@@ -1,13 +1,18 @@
+//
+//  AddFriendView.swift
+//  TentenV10
+//
+//  Created by 조윤근 on 8/8/24.
+//
+
 import SwiftUI
 
 struct AddFriendView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var viewModel: HomeViewModel
+    @EnvironmentObject var viewModel: ContentViewModel
     
-    @State private var friendPin: String = ""
-
     var body: some View {
-        VStack(spacing: 20) {
+        VStack {
             Text("Add Friend")
                 .font(.largeTitle)
                 .fontWeight(.bold)
@@ -18,7 +23,7 @@ struct AddFriendView: View {
                     .padding()
             }
             
-            TextField("Enter Friend's PIN", text: $friendPin)
+            TextField("Enter Friend's PIN", text: $viewModel.friendPin)
                 .autocapitalization(.none)
                 .padding()
                 .background(Color(.secondarySystemBackground))
@@ -26,8 +31,9 @@ struct AddFriendView: View {
                 .padding(.horizontal)
             
             Button(action: {
-                friendPin = friendPin.lowercased()
-                addFriend()
+                viewModel.friendPin = viewModel.friendPin.lowercased()
+                viewModel.addFriend()
+                dismiss()
             }) {
                 Text("Add Friend")
                     .font(.title2)
@@ -38,7 +44,7 @@ struct AddFriendView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
             }
-
+            
             Spacer()
             
             Button(action: {
@@ -63,22 +69,8 @@ struct AddFriendView: View {
             }
         }
     }
-    
-    private func addFriend() {
-        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
-            NSLog("LOG: not authenticated - AddFriendView")
-            return
-        }
-        
-        viewModel.addFriendByPin(currentUserId: uid, friendPin: friendPin) { result in
-            switch result {
-            case .success(let friendId):
-                NSLog("Friend added with ID: \(friendId)")
-                dismiss()
-            case .failure(let error):
-                NSLog("Failed to add friend: \(error.localizedDescription)")
-            }
-        }
-    }
 }
 
+#Preview {
+    AddFriendView()
+}

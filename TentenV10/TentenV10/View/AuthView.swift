@@ -1,12 +1,11 @@
 import SwiftUI
 
 struct AuthView: View {
-    @State private var isLoginMode = true
-    @State private var showingImagePicker = false
-    @State private var inputImage: UIImage?
+    @Binding var isLoginMode: Bool
+    @EnvironmentObject var viewModel: ContentViewModel
+    @State private var isImagePickerPresented = false
+//    @State private var selectedImage: UIImage?
 
-    @ObservedObject var viewModel: AuthViewModel
-    
     var body: some View {
         VStack {
             Picker(selection: $isLoginMode, label: Text("Mode")) {
@@ -20,9 +19,9 @@ struct AuthView: View {
             
             if !isLoginMode {
                 Button(action: {
-                    showingImagePicker.toggle()
+                    isImagePickerPresented.toggle()
                 }) {
-                    if let image = inputImage {
+                    if let image = viewModel.selectedImage {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
@@ -39,34 +38,21 @@ struct AuthView: View {
                     }
                 }
                 .padding()
-
-                TextField("Email", text: $viewModel.email)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(5.0)
-
-                SecureField("Password", text: $viewModel.password)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(5.0)
-            } else {
-                TextField("Email", text: $viewModel.email)
-                    .autocapitalization(.none)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(5.0)
-
-                SecureField("Password", text: $viewModel.password)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(5.0)
             }
-           
+            
+            TextField("Email", text: $viewModel.email)
+                .autocapitalization(.none)
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(5.0)
+
+            SecureField("Password", text: $viewModel.password)
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(5.0)
+            
             Button(action: {
-                isLoginMode ?
-                viewModel.signIn() :
-                viewModel.signUp(profileImage: inputImage)
+                isLoginMode ? viewModel.signIn() : viewModel.signUp()
             }) {
                 Text(isLoginMode ? "Login" : "Sign Up")
                     .foregroundColor(.white)
@@ -76,12 +62,9 @@ struct AuthView: View {
                     .cornerRadius(10.0)
             }
             .padding(.top, 20)
-
-            Spacer()
         }
-        .padding()
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(image: $inputImage)
+        .fullScreenCover(isPresented: $isImagePickerPresented) {
+            ImagePicker(image: $viewModel.selectedImage)
         }
     }
 }

@@ -1,63 +1,86 @@
+//import SwiftUI
+//
+//struct HomeView: View {
+//    @EnvironmentObject var viewModel: ContentViewModel
+//    @State private var isSheetPresented: Bool = false
+//    
+//    var body: some View {
+//        VStack {
+//            Text("Home View")
+//                .padding()
+//            
+//            Spacer()
+//            // TODO: print out friends with their username and profile image
+//            Spacer()
+//
+//            Button(action: {
+//                isSheetPresented = true
+//            }) {
+//                Text("Add Friend")
+//                    .font(.title2)
+//                    .foregroundColor(.white)
+//                    .padding()
+//                    .background(Color.blue)
+//                    .cornerRadius(10)
+//            }
+//        }
+//        .sheet(isPresented: $isSheetPresented) {
+//            AddFriendView()
+//        }
+//    }
+//}
+
 import SwiftUI
-import FirebaseAuth
 
 struct HomeView: View {
-    @ObservedObject var viewModel: HomeViewModel
-    @State private var profileImage: UIImage? = nil
+    @EnvironmentObject var viewModel: ContentViewModel
     @State private var isSheetPresented: Bool = false
     
     var body: some View {
         VStack {
-            if let profileImage = profileImage {
-                Image(uiImage: profileImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150, height: 150)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                    .shadow(radius: 10)
-                    .padding()
-            } else {
-                Circle()
-                    .fill(Color.gray)
-                    .frame(width: 150, height: 150)
-                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                    .padding()
-            }
+            Text("Home View")
+                .padding()
             
-            if let userRecord = viewModel.userRecord {
-                Text("Email: \(userRecord.email)")
+            Spacer()
+
+            // Display friends with their username and profile image
+            if viewModel.friendsDetails.isEmpty {
+                Text("No friends available")
                     .padding()
-                
-                Text("Token: \(String(describing: userRecord.deviceToken))")
-                    .padding()
-                
-                Text("Pin: \(userRecord.pin)")
-                    .padding()
-                Text("Username: \(userRecord.username)")
-                Text("hasIncomingCallRequest: \(userRecord.hasIncomingCallRequest ? "True" : "False")")
-                
-                // Display list of friend IDs
-                if !userRecord.friends.isEmpty {
-                    Text("Friends:")
-                        .font(.headline)
-                        .padding(.top)
-                    
-                    List(userRecord.friends, id: \.self) { friendId in
-                        Text("Friend ID: \(friendId)")
-                    }
-                    .frame(height: 200) // Adjust height as needed
-                } else {
-                    Text("No friends added yet.")
-                        .padding()
-                }
             } else {
-                Text("Loading user information...")
+                ForEach(viewModel.friendsDetails, id: \.id) { friend in
+                    HStack {
+                        // Profile image
+                        if let profileImageData = friend.profileImageData,
+                           let uiImage = UIImage(data: profileImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .shadow(radius: 5)
+                        } else {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        // Username
+                        Text(friend.username)
+                            .font(.headline)
+                            .padding(.leading, 10)
+                        
+                        Spacer()
+                    }
                     .padding()
+                }
             }
             
             Spacer()
-            
+
             Button(action: {
                 isSheetPresented = true
             }) {
@@ -69,37 +92,9 @@ struct HomeView: View {
                     .cornerRadius(10)
             }
         }
-        .padding()
         .sheet(isPresented: $isSheetPresented) {
-            AddFriendView(viewModel: viewModel)
-        }
-        .onAppear {
-            NSLog("LOG: onAppear")
-            refreshUserRecord()
-        }
-        .onChange(of: viewModel.userRecord) { _, _ in
-            NSLog("LOG: onChange")
-            updateProfileImage()
-        }
-        .onChange(of: viewModel.userRecord?.friends) { _, _ in
-            NSLog("LOG: friends changed")
-            refreshUserRecord()
-        }
-    }
-    
-    private func refreshUserRecord() {
-        NSLog("LOG: refreshUserRecord")
-        guard let currentUser = Auth.auth().currentUser else { return }
-        viewModel.fetchUserFromDatabase(currentUserId: currentUser.uid)
-        updateProfileImage()
-    }
-
-    private func updateProfileImage() {
-        if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData {
-            profileImage = UIImage(data: imageData)
-        } else {
-            profileImage = nil
+            AddFriendView()
+                .environmentObject(viewModel)
         }
     }
 }
-

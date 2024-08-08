@@ -1,20 +1,23 @@
 import SwiftUI
+import FirebaseAuth
 
 struct ContentView: View {
-    @ObservedObject var authViewModel = AuthViewModel()
-    @ObservedObject var homeViewModel = HomeViewModel()
-
+    @ObservedObject var viewModel = ContentViewModel()
+    @State private var isLoginMode = true
+    
     var body: some View {
-        Group {
-            if authViewModel.user == nil {
-                AuthView(viewModel: authViewModel)
-            } else {
-                HomeView(viewModel: homeViewModel)
-            }
+        if viewModel.isUserLoggedIn {
+            HomeView()
+                .environmentObject(viewModel)
+                .onAppear {
+                    if let id = Auth.auth().currentUser?.uid {
+                        NSLog("LOG: fetch user record on appear")
+                        viewModel.fetchUser(id: id)
+                    }
+                }
+        } else {
+            AuthView(isLoginMode: $isLoginMode)
+                .environmentObject(viewModel)
         }
     }
-}
-
-#Preview {
-    ContentView()
 }
