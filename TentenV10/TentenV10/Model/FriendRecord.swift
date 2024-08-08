@@ -8,12 +8,13 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var pin: String
     var profileImageData: Data?
     var deviceToken: String?
+    var userId: String // Foreign key to UserRecord
 
     // Define the primary key for the table
     static var databaseTableName: String = "friends"
 
     enum Columns: String, ColumnExpression {
-        case id, email, username, pin, profileImageData, deviceToken
+        case id, email, username, pin, profileImageData, deviceToken, userId
     }
 
     // Define how to encode to and decode from the database
@@ -24,5 +25,6 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
         container[Columns.pin] = pin
         container[Columns.profileImageData] = profileImageData
         container[Columns.deviceToken] = deviceToken
+        container[Columns.userId] = userId
     }
 }

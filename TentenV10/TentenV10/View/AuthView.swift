@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct AuthView: View {
-    @Binding var isLoginMode: Bool
+    @State var isLoginMode: Bool = true
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var isImagePickerPresented = false
-//    @State private var selectedImage: UIImage?
 
     var body: some View {
         VStack {

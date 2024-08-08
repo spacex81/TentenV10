@@ -23,11 +23,13 @@
 		C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */; };
 		C8B5B3FB2C646684002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3FA2C646684002ACBAA /* UserRecord.swift */; };
 		C8B5B3FD2C646688002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3FC2C646688002ACBAA /* UserDto.swift */; };
-		C8B5B3FF2C6481EF002ACBAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3FE2C6481EF002ACBAA /* ImagePicker.swift */; };
-		C8B5B4012C6482C3002ACBAA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4002C6482C3002ACBAA /* HomeView.swift */; };
-		C8B5B4032C6482C7002ACBAA /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4022C6482C7002ACBAA /* AuthView.swift */; };
-		C8B5B4052C6491C8002ACBAA /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4042C6491C8002ACBAA /* AddFriendView.swift */; };
 		C8B5B4072C64A313002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4062C64A313002ACBAA /* FriendRecord.swift */; };
+		C8B5B4092C64B692002ACBAA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4082C64B692002ACBAA /* HomeView.swift */; };
+		C8B5B40B2C64B698002ACBAA /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40A2C64B698002ACBAA /* AuthView.swift */; };
+		C8B5B40D2C64B893002ACBAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */; };
+		C8B5B40F2C64BC20002ACBAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */; };
+		C8B5B4112C64BC25002ACBAA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */; };
+		C8B5B4132C64E1E1002ACBAA /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,11 +45,13 @@
 		C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		C8B5B3FA2C646684002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B3FC2C646688002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
-		C8B5B3FE2C6481EF002ACBAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
-		C8B5B4002C6482C3002ACBAA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		C8B5B4022C6482C7002ACBAA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
-		C8B5B4042C6491C8002ACBAA /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		C8B5B4062C64A313002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
+		C8B5B4082C64B692002ACBAA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C8B5B40A2C64B698002ACBAA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,8 @@
 		C815BCBA2C60D492004CB09E /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */,
+				C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -139,10 +145,10 @@
 			isa = PBXGroup;
 			children = (
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
-				C8B5B4002C6482C3002ACBAA /* HomeView.swift */,
-				C8B5B4042C6491C8002ACBAA /* AddFriendView.swift */,
-				C8B5B4022C6482C7002ACBAA /* AuthView.swift */,
-				C8B5B3FE2C6481EF002ACBAA /* ImagePicker.swift */,
+				C8B5B4082C64B692002ACBAA /* HomeView.swift */,
+				C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */,
+				C8B5B40A2C64B698002ACBAA /* AuthView.swift */,
+				C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -245,13 +251,15 @@
 				C8B5B4072C64A313002ACBAA /* FriendRecord.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C8B5B3FD2C646688002ACBAA /* UserDto.swift in Sources */,
-				C8B5B3FF2C6481EF002ACBAA /* ImagePicker.swift in Sources */,
+				C8B5B40F2C64BC20002ACBAA /* FirebaseManager.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
-				C8B5B4012C6482C3002ACBAA /* HomeView.swift in Sources */,
+				C8B5B4092C64B692002ACBAA /* HomeView.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
+				C8B5B4112C64BC25002ACBAA /* DatabaseManager.swift in Sources */,
+				C8B5B40D2C64B893002ACBAA /* ImagePicker.swift in Sources */,
 				C8B5B3FB2C646684002ACBAA /* UserRecord.swift in Sources */,
-				C8B5B4052C6491C8002ACBAA /* AddFriendView.swift in Sources */,
-				C8B5B4032C6482C7002ACBAA /* AuthView.swift in Sources */,
+				C8B5B4132C64E1E1002ACBAA /* AddFriendView.swift in Sources */,
+				C8B5B40B2C64B698002ACBAA /* AuthView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
