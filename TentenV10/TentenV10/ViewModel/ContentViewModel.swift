@@ -90,20 +90,40 @@ class ContentViewModel: ObservableObject {
             NSLog("LOG: Fetching user from database")
             let userRecord = databaseManager.readUser(id: id)
             if let userRecord = userRecord {
-                // set memory
+                // if local database has user record, just update memory
                 self.userRecord = userRecord
-                // set local db
-                self.databaseManager.createUser(user: userRecord)
+                self.fetchDetailedFriends()
             } else {
                 NSLog("LOG: user record is not available in local database")
                 NSLog("LOG: Fetching user from firestore")
                 firebaseManager.fetchUser(userId: id) { userDto in
                     self.convertUserDtoToUserRecord(userDto: userDto) { userRecord in
-                        // set memory
                         self.userRecord = userRecord
-                        // set local db
                         self.databaseManager.createUser(user: userRecord)
+                        self.fetchDetailedFriends()
                     }
+                }
+            }
+        }
+    }
+    
+    func fetchDetailedFriends() {
+        NSLog("LOG: fetchDetailedFriends")
+        guard let id = currentUserId else {
+            NSLog("LOG: currentUserId is not when fetching detailed friends")
+            return
+        }
+        
+        NSLog("LOG: Fetching detailed friends from local database")
+        let friends = databaseManager.fetchFriendsByUserId(userId: id)
+        if !friends.isEmpty {
+            self.detailedFriends = friends
+        } else {
+            NSLog("LOG: Local database doesn't have any detailed friends")
+            NSLog("LOG: Fetching detailed friends from remote firestore")
+            if let userRecord = userRecord, !userRecord.friends.isEmpty {
+                for friendId in userRecord.friends {
+                    fetchFriendAndUpdateLocal(friendId: friendId)
                 }
             }
         }
@@ -113,6 +133,20 @@ class ContentViewModel: ObservableObject {
 
 // MARK: Friend
 extension ContentViewModel {
+    fileprivate func fetchFriendAndUpdateLocal(friendId: String) {
+        NSLog("LOG: fetchFriendAndUpdateLocal")
+        // fetch user dto from firestore
+        self.firebaseManager.fetchUser(userId: friendId) { userDto in
+            // convert user dto to friend record
+            self.convertUserDtoToFriendRecord(userDto: userDto) { friendRecord in
+                // add friend record in memory
+                self.detailedFriends.append(friendRecord)
+                // add friend record in local database
+                self.databaseManager.createFriend(friend: friendRecord)
+            }
+        }
+    }
+    
     func addFriend() {
         guard var newUserRecord = userRecord else {
             NSLog("LOG: userRecord is nil when adding friend")
@@ -128,19 +162,12 @@ extension ContentViewModel {
                 self.databaseManager.createUser(user: newUserRecord)
                 self.firebaseManager.addFriendId(friendId: friendId)
 
-                // fetch user dto from firestore
-                self.firebaseManager.fetchUser(userId: friendId) { userDto in
-                    // convert user dto to friend record
-                    self.convertUserDtoToFriendRecord(userDto: userDto) { friendRecord in
-                     // add friend record in memory
-                        self.detailedFriends.append(friendRecord)
-                     // add friend record in local database
-                        self.databaseManager.createFriend(friend: friendRecord)
-                    }
-                }
-
+                self.fetchFriendAndUpdateLocal(friendId: friendId)
             }
         }
+    }
+    
+    func listenToFriend() {
         
     }
 }

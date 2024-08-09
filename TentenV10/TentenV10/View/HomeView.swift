@@ -92,6 +92,7 @@ struct HomeView: View {
             if viewModel.currentUserId != nil {
                 NSLog("LOG: fetch user record on appear")
                 viewModel.fetchUser()
+                // listen to friends 
             }
         }
     }

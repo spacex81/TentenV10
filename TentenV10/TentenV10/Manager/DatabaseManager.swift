@@ -107,4 +107,15 @@ extension DatabaseManager {
             NSLog("LOG: Failed to save friend: \(error.localizedDescription)")
         }
     }
+    
+    func fetchFriendsByUserId(userId: String) -> [FriendRecord] {
+        do {
+            let friends = try dbQueue.read { db in
+                try FriendRecord.filter(Column("userId") == userId).fetchAll(db)
+            }
+            return friends
+        } catch {
+            return []
+        }
+    }
 }
