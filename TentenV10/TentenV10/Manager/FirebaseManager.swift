@@ -3,7 +3,6 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 
-
 class FirebaseManager {
     static let shared = FirebaseManager()
     
@@ -20,30 +19,33 @@ class FirebaseManager {
 
 // MARK: Auth
 extension FirebaseManager {
-    func signIn(email: String, password: String) {
-       NSLog("LOG: signIn")
-       auth.signIn(withEmail: email, password: password) { result, error in
-           if let error = error {
-               NSLog("LOG: Failed to sign in: \(error.localizedDescription)")
-           } else {
-               NSLog("LOG: Succeed to sign in")
-           }
-       }
-   }
-    
-    func signUp(email: String, password: String, completion: @escaping (AuthDataResult) -> Void) {
-        NSLog("LOG: signUp")
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error {
-                NSLog("LOG: Failed to sign up: \(error.localizedDescription)")
-            } else {
-                NSLog("LOG: Succeed to sign up")
-                guard let result = result else {
-                    NSLog("LOG: result is null when signUp")
-                    return
+    func signIn(email: String, password: String) async throws -> User {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<User, Error>) in
+            auth.signIn(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if let user = result?.user {
+                    continuation.resume(returning: user)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred on sign in."]))
                 }
-                
-                completion(result)
+            }
+        }
+    }
+    
+    func signUp(email: String, password: String) async throws -> User {
+        try await withCheckedThrowingContinuation { continuation in
+            auth.createUser(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    NSLog("LOG: Failed to sign up: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let user = result?.user {
+                    NSLog("LOG: Succeed to sign up")
+                    continuation.resume(returning: user)
+                } else {
+                    NSLog("LOG: Result is null when signUp")
+                    continuation.resume(throwing: NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred."]))
+                }
             }
         }
     }
@@ -51,7 +53,7 @@ extension FirebaseManager {
     func signOut() {
         NSLog("LOG: signOut")
         do {
-            try Auth.auth().signOut()
+            try auth.signOut()
         } catch {
             NSLog("LOG: Failed to sign out")
         }
@@ -62,47 +64,56 @@ extension FirebaseManager {
 extension FirebaseManager {
     func createUser(userDto: UserDto) {
         do {
-            try db.collection("users").document(userDto.id!).setData(from: userDto) { error in
+            try usersCollection.document(userDto.id!).setData(from: userDto) { error in
                 if let error = error {
-                    print("Error adding user to Firestore: \(error)")
+                    NSLog("LOG: Error adding user to Firestore: \(error)")
                 } else {
-                    print("User successfully added to Firestore")
+                    NSLog("LOG: User successfully added to Firestore")
                 }
             }
         } catch let error {
-            print("Error encoding user: \(error)")
+            NSLog("LOG: Error encoding user: \(error)")
         }
     }
     
-    func fetchUser(userId: String, completion: @escaping (UserDto) -> Void) {
-        db.collection("users").document(userId).getDocument { document, error in
-            if let document = document, document.exists {
-                do {
-                    let userDto = try document.data(as: UserDto.self)
-                    completion(userDto)
-                } catch {
-                    NSLog("LOG: failed to convert firestore document to UserDto: \(error.localizedDescription)")
+    func fetchUser(userId: String) async throws -> UserDto {
+        try await withCheckedThrowingContinuation { continuation in
+            usersCollection.document(userId).getDocument { document, error in
+                if let error = error {
+                    NSLog("LOG: failed to fetch user dto from firestore: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let document = document, document.exists {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        continuation.resume(returning: userDto)
+                    } catch {
+                        NSLog("LOG: failed to convert firestore document to UserDto: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    }
+                } else {
+                    NSLog("LOG: failed to fetch user dto from firestore")
+                    continuation.resume(throwing: NSError(domain: "FirestoreError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist."]))
                 }
-            } else {
-                NSLog("LOG: failed to fetch user dto from firestore")
-                self.signOut()
             }
         }
     }
     
-    func getFriendIdByPin(friendPin: String, completion: @escaping (String) -> Void) {
-        usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { (snapshot, error) in
-            if let error = error {
-                NSLog("LOG: Error fetching friend: \(error.localizedDescription)")
+    func getFriendByPin(friendPin: String) async throws -> String {
+        try await withCheckedThrowingContinuation { continuation in
+            usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                }
+                
+                guard let documents = snapshot?.documents, let document = documents.first else {
+                    let error = NSError(domain: "getFriendIdByPinError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No such friend with pin: \(friendPin)"])
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                let friendId = document.documentID
+                continuation.resume(returning: friendId)
             }
-
-            guard let documents = snapshot?.documents, let document = documents.first else {
-                NSLog("LOG: No such friend with pin: \(friendPin)")
-                return
-            }
-
-            let friendId = document.documentID
-            completion(friendId)
         }
     }
     
@@ -121,38 +132,51 @@ extension FirebaseManager {
             }
         }
     }
+    
+    func updateDeviceToken(userId: String, newDeviceToken: String) {
+            usersCollection.document(userId).updateData([
+                "deviceToken": newDeviceToken
+            ]) { error in
+                if let error = error {
+                    NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
+                } else {
+                    NSLog("LOG: Device token successfully updated in Firestore")
+                }
+            }
+        }
 }
 
 // MARK: Storage
 extension FirebaseManager {
-    func uploadImage(id: String, profileImageData: Data, completion: @escaping (String) -> Void) {
+    func uploadImage(id: String, profileImageData: Data) async throws -> String {
         let storageRef = storage.reference().child("profile_images").child("\(id).jpg")
-        storageRef.putData(profileImageData, metadata: nil) { metadata, error in
-            if let error = error {
-                NSLog("LOG: Failed to Store Profile Image to Firebase Storage: \(error)")
+        
+        // Upload the image data
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            storageRef.putData(profileImageData, metadata: nil) { metadata, error in
+                if let error = error {
+                    NSLog("LOG: Failed to Store Profile Image to Firebase Storage: \(error)")
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
             }
-            
+        }
+        
+        // Get the download URL
+        let downloadURL = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
             storageRef.downloadURL { url, error in
                 if let error = error {
                     NSLog("LOG: Failed to Get Profile Image Url from Firebase Storage: \(error)")
-                }
-                
-                if let url = url {
-                    completion(url.absoluteString)
+                    continuation.resume(throwing: error)
+                } else if let url = url {
+                    continuation.resume(returning: url.absoluteString)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "StorageError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve download URL."]))
                 }
             }
         }
-    }
-    
-    func updateDeviceToken(userId: String, newDeviceToken: String) {
-        db.collection("users").document(userId).updateData([
-            "deviceToken": newDeviceToken
-        ]) { error in
-            if let error = error {
-                NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
-            } else {
-                NSLog("LOG: Device token successfully updated in Firestore")
-            }
-        }
+        
+        return downloadURL
     }
 }

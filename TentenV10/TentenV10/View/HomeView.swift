@@ -1,42 +1,35 @@
-//
-//  HomeView.swift
-//  TentenV10
-//
-//  Created by 조윤근 on 8/8/24.
-//
-
 import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var isSheetPresented: Bool = false
-    
+
     var body: some View {
         VStack {
-            Text("Home View")
-            Spacer()
             if let userRecord = viewModel.userRecord {
                 Text(userRecord.username)
-                    .padding()
-                Text(userRecord.pin)
-                    .padding()
                 Text(userRecord.deviceToken ?? "Empty Device Token")
-                    .padding()
-                
-                // Profile Image
-                if let imageData = userRecord.profileImageData,
-                   let uiImage = UIImage(data: imageData) {
+                if let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 50, height: 50)
                         .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                        .shadow(radius: 10)
+                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                        .shadow(radius: 5)
+                } else {
+                    Circle()
+                        .fill(Color.gray)
+                        .frame(width: 50, height: 50)
+                }
+                
+                if userRecord.friends.isEmpty {
+                    Text("No FriendIds")
                         .padding()
                 } else {
-                    Text("No Profile Image")
-                        .padding()
+                    List(userRecord.friends, id: \.self) { friendId in
+                        Text(friendId)
+                    }
                 }
                 
                 if viewModel.detailedFriends.isEmpty {
@@ -72,6 +65,7 @@ struct HomeView: View {
                     .frame(maxHeight: 200) // Adjust height as needed
                 }
             }
+            // Add FriendView
             Spacer()
 
             Button(action: {
@@ -89,11 +83,18 @@ struct HomeView: View {
             AddFriendView()
         }
         .onAppear {
-            if viewModel.currentUserId != nil {
+            NSLog("LOG: onAppear")
+            if viewModel.needUserFetch, let id = viewModel.currentUser?.uid {
                 NSLog("LOG: fetch user record on appear")
-                viewModel.fetchUser()
-                // listen to friends 
+                Task {
+                    try await viewModel.fetchUser(id: id)
+                }
             }
+            
+//            if !viewModel.isListeningToFriends {
+//                // listen to friends
+//                viewModel.listenToFriends()
+//            }
         }
     }
 }

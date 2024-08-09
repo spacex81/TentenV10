@@ -61,12 +61,10 @@ extension DatabaseManager {
                 try user.save(db)
             }
             NSLog("LOG: Successfully added new user record")
-            printUsersTable()
         } catch {
             print("Failed to save user: \(error)")
         }
     }
-
     
     func readUser(id: String) -> UserRecord? {
         do {
@@ -80,23 +78,9 @@ extension DatabaseManager {
         
         return nil
     }
-    
-    func printUsersTable() {
-        NSLog("LOG: printUserTable")
-        do {
-            try dbQueue.read { db in
-                let userRecords = try UserRecord.fetchAll(db)
-                for userRecord in userRecords {
-                    print(userRecord)
-                }
-            }
-        } catch {
-            print("Failed to fetch user records: \(error)")
-        }
-    }
 }
 
-// MARK: Friend Record
+// MARK: Friend CRUD
 extension DatabaseManager {
     func createFriend(friend: FriendRecord) {
         do {

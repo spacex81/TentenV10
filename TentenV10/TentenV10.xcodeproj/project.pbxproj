@@ -21,15 +21,15 @@
 		C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC8C2C60854C004CB09E /* AppDelegate.swift */; };
 		C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */; };
 		C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */; };
-		C8B5B3FB2C646684002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3FA2C646684002ACBAA /* UserRecord.swift */; };
-		C8B5B3FD2C646688002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3FC2C646688002ACBAA /* UserDto.swift */; };
-		C8B5B4072C64A313002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4062C64A313002ACBAA /* FriendRecord.swift */; };
-		C8B5B4092C64B692002ACBAA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4082C64B692002ACBAA /* HomeView.swift */; };
-		C8B5B40B2C64B698002ACBAA /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40A2C64B698002ACBAA /* AuthView.swift */; };
-		C8B5B40D2C64B893002ACBAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */; };
-		C8B5B40F2C64BC20002ACBAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */; };
-		C8B5B4112C64BC25002ACBAA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */; };
-		C8B5B4132C64E1E1002ACBAA /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */; };
+		C8B5B4152C65B01C002ACBAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */; };
+		C8B5B4172C65B18D002ACBAA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4162C65B18D002ACBAA /* HomeView.swift */; };
+		C8B5B4192C65B192002ACBAA /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4182C65B191002ACBAA /* AuthView.swift */; };
+		C8B5B41B2C65B1D1002ACBAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */; };
+		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
+		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
+		C8B5B4212C65B903002ACBAA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */; };
+		C8B5B4252C65F58E002ACBAA /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */; };
+		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,15 +43,15 @@
 		C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
 		C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
-		C8B5B3FA2C646684002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
-		C8B5B3FC2C646688002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
-		C8B5B4062C64A313002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
-		C8B5B4082C64B692002ACBAA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		C8B5B40A2C64B698002ACBAA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
-		C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
-		C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
-		C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
+		C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		C8B5B4162C65B18D002ACBAA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C8B5B4182C65B191002ACBAA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
+		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
+		C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
+		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +117,8 @@
 		C815BCBA2C60D492004CB09E /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C8B5B40E2C64BC20002ACBAA /* FirebaseManager.swift */,
-				C8B5B4102C64BC25002ACBAA /* DatabaseManager.swift */,
+				C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */,
+				C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -127,8 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				C815BCC32C60D662004CB09E /* Dto */,
-				C8B5B3FA2C646684002ACBAA /* UserRecord.swift */,
-				C8B5B4062C64A313002ACBAA /* FriendRecord.swift */,
+				C8B5B41C2C65B761002ACBAA /* UserRecord.swift */,
+				C8B5B4262C660122002ACBAA /* FriendRecord.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -145,10 +145,10 @@
 			isa = PBXGroup;
 			children = (
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
-				C8B5B4082C64B692002ACBAA /* HomeView.swift */,
-				C8B5B4122C64E1E1002ACBAA /* AddFriendView.swift */,
-				C8B5B40A2C64B698002ACBAA /* AuthView.swift */,
-				C8B5B40C2C64B893002ACBAA /* ImagePicker.swift */,
+				C8B5B4162C65B18D002ACBAA /* HomeView.swift */,
+				C8B5B4182C65B191002ACBAA /* AuthView.swift */,
+				C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */,
+				C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 		C815BCC32C60D662004CB09E /* Dto */ = {
 			isa = PBXGroup;
 			children = (
-				C8B5B3FC2C646688002ACBAA /* UserDto.swift */,
+				C8B5B41E2C65B765002ACBAA /* UserDto.swift */,
 			);
 			path = Dto;
 			sourceTree = "<group>";
@@ -247,19 +247,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8B5B4192C65B192002ACBAA /* AuthView.swift in Sources */,
+				C8B5B4212C65B903002ACBAA /* DatabaseManager.swift in Sources */,
+				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */,
-				C8B5B4072C64A313002ACBAA /* FriendRecord.swift in Sources */,
+				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
-				C8B5B3FD2C646688002ACBAA /* UserDto.swift in Sources */,
-				C8B5B40F2C64BC20002ACBAA /* FirebaseManager.swift in Sources */,
+				C8B5B4152C65B01C002ACBAA /* FirebaseManager.swift in Sources */,
+				C8B5B4252C65F58E002ACBAA /* AddFriendView.swift in Sources */,
+				C8B5B4172C65B18D002ACBAA /* HomeView.swift in Sources */,
+				C8B5B41B2C65B1D1002ACBAA /* ImagePicker.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
-				C8B5B4092C64B692002ACBAA /* HomeView.swift in Sources */,
+				C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
-				C8B5B4112C64BC25002ACBAA /* DatabaseManager.swift in Sources */,
-				C8B5B40D2C64B893002ACBAA /* ImagePicker.swift in Sources */,
-				C8B5B3FB2C646684002ACBAA /* UserRecord.swift in Sources */,
-				C8B5B4132C64E1E1002ACBAA /* AddFriendView.swift in Sources */,
-				C8B5B40B2C64B698002ACBAA /* AuthView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
