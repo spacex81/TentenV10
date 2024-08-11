@@ -22,3 +22,4 @@ struct UserDto: Codable {
         self.friends = friends
     }
 }
+

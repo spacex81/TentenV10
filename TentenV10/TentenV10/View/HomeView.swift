@@ -1,73 +1,100 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var isSheetPresented: Bool = false
 
     var body: some View {
         VStack {
-            if let userRecord = viewModel.userRecord {
-                Text(userRecord.username)
-                Text(userRecord.deviceToken ?? "Empty Device Token")
-                if let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                        .shadow(radius: 5)
-                } else {
-                    Circle()
-                        .fill(Color.gray)
-                        .frame(width: 50, height: 50)
-                }
-                
-                if userRecord.friends.isEmpty {
-                    Text("No FriendIds")
-                        .padding()
-                } else {
-                    List(userRecord.friends, id: \.self) { friendId in
-                        Text(friendId)
+            if let selectedFriend = viewModel.selectedFriend {
+                VStack {
+                    if let imageData = selectedFriend.profileImageData, let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                            .shadow(radius: 10)
+                        
+                        Text(selectedFriend.username)
+                            .font(.title)
+                            .padding(.top, 10)
                     }
+                    
                 }
-                
-                if viewModel.detailedFriends.isEmpty {
-                    Text("No Friends")
-                        .padding()
-                } else {
-                    List(viewModel.detailedFriends, id: \.id) { friend in
-                        HStack {
-                            if let imageData = friend.profileImageData,
-                               let uiImage = UIImage(data: imageData) {
+                .padding(.bottom, 20)
+            } else {
+                VStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .shadow(radius: 10)
+                        .foregroundColor(.gray)
+                    
+                    Text("No Friend Selected")
+                        .font(.title)
+                        .padding(.top, 10)
+                        .foregroundColor(.gray)
+                }
+                .padding(.bottom, 20)
+            }
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(viewModel.detailedFriends, id: \.id) { friend in
+                        VStack {
+                            if let imageData = friend.profileImageData, let uiImage = UIImage(data: imageData) {
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 50, height: 50)
+                                    .scaledToFill()
+                                    .frame(width: 70, height: 70)
                                     .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                                    .shadow(radius: 5)
-                            } else {
-                                Circle()
-                                    .fill(Color.gray)
-                                    .frame(width: 50, height: 50)
+                                    .shadow(radius: 10)
+                                    .onTapGesture {
+                                        viewModel.selectFriend(friend: friend)
+                                    }
                             }
-                            VStack(alignment: .leading) {
-                                Text(friend.username)
-                                    .font(.headline)
-                                Text(friend.email)
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }
+                            
+                            Text(friend.username)
+                                .font(.caption)
+                                .padding(.top, 5)
                         }
-                        .padding(.vertical, 4)
                     }
-                    .frame(maxHeight: 200) // Adjust height as needed
                 }
             }
-            // Add FriendView
-            Spacer()
-
+            .padding(.bottom, 40)
+            
+            Text(viewModel.isConnected ? "Connected" : "Tap to Connect")
+                .foregroundColor(viewModel.selectedFriend == nil ? .gray : .blue)
+                .onTapGesture {
+                    guard viewModel.selectedFriend != nil else {return}
+                    if !viewModel.isConnected {
+                        Task {
+                            await viewModel.connect()
+                        }
+                    } else {
+                        viewModel.disconnect()
+                    }
+                }
+                .padding(.bottom, 20)
+            
+            Text(viewModel.isPublished ? "Published" : "Tap to Publish")
+                .foregroundColor(viewModel.selectedFriend == nil ? .gray : .blue)
+                .onTapGesture {
+                    guard viewModel.selectedFriend != nil else {return}
+                    if !viewModel.isPublished {
+                        viewModel.publishAudio()
+                    } else {
+                        Task {
+                            await viewModel.unpublishAudio()
+                        }
+                    }
+                }
+                .padding(.bottom, 20)
+            
             Button(action: {
                 isSheetPresented = true
             }) {
@@ -82,6 +109,9 @@ struct HomeView: View {
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()
         }
+        .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
+            viewModel.handleScenePhaseChange(to: newScenePhase)
+        }
         .onAppear {
             NSLog("LOG: onAppear")
             if viewModel.needUserFetch, let id = viewModel.currentUser?.uid {
@@ -90,11 +120,6 @@ struct HomeView: View {
                     try await viewModel.fetchUser(id: id)
                 }
             }
-            
-//            if !viewModel.isListeningToFriends {
-//                // listen to friends
-//                viewModel.listenToFriends()
-//            }
         }
     }
 }

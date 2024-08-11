@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 import UIKit
 import FirebaseCore
 import FirebaseAuth
@@ -11,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         
         requestNotificationPermission(application: application)
+        requestMicrophonePermission()
 
         UNUserNotificationCenter.current().delegate = self
 
@@ -40,6 +42,26 @@ extension AppDelegate {
             if granted {
                 DispatchQueue.main.async {
                     application.registerForRemoteNotifications()
+                }
+            }
+        }
+    }
+    
+    private func requestMicrophonePermission() {
+        if #available(iOS 17.0, *) {
+            AVAudioApplication.requestRecordPermission { granted in
+                if granted {
+                    print("Microphone permission granted")
+                } else {
+                    print("Microphone permission denied")
+                }
+            }
+        } else {
+            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                if granted {
+                    print("Microphone permission granted")
+                } else {
+                    print("Microphone permission denied")
                 }
             }
         }

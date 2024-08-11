@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C812FEE02C68A92E00BD9D9B /* LiveKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */; };
+		C812FEE22C68E90F00BD9D9B /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */; };
+		C812FEE42C68EAAE00BD9D9B /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */; };
+		C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = C812FEE52C68ECDC00BD9D9B /* test.wav */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -33,6 +37,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitManager.swift; sourceTree = "<group>"; };
+		C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
+		C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
+		C812FEE52C68ECDC00BD9D9B /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -99,6 +107,7 @@
 				C815BC6C2C60849B004CB09E /* TentenV10App.swift */,
 				C815BC8C2C60854C004CB09E /* AppDelegate.swift */,
 				C815BC702C60849C004CB09E /* Assets.xcassets */,
+				C812FEE52C68ECDC00BD9D9B /* test.wav */,
 				C815BC8E2C60858B004CB09E /* Info.plist */,
 				C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */,
 				C815BC722C60849C004CB09E /* Preview Content */,
@@ -119,6 +128,9 @@
 			children = (
 				C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */,
 				C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */,
+				C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */,
+				C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */,
+				C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -234,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,
 				C815BC712C60849C004CB09E /* Assets.xcassets in Resources */,
 				C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */,
@@ -251,12 +264,15 @@
 				C8B5B4212C65B903002ACBAA /* DatabaseManager.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */,
+				C812FEE42C68EAAE00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C8B5B4152C65B01C002ACBAA /* FirebaseManager.swift in Sources */,
+				C812FEE22C68E90F00BD9D9B /* AudioSessionManager.swift in Sources */,
 				C8B5B4252C65F58E002ACBAA /* AddFriendView.swift in Sources */,
 				C8B5B4172C65B18D002ACBAA /* HomeView.swift in Sources */,
 				C8B5B41B2C65B1D1002ACBAA /* ImagePicker.swift in Sources */,
+				C812FEE02C68A92E00BD9D9B /* LiveKitManager.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
 				C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
@@ -398,6 +414,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TentenV10/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Need for Walkie Talkie";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -429,6 +446,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TentenV10/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Need for Walkie Talkie";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

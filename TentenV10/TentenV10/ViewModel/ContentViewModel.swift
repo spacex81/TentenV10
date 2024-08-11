@@ -1,10 +1,12 @@
 import Foundation
+import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import GRDB
 
 class ContentViewModel: ObservableObject {
+    
     @Published var isUserLoggedIn = false
     // used once when app launch
     @Published var needUserFetch = true
@@ -19,14 +21,22 @@ class ContentViewModel: ObservableObject {
                     updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
                 }
             }
-            if userRecord != nil {
-                listenToFriends()
+            
+            if let userRecord = self.userRecord {
+                listenToUser(userRecord: userRecord)
+                listenToFriends(userRecord: userRecord)
             }
         }
     }
+    
+    @Published var selectedFriend: FriendRecord?
     @Published var detailedFriends: [FriendRecord] = []
     @Published var friendPin: String = ""
     @Published var isListeningToFriends = false 
+    
+    @Published var isConnected: Bool = false
+    @Published var isPublished: Bool = false
+
     
     private var deviceToken: String? {
         didSet {
@@ -39,19 +49,37 @@ class ContentViewModel: ObservableObject {
     }
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     private var friendsListeners: [ListenerRegistration] = []
+    private var userListener: ListenerRegistration?
+    private var previousUserDto: UserDto?
     
     private let firebaseManager = FirebaseManager.shared
     private let databaseManager = DatabaseManager.shared
+    @ObservedObject var liveKitManager = LiveKitManager.shared
+    private let audioSessionManager = AudioSessionManager.shared
+    private let backgroundTaskManager = BackgroundTaskManager.shared
     
     init() {
         startListeningToAuthChanges()
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceTokenNotification(_:)), name: .didReceiveDeviceToken, object: nil)
+        
+        bindLiveKitManager()
     }
     
     deinit {
         stopListeningToAuthChanges()
         friendsListeners.forEach { $0.remove() }
     }
+    
+    private func bindLiveKitManager() {
+        liveKitManager.$isConnected
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isConnected)
+        
+        liveKitManager.$isPublished
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isPublished)
+    }
+
     
     @objc private func handleDeviceTokenNotification(_ notification: Notification) {
         if let token = notification.userInfo?["deviceToken"] as? String {
@@ -81,6 +109,41 @@ class ContentViewModel: ObservableObject {
     }
 }
 
+// MARK: LiveKit
+extension ContentViewModel {
+    func connect() async {
+        guard let friendUid = selectedFriend?.id else {
+            NSLog("Friend is not selected")
+            return
+        }
+        
+        await liveKitManager.connect()
+        firebaseManager.updateCallRequest(friendUid: friendUid, hasIncomingCallRequest: true)
+    }
+    
+    func disconnect() {
+        guard let friendUid = selectedFriend?.id else {
+            NSLog("Friend is not selected")
+            return
+        }
+
+        Task {
+            await liveKitManager.disconnect()
+            firebaseManager.updateCallRequest(friendUid: friendUid, hasIncomingCallRequest: false)
+        }
+    }
+    
+    func publishAudio() {
+        Task {
+            await liveKitManager.publishAudio()
+        }
+    }
+    
+    func unpublishAudio() async {
+        await liveKitManager.unpublishAudio()
+    }
+}
+
 // MARK: Friend
 extension ContentViewModel {
     func addFriend() {
@@ -99,6 +162,7 @@ extension ContentViewModel {
                          
                          DispatchQueue.main.async {
                              self.userRecord!.friends.append(friendId)
+                             self.friendPin = ""
                          }
                          self.databaseManager.createUser(user: newUserRecord)
                          self.firebaseManager.addFriendId(friendId: friendId)
@@ -127,14 +191,10 @@ extension ContentViewModel {
         }
     }
     
-    func listenToFriends() {
+    
+    func listenToFriends(userRecord: UserRecord) {
         NSLog("LOG: listenToFriends")
-        guard let friends = userRecord?.friends, !friends.isEmpty else {
-            NSLog("LOG: userRecord.friends is empty or userRecord is nil")
-            NSLog("LOG: userRecord: \(userRecord)")
-            NSLog("LOG: userRecord.friends: \(userRecord?.friends)")
-            return
-        }
+        let friends = userRecord.friends
 
         // Clear existing listeners before setting up new ones
         friendsListeners.forEach { $0.remove() }
@@ -144,12 +204,63 @@ extension ContentViewModel {
         friends.forEach { listenToFriend(friendId: $0) }
     }
     
+    func listenToUser(userRecord: UserRecord) {
+        let userId = userRecord.id
+        userListener = firebaseManager.usersCollection.document(userId).addSnapshotListener {
+            [weak self] document, error in
+            guard let self = self else { return }
+
+            if let error = error {
+               print("Error listening to user: \(error.localizedDescription)")
+               return
+            }
+            
+            if let document = document, document.exists {
+                Task {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        
+                        self.handleIncomingCallRequest(oldDto: self.previousUserDto, newDto: userDto)
+                        self.previousUserDto = userDto
+                        
+                        let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
+                        
+                        if self.userRecord != userRecord {
+                            NSLog("LOG: new user record!")
+                            DispatchQueue.main.async {
+                                self.userRecord = userRecord
+                            }
+                            self.databaseManager.createUser(user: userRecord)
+                        }
+                    } catch {
+                        print("Error converting UserDto to UserRecord: \(error.localizedDescription)")
+                    }
+                }
+            } else {
+                print("Document does not exist when trying to listen to user")
+            }
+        }
+    }
+    
+    private func handleIncomingCallRequest(userDto: UserDto) {
+        NSLog("LOG: handleIncomingCallRequest")
+        if userDto.hasIncomingCallRequest {
+            Task {
+                await liveKitManager.connect()
+            }
+        } else {
+            Task {
+                await liveKitManager.disconnect()
+            }
+        }
+    }
+
     func listenToFriend(friendId: String) {
         let friendListener = firebaseManager.usersCollection.document(friendId).addSnapshotListener { [weak self] document, error in
             guard let self = self else { return }
 
             if let error = error {
-                print("Error fetching friend: \(error.localizedDescription)")
+                print("Error listening to friend: \(error.localizedDescription)")
                 return
             }
 
@@ -159,9 +270,6 @@ extension ContentViewModel {
                         let friendDto = try document.data(as: UserDto.self)
                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
                         
-                        NSLog("Friend information updated")
-                        NSLog("username: \(friendRecord.email)")
-
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == friendRecord.id }) {
                                 self.detailedFriends[index] = friendRecord
@@ -169,6 +277,8 @@ extension ContentViewModel {
                                 self.detailedFriends.append(friendRecord)
                             }
                         }
+                        self.databaseManager.createFriend(friend: friendRecord)
+
                     } catch {
                         print("Error converting UserDto to FriendRecord: \(error.localizedDescription)")
                     }
@@ -179,6 +289,12 @@ extension ContentViewModel {
         }
 
         friendsListeners.append(friendListener)
+    }
+    
+    func selectFriend(friend: FriendRecord) {
+        DispatchQueue.main.async {
+            self.selectedFriend = friend
+        }
     }
 }
 
@@ -196,6 +312,7 @@ extension ContentViewModel {
             return newUserRecord
         } catch {
             NSLog("LOG: Error fetching user from Firestore: \(error.localizedDescription)")
+            self.signOut()
             throw NSError(domain: "fetchUserError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch user from remote firestore."])
         }
     }
@@ -229,12 +346,14 @@ extension ContentViewModel {
                 NSLog("LOG: detailedFriends in local database is empty")
                 NSLog("LOG: Fetching detailedFriends from remote firestore")
                 for friendId in newUserRecord.friends {
+                    NSLog("LOG: newUserRecord.friends: \(newUserRecord.friends)")
                     fetchFriendAndUpdateLocal(friendId: friendId)
                 }
             }
             DispatchQueue.main.async {
                 self.detailedFriends = newDetailedFriends
             }
+            NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
         } else {
             NSLog("LOG: Remote firestore doesn't have user record either")
             throw NSError(domain: "signIn", code: -1, userInfo: [NSLocalizedDescriptionKey: "Either local or remote doesn't have user record whent fetching user"])
@@ -246,10 +365,12 @@ extension ContentViewModel {
             do {
                 let friendUserDto = try await firebaseManager.fetchUser(userId: friendId)
                 let friendRecord = try await convertUserDtoToFriendRecord(userDto: friendUserDto)
-                DispatchQueue.main.async {
-                    self.detailedFriends.append(friendRecord)
+                if !self.detailedFriends.contains(friendRecord) {
+                    DispatchQueue.main.async {
+                        self.detailedFriends.append(friendRecord)
+                    }
+                    self.databaseManager.createFriend(friend: friendRecord)
                 }
-                self.databaseManager.createFriend(friend: friendRecord)
             } catch {
                 NSLog("LOG: Error while fetching friend from firestore: \(error.localizedDescription)")
             }
@@ -414,5 +535,47 @@ extension ContentViewModel {
         databaseManager.createUser(user: newUserRecord)
         // update firestore
         firebaseManager.updateDeviceToken(userId: newUserRecord.id, newDeviceToken: newDeviceToken)
+    }
+    
+    private func handleIncomingCallRequest(oldDto: UserDto?, newDto: UserDto) {
+        guard let oldDto = oldDto else {
+            NSLog("LOG: No previous UserDto to compare.")
+            return
+        }
+
+        if oldDto.hasIncomingCallRequest != newDto.hasIncomingCallRequest {
+//            NSLog("LOG: UserDto hasIncomingCallRequest changed from \(oldDto.hasIncomingCallRequest) to \(newDto.hasIncomingCallRequest)")
+            if newDto.hasIncomingCallRequest {
+                Task {
+                    await liveKitManager.connect()
+                }
+            } else {
+                Task {
+                    await liveKitManager.disconnect()
+                }
+            }
+        }
+    }
+}
+
+extension ContentViewModel {
+    func handleScenePhaseChange(to newScenePhase: ScenePhase) {
+        switch newScenePhase {
+
+        case .active:
+             NSLog("LOG: App is active and in the foreground")
+            backgroundTaskManager.stopAudioTask()
+
+        case .inactive:
+            NSLog("LOG: App is inactive")
+
+        case .background:
+            NSLog("LOG: App is in the background")
+            audioSessionManager.setupAudioPlayer()
+            backgroundTaskManager.startAudioTask()
+
+        @unknown default:
+            break
+        }
     }
 }

@@ -144,6 +144,15 @@ extension FirebaseManager {
                 }
             }
         }
+    
+    func updateCallRequest(friendUid: String, hasIncomingCallRequest: Bool) {
+        let friendRef = usersCollection.document(friendUid)
+        friendRef.updateData(["hasIncomingCallRequest": hasIncomingCallRequest]) { error in
+            if let error = error {
+                NSLog("Error updating call request: \(error.localizedDescription)")
+            }
+        }
+    }
 }
 
 // MARK: Storage

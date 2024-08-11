@@ -46,6 +46,19 @@ struct AddFriendView: View {
             }
             
             Spacer()
+            if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
+                
+                Text(userRecord.username)
+                    .font(.title)
+                    .padding(.top, 10)
+            }
+            Spacer()
             
             Button(action: {
                 dismiss()
