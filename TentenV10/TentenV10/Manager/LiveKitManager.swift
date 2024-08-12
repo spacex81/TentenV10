@@ -13,7 +13,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     let handleLiveKitTokenUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/handleLivekitToken"
     let handleRegularNotificationUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/handleRegularNotification"
 
-    var roomName: String = "testName"
+//    var roomName: String = "testName"
     
     init() {
         let roomOptions = RoomOptions(adaptiveStream: true, dynacast: true)
@@ -22,7 +22,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 }
 
 extension LiveKitManager {
-    func connect() async {
+    func connect(roomName: String) async {
         if roomName == "testRoom" {
             NSLog("LOG: Connecting to LiveKit with default room name")
         } else {

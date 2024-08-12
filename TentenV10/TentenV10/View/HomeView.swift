@@ -2,9 +2,9 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
-    @EnvironmentObject var viewModel: ContentViewModel
     @State private var isSheetPresented: Bool = false
-
+    @ObservedObject var viewModel = HomeViewModel.shared
+    
     var body: some View {
         VStack {
             if let selectedFriend = viewModel.selectedFriend {
@@ -20,8 +20,9 @@ struct HomeView: View {
                         Text(selectedFriend.username)
                             .font(.title)
                             .padding(.top, 10)
+                        
+                        
                     }
-                    
                 }
                 .padding(.bottom, 20)
             } else {
@@ -56,6 +57,7 @@ struct HomeView: View {
                                     .onTapGesture {
                                         viewModel.selectFriend(friend: friend)
                                     }
+                                    .opacity(friend.isBusy ? 0.5 : 1.0)
                             }
                             
                             Text(friend.username)
@@ -112,18 +114,5 @@ struct HomeView: View {
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)
         }
-        .onAppear {
-            NSLog("LOG: onAppear")
-            if viewModel.needUserFetch, let id = viewModel.currentUser?.uid {
-                NSLog("LOG: fetch user record on appear")
-                Task {
-                    try await viewModel.fetchUser(id: id)
-                }
-            }
-        }
     }
-}
-
-#Preview {
-    HomeView()
 }

@@ -1,0 +1,741 @@
+import Foundation
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
+import GRDB
+
+class RepositoryManager: ObservableObject {
+    static let shared = RepositoryManager()
+    
+    private let liveKitManager = LiveKitManager.shared
+    
+    // Local Database
+    private var dbQueue: DatabaseQueue!
+    
+    // Firebase
+    let auth = Auth.auth()
+    let db = Firestore.firestore()
+    let storage = Storage.storage()
+    let usersCollection: CollectionReference
+    
+    private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
+    private var friendsListeners: [ListenerRegistration] = []
+    private var userListener: ListenerRegistration?
+//    private var previousUserDto: UserDto?
+    
+    @Published var userRecord: UserRecord? {
+        didSet {
+//            if let deviceToken = deviceToken, let userRecord = userRecord {
+//                if userRecord.deviceToken != deviceToken {
+//                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+//                }
+//            }
+            
+            if let userRecord = self.userRecord {
+                // update deviceToken
+                if let deviceToken = deviceToken {
+                    if userRecord.deviceToken != deviceToken {
+                        updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+                    }
+                }
+                
+                // setup listener
+                if userListener == nil {
+                    listenToUser(userRecord: userRecord)
+                }
+                if friendsListeners.isEmpty {
+                    listenToFriends(userRecord: userRecord)
+                }
+                
+                // update room name
+                if let senderToken = userRecord.deviceToken,
+                   let receiverToken = selectedFriend?.deviceToken {
+                    
+                    let tokens = [senderToken, receiverToken].sorted()
+                    let roomName = "\(tokens[0])_\(tokens[1])"
+                    
+                    if userRecord.roomName != roomName {
+                         updateRoomName(roomName: roomName)
+                    }            
+                }
+            }
+        }
+    }
+    
+    @Published var selectedFriend: FriendRecord? {
+        didSet {
+            // update room name
+            if let senderToken = userRecord?.deviceToken,
+               let receiverToken = selectedFriend?.deviceToken {
+                let tokens = [senderToken, receiverToken].sorted()
+                let roomName = "\(tokens[0])_\(tokens[1])"
+                
+                if userRecord?.roomName != roomName {
+                     updateRoomName(roomName: roomName)
+                }
+            }
+        }
+    }
+    
+    private func updateRoomName(roomName: String) {
+        NSLog("LOG: updateRoomName")
+//        let tokens = [senderToken, receiverToken].sorted()
+//        let roomName = "\(tokens[0])_\(tokens[1])"
+        
+//        liveKitManager.roomName = roomName
+        guard var newUserRecord = userRecord else {
+            NSLog("LOG: userRecord is not set when trying to update room name")
+            return
+        }
+        
+        newUserRecord.roomName = roomName
+        // update memory
+        DispatchQueue.main.async {
+            self.userRecord = newUserRecord
+        }
+        // update local db
+        createUserInDatabase(user: newUserRecord)
+        // not gonna update firebase value here
+        // firebase roomName value will be updated only once when connecting to LiveKit
+    }
+    
+    @Published var deviceToken: String? {
+        didSet {
+            if let deviceToken = deviceToken, let userRecord = userRecord {
+                if userRecord.deviceToken != deviceToken {
+                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+                }
+            }
+        }
+    }
+    
+    @Published var userDto: UserDto?
+    @Published var detailedFriends: [FriendRecord] = []
+    
+    @Published var needUserFetch = true
+    
+    @Published var currentUser: User?
+
+    init() {
+        usersCollection = db.collection("users")
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceTokenNotification(_:)), name: .didReceiveDeviceToken, object: nil)
+        setupDatabase()
+        startListeningToAuthChanges()
+    }
+    
+    deinit {
+        stopListeningToAuthChanges()
+    }
+    
+    @objc private func handleDeviceTokenNotification(_ notification: Notification) {
+        if let token = notification.userInfo?["deviceToken"] as? String {
+            self.deviceToken = token
+        }
+    }
+    
+    private func updateDeviceToken(oldUserRecord: UserRecord, newDeviceToken: String) {
+        NSLog("LOG: updateDeviceToken")
+        var newUserRecord = oldUserRecord
+        newUserRecord.deviceToken = newDeviceToken
+
+        // update device token in self.userRecord
+        DispatchQueue.main.async {
+            self.userRecord = newUserRecord
+        }
+        // update local database
+        createUserInDatabase(user: newUserRecord)
+        // update firestore
+        updateDeviceTokenInFirebase(userId: newUserRecord.id, newDeviceToken: newDeviceToken)
+    }
+    
+    func startListeningToAuthChanges() {
+        authStateListenerHandle = auth.addStateDidChangeListener { [weak self] _, user in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if let user = user {
+                    self.currentUser = user
+                    NSLog("self.currentUser is set")
+                } else {
+                    self.currentUser = nil
+                    NSLog("self.currentUser is nil")
+                }
+            }
+        }
+    }
+    
+    func stopListeningToAuthChanges() {
+        if let handle = authStateListenerHandle {
+            auth.removeStateDidChangeListener(handle)
+        }
+    }
+    
+    private func setupDatabase() {
+        do {
+            let databaseURL = try FileManager.default
+                .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                .appendingPathComponent("db.sqlite")
+            
+            dbQueue = try DatabaseQueue(path: databaseURL.path)
+
+            // Register migrations
+            var migrator = DatabaseMigrator()
+
+            migrator.registerMigration("v1") { db in
+               // Create the initial users table
+               try db.create(table: "users") { t in
+                   t.column("id", .text).primaryKey()
+                   t.column("email", .text).notNull()
+                   t.column("username", .text).notNull()
+                   t.column("pin", .text).notNull()
+                   t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
+                   t.column("profileImageData", .blob)
+                   t.column("deviceToken", .text)
+                   t.column("friends", .text)
+                   t.column("roomName", .text).notNull().defaults(to: "testRoom")
+                   t.column("isBusy", .boolean).notNull().defaults(to: false)  // New field with default value
+               }
+               
+               // Create the friends table
+               try db.create(table: "friends") { t in
+                   t.column("id", .text).primaryKey()
+                   t.column("email", .text).notNull()
+                   t.column("username", .text).notNull()
+                   t.column("pin", .text).notNull()
+                   t.column("profileImageData", .blob)
+                   t.column("deviceToken", .text)
+                   t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
+               }
+            }
+
+            // Migrate the database to the latest version
+            try migrator.migrate(dbQueue)
+        } catch {
+            NSLog("LOG: Error setting up database: \(error)")
+        }
+    }
+}
+
+// MARK: Listener
+extension RepositoryManager {
+    func listenToFriends(userRecord: UserRecord) {
+        NSLog("LOG: listenToFriends")
+        let friends = userRecord.friends
+
+        // Clear existing listeners before setting up new ones
+        friendsListeners.forEach { $0.remove() }
+        friendsListeners = []
+
+        // Listen to each friend
+        friends.forEach { listenToFriend(friendId: $0) }
+    }
+    
+    func listenToUser(userRecord: UserRecord) {
+        NSLog("LOG: listenToUser")
+         let userId = userRecord.id
+         userListener = usersCollection.document(userId).addSnapshotListener {
+             [weak self] document, error in
+             guard let self = self else { return }
+             
+             NSLog("LOG: user listener callback")
+
+             if let error = error {
+                print("Error listening to user: \(error.localizedDescription)")
+                return
+             }
+             
+             if let document = document, document.exists {
+                 Task {
+                     do {
+                         let userDto = try document.data(as: UserDto.self)
+                         
+                         self.handleIncomingCallRequest(userDto: userDto)
+//                         self.previousUserDto = userDto
+                         
+                         let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
+                         
+                         if self.userRecord != userRecord {
+                             DispatchQueue.main.async {
+                                 self.userRecord = userRecord
+                             }
+                             self.createUserInDatabase(user: userRecord)
+                         }
+                     } catch {
+                         print("Error converting UserDto to UserRecord: \(error.localizedDescription)")
+                     }
+                 }
+             } else {
+                 print("Document does not exist when trying to listen to user")
+             }
+         }
+     }
+    
+    private func handleIncomingCallRequest(userDto: UserDto) {
+        let roomName = userDto.roomName
+        NSLog("LOG: handleIncomingCallRequest")
+        NSLog("LOG: room name: \(roomName)")
+        
+        if userDto.hasIncomingCallRequest {
+            Task {
+                await liveKitManager.connect(roomName: roomName)
+            }
+        } else {
+            Task {
+                await liveKitManager.disconnect()
+            }
+        }
+    }
+    
+    func listenToFriend(friendId: String) {
+        let friendListener = usersCollection.document(friendId).addSnapshotListener { [weak self] document, error in
+            guard let self = self else { return }
+
+            if let error = error {
+                print("Error listening to friend: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, document.exists {
+                Task {
+                    do {
+                        let friendDto = try document.data(as: UserDto.self)
+                        let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
+                        
+                        DispatchQueue.main.async {
+                            if let index = self.detailedFriends.firstIndex(where: { $0.id == friendRecord.id }) {
+                                self.detailedFriends[index] = friendRecord
+                            } else {
+                                self.detailedFriends.append(friendRecord)
+                            }
+                        }
+                        self.createFriendInDatabase(friend: friendRecord)
+
+                    } catch {
+                        print("Error converting UserDto to FriendRecord: \(error.localizedDescription)")
+                    }
+                }
+            } else {
+                print("Document does not exist for friendId: \(friendId)")
+            }
+        }
+
+        friendsListeners.append(friendListener)
+    }
+}
+
+extension RepositoryManager {
+    func addFriend(friendPin: String) async {
+            guard var newUserRecord = userRecord else {
+                NSLog("LOG: userRecord is nil when adding friend")
+                return
+            }
+        
+            do {
+                if friendPin != "" {
+                     let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
+                     
+                     if !newUserRecord.friends.contains(friendId) {
+                         newUserRecord.friends.append(friendId)
+                         
+                         DispatchQueue.main.async {
+                             self.userRecord!.friends.append(friendId)
+                         }
+                         createUserInDatabase(user: newUserRecord)
+                         addFriendIdInFirebase(friendId: friendId)
+                         
+                         // fetch detailed friend
+                         let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
+                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
+                         
+                         if !self.detailedFriends.contains(friendRecord) {
+                             DispatchQueue.main.async {
+                                 self.detailedFriends.append(friendRecord)
+                             }
+                             createFriendInDatabase(friend: friendRecord)
+                         } else {
+                             NSLog("LOG: friend is already added-FriendRecord")
+                         }
+                     } else {
+                         NSLog("LOG: friend is already added-FriendID")
+                     }
+                 } else {
+                     throw NSError(domain: "addFriendError", code: -1, userInfo: [NSLocalizedDescriptionKey: "friendPin is not set when trying to add friend by pin"])
+                 }
+            } catch {
+                NSLog("LOG: Error adding friend by pin: \(error.localizedDescription)")
+            }
+    }
+}
+
+extension RepositoryManager {
+    func createUserWhenSignUp(newUserRecord: UserRecord) async {
+        DispatchQueue.main.async {
+            self.userRecord = newUserRecord
+        }
+
+        createUserInDatabase(user: newUserRecord)
+        
+        do {
+            let profileImagePath = try await saveProfileImageInFirebase(id: newUserRecord.id, profileImageData: newUserRecord.profileImageData!)
+            let newUserDto = UserDto(id: newUserRecord.id, email: newUserRecord.email, username: newUserRecord.username, pin: newUserRecord.pin, profileImagePath: profileImagePath, deviceToken: newUserRecord.deviceToken)
+            createUserInFirebase(userDto: newUserDto)
+        } catch {
+            NSLog("LOG: Failed to save user when sign up: \(error.localizedDescription)")
+        }
+    }
+}
+
+// MARK: Local Database: User CRUD
+extension RepositoryManager {
+    func createUserInDatabase(user: UserRecord) {
+        do {
+            _ = try dbQueue.write { db in
+                try user.save(db)
+            }
+            NSLog("LOG: Successfully added new user record")
+        } catch {
+            print("Failed to save user: \(error)")
+        }
+    }
+    
+    func readUserFromDatabase(id: String) -> UserRecord? {
+        do {
+            let userRecord = try dbQueue.read { db in
+                try UserRecord.fetchOne(db, key: id)
+            }
+            return userRecord
+        } catch {
+            NSLog("LOG: Failed to read user from database: \(error.localizedDescription)")
+        }
+        
+        return nil
+    }
+}
+
+// MARK: Local Database: Friend CRUD
+extension RepositoryManager {
+    func createFriendInDatabase(friend: FriendRecord) {
+        do {
+            _ = try dbQueue.write { db in
+                try friend.save(db)
+            }
+        } catch {
+            NSLog("LOG: Failed to save friend: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchFriendsByUserIdFromDatabase(userId: String) -> [FriendRecord] {
+        do {
+            let friends = try dbQueue.read { db in
+                try FriendRecord.filter(Column("userId") == userId).fetchAll(db)
+            }
+            return friends
+        } catch {
+            return []
+        }
+    }
+}
+
+
+// MARK: Firebase: Firestore
+extension RepositoryManager {
+    func createUserInFirebase(userDto: UserDto) {
+        do {
+            try usersCollection.document(userDto.id!).setData(from: userDto) { error in
+                if let error = error {
+                    NSLog("LOG: Error adding user to Firestore: \(error)")
+                } else {
+                    NSLog("LOG: User successfully added to Firestore")
+                }
+            }
+        } catch let error {
+            NSLog("LOG: Error encoding user: \(error)")
+        }
+    }
+    
+    func fetchUserFromFirebase(userId: String) async throws -> UserDto {
+        try await withCheckedThrowingContinuation { continuation in
+            usersCollection.document(userId).getDocument { document, error in
+                if let error = error {
+                    NSLog("LOG: failed to fetch user dto from firestore: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let document = document, document.exists {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        continuation.resume(returning: userDto)
+                    } catch {
+                        NSLog("LOG: failed to convert firestore document to UserDto: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    }
+                } else {
+                    NSLog("LOG: failed to fetch user dto from firestore")
+                    continuation.resume(throwing: NSError(domain: "FirestoreError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist."]))
+                }
+            }
+        }
+    }
+    
+    func getFriendByPinFromFirebase(friendPin: String) async throws -> String {
+        try await withCheckedThrowingContinuation { continuation in
+            usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                }
+                
+                guard let documents = snapshot?.documents, let document = documents.first else {
+                    let error = NSError(domain: "getFriendIdByPinError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No such friend with pin: \(friendPin)"])
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                let friendId = document.documentID
+                continuation.resume(returning: friendId)
+            }
+        }
+    }
+    
+    func addFriendIdInFirebase(friendId: String) {
+        guard let currentUserId = auth.currentUser?.uid else {
+            NSLog("LOG: currentUserId is not set when adding friend id")
+            return
+        }
+        
+        let currentUserRef = usersCollection.document(currentUserId)
+        currentUserRef.updateData([
+            "friends": FieldValue.arrayUnion([friendId])
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Failed to add friend to firestore: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func updateDeviceTokenInFirebase(userId: String, newDeviceToken: String) {
+            usersCollection.document(userId).updateData([
+                "deviceToken": newDeviceToken
+            ]) { error in
+                if let error = error {
+                    NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
+                } else {
+                    NSLog("LOG: Device token successfully updated in Firestore")
+                }
+            }
+        }
+    
+    func updateCallStatusInFirebase(friendUid: String, hasIncomingCallRequest: Bool, isBusy: Bool) {
+        guard let userId = currentUser?.uid else {
+            NSLog("LOG: currentUser is not set when connecting to LiveKit Room")
+            return
+        }
+
+        guard let roomName = userRecord?.roomName else {
+            NSLog("LOG: userRecord is not set when connecting to LiveKit Room")
+            return
+        }
+
+        let userRef = usersCollection.document(userId)
+        let friendRef = usersCollection.document(friendUid)
+
+        let batch = db.batch()
+        batch.updateData(["roomName": roomName, "isBusy": isBusy], forDocument: userRef)
+        batch.updateData(["hasIncomingCallRequest": hasIncomingCallRequest, "roomName": roomName, "isBusy": isBusy], forDocument: friendRef)
+        
+        batch.commit { error in
+            if let error = error {
+                NSLog("Error updating call request: \(error.localizedDescription)")
+            } else {
+                NSLog("Successfully updated call request and room name for both user and friend.")
+            }
+        }
+    }
+
+}
+
+// MARK: Firebase: Storage
+extension RepositoryManager {
+    func saveProfileImageInFirebase(id: String, profileImageData: Data) async throws -> String {
+        let storageRef = storage.reference().child("profile_images").child("\(id).jpg")
+        
+        // Upload the image data
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            storageRef.putData(profileImageData, metadata: nil) { metadata, error in
+                if let error = error {
+                    NSLog("LOG: Failed to Store Profile Image to Firebase Storage: \(error)")
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+        
+        // Get the download URL
+        let downloadURL = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    NSLog("LOG: Failed to Get Profile Image Url from Firebase Storage: \(error)")
+                    continuation.resume(throwing: error)
+                } else if let url = url {
+                    continuation.resume(returning: url.absoluteString)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "StorageError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to retrieve download URL."]))
+                }
+            }
+        }
+        
+        return downloadURL
+    }
+}
+
+// MARK: Fetch User
+extension RepositoryManager {
+    func fetchUser(id: String) async throws {
+        var newUserRecord: UserRecord?
+        var needToUpdateLocal = false
+        
+        NSLog("LOG: Fetching user from local database")
+        newUserRecord = fetchUserFromLocal(id: id)
+        if newUserRecord == nil {
+            needToUpdateLocal = true
+            NSLog("LOG: Local database doesn't have user record")
+            NSLog("LOG: Fetching user from remote firestore")
+            newUserRecord = try await fetchUserFromRemote(id: id)
+        }
+        
+        if let newUserRecord = newUserRecord {
+            DispatchQueue.main.async {
+                self.userRecord = newUserRecord
+            }
+            if needToUpdateLocal {
+                createUserInDatabase(user: newUserRecord)
+                needToUpdateLocal = false
+            }
+            
+            // fetch detailedFriends by userId
+            NSLog("LOG: Fetching detailedFriends from local database")
+            let newDetailedFriends = fetchFriendsByUserIdFromDatabase(userId: newUserRecord.id)
+            if newDetailedFriends.isEmpty {
+                NSLog("LOG: detailedFriends in local database is empty")
+                NSLog("LOG: Fetching detailedFriends from remote firestore")
+                for friendId in newUserRecord.friends {
+                    NSLog("LOG: newUserRecord.friends: \(newUserRecord.friends)")
+                    fetchFriendAndUpdateLocal(friendId: friendId)
+                }
+            }
+            DispatchQueue.main.async {
+                self.detailedFriends = newDetailedFriends
+            }
+            NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
+        } else {
+            NSLog("LOG: Remote firestore doesn't have user record either")
+            throw NSError(domain: "signIn", code: -1, userInfo: [NSLocalizedDescriptionKey: "Either local or remote doesn't have user record whent fetching user"])
+        }
+    }
+    
+    private func fetchUserFromLocal(id: String) -> UserRecord? {
+        let newUserRecord = readUserFromDatabase(id: id)
+        return newUserRecord
+    }
+    
+    private func fetchUserFromRemote(id: String) async throws -> UserRecord {
+        do {
+            let newUserDto = try await fetchUserFromFirebase(userId: id)
+            let newUserRecord = try await convertUserDtoToUserRecord(userDto: newUserDto)
+            return newUserRecord
+        } catch {
+            NSLog("LOG: Error fetching user from Firestore: \(error.localizedDescription)")
+            do {
+                try self.auth.signOut()
+            } catch {
+              NSLog("LOG: Failed to sign out in fetchUserFromRemote")
+            }
+            throw NSError(domain: "fetchUserError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch user from remote firestore."])
+        }
+    }
+    
+    
+    private func fetchFriendAndUpdateLocal(friendId: String) {
+        Task {
+            do {
+                let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
+                let friendRecord = try await convertUserDtoToFriendRecord(userDto: friendUserDto)
+                if !self.detailedFriends.contains(friendRecord) {
+                    DispatchQueue.main.async {
+                        self.detailedFriends.append(friendRecord)
+                    }
+                    self.createFriendInDatabase(friend: friendRecord)
+                }
+            } catch {
+                NSLog("LOG: Error while fetching friend from firestore: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func convertUserDtoToUserRecord(userDto: UserDto) async throws -> UserRecord {
+        guard let profileImagePath = userDto.profileImagePath else {
+            throw NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Profile image path is not set."])
+        }
+        
+        let storageRef = storage.reference(forURL: profileImagePath)
+        let imageData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    NSLog("LOG: Error getting image data from profileImagePath: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let data = data {
+                    continuation.resume(returning: data)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred while fetching image data."]))
+                }
+            }
+        }
+        
+        let userRecord = UserRecord(
+            id: userDto.id ?? UUID().uuidString,
+            email: userDto.email,
+            username: userDto.username,
+            pin: userDto.pin,
+            hasIncomingCallRequest: userDto.hasIncomingCallRequest,
+            profileImageData: imageData,
+            deviceToken: userDto.deviceToken,
+            friends: userDto.friends
+        )
+        
+        return userRecord
+    }
+    
+    private func convertUserDtoToFriendRecord(userDto: UserDto) async throws -> FriendRecord {
+        guard let profileImagePath = userDto.profileImagePath else {
+            throw NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Profile image path is not set."])
+        }
+        
+        let storageRef = storage.reference(forURL: profileImagePath)
+        let imageData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    NSLog("LOG: Error getting image data from profileImagePath: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let data = data {
+                    continuation.resume(returning: data)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred while fetching image data."]))
+                }
+            }
+        }
+        guard let userId = self.currentUser?.uid else {
+            NSLog("LOG: currentUserId is not set when converting userDto into friendRecord")
+            throw NSError(domain: "convertUserDtoToFriendRecord", code: -1, userInfo: [NSLocalizedDescriptionKey: "currentUser is null when converting UserDto to FriendRecord"])
+        }
+        
+        let friendRecord = FriendRecord(
+            id: userDto.id ?? UUID().uuidString,
+            email: userDto.email,
+            username: userDto.username,
+            pin: userDto.pin,
+            profileImageData: imageData,
+            deviceToken: userDto.deviceToken,
+            userId: userId,
+            isBusy: userDto.isBusy
+        )
+        
+        return friendRecord
+    }
+}

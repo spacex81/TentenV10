@@ -40,7 +40,7 @@ extension BackgroundTaskManager {
 
     private func handleLiveKitTask() {
         Task {
-            await liveKitManager.connect()
+//            await liveKitManager.connect()
         }
     }
 }

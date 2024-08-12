@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AuthView: View {
     @State var isLoginMode: Bool = true
-    @EnvironmentObject var viewModel: ContentViewModel
+    @ObservedObject var viewModel = AuthViewModel()
     @State private var isImagePickerPresented = false
 
     var body: some View {

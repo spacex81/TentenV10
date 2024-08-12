@@ -1,16 +1,9 @@
-//
-//  AddFriendView.swift
-//  TentenV10
-//
-//  Created by 조윤근 on 8/8/24.
-//
-
 import SwiftUI
 
 struct AddFriendView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var viewModel: ContentViewModel
-    
+    @ObservedObject var viewModel = HomeViewModel.shared
+
     var body: some View {
         VStack {
             Text("Add Friend")
@@ -57,6 +50,10 @@ struct AddFriendView: View {
                 Text(userRecord.username)
                     .font(.title)
                     .padding(.top, 10)
+                
+                Text(userRecord.deviceToken ?? "Empty Device Token")
+                    .font(.title)
+                    .padding(.top, 10)
             }
             Spacer()
             
@@ -82,8 +79,4 @@ struct AddFriendView: View {
             }
         }
     }
-}
-
-#Preview {
-    AddFriendView()
 }

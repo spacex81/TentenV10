@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C812FEE02C68A92E00BD9D9B /* LiveKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */; };
-		C812FEE22C68E90F00BD9D9B /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */; };
-		C812FEE42C68EAAE00BD9D9B /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */; };
 		C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = C812FEE52C68ECDC00BD9D9B /* test.wav */; };
+		C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */; };
+		C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF052C69D70E00BD9D9B /* AuthManager.swift */; };
+		C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF072C69D72D00BD9D9B /* RepositoryManager.swift */; };
+		C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF092C69D96200BD9D9B /* HomeView.swift */; };
+		C812FF0C2C69D96700BD9D9B /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF0B2C69D96700BD9D9B /* AuthView.swift */; };
+		C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */; };
+		C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF0F2C69DA1F00BD9D9B /* HomeViewModel.swift */; };
+		C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF112C69DAF700BD9D9B /* AuthViewModel.swift */; };
+		C812FF142C69DB3500BD9D9B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF132C69DB3500BD9D9B /* ImagePicker.swift */; };
+		C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF152C69F30800BD9D9B /* LiveKitManager.swift */; };
+		C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF172C69F3AF00BD9D9B /* BackgroundTaskManager.swift */; };
+		C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -24,23 +33,25 @@
 		C815BC8B2C608543004CB09E /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = C815BC8A2C608543004CB09E /* WebRTC */; };
 		C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC8C2C60854C004CB09E /* AppDelegate.swift */; };
 		C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */; };
-		C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */; };
-		C8B5B4152C65B01C002ACBAA /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */; };
-		C8B5B4172C65B18D002ACBAA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4162C65B18D002ACBAA /* HomeView.swift */; };
-		C8B5B4192C65B192002ACBAA /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4182C65B191002ACBAA /* AuthView.swift */; };
-		C8B5B41B2C65B1D1002ACBAA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
-		C8B5B4212C65B903002ACBAA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */; };
-		C8B5B4252C65F58E002ACBAA /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitManager.swift; sourceTree = "<group>"; };
-		C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
-		C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
 		C812FEE52C68ECDC00BD9D9B /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
+		C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		C812FF052C69D70E00BD9D9B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		C812FF072C69D72D00BD9D9B /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
+		C812FF092C69D96200BD9D9B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C812FF0B2C69D96700BD9D9B /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
+		C812FF0F2C69DA1F00BD9D9B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		C812FF112C69DAF700BD9D9B /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		C812FF132C69DB3500BD9D9B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C812FF152C69F30800BD9D9B /* LiveKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitManager.swift; sourceTree = "<group>"; };
+		C812FF172C69F3AF00BD9D9B /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
+		C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -50,15 +61,8 @@
 		C815BC8E2C60858B004CB09E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
-		C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
-		C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		C8B5B4162C65B18D002ACBAA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		C8B5B4182C65B191002ACBAA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
-		C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
-		C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
-		C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,11 +130,11 @@
 		C815BCBA2C60D492004CB09E /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C8B5B4142C65B01C002ACBAA /* FirebaseManager.swift */,
-				C8B5B4202C65B903002ACBAA /* DatabaseManager.swift */,
-				C812FEDF2C68A92E00BD9D9B /* LiveKitManager.swift */,
-				C812FEE12C68E90F00BD9D9B /* AudioSessionManager.swift */,
-				C812FEE32C68EAAE00BD9D9B /* BackgroundTaskManager.swift */,
+				C812FF052C69D70E00BD9D9B /* AuthManager.swift */,
+				C812FF072C69D72D00BD9D9B /* RepositoryManager.swift */,
+				C812FF152C69F30800BD9D9B /* LiveKitManager.swift */,
+				C812FF172C69F3AF00BD9D9B /* BackgroundTaskManager.swift */,
+				C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -148,7 +152,9 @@
 		C815BCBC2C60D49E004CB09E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				C8B5B3F82C63ADD4002ACBAA /* ContentViewModel.swift */,
+				C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */,
+				C812FF0F2C69DA1F00BD9D9B /* HomeViewModel.swift */,
+				C812FF112C69DAF700BD9D9B /* AuthViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -157,10 +163,10 @@
 			isa = PBXGroup;
 			children = (
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
-				C8B5B4162C65B18D002ACBAA /* HomeView.swift */,
-				C8B5B4182C65B191002ACBAA /* AuthView.swift */,
-				C8B5B41A2C65B1D1002ACBAA /* ImagePicker.swift */,
-				C8B5B4242C65F58E002ACBAA /* AddFriendView.swift */,
+				C812FF092C69D96200BD9D9B /* HomeView.swift */,
+				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
+				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
+				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -260,21 +266,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8B5B4192C65B192002ACBAA /* AuthView.swift in Sources */,
-				C8B5B4212C65B903002ACBAA /* DatabaseManager.swift in Sources */,
+				C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */,
+				C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
-				C8B5B3F92C63ADD4002ACBAA /* ContentViewModel.swift in Sources */,
-				C812FEE42C68EAAE00BD9D9B /* BackgroundTaskManager.swift in Sources */,
+				C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */,
+				C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */,
+				C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
-				C8B5B4152C65B01C002ACBAA /* FirebaseManager.swift in Sources */,
-				C812FEE22C68E90F00BD9D9B /* AudioSessionManager.swift in Sources */,
-				C8B5B4252C65F58E002ACBAA /* AddFriendView.swift in Sources */,
-				C8B5B4172C65B18D002ACBAA /* HomeView.swift in Sources */,
-				C8B5B41B2C65B1D1002ACBAA /* ImagePicker.swift in Sources */,
-				C812FEE02C68A92E00BD9D9B /* LiveKitManager.swift in Sources */,
+				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
+				C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */,
+				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
+				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
+				C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */,
 				C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */,
+				C812FF142C69DB3500BD9D9B /* ImagePicker.swift in Sources */,
+				C812FF0C2C69D96700BD9D9B /* AuthView.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

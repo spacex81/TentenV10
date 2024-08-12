@@ -11,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         FirebaseApp.configure()
         
+        
         requestNotificationPermission(application: application)
         requestMicrophonePermission()
 
