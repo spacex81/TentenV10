@@ -1,4 +1,5 @@
 import Foundation
+import UserNotifications
 import LiveKit
 
 class LiveKitManager: ObservableObject, RoomDelegate {
@@ -79,7 +80,7 @@ extension LiveKitManager {
         do {
             try await room.localParticipant.setMicrophone(enabled: true)
             DispatchQueue.main.async {
-                self.isPublished = true
+//                self.isPublished = true
             }
             NSLog("LOG: Microphone enabled and LiveKit Audio track Published")
         } catch {
@@ -128,5 +129,52 @@ extension LiveKitManager {
             return nil
         }
     }
+}
 
+// MARK: LiveKit Delegate
+extension LiveKitManager {
+    func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, forTopic topic: String) {
+        print("Data Received from receiver, you are ok to talk")
+        DispatchQueue.main.async {
+            self.isPublished = true
+        }
+    }
+    
+    func room(_ room: Room, participant: RemoteParticipant, didSubscribeTrack publication: RemoteTrackPublication) {
+        NSLog("RemoteParticipant-didSubscribeTrack")
+        sendMessageToRemoteParticipant(message: "readyToTalk")
+        sendLocalNotification(title: "Remote Participant", body: "Remote participant is talking")
+        NSLog("LOG: Ready to listen to remote audio stream")
+    }
+    
+    func sendMessageToRemoteParticipant(message: String) {
+        guard let room = room else {
+            print("Room is not set")
+            return
+        }
+        
+        let data = Data(message.utf8)
+        Task {
+            do {
+                try await room.localParticipant.publish(data: data)
+            } catch {
+                print("Failed to send data: \(error)")
+            }
+        }
+    }
+    
+    func sendLocalNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Failed to add notification request: \(error)")
+            }
+        }
+    }
 }
