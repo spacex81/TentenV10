@@ -32,7 +32,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         collectionView.showsHorizontalScrollIndicator = false
 
         // Initialize and assign the data source
-        dataSource = CustomCollectionViewDataSource(detailedFriends: $detailedFriends, selectedFriend: $selectedFriend)
+        dataSource = CustomCollectionViewDataSource(detailedFriends: $detailedFriends, selectedFriend: $selectedFriend, collectionViewController: self)
         collectionView.dataSource = dataSource
 
         view.addSubview(collectionView)
@@ -45,4 +45,41 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    
+    func centerCell(at indexPath: IndexPath) {
+        // Check if the indexPath is the first or last item
+        if indexPath.item == 0 || indexPath.item == detailedFriends.count - 1 {
+            print("Add button tapped")
+            return
+        }
+        
+        guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return }
+        
+        let collectionViewCenterX = collectionView.bounds.size.width / 2
+        let targetContentOffsetX = attributes.center.x - collectionViewCenterX
+        
+        // Start the spring animation directly
+        let springAnimationDuration: TimeInterval = 0.7
+        let springDamping: CGFloat = 0.5
+        
+        // Use UIViewPropertyAnimator to create a spring animation
+        let springAnimator = UIViewPropertyAnimator(duration: springAnimationDuration, dampingRatio: springDamping, animations: {
+            self.collectionView.setContentOffset(CGPoint(x: targetContentOffsetX, y: 0), animated: false)
+        })
+        
+        springAnimator.startAnimation()
+        
+        // Haptic feedback
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        generator.impactOccurred()
+        
+        // Update the selected profile image
+        DispatchQueue.main.async {
+            if let cell = self.collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell, let friend = cell.friend {
+                self.selectedFriend = friend
+            }
+        }
+    }
+
 }

@@ -2,6 +2,11 @@ import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "CustomCollectionViewCell"
+   
+    var friend: FriendRecord?
+    
+    var onTap: (() -> Void)? // Closure to handle tap event
+
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -23,6 +28,13 @@ class CustomCollectionViewCell: UICollectionViewCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCell))
+        contentView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc private func didTapCell() {
+        onTap?() // Trigger the tap callback
     }
     
     required init?(coder: NSCoder) {
