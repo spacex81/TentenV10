@@ -20,8 +20,6 @@ struct HomeView: View {
                         Text(selectedFriend.username)
                             .font(.title)
                             .padding(.top, 10)
-                        
-                        
                     }
                 }
                 .padding(.bottom, 20)
@@ -69,32 +67,8 @@ struct HomeView: View {
             }
             .padding(.bottom, 40)
             
-            Text(viewModel.isConnected ? "Connected" : "Tap to Connect")
-                .foregroundColor(viewModel.selectedFriend == nil ? .gray : .blue)
-                .onTapGesture {
-                    guard viewModel.selectedFriend != nil else {return}
-                    if !viewModel.isConnected {
-                        Task {
-                            await viewModel.connect()
-                        }
-                    } else {
-                        viewModel.disconnect()
-                    }
-                }
-                .padding(.bottom, 20)
-            
-            Text(viewModel.isPublished ? "Published" : "Tap to Publish")
-                .foregroundColor(viewModel.selectedFriend == nil ? .gray : .blue)
-                .onTapGesture {
-                    guard viewModel.selectedFriend != nil else {return}
-                    if !viewModel.isPublished {
-                        viewModel.publishAudio()
-                    } else {
-                        Task {
-                            await viewModel.unpublishAudio()
-                        }
-                    }
-                }
+            // Press-Hold-to-Talk Button
+            PressHoldToTalkButton(viewModel: viewModel)
                 .padding(.bottom, 20)
             
             Button(action: {
@@ -113,6 +87,46 @@ struct HomeView: View {
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)
+        }
+    }
+}
+
+struct PressHoldToTalkButton: View {
+    @ObservedObject var viewModel: HomeViewModel
+    @State private var isPressed: Bool = false
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(isPressed ? Color.red : Color.green)
+                .frame(width: 100, height: 100)
+                .scaleEffect(isPressed ? 1.2 : 1.0)
+                .animation(.easeInOut(duration: 0.2), value: isPressed)
+
+            Text(isPressed ? "Talking..." : "Hold to Talk")
+                .foregroundColor(.white)
+                .font(.headline)
+        }
+        .onLongPressGesture(minimumDuration: .infinity, pressing: { isPressing in
+            isPressed = isPressing
+            if isPressing {
+                // Start talking: connect and publish
+                Task {
+                    if !viewModel.isConnected {
+                        await viewModel.connect()
+                    }
+                    viewModel.publishAudio()
+                }
+            } else {
+                // Stop talking: unpublish
+                Task {
+                    await viewModel.unpublishAudio()
+                    viewModel.disconnect()
+                }
+            }
+        }) {
+            // Optional: action to perform when the gesture ends
+            print("Talk ended")
         }
     }
 }

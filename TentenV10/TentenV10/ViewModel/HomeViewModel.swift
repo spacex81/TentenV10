@@ -14,7 +14,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var currentUser: User?
     @Published var userRecord: UserRecord?
-    @Published var selectedFriend: FriendRecord?
+    @Published var selectedFriend: FriendRecord? 
     
 
     

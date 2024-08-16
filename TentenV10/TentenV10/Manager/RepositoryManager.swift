@@ -204,6 +204,7 @@ class RepositoryManager: ObservableObject {
                    t.column("profileImageData", .blob)
                    t.column("deviceToken", .text)
                    t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
+                   t.column("isBusy", .boolean).notNull().defaults(to: false)
                }
             }
 
