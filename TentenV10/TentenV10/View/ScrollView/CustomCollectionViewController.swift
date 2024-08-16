@@ -21,22 +21,23 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 70, height: 70)
-        layout.minimumLineSpacing = 20
+        let layout = CustomCollectionViewFlowLayout()
+        layout.viewController = self 
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.delegate = self
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.reuseIdentifier)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.reuseIdentifier)
+        collectionView.decelerationRate = .fast
 
-        // Initialize and assign the data source
         dataSource = CustomCollectionViewDataSource(detailedFriends: $detailedFriends, selectedFriend: $selectedFriend, collectionViewController: self)
         collectionView.dataSource = dataSource
+        
+        collectionView.delegate = self
+        // Initialize and assign the data source
 
         view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
