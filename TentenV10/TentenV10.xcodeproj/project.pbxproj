@@ -41,6 +41,7 @@
 		C8E9BF242C6F3F53002AEDE0 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF232C6F3F53002AEDE0 /* CustomCollectionViewController.swift */; };
 		C8E9BF262C6F3F6B002AEDE0 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF252C6F3F6B002AEDE0 /* CustomCollectionView.swift */; };
 		C8E9BF282C6F3F9D002AEDE0 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF272C6F3F9D002AEDE0 /* CustomCollectionViewCell.swift */; };
+		C8E9BF2A2C6F3FE2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF292C6F3FE2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		C8E9BF232C6F3F53002AEDE0 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		C8E9BF252C6F3F6B002AEDE0 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		C8E9BF272C6F3F9D002AEDE0 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		C8E9BF292C6F3FE2002AEDE0 /* CustomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				C8E9BF232C6F3F53002AEDE0 /* CustomCollectionViewController.swift */,
+				C8E9BF292C6F3FE2002AEDE0 /* CustomCollectionViewDataSource.swift */,
 				C8E9BF252C6F3F6B002AEDE0 /* CustomCollectionView.swift */,
 				C8E9BF272C6F3F9D002AEDE0 /* CustomCollectionViewCell.swift */,
 			);
@@ -309,6 +312,7 @@
 				C8E9BF282C6F3F9D002AEDE0 /* CustomCollectionViewCell.swift in Sources */,
 				C8E9BF242C6F3F53002AEDE0 /* CustomCollectionViewController.swift in Sources */,
 				C812FF142C69DB3500BD9D9B /* ImagePicker.swift in Sources */,
+				C8E9BF2A2C6F3FE2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
 				C812FF0C2C69D96700BD9D9B /* AuthView.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
 				C8E9BF262C6F3F6B002AEDE0 /* CustomCollectionView.swift in Sources */,
