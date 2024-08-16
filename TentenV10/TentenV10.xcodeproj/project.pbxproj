@@ -37,6 +37,9 @@
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
+		C8DB63EC2C6F2AE400831BA8 /* PressHoldToTalkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DB63EB2C6F2AE400831BA8 /* PressHoldToTalkButton.swift */; };
+		C8DB63EF2C6F2B3400831BA8 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DB63EE2C6F2B3400831BA8 /* CustomCollectionViewController.swift */; };
+		C8DB63F12C6F2B8800831BA8 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DB63F02C6F2B8800831BA8 /* CustomCollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +69,9 @@
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
 		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
+		C8DB63EB2C6F2AE400831BA8 /* PressHoldToTalkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressHoldToTalkButton.swift; sourceTree = "<group>"; };
+		C8DB63EE2C6F2B3400831BA8 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
+		C8DB63F02C6F2B8800831BA8 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,8 +171,10 @@
 		C815BCBD2C60D4A3004CB09E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
 				C812FF092C69D96200BD9D9B /* HomeView.swift */,
+				C8DB63EB2C6F2AE400831BA8 /* PressHoldToTalkButton.swift */,
 				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
 				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
@@ -180,6 +188,15 @@
 				C8B5B41E2C65B765002ACBAA /* UserDto.swift */,
 			);
 			path = Dto;
+			sourceTree = "<group>";
+		};
+		C8DB63ED2C6F2B2100831BA8 /* ScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				C8DB63EE2C6F2B3400831BA8 /* CustomCollectionViewController.swift */,
+				C8DB63F02C6F2B8800831BA8 /* CustomCollectionView.swift */,
+			);
+			path = ScrollView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,12 +299,15 @@
 				C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */,
 				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
+				C8DB63EC2C6F2AE400831BA8 /* PressHoldToTalkButton.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
 				C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */,
 				C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */,
+				C8DB63EF2C6F2B3400831BA8 /* CustomCollectionViewController.swift in Sources */,
 				C812FF142C69DB3500BD9D9B /* ImagePicker.swift in Sources */,
 				C812FF0C2C69D96700BD9D9B /* AuthView.swift in Sources */,
 				C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */,
+				C8DB63F12C6F2B8800831BA8 /* CustomCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
