@@ -26,16 +26,16 @@ struct HomeView: View {
             PressHoldToTalkButton(viewModel: viewModel)
                 .padding(.bottom, 20)
             
-            Button(action: {
-                isSheetPresented = true
-            }) {
-                Text("Add Friend")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
+//            Button(action: {
+//                isSheetPresented = true
+//            }) {
+//                Text("Add Friend")
+//                    .font(.title2)
+//                    .foregroundColor(.white)
+//                    .padding()
+//                    .background(Color.blue)
+//                    .cornerRadius(10)
+//            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
