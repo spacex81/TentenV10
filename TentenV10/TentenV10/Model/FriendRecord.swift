@@ -61,3 +61,9 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
         container[Columns.isBusy] = isBusy // Encode the new isBusy property
     }
 }
+
+extension FriendRecord {
+    static var empty: FriendRecord {
+        return FriendRecord(id: "", email: "", username: "", pin: "", profileImageData: nil, deviceToken: nil, userId: "", isBusy: false)
+    }
+}

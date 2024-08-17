@@ -7,7 +7,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
 
     @Binding var selectedFriend: FriendRecord?
     @Binding var detailedFriends: [FriendRecord]
-
+    
     init(selectedFriend: Binding<FriendRecord?>, detailedFriends: Binding<[FriendRecord]>) {
         self._selectedFriend = selectedFriend
         self._detailedFriends = detailedFriends
@@ -22,16 +22,24 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         super.viewDidLoad()
 
         let layout = CustomCollectionViewFlowLayout()
-        layout.viewController = self 
+        layout.viewController = self
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.reuseIdentifier)
+        collectionView.register(AddButtonCell.self, forCellWithReuseIdentifier: AddButtonCell.reuseIdentifier)
         collectionView.decelerationRate = .fast
 
-        dataSource = CustomCollectionViewDataSource(detailedFriends: $detailedFriends, selectedFriend: $selectedFriend, collectionViewController: self)
+        dataSource = CustomCollectionViewDataSource(
+            detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.detailedFriends) }, set: { newFriends in
+                // Update the original detailedFriends if needed
+                self.detailedFriends = newFriends
+            }),
+            selectedFriend: $selectedFriend,
+            collectionViewController: self
+        )
         collectionView.dataSource = dataSource
         
         collectionView.delegate = self
@@ -49,7 +57,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     
     func centerCell(at indexPath: IndexPath) {
         // Check if the indexPath is the first or last item
-        if indexPath.item == 0 || indexPath.item == detailedFriends.count - 1 {
+        if indexPath.item == 0 || indexPath.item == detailedFriends.count + 1 {
             print("Add button tapped")
             return
         }
@@ -83,4 +91,15 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         }
     }
 
+    func reloadData() {
+        collectionView.reloadData()
+    }
+    
+    private func updatedDetailedFriends(with friends: [FriendRecord]) -> [FriendRecord] {
+        var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
+        updatedFriends.append(contentsOf: friends)
+        updatedFriends.append(FriendRecord.empty) // Add empty at the end
+        return updatedFriends
+    }
 }
+

@@ -105,7 +105,6 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         // Adding spring animation on scroll
         let springAnimationDuration: TimeInterval = 0.7
         let springDamping: CGFloat = 0.5
-        let initialSpringVelocity: CGFloat = 0.5
         
         DispatchQueue.main.async {
             let springAnimator = UIViewPropertyAnimator(duration: springAnimationDuration, dampingRatio: springDamping, animations: {
@@ -115,7 +114,7 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
             // Update the selected profile image when snapping
             if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
-               let friend = self.viewController?.detailedFriends[indexPath.item] {
+               let friend = self.viewController?.detailedFriends[indexPath.item - 1] {
                 self.viewController?.selectedFriend = friend
             }
         }

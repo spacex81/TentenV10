@@ -18,13 +18,22 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.reuseIdentifier, for: indexPath) as! CustomCollectionViewCell
-        let friend = detailedFriends[indexPath.item]
-        cell.friend = friend
-        cell.onTap = { [weak self] in
-            self?.collectionViewController?.centerCell(at: indexPath)
+        if indexPath.item == 0 || indexPath.item == detailedFriends.count - 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddButtonCell.reuseIdentifier, for: indexPath) as! AddButtonCell
+            cell.onTap = {
+                NSLog("LOG: Add Button tapped at index \(indexPath.item)")
+            }
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.reuseIdentifier, for: indexPath) as! CustomCollectionViewCell
+            let friend = detailedFriends[indexPath.item]
+            cell.friend = friend
+            cell.onTap = { [weak self] in
+                self?.collectionViewController?.centerCell(at: indexPath)
+            }
+            cell.configure(with: friend)
+            return cell
         }
-        cell.configure(with: friend)
-        return cell
     }
 }
+
