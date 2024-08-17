@@ -8,37 +8,14 @@ struct HomeView: View {
     var body: some View {
         VStack {
             if let selectedFriend = viewModel.selectedFriend {
-                VStack {
-                    if let imageData = selectedFriend.profileImageData, let uiImage = UIImage(data: imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .shadow(radius: 10)
-                        
-                        Text(selectedFriend.username)
-                            .font(.title)
-                            .padding(.top, 10)
-                    }
-                }
-                .padding(.bottom, 20)
+                Text(selectedFriend.username)
+                    .font(.title)
+                    .padding(.top, 10)
             } else {
-                VStack {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 100, height: 100)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                        .foregroundColor(.gray)
-                    
-                    Text("No Friend Selected")
-                        .font(.title)
-                        .padding(.top, 10)
-                        .foregroundColor(.gray)
-                }
-                .padding(.bottom, 20)
+                Text("No Friend Selected")
+                    .font(.title)
+                    .padding(.top, 10)
+                    .foregroundColor(.gray)
             }
             
             // UIKit Scroll View
@@ -60,6 +37,20 @@ struct HomeView: View {
                     .cornerRadius(10)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Group {
+                if let imageData = viewModel.selectedFriend?.profileImageData, let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                } else {
+                    Color.clear
+                        .ignoresSafeArea()
+                }
+            }
+        )
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()
         }
@@ -68,3 +59,4 @@ struct HomeView: View {
         }
     }
 }
+
