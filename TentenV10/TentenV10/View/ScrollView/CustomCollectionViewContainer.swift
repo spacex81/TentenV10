@@ -39,10 +39,6 @@ class CustomCollectionViewContainer: UIView {
             collectionView.topAnchor.constraint(equalTo: containerView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
-
-        // Add border to the container view
-        self.layer.borderColor = UIColor.red.cgColor
-        self.layer.borderWidth = 2.0
     }
 
     func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
