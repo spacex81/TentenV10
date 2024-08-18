@@ -2,6 +2,8 @@ import SwiftUI
 
 struct AnimatedBackgroundViewRepresentable: UIViewRepresentable {
     var image: UIImage?
+    @Binding var isPressing: Bool
+    @Binding var isPublished: Bool
 
     func makeUIView(context: Context) -> AnimatedBackgroundView {
         return AnimatedBackgroundView()
@@ -9,5 +11,6 @@ struct AnimatedBackgroundViewRepresentable: UIViewRepresentable {
 
     func updateUIView(_ uiView: AnimatedBackgroundView, context: Context) {
         uiView.setImage(image)
+//        uiView.applyScaling(isPressing: isPressing, isPublished: isPublished)
     }
 }
