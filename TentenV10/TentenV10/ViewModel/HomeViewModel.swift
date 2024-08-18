@@ -16,12 +16,13 @@ class HomeViewModel: ObservableObject {
     @Published var userRecord: UserRecord?
     @Published var selectedFriend: FriendRecord?
     
-    // will be changed by the collection view cell
     @Published var isPressing: Bool = false {
         didSet {
-            handlePressingStateChange()
+            circleTrim = isPressing ? 1 : 0.9
+//            handlePressingStateChange()
         }
     }
+    @Published var circleTrim: CGFloat = 1.0
     
     @Published var detailedFriends: [FriendRecord] = []
     

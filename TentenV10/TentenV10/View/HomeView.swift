@@ -5,6 +5,7 @@ struct HomeView: View {
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
     
+    
     // size of the collection view item
     var itemSize: CGFloat {
         let screenWidth = UIScreen.main.bounds.width
@@ -32,14 +33,19 @@ struct HomeView: View {
                     .foregroundColor(.gray)
             }
             
-            // Scroll View
             ZStack {
+                // Scroll View
                 CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $viewModel.isPressing)
                     .frame(height: 300)
                 
+                // Ring
                 Circle()
-                    .stroke(.white, lineWidth: 10)
-                    .frame(width: strokeSize, height: strokeSize)
+                    .trim(from: viewModel.isPressing ? 0 : 0.1, to: 1.0) // 0.125 is approximately 1.5/12
+                    .stroke(.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .rotationEffect(.degrees(-75)) // Start from top
+                    .opacity(viewModel.isPressing ? 0.5 : 1.0)
+                    .frame(width: viewModel.isPressing ? strokeSize * 0.7 : strokeSize, height: viewModel.isPressing ? strokeSize * 0.7 : strokeSize)
+                    .animation(.easeInOut(duration: 0.1), value: viewModel.isPressing)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
