@@ -34,26 +34,34 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.reuseIdentifier, for: indexPath) as! CustomCollectionViewCell
             let friend = detailedFriends[indexPath.item]
-            cell.friend = friend
-            cell.onTap = { [weak self] in
-                NSLog("LOG: onTap")
-                self?.collectionViewController?.centerCell(at: indexPath)
+            if friend == selectedFriend {
+                NSLog("LOG: selected friend: \(friend.username)")
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
+                cell.configure(with: friend)
+                
+                cell.onLongPressBegan = { [weak self] in
+                    NSLog("LOG: onLongPressBegan")
+                    self?.isPressing = true
+                }
+                cell.onLongPressEnded = { [weak self] in
+                    NSLog("LOG: onLongPressEnded")
+                    self?.isPressing = false
+                }
+                
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
+                cell.configure(with: friend)
+                
+                cell.onTap = { [weak self] in
+                    NSLog("LOG: onTap")
+                    self?.collectionViewController?.centerCell(at: indexPath)
+                    self?.selectedFriend = friend
+                }
+                
+                return cell
             }
-            cell.configure(with: friend)
-
-            // Set up long press gesture handlers
-            cell.onLongPressBegan = { [weak self] in
-                NSLog("LOG: onLongPressBegan")
-                self?.isPressing = true
-            }
-            cell.onLongPressEnded = { [weak self] in
-                NSLog("LOG: onLongPressEnded")
-                self?.isPressing = false
-            }
-            
-            return cell
         }
     }
 }

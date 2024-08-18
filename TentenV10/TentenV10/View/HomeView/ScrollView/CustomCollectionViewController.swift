@@ -39,7 +39,8 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.reuseIdentifier)
+        collectionView.register(TapCell.self, forCellWithReuseIdentifier: TapCell.reuseIdentifier)
+        collectionView.register(LongPressCell.self, forCellWithReuseIdentifier: LongPressCell.reuseIdentifier)
         collectionView.register(AddButtonCell.self, forCellWithReuseIdentifier: AddButtonCell.reuseIdentifier)
         collectionView.decelerationRate = .fast
 
@@ -75,7 +76,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
             return
         }
         
-//        let initialIndexPath = IndexPath(item: 1, section: 0)
         DispatchQueue.main.async {
             self.selectedFriend = self.detailedFriends[0]
         }
@@ -102,13 +102,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
         generator.impactOccurred()
-        
-        // Update the selected profile image
-        DispatchQueue.main.async {
-            if let cell = self.collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell, let friend = cell.friend {
-                self.selectedFriend = friend
-            }
-        }
     }
 
     func reloadData() {

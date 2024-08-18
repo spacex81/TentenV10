@@ -1,11 +1,8 @@
 import UIKit
 
-class CustomCollectionViewCell: UICollectionViewCell {
-    static let reuseIdentifier = "CustomCollectionViewCell"
-   
-    var friend: FriendRecord?
+class LongPressCell: UICollectionViewCell {
+    static let reuseIdentifier = "LongPressCell"
     
-    var onTap: (() -> Void)? // Closure to handle tap event
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
 
@@ -17,7 +14,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private let tapGestureRecognizer = UITapGestureRecognizer()
     private let longPressGestureRecognizer = UILongPressGestureRecognizer()
 
     override init(frame: CGRect) {
@@ -33,16 +29,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         
-        tapGestureRecognizer.addTarget(self, action: #selector(didTapCell))
-        contentView.addGestureRecognizer(tapGestureRecognizer)
-        
         longPressGestureRecognizer.minimumPressDuration = 0.1
         longPressGestureRecognizer.addTarget(self, action: #selector(didLongPressCell))
         contentView.addGestureRecognizer(longPressGestureRecognizer)
-    }
-    
-    @objc private func didTapCell() {
-        onTap?() // Trigger the tap callback
     }
     
     @objc private func didLongPressCell(_ gesture: UILongPressGestureRecognizer) {
