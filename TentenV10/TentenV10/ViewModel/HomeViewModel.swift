@@ -18,11 +18,9 @@ class HomeViewModel: ObservableObject {
     
     @Published var isPressing: Bool = false {
         didSet {
-            circleTrim = isPressing ? 1 : 0.9
 //            handlePressingStateChange()
         }
     }
-    @Published var circleTrim: CGFloat = 1.0
     
     @Published var detailedFriends: [FriendRecord] = []
     
