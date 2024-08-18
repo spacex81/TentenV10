@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C8022C902C70DBA1006DE470 /* AddButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C8F2C70DBA1006DE470 /* AddButtonCell.swift */; };
+		C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */; };
+		C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */; };
 		C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = C812FEE52C68ECDC00BD9D9B /* test.wav */; };
 		C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */; };
 		C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF052C69D70E00BD9D9B /* AuthManager.swift */; };
@@ -48,6 +50,8 @@
 
 /* Begin PBXFileReference section */
 		C8022C8F2C70DBA1006DE470 /* AddButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButtonCell.swift; sourceTree = "<group>"; };
+		C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedBackgroundView.swift; sourceTree = "<group>"; };
+		C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedBackgroundViewRepresentable.swift; sourceTree = "<group>"; };
 		C812FEE52C68ECDC00BD9D9B /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
 		C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		C812FF052C69D70E00BD9D9B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -100,6 +104,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C8022C912C71F46A006DE470 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
+				C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */,
+				C812FF092C69D96200BD9D9B /* HomeView.swift */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
+		C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */ = {
+			isa = PBXGroup;
+			children = (
+				C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */,
+				C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */,
+			);
+			path = AnimatedBackgroundView;
+			sourceTree = "<group>";
+		};
 		C815BC602C60849B004CB09E = {
 			isa = PBXGroup;
 			children = (
@@ -179,9 +202,8 @@
 		C815BCBD2C60D4A3004CB09E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
+				C8022C912C71F46A006DE470 /* HomeView */,
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
-				C812FF092C69D96200BD9D9B /* HomeView.swift */,
 				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
 				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
@@ -300,6 +322,7 @@
 			files = (
 				C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */,
 				C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */,
+				C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8E9BF7E2C709CDC002AEDE0 /* CustomCollectionViewCell.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
@@ -316,6 +339,7 @@
 				C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */,
 				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
 				C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */,
+				C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
 				C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */,
