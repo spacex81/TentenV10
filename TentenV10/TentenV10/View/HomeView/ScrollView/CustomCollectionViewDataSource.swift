@@ -8,7 +8,6 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var isPressing: Bool
     private weak var collectionViewController: CustomCollectionViewController?
 
-
     init(
         detailedFriends: Binding<[FriendRecord]>,
         selectedFriend: Binding<FriendRecord?>,
@@ -39,32 +38,22 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             let friend = detailedFriends[indexPath.item]
             cell.friend = friend
             cell.onTap = { [weak self] in
+                NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)
             }
             cell.configure(with: friend)
-            
-            // Set up long press gesture recognizer
-            cell.longPressGestureRecognizer.addTarget(self, action: #selector(handleLongPress(_:)))
-            cell.addGestureRecognizer(cell.longPressGestureRecognizer)
+
+            // Set up long press gesture handlers
+            cell.onLongPressBegan = { [weak self] in
+                NSLog("LOG: onLongPressBegan")
+                self?.isPressing = true
+            }
+            cell.onLongPressEnded = { [weak self] in
+                NSLog("LOG: onLongPressEnded")
+                self?.isPressing = false
+            }
             
             return cell
         }
     }
-    
-    @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        guard let _ = collectionViewController?.collectionView else { return }
-        
-        switch gestureRecognizer.state {
-        case .began:
-            isPressing = true
-        case .ended, .cancelled:
-            isPressing = false
-        default:
-            break
-        }
-    }
 }
-
-
-
-

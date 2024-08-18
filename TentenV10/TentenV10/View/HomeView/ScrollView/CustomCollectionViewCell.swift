@@ -6,8 +6,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
     var friend: FriendRecord?
     
     var onTap: (() -> Void)? // Closure to handle tap event
+    var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
+    var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
 
-    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -16,8 +17,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    let longPressGestureRecognizer = UILongPressGestureRecognizer()
-    
+    private let tapGestureRecognizer = UITapGestureRecognizer()
+    private let longPressGestureRecognizer = UILongPressGestureRecognizer()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
@@ -31,15 +33,27 @@ class CustomCollectionViewCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCell))
+        tapGestureRecognizer.addTarget(self, action: #selector(didTapCell))
         contentView.addGestureRecognizer(tapGestureRecognizer)
         
         longPressGestureRecognizer.minimumPressDuration = 0.1
+        longPressGestureRecognizer.addTarget(self, action: #selector(didLongPressCell))
         contentView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
     @objc private func didTapCell() {
         onTap?() // Trigger the tap callback
+    }
+    
+    @objc private func didLongPressCell(_ gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            onLongPressBegan?() // Trigger the long press began callback
+        case .ended, .cancelled:
+            onLongPressEnded?() // Trigger the long press ended callback
+        default:
+            break
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -54,5 +68,3 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
 }
-
-
