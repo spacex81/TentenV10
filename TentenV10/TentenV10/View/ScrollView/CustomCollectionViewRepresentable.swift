@@ -4,9 +4,10 @@ struct CustomCollectionViewRepresentable: UIViewRepresentable {
     @Binding var selectedFriend: FriendRecord?
     @Binding var detailedFriends: [FriendRecord]
     @Binding var isSheetPresented: Bool
+    @Binding var isPressing: Bool
 
     func makeUIView(context: Context) -> UIView {
-        let container = CustomCollectionViewContainer(selectedFriend: $selectedFriend, detailedFriends: $detailedFriends, isSheetPresented: $isSheetPresented)
+        let container = CustomCollectionViewContainer(selectedFriend: $selectedFriend, detailedFriends: $detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $isPressing)
         return container
     }
 

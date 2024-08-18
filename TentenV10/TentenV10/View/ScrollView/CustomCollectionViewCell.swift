@@ -16,6 +16,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    let longPressGestureRecognizer = UILongPressGestureRecognizer()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
@@ -31,6 +33,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCell))
         contentView.addGestureRecognizer(tapGestureRecognizer)
+        
+        longPressGestureRecognizer.minimumPressDuration = 0.1
+        contentView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
     @objc private func didTapCell() {
@@ -49,3 +54,5 @@ class CustomCollectionViewCell: UICollectionViewCell {
         }
     }
 }
+
+

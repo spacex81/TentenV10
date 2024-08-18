@@ -14,9 +14,10 @@ class HomeViewModel: ObservableObject {
     
     @Published var currentUser: User?
     @Published var userRecord: UserRecord?
-    @Published var selectedFriend: FriendRecord? 
+    @Published var selectedFriend: FriendRecord?
     
-
+    // will be changed by the collection view cell
+    @Published var isPressing: Bool = false
     
     @Published var detailedFriends: [FriendRecord] = []
     
@@ -34,15 +35,6 @@ class HomeViewModel: ObservableObject {
         bindRepositoryManager()
         bindLiveKitManager()
     }
-    
-//    private func bindRepositoryManager() {
-//        repoManager.$userRecord
-//            .receive(on: DispatchQueue.main)
-//            .assign(to: &$userRecord)
-//        repoManager.$currentUser
-//            .receive(on: DispatchQueue.main)
-//            .assign(to: &$currentUser)
-//    }
     
     private func bindLiveKitManager() {
         liveKitManager.$isConnected

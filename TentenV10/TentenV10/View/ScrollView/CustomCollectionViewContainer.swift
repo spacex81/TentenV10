@@ -5,8 +5,8 @@ class CustomCollectionViewContainer: UIView {
     private let collectionViewController: CustomCollectionViewController
     private let containerView = UIView()
 
-    init(selectedFriend: Binding<FriendRecord?>, detailedFriends: Binding<[FriendRecord]>, isSheetPresented: Binding<Bool>) {
-        self.collectionViewController = CustomCollectionViewController(selectedFriend: selectedFriend, detailedFriends: detailedFriends, isSheetPresented: isSheetPresented)
+    init(selectedFriend: Binding<FriendRecord?>, detailedFriends: Binding<[FriendRecord]>, isSheetPresented: Binding<Bool>, isPressing: Binding<Bool>) {
+        self.collectionViewController = CustomCollectionViewController(selectedFriend: selectedFriend, detailedFriends: detailedFriends, isSheetPresented: isSheetPresented, isPressing: isPressing)
 
         super.init(frame: .zero)
 
@@ -58,3 +58,4 @@ extension CustomCollectionViewContainer {
         return view
     }
 }
+

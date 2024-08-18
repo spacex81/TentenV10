@@ -30,25 +30,20 @@ struct HomeView: View {
                     .foregroundColor(.gray)
             }
             
+            if viewModel.isPressing {
+                Text("isPressed is true")
+            } else {
+                Text("isPressed is false")
+            }
+            
+            // Scroll View
             ZStack {
-                // Scroll View
-                CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented)
+                CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $viewModel.isPressing)
                     .frame(height: 300)
                 
                 Circle()
                     .stroke(.white, lineWidth: 10)
                     .frame(width: strokeSize, height: strokeSize)
-                // TODO: set the strokeSize as the 110% of the itemSize of the collection view item
-                
-//                let standardItemSpacing: CGFloat = 10
-//                let screenWidth = collectionView!.bounds.width
-//                let totalSpacing = standardItemSpacing * 2 // 2 gaps of 10 points each
-//                let itemWidth = (screenWidth - totalSpacing) / 3.0
-//
-//                itemSize = CGSize(width: itemWidth, height: itemWidth)
-                
-                
-                // 'collectionView!.bounds.width' this value is same with screen width so it is possible to calculate the stroke size
             }
             
             // Press-Hold-to-Talk Button
@@ -78,4 +73,5 @@ struct HomeView: View {
         }
     }
 }
+
 

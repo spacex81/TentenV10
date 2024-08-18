@@ -17,22 +17,23 @@ struct PressHoldToTalkButton: View {
                 .font(.headline)
         }
         .onLongPressGesture(minimumDuration: .infinity, pressing: { isPressing in
-            isPressed = isPressing
-            if isPressing {
-                // Start talking: connect and publish
-                Task {
-                    if !viewModel.isConnected {
-                        await viewModel.connect()
-                    }
-                    viewModel.publishAudio()
-                }
-            } else {
-                // Stop talking: unpublish
-                Task {
-                    await viewModel.unpublishAudio()
-                    viewModel.disconnect()
-                }
-            }
+//            isPressed = isPressing
+            viewModel.isPressing = isPressing
+//            if isPressing {
+//                // Start talking: connect and publish
+//                Task {
+//                    if !viewModel.isConnected {
+//                        await viewModel.connect()
+//                    }
+//                    viewModel.publishAudio()
+//                }
+//            } else {
+//                // Stop talking: unpublish
+//                Task {
+//                    await viewModel.unpublishAudio()
+//                    viewModel.disconnect()
+//                }
+//            }
         }) {
             // Optional: action to perform when the gesture ends
             print("Talk ended")
