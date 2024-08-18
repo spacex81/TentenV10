@@ -7,7 +7,12 @@ struct CustomCollectionViewRepresentable: UIViewRepresentable {
     @Binding var isPressing: Bool
 
     func makeUIView(context: Context) -> UIView {
-        let container = CustomCollectionViewContainer(selectedFriend: $selectedFriend, detailedFriends: $detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $isPressing)
+        let container = CustomCollectionViewContainer(
+            selectedFriend: $selectedFriend,
+            detailedFriends: $detailedFriends,
+            isSheetPresented: $isSheetPresented,
+            isPressing: $isPressing
+        )
         return container
     }
 

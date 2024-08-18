@@ -9,7 +9,13 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     private weak var collectionViewController: CustomCollectionViewController?
 
 
-    init(detailedFriends: Binding<[FriendRecord]>, selectedFriend: Binding<FriendRecord?>, isSheetPresented: Binding<Bool>, isPressing: Binding<Bool>, collectionViewController: CustomCollectionViewController) {
+    init(
+        detailedFriends: Binding<[FriendRecord]>,
+        selectedFriend: Binding<FriendRecord?>,
+        isSheetPresented: Binding<Bool>,
+        isPressing: Binding<Bool>,
+        collectionViewController: CustomCollectionViewController
+    ) {
         self._detailedFriends = detailedFriends
         self._selectedFriend = selectedFriend
         self._isSheetPresented = isSheetPresented
@@ -46,7 +52,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
     
     @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        guard let collectionView = collectionViewController?.collectionView else { return }
+        guard let _ = collectionViewController?.collectionView else { return }
         
         switch gestureRecognizer.state {
         case .began:

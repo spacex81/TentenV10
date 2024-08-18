@@ -19,6 +19,8 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             if let selectedFriend = viewModel.selectedFriend {
                 Text(selectedFriend.username)
                     .font(.title)
@@ -30,12 +32,6 @@ struct HomeView: View {
                     .foregroundColor(.gray)
             }
             
-            if viewModel.isPressing {
-                Text("isPressed is true")
-            } else {
-                Text("isPressed is false")
-            }
-            
             // Scroll View
             ZStack {
                 CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $viewModel.isPressing)
@@ -45,11 +41,6 @@ struct HomeView: View {
                     .stroke(.white, lineWidth: 10)
                     .frame(width: strokeSize, height: strokeSize)
             }
-            
-            // Press-Hold-to-Talk Button
-            PressHoldToTalkButton(viewModel: viewModel)
-                .padding(.bottom, 20)
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(

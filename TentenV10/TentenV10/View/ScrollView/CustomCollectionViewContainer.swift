@@ -6,7 +6,12 @@ class CustomCollectionViewContainer: UIView {
     private let containerView = UIView()
 
     init(selectedFriend: Binding<FriendRecord?>, detailedFriends: Binding<[FriendRecord]>, isSheetPresented: Binding<Bool>, isPressing: Binding<Bool>) {
-        self.collectionViewController = CustomCollectionViewController(selectedFriend: selectedFriend, detailedFriends: detailedFriends, isSheetPresented: isSheetPresented, isPressing: isPressing)
+        self.collectionViewController = CustomCollectionViewController(
+            selectedFriend: selectedFriend,
+            detailedFriends: detailedFriends,
+            isSheetPresented: isSheetPresented,
+            isPressing: isPressing
+        )
 
         super.init(frame: .zero)
 

@@ -12,7 +12,12 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     
     private var needToCenterInitialItem: Bool = true
     
-    init(selectedFriend: Binding<FriendRecord?>, detailedFriends: Binding<[FriendRecord]>, isSheetPresented: Binding<Bool>, isPressing: Binding<Bool>) {
+    init(
+        selectedFriend: Binding<FriendRecord?>,
+        detailedFriends: Binding<[FriendRecord]>,
+        isSheetPresented: Binding<Bool>,
+        isPressing: Binding<Bool>
+    ) {
     self._selectedFriend = selectedFriend
         self._detailedFriends = detailedFriends
         self._isSheetPresented = isSheetPresented
@@ -70,7 +75,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
             return
         }
         
-        let initialIndexPath = IndexPath(item: 1, section: 0)
+//        let initialIndexPath = IndexPath(item: 1, section: 0)
         DispatchQueue.main.async {
             self.selectedFriend = self.detailedFriends[0]
         }

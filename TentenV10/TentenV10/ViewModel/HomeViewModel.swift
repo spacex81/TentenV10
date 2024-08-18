@@ -17,7 +17,11 @@ class HomeViewModel: ObservableObject {
     @Published var selectedFriend: FriendRecord?
     
     // will be changed by the collection view cell
-    @Published var isPressing: Bool = false
+    @Published var isPressing: Bool = false {
+        didSet {
+            handlePressingStateChange()
+        }
+    }
     
     @Published var detailedFriends: [FriendRecord] = []
     
@@ -80,6 +84,20 @@ class HomeViewModel: ObservableObject {
                 self.detailedFriends = detailedFriends
             }
             .store(in: &cancellables)
+    }
+    
+    private func handlePressingStateChange() {
+        Task {
+            if isPressing {
+                if !isConnected {
+                    await connect()
+                }
+                publishAudio()
+            } else {
+                await unpublishAudio()
+                disconnect()
+            }
+        }
     }
 }
 
