@@ -70,47 +70,4 @@ class AnimatedBackgroundView: UIView {
         }
     }
 
-    func applyScaling(isPressing: Bool, isPublished: Bool, completion: (() -> Void)? = nil) {
-        NSLog("LOG: applyScaling")
-
-        if animationInProgress {
-            NSLog("LOG: Animation already in progress")
-            return // Avoid starting a new animation if one is already in progress
-        }
-
-        animationInProgress = true
-
-        if isPressing {
-            NSLog("isPressing is true")
-        } else {
-            NSLog("isPressing is false")
-        }
-
-        if isPressing && !isPublished {
-            NSLog("LOG: condition met")
-            // Shrink the image view
-            currentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
-                self.imageView.transform = CGAffineTransform(scaleX: 0.7, y: 0.7) // 70% shrink
-            }
-            currentAnimator?.addCompletion { _ in
-                // Animation completed
-                NSLog("LOG: Shrinking animation completed")
-                self.animationInProgress = false
-                completion?()
-            }
-            currentAnimator?.startAnimation() // Use startAnimation() to begin the animation
-        } else {
-            // Reset to original size
-            currentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
-                self.imageView.transform = CGAffineTransform.identity
-            }
-            currentAnimator?.addCompletion { _ in
-                // Animation completed
-                NSLog("LOG: Resetting animation completed")
-                self.animationInProgress = false
-                completion?()
-            }
-            currentAnimator?.startAnimation() // Use startAnimation() to begin the animation
-        }
-    }
 }
