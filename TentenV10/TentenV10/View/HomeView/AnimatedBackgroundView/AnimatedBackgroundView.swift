@@ -22,7 +22,7 @@ class AnimatedBackgroundView: UIView {
     private func setupImageView() {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
+        imageView.layer.cornerRadius = 50
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -60,7 +60,7 @@ class AnimatedBackgroundView: UIView {
         transitionView.transform = CGAffineTransform(scaleX: 1.2, y: 1.0) // Start with larger image horizontally
         addSubview(transitionView)
 
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             transitionView.alpha = 1
             transitionView.transform = CGAffineTransform.identity // Scale down to original size
         }) { _ in
@@ -80,14 +80,27 @@ class AnimatedBackgroundView: UIView {
         return data1 == data2
     }
 
-    func setPressingState(_ isPressing: Bool) {
-        let scaleXFactor: CGFloat = isPressing ? 0.8 : 1.0 // Shrink
-        let scaleYFactor: CGFloat = isPressing ? 0.75 : 1.0 // Shrink
+    func setPressingState(_ isPressing: Bool, _ isPublished: Bool) {
+//        let scaleXFactor: CGFloat = isPressing ? 0.85 : 1.0
+//        let scaleYFactor: CGFloat = isPressing ? 0.75 : 1.0
+        let scaleXFactor: CGFloat
+        let scaleYFactor: CGFloat
+        
+        if isPressing && !isPublished {
+            scaleXFactor = 0.85
+            scaleYFactor = 0.75
+        } else if isPublished {
+            scaleXFactor = 0.95
+            scaleYFactor = 0.85
+        } else {
+            scaleXFactor = 1.0
+            scaleYFactor = 1.0
+        }
 
         UIView.animate(withDuration: 0.25) {
             self.imageView.transform = CGAffineTransform(scaleX: scaleXFactor, y: scaleYFactor)
 
-            if isPressing {
+            if isPressing && !isPublished {
                 // Create and add the blur effect view if not already added
                 if self.blurEffectView.superview == nil {
                     let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)

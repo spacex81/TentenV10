@@ -11,6 +11,6 @@ struct AnimatedBackgroundViewRepresentable: UIViewRepresentable {
 
     func updateUIView(_ uiView: AnimatedBackgroundView, context: Context) {
         uiView.setImage(image)
-        uiView.setPressingState(isPressing)
+        uiView.setPressingState(isPressing, isPublished)
     }
 }

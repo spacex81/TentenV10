@@ -18,7 +18,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var isPressing: Bool = false {
         didSet {
-//            handlePressingStateChange()
+            handlePressingStateChange()
         }
     }
     
