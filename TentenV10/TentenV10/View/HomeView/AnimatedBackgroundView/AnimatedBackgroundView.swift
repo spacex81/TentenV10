@@ -3,15 +3,20 @@ import UIKit
 class AnimatedBackgroundView: UIView {
     private let imageView = UIImageView()
     private var currentImage: UIImage? // Store the current image
+    private let blurEffectView = UIVisualEffectView(effect: nil)
+    private let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    private var feedbackTimer: Timer? // Timer for continuous haptic feedback
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupImageView()
+        impactFeedbackGenerator.prepare() // Prepare the feedback generator
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupImageView()
+        impactFeedbackGenerator.prepare() // Prepare the feedback generator
     }
 
     private func setupImageView() {
@@ -75,8 +80,6 @@ class AnimatedBackgroundView: UIView {
         return data1 == data2
     }
 
-    private let blurEffectView = UIVisualEffectView(effect: nil)
-
     func setPressingState(_ isPressing: Bool) {
         let scaleXFactor: CGFloat = isPressing ? 0.8 : 1.0 // Shrink
         let scaleYFactor: CGFloat = isPressing ? 0.75 : 1.0 // Shrink
@@ -102,13 +105,31 @@ class AnimatedBackgroundView: UIView {
                 animation.duration = 0.3 // Duration of the wiggle animation
                 animation.repeatCount = Float.infinity // Repeat indefinitely
                 self.imageView.layer.add(animation, forKey: "wiggle")
+
+                // Trigger continuous haptic feedback
+                self.startHapticFeedback()
             } else {
                 // Remove the blur effect view
                 self.blurEffectView.removeFromSuperview()
                 
                 // Stop the wiggle animation
                 self.imageView.layer.removeAnimation(forKey: "wiggle")
+                
+                // Stop continuous haptic feedback
+                self.stopHapticFeedback()
             }
         }
+    }
+
+    private func startHapticFeedback() {
+        feedbackTimer?.invalidate() // Invalidate any existing timer
+        feedbackTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            self.impactFeedbackGenerator.impactOccurred()
+        }
+    }
+
+    private func stopHapticFeedback() {
+        feedbackTimer?.invalidate() // Invalidate the timer
+        feedbackTimer = nil
     }
 }
