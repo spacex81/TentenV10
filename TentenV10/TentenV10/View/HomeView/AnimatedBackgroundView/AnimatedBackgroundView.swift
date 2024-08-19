@@ -17,6 +17,7 @@ class AnimatedBackgroundView: UIView {
     private func setupImageView() {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -77,12 +78,12 @@ class AnimatedBackgroundView: UIView {
     private let blurEffectView = UIVisualEffectView(effect: nil)
 
     func setPressingState(_ isPressing: Bool) {
-        let scaleFactor: CGFloat = isPressing ? 0.7 : 1.0 // Shrink to 70% or restore to 100%
-        
-        UIView.animate(withDuration: 0.2) {
-            self.imageView.transform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-            
-            // Apply or remove blur effect based on pressing state
+        let scaleXFactor: CGFloat = isPressing ? 0.8 : 1.0 // Shrink
+        let scaleYFactor: CGFloat = isPressing ? 0.75 : 1.0 // Shrink
+
+        UIView.animate(withDuration: 0.25) {
+            self.imageView.transform = CGAffineTransform(scaleX: scaleXFactor, y: scaleYFactor)
+
             if isPressing {
                 // Create and add the blur effect view if not already added
                 if self.blurEffectView.superview == nil {
@@ -92,9 +93,21 @@ class AnimatedBackgroundView: UIView {
                     self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                     self.imageView.addSubview(self.blurEffectView)
                 }
+                
+                // Add wiggle animation
+                let wiggleRotationAngle: CGFloat = .pi / 50 // Degrees
+                let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+                animation.values = [-wiggleRotationAngle, wiggleRotationAngle, -wiggleRotationAngle] // Left and right rotations
+                animation.keyTimes = [0, 0.5, 1] // Set the timing for each keyframe
+                animation.duration = 0.3 // Duration of the wiggle animation
+                animation.repeatCount = Float.infinity // Repeat indefinitely
+                self.imageView.layer.add(animation, forKey: "wiggle")
             } else {
                 // Remove the blur effect view
                 self.blurEffectView.removeFromSuperview()
+                
+                // Stop the wiggle animation
+                self.imageView.layer.removeAnimation(forKey: "wiggle")
             }
         }
     }
