@@ -49,10 +49,12 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            AnimatedBackgroundViewRepresentable(image: viewModel.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
-                                                 isPressing: $viewModel.isPressing,
-                                                 isPublished: $viewModel.isPublished)
-                .ignoresSafeArea()
+            AnimatedBackgroundViewRepresentable(
+                image: viewModel.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
+                isPressing: $viewModel.isPressing,
+                isPublished: $viewModel.isPublished
+            )
+            .ignoresSafeArea()
         )
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()

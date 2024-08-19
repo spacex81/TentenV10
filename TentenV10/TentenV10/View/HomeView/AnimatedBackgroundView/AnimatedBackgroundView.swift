@@ -2,9 +2,7 @@ import UIKit
 
 class AnimatedBackgroundView: UIView {
     private let imageView = UIImageView()
-    private var initialImage: UIImage?
-    private var animationInProgress = false
-    private var currentAnimator: UIViewPropertyAnimator?
+    private var currentImage: UIImage? // Store the current image
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,22 +29,20 @@ class AnimatedBackgroundView: UIView {
     }
 
     func setImage(_ image: UIImage?) {
-        guard let image = image else {
+        guard let newImage = image else {
             imageView.image = nil
+            currentImage = nil
             return
         }
 
-        if initialImage == nil {
-            initialImage = image
-        }
-
-        // If the image is already the same, do nothing
-        if imageView.image == image {
+        if let currentImage = currentImage, areImagesEqual(currentImage, newImage) {
+            // If the image is the same as the current image, do nothing
             return
         }
 
-        // Animate the transition to the new image
-        animateTransition(to: image)
+        // Update the current image and animate the transition
+        currentImage = newImage
+        animateTransition(to: newImage)
     }
 
     private func animateTransition(to image: UIImage) {
@@ -70,4 +66,21 @@ class AnimatedBackgroundView: UIView {
         }
     }
 
+    private func areImagesEqual(_ image1: UIImage, _ image2: UIImage) -> Bool {
+        // Simple comparison of image sizes and pixel data
+        guard image1.size == image2.size else { return false }
+        
+        guard let data1 = image1.pngData(), let data2 = image2.pngData() else { return false }
+        return data1 == data2
+    }
+
+    func setPressingState(_ isPressing: Bool) {
+        // Define the scale factor for shrinking
+        let scaleFactor: CGFloat = isPressing ? 0.7 : 1.0 // 70% of the original size when pressing, 100% otherwise
+
+        // Animate the scaling transformation
+        UIView.animate(withDuration: 0.2) {
+            self.imageView.transform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
+        }
+    }
 }
