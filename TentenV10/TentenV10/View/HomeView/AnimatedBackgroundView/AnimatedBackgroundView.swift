@@ -74,13 +74,28 @@ class AnimatedBackgroundView: UIView {
         return data1 == data2
     }
 
-    func setPressingState(_ isPressing: Bool) {
-        // Define the scale factor for shrinking
-        let scaleFactor: CGFloat = isPressing ? 0.7 : 1.0 // 70% of the original size when pressing, 100% otherwise
+    private let blurEffectView = UIVisualEffectView(effect: nil)
 
-        // Animate the scaling transformation
+    func setPressingState(_ isPressing: Bool) {
+        let scaleFactor: CGFloat = isPressing ? 0.7 : 1.0 // Shrink to 70% or restore to 100%
+        
         UIView.animate(withDuration: 0.2) {
             self.imageView.transform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
+            
+            // Apply or remove blur effect based on pressing state
+            if isPressing {
+                // Create and add the blur effect view if not already added
+                if self.blurEffectView.superview == nil {
+                    let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+                    self.blurEffectView.effect = blurEffect
+                    self.blurEffectView.frame = self.imageView.bounds
+                    self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    self.imageView.addSubview(self.blurEffectView)
+                }
+            } else {
+                // Remove the blur effect view
+                self.blurEffectView.removeFromSuperview()
+            }
         }
     }
 }
