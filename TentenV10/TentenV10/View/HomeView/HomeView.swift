@@ -22,16 +22,15 @@ struct HomeView: View {
             Spacer()
 
             if let selectedFriend = viewModel.selectedFriend {
-                Text(selectedFriend.username)
-                    .font(.title)
-                    .padding(.top, 10)
-            } else {
-                Text("No Friend Selected")
-                    .font(.title)
-                    .padding(.top, 10)
-                    .foregroundColor(.gray)
+                if viewModel.isPressing && !viewModel.isPublished {
+                    Text("Connecting")
+                } else {
+                    Text(selectedFriend.username)
+                        .font(.title)
+                        .padding(.top, 10)
+                }
             }
-
+            
             ZStack {
                 // Scroll View
                 CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $viewModel.isPressing)
@@ -40,7 +39,8 @@ struct HomeView: View {
                 // Ring
                 Circle()
                     .trim(from: viewModel.isPressing ? 0 : 0.1, to: 1.0) // 0.1 for 10% gap
-                    .stroke(.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+//                    .stroke(.white, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .stroke(.white, style: StrokeStyle(lineWidth: viewModel.isPressing ? 12 : 8, lineCap: .round))
                     .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
                     .opacity(viewModel.isPressing ? 0.5 : 1.0)
                     .frame(width: viewModel.isPressing ? strokeSize * 0.7 : strokeSize, height: viewModel.isPressing ? strokeSize * 0.7 : strokeSize)
