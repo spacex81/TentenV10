@@ -9,6 +9,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     @Binding var detailedFriends: [FriendRecord]
     @Binding var isSheetPresented: Bool
     @Binding var isPressing: Bool
+    @Binding var isPublished: Bool
     
     private var needToCenterInitialItem: Bool = true
     
@@ -16,12 +17,14 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         selectedFriend: Binding<FriendRecord?>,
         detailedFriends: Binding<[FriendRecord]>,
         isSheetPresented: Binding<Bool>,
-        isPressing: Binding<Bool>
+        isPressing: Binding<Bool>,
+        isPublished: Binding<Bool>
     ) {
     self._selectedFriend = selectedFriend
         self._detailedFriends = detailedFriends
         self._isSheetPresented = isSheetPresented
         self._isPressing = isPressing
+        self._isPublished = isPublished
         super.init(nibName: nil, bundle: nil)
     }
 

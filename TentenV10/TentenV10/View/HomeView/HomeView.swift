@@ -33,8 +33,14 @@ struct HomeView: View {
             
             ZStack {
                 // Scroll View
-                CustomCollectionViewRepresentable(selectedFriend: $viewModel.selectedFriend, detailedFriends: $viewModel.detailedFriends, isSheetPresented: $isSheetPresented, isPressing: $viewModel.isPressing)
-                    .frame(height: 300)
+                CustomCollectionViewRepresentable(
+                    selectedFriend: $viewModel.selectedFriend,
+                    detailedFriends: $viewModel.detailedFriends,
+                    isSheetPresented: $isSheetPresented,
+                    isPressing: $viewModel.isPressing,
+                    isPublished: $viewModel.isPublished
+                )
+                .frame(height: 300)
 
                 // Ring
                 Circle()
