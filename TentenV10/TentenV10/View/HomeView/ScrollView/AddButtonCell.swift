@@ -4,11 +4,7 @@ class AddButtonCell: UICollectionViewCell {
     static let reuseIdentifier = "AddButtonCell"
     
     var onTap: (() -> Void)?
-    var isPressing: Bool = false {
-        didSet {
-            animateScale(isPressing: isPressing)
-        }
-    }
+
 
     private let addButton: UIButton = {
         let button = UIButton()
@@ -43,23 +39,5 @@ class AddButtonCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension AddButtonCell {
-    private func animateScale(isPressing: Bool) {
-        let scaleTransform = isPressing ? CGAffineTransform(scaleX: 0.001, y: 0.001) : .identity
-        
-        UIView.animate(
-            withDuration: 0.6,
-            delay: 0,
-            usingSpringWithDamping: 0.6, // Adjust damping for bounce effect
-            initialSpringVelocity: 0.8,  // Adjust velocity for bounce intensity
-            options: [],
-            animations: {
-                self.transform = scaleTransform
-            },
-            completion: nil
-        )
     }
 }

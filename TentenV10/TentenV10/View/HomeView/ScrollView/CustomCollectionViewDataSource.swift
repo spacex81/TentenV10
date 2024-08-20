@@ -27,45 +27,61 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let friend = detailedFriends[indexPath.item]
+        
+        let cell: UICollectionViewCell
+        
         if indexPath.item == 0 || indexPath.item == detailedFriends.count - 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddButtonCell.reuseIdentifier, for: indexPath) as! AddButtonCell
-            cell.onTap = { [weak self] in
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddButtonCell.reuseIdentifier, for: indexPath) as! AddButtonCell
+            (cell as! AddButtonCell).onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
-            cell.isPressing = isPressing
-            return cell
+        } else if friend == selectedFriend {
+            NSLog("LOG: selected friend: \(friend.username)")
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
+            let longPressCell = cell as! LongPressCell
+            longPressCell.configure(with: friend)
+            
+            longPressCell.onLongPressBegan = { [weak self] in
+                NSLog("LOG: onLongPressBegan")
+                self?.isPressing = true
+            }
+            longPressCell.onLongPressEnded = { [weak self] in
+                NSLog("LOG: onLongPressEnded")
+                self?.isPressing = false
+            }
         } else {
-            let friend = detailedFriends[indexPath.item]
-            if friend == selectedFriend {
-                NSLog("LOG: selected friend: \(friend.username)")
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
-                cell.configure(with: friend)
-                
-                cell.onLongPressBegan = { [weak self] in
-                    NSLog("LOG: onLongPressBegan")
-                    self?.isPressing = true
-                }
-                cell.onLongPressEnded = { [weak self] in
-                    NSLog("LOG: onLongPressEnded")
-                    self?.isPressing = false
-                }
-                
-                cell.isPressing = isPressing
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
-                cell.configure(with: friend)
-                
-                cell.onTap = { [weak self] in
-                    NSLog("LOG: onTap")
-                    self?.collectionViewController?.centerCell(at: indexPath)
-                    self?.selectedFriend = friend
-                }
-                
-                cell.isPressing = isPressing
-                return cell
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
+            let tapCell = cell as! TapCell
+            tapCell.configure(with: friend)
+            
+            tapCell.onTap = { [weak self] in
+                NSLog("LOG: onTap")
+                self?.collectionViewController?.centerCell(at: indexPath)
+                self?.selectedFriend = friend
             }
         }
+        
+        // Ensure the cell is updated correctly
+        animateScale(isPressing: isPressing, cell: cell)
+        
+        return cell
+    }
+
+    func animateScale(isPressing: Bool, cell: UICollectionViewCell) {
+        let scaleTransform = isPressing ? CGAffineTransform(scaleX: 0.001, y: 0.001) : .identity
+        
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.6, // Adjust damping for bounce effect
+            initialSpringVelocity: 0.8,  // Adjust velocity for bounce intensity
+            options: [],
+            animations: {
+                cell.transform = scaleTransform
+            },
+            completion: nil
+        )
     }
 }
 
