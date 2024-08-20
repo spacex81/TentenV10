@@ -1,10 +1,9 @@
 import UIKit
 
-class AddButtonCell: UICollectionViewCell {
+class AddButtonCell: BaseCell {
     static let reuseIdentifier = "AddButtonCell"
-    
-    var onTap: (() -> Void)?
 
+    var onTap: (() -> Void)?
 
     private let addButton: UIButton = {
         let button = UIButton()
@@ -21,23 +20,23 @@ class AddButtonCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(addButton)
-        
+
         NSLayoutConstraint.activate([
             addButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             addButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             addButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             addButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        
+
         // Attach target to button for touch events
         addButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
-
-    @objc private func didTapButton() {
-        onTap?() // Trigger the tap callback
-    }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func didTapButton() {
+        onTap?() // Trigger the tap callback
     }
 }

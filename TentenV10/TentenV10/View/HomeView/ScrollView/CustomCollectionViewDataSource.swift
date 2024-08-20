@@ -33,7 +33,10 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
         
         if indexPath.item == 0 || indexPath.item == detailedFriends.count - 1 {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddButtonCell.reuseIdentifier, for: indexPath) as! AddButtonCell
-            (cell as! AddButtonCell).onTap = { [weak self] in
+            let addButtonCell = cell as! AddButtonCell
+            
+            addButtonCell.isPressing = isPressing
+            addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
         } else if friend == selectedFriend {
@@ -42,6 +45,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             let longPressCell = cell as! LongPressCell
             longPressCell.configure(with: friend)
             
+            longPressCell.isPressing = isPressing
             longPressCell.onLongPressBegan = { [weak self] in
                 NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
@@ -55,6 +59,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             let tapCell = cell as! TapCell
             tapCell.configure(with: friend)
             
+            tapCell.isPressing = isPressing
             tapCell.onTap = { [weak self] in
                 NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)
@@ -62,26 +67,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
         }
         
-        // Ensure the cell is updated correctly
-        animateScale(isPressing: isPressing, cell: cell)
-        
         return cell
-    }
-
-    func animateScale(isPressing: Bool, cell: UICollectionViewCell) {
-        let scaleTransform = isPressing ? CGAffineTransform(scaleX: 0.001, y: 0.001) : .identity
-        
-        UIView.animate(
-            withDuration: 0.4,
-            delay: 0,
-            usingSpringWithDamping: 0.6, // Adjust damping for bounce effect
-            initialSpringVelocity: 0.8,  // Adjust velocity for bounce intensity
-            options: [],
-            animations: {
-                cell.transform = scaleTransform
-            },
-            completion: nil
-        )
     }
 }
 

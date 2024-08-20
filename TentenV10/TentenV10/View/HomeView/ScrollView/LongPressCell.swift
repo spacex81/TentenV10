@@ -1,11 +1,10 @@
 import UIKit
 
-class LongPressCell: UICollectionViewCell {
+class LongPressCell: BaseCell {
     static let reuseIdentifier = "LongPressCell"
-    
+
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
-
 
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -14,25 +13,27 @@ class LongPressCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         return imageView
     }()
-    
+
     private let longPressGestureRecognizer = UILongPressGestureRecognizer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
-        contentView.layer.cornerRadius = frame.size.width / 2
-        contentView.layer.masksToBounds = true
-        
+
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
-        
+
         longPressGestureRecognizer.minimumPressDuration = 0.1
         longPressGestureRecognizer.addTarget(self, action: #selector(didLongPressCell))
         contentView.addGestureRecognizer(longPressGestureRecognizer)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     @objc private func didLongPressCell(_ gesture: UILongPressGestureRecognizer) {
@@ -45,11 +46,7 @@ class LongPressCell: UICollectionViewCell {
             break
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     func configure(with friend: FriendRecord) {
         if let imageData = friend.profileImageData {
             imageView.image = UIImage(data: imageData)
@@ -58,4 +55,3 @@ class LongPressCell: UICollectionViewCell {
         }
     }
 }
-
