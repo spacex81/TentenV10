@@ -1,7 +1,7 @@
 import UIKit
 
 class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    let standardItemScale: CGFloat = 1.0
+    let standardItemScale: CGFloat = 0.8
     let shrinkedItemScale: CGFloat = 0.5
     let standardItemSpacing: CGFloat = 10
 
@@ -29,7 +29,7 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         // Calculate item size so that three items fit the screen width
         let screenWidth = collectionView!.bounds.width
         let totalSpacing = standardItemSpacing * 2 // 2 gaps of 10 points each
-        let itemWidth = (screenWidth - totalSpacing) / 3.0
+        let itemWidth = ((screenWidth - totalSpacing) / 3.0)
 
         itemSize = CGSize(width: itemWidth, height: itemWidth)
     }

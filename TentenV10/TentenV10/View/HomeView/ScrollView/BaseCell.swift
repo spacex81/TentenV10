@@ -16,7 +16,7 @@ class BaseCell: UICollectionViewCell {
 
     func animateScale() {
         if isPressing {
-            self.transform = .identity
+            self.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         } else {
             self.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         }
@@ -27,7 +27,7 @@ class BaseCell: UICollectionViewCell {
         if isPressing {
             scaleTransform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         } else {
-            scaleTransform = .identity
+            scaleTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
         
         // Create a new animator
