@@ -6,6 +6,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var selectedFriend: FriendRecord?
     @Binding var isSheetPresented: Bool
     @Binding var isPressing: Bool
+    @Binding var isLocked: Bool
     private weak var collectionViewController: CustomCollectionViewController?
 
     init(
@@ -13,12 +14,14 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
         selectedFriend: Binding<FriendRecord?>,
         isSheetPresented: Binding<Bool>,
         isPressing: Binding<Bool>,
+        isLocked: Binding<Bool>,
         collectionViewController: CustomCollectionViewController
     ) {
         self._detailedFriends = detailedFriends
         self._selectedFriend = selectedFriend
         self._isSheetPresented = isSheetPresented
         self._isPressing = isPressing
+        self._isLocked = isLocked
         self.collectionViewController = collectionViewController
     }
 

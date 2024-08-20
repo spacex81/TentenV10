@@ -21,6 +21,7 @@ class HomeViewModel: ObservableObject {
 //            handlePressingStateChange()
         }
     }
+    @Published var isLocked: Bool = false
     
     @Published var detailedFriends: [FriendRecord] = []
     

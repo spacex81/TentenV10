@@ -31,6 +31,8 @@ struct HomeView: View {
                 }
             }
             
+            Text("isLocked is \(viewModel.isLocked ? "true" : "false")")
+            
             ZStack {
                 // Scroll View
                 CustomCollectionViewRepresentable(
@@ -38,7 +40,8 @@ struct HomeView: View {
                     detailedFriends: $viewModel.detailedFriends,
                     isSheetPresented: $isSheetPresented,
                     isPressing: $viewModel.isPressing,
-                    isPublished: $viewModel.isPublished
+                    isPublished: $viewModel.isPublished,
+                    isLocked: $viewModel.isLocked
                 )
                 .frame(height: 300)
 

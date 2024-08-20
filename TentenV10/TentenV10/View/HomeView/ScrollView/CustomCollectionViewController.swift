@@ -10,6 +10,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     @Binding var isSheetPresented: Bool
     @Binding var isPressing: Bool
     @Binding var isPublished: Bool
+    @Binding var isLocked: Bool
     
     private var needToCenterInitialItem: Bool = true
     
@@ -18,13 +19,15 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         detailedFriends: Binding<[FriendRecord]>,
         isSheetPresented: Binding<Bool>,
         isPressing: Binding<Bool>,
-        isPublished: Binding<Bool>
+        isPublished: Binding<Bool>,
+        isLocked: Binding<Bool>
     ) {
     self._selectedFriend = selectedFriend
         self._detailedFriends = detailedFriends
         self._isSheetPresented = isSheetPresented
         self._isPressing = isPressing
         self._isPublished = isPublished
+        self._isLocked = isLocked
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -55,6 +58,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
             selectedFriend: $selectedFriend,
             isSheetPresented: $isSheetPresented,
             isPressing: $isPressing,
+            isLocked: $isLocked,
             collectionViewController: self
         )
         collectionView.dataSource = dataSource
