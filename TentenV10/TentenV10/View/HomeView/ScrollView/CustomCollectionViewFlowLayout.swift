@@ -1,7 +1,7 @@
 import UIKit
 
 class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    let standardItemScale: CGFloat = 0.8
+    let standardItemScale: CGFloat = 1.0
     let shrinkedItemScale: CGFloat = 0.5
     let standardItemSpacing: CGFloat = 10
 

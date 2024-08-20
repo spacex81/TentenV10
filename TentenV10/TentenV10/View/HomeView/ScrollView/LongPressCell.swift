@@ -5,6 +5,11 @@ class LongPressCell: UICollectionViewCell {
     
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
+    var isPressing: Bool = false {
+        didSet {
+            animateScale(isPressing: isPressing)
+        }
+    }
 
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -55,5 +60,23 @@ class LongPressCell: UICollectionViewCell {
         } else {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
+    }
+}
+
+extension LongPressCell {
+    private func animateScale(isPressing: Bool) {
+        let scaleTransform = isPressing ? CGAffineTransform(scaleX: 0.001, y: 0.001) : .identity
+        
+        UIView.animate(
+            withDuration: 0.6,
+            delay: 0,
+            usingSpringWithDamping: 0.6, // Adjust damping for bounce effect
+            initialSpringVelocity: 0.8,  // Adjust velocity for bounce intensity
+            options: [],
+            animations: {
+                self.transform = scaleTransform
+            },
+            completion: nil
+        )
     }
 }

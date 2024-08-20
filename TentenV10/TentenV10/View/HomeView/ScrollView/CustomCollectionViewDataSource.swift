@@ -32,6 +32,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             cell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
+            cell.isPressing = isPressing
             return cell
         } else {
             let friend = detailedFriends[indexPath.item]
@@ -49,6 +50,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                     self?.isPressing = false
                 }
                 
+                cell.isPressing = isPressing
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
@@ -60,8 +62,11 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                     self?.selectedFriend = friend
                 }
                 
+                cell.isPressing = isPressing
                 return cell
             }
         }
     }
 }
+
+
