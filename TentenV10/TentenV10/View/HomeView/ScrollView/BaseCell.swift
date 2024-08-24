@@ -3,7 +3,9 @@ import UIKit
 class BaseCell: UICollectionViewCell {
     // Common properties and methods
     private var previousIsPressing: Bool = false
+    private var previousIsLocked: Bool = false
     var propertyAnimator: UIViewPropertyAnimator?
+    let viewModel = HomeViewModel.shared
 
     var isPressing: Bool = false {
         didSet {
@@ -14,13 +16,22 @@ class BaseCell: UICollectionViewCell {
         }
     }
 
+    var isLocked: Bool = false {
+        didSet {
+            if previousIsLocked != isLocked {
+                animateScale()
+                previousIsLocked = isLocked
+            }
+        }
+    }
+
     // new
     func animateScale() {
         // Cancel any ongoing animation
         propertyAnimator?.stopAnimation(true)
         
         let scaleTransform: CGAffineTransform
-        if isPressing {
+        if isPressing || isLocked {
             scaleTransform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         } else {
             scaleTransform = CGAffineTransform(scaleX: 1.0, y: 1.0)

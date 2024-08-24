@@ -15,6 +15,12 @@ class LongPressCell: BaseCell {
     }()
 
     private let longPressGestureRecognizer = UILongPressGestureRecognizer()
+    
+    private let lockDistance: CGFloat = 100
+    private var longPressGestureBeganPoint = CGPoint.zero
+    
+    private let feedback = UIImpactFeedbackGenerator(style: .medium)
+    private var hasGivenFeedback = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,9 +43,27 @@ class LongPressCell: BaseCell {
     }
     
     @objc private func didLongPressCell(_ gesture: UILongPressGestureRecognizer) {
+        let locationInContentView = gesture.location(in: contentView)
+        
         switch gesture.state {
         case .began:
             onLongPressBegan?() // Trigger the long press began callback
+            viewModel.progress = 0
+            longPressGestureBeganPoint = locationInContentView
+            hasGivenFeedback = false
+        case .changed:
+            let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
+            let lockProgress = Float(verticalDistance / lockDistance)
+            if lockProgress >= 1 {
+                viewModel.isLocked = true
+                if !hasGivenFeedback {
+                    NSLog("LOG: impactOccurred")
+                    feedback.impactOccurred()
+                    hasGivenFeedback = true // Set the flag to true to prevent further feedback
+                }
+            } else {
+                viewModel.progress = lockProgress
+            }
         case .ended, .cancelled:
             onLongPressEnded?() // Trigger the long press ended callback
         default:

@@ -97,7 +97,7 @@ class AnimatedBackgroundView: UIView {
             scaleYFactor = 1.0
         }
 
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.3) {
             self.imageView.transform = CGAffineTransform(scaleX: scaleXFactor, y: scaleYFactor)
 
             if isPressing && !isPublished {

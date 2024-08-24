@@ -39,6 +39,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             let addButtonCell = cell as! AddButtonCell
             
             addButtonCell.isPressing = isPressing
+            addButtonCell.isLocked = isLocked
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
@@ -49,6 +50,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             longPressCell.configure(with: friend)
             
             longPressCell.isPressing = isPressing
+            longPressCell.isLocked = isLocked
             longPressCell.onLongPressBegan = { [weak self] in
                 NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
@@ -63,6 +65,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             tapCell.configure(with: friend)
             
             tapCell.isPressing = isPressing
+            tapCell.isLocked = isLocked
             tapCell.onTap = { [weak self] in
                 NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)

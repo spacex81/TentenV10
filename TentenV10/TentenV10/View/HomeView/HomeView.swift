@@ -16,6 +16,10 @@ struct HomeView: View {
     var strokeSize: CGFloat {
         return itemSize * 1.05
     }
+    
+    private var ringAnimationState: Bool {
+        viewModel.isPressing || viewModel.isLocked
+    }
 
     var body: some View {
         VStack {
@@ -31,10 +35,21 @@ struct HomeView: View {
                 }
             }
             
-            LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
+            if viewModel.isPressing && viewModel.isPublished {
+                LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
+            }
             
+            Text("isPressing is \(viewModel.isPressing ? "true" : "false")")
+            Text("isPublished is \(viewModel.isPublished ? "true" : "false")")
             Text("isLocked is \(viewModel.isLocked ? "true" : "false")")
-            
+            if viewModel.isLocked {
+                Button {
+                    viewModel.isPublished = false
+                    viewModel.isLocked = false
+                } label: {
+                    Text("Cancel")
+                }
+            }
             ZStack {
                 // Scroll View
                 CustomCollectionViewRepresentable(
@@ -49,15 +64,15 @@ struct HomeView: View {
 
                 // Ring
                 Circle()
-                    .trim(from: viewModel.isPressing ? 0 : 0.1, to: 1.0) // 0.1 for 10% gap
-                    .stroke(.white, style: StrokeStyle(lineWidth: viewModel.isPressing ? 12 : 8, lineCap: .round))
+                    .trim(from: ringAnimationState ? 0 : 0.1, to: 1.0) // 0.1 for 10% gap
+                    .stroke(.white, style: StrokeStyle(lineWidth: ringAnimationState ? 12 : 8, lineCap: .round))
                     .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
-                    .opacity(viewModel.isPressing ? 0.5 : 1.0)
-                    .frame(width: viewModel.isPressing ? strokeSize * 0.7 : strokeSize, height: viewModel.isPressing ? strokeSize * 0.7 : strokeSize)
+                    .opacity(ringAnimationState ? 0.5 : 1.0)
+                    .frame(width: ringAnimationState ? strokeSize * 0.7 : strokeSize, height: ringAnimationState ? strokeSize * 0.7 : strokeSize)
                     .animation(
                         Animation.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.0)
                             .speed(1.0), // Adjust speed if necessary
-                        value: viewModel.isPressing
+                        value: ringAnimationState
                     )
             }
         }

@@ -18,7 +18,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var isPressing: Bool = false {
         didSet {
-//            handlePressingStateChange()
+            handlePressingStateChange()
         }
     }
     @Published var isLocked: Bool = false
@@ -95,8 +95,10 @@ class HomeViewModel: ObservableObject {
                 }
                 publishAudio()
             } else {
-                await unpublishAudio()
-                disconnect()
+                if !isLocked {
+                    await unpublishAudio()
+                    disconnect()
+                }
             }
         }
     }
@@ -115,8 +117,12 @@ extension HomeViewModel {
             return
         }
         
-        repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: true, isBusy: true)
-        await liveKitManager.connect(roomName: roomName)
+//        repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: true, isBusy: true)
+//        await liveKitManager.connect(roomName: roomName)
+        Task {
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+            liveKitManager.isConnected = true
+        }
     }
     
     func disconnect() {
@@ -125,20 +131,30 @@ extension HomeViewModel {
             return
         }
 
+//        Task {
+//            await liveKitManager.disconnect()
+//            repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: false, isBusy: false)
+//        }
         Task {
-            await liveKitManager.disconnect()
-            repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: false, isBusy: false)
+            liveKitManager.isConnected = false
         }
     }
     
     func publishAudio() {
+//        Task {
+//            await liveKitManager.publishAudio()
+//        }
         Task {
-            await liveKitManager.publishAudio()
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+            liveKitManager.isPublished = true
         }
     }
     
     func unpublishAudio() async {
-        await liveKitManager.unpublishAudio()
+//        await liveKitManager.unpublishAudio()
+        Task {
+            liveKitManager.isPublished = false 
+        }
     }
 }
 
