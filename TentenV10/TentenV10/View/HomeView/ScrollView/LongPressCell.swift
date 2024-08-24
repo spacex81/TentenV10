@@ -54,4 +54,17 @@ class LongPressCell: BaseCell {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
     }
+
+    override func applyScaleTransform(_ transform: CGAffineTransform) {
+        propertyAnimator = UIViewPropertyAnimator(
+            duration: 0.4,
+            dampingRatio: 0.6, // Adjust damping for bounce effect
+            animations: {
+                self.imageView.transform = transform
+            }
+        )
+
+        // Start the animation
+        propertyAnimator?.startAnimation()
+    }
 }

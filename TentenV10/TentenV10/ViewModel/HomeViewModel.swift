@@ -22,6 +22,7 @@ class HomeViewModel: ObservableObject {
         }
     }
     @Published var isLocked: Bool = false
+    @Published var progress: Float = 0.0
     
     @Published var detailedFriends: [FriendRecord] = []
     

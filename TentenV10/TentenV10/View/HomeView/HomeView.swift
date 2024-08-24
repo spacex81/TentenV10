@@ -31,6 +31,8 @@ struct HomeView: View {
                 }
             }
             
+            LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
+            
             Text("isLocked is \(viewModel.isLocked ? "true" : "false")")
             
             ZStack {

@@ -28,7 +28,6 @@ class AddButtonCell: BaseCell {
             addButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
-        // Attach target to button for touch events
         addButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
     
@@ -38,5 +37,18 @@ class AddButtonCell: BaseCell {
     
     @objc private func didTapButton() {
         onTap?() // Trigger the tap callback
+    }
+
+    override func applyScaleTransform(_ transform: CGAffineTransform) {
+        propertyAnimator = UIViewPropertyAnimator(
+            duration: 0.4,
+            dampingRatio: 0.6, // Adjust damping for bounce effect
+            animations: {
+                self.addButton.transform = transform
+            }
+        )
+
+        // Start the animation
+        propertyAnimator?.startAnimation()
     }
 }

@@ -38,6 +38,8 @@
 		C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */; };
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
+		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
+		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
@@ -77,6 +79,8 @@
 		C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C82CA7242C6B014B00B4BFD0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		C82F66DE2C74A09D004E33FA /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewRepresentable.swift; sourceTree = "<group>"; };
+		C85489812C7A05EB006878E0 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 		C8022C912C71F46A006DE470 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
+				C854897E2C7A05D3006878E0 /* LockView */,
 				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
 				C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */,
 				C812FF092C69D96200BD9D9B /* HomeView.swift */,
@@ -221,6 +226,15 @@
 				C8B5B41E2C65B765002ACBAA /* UserDto.swift */,
 			);
 			path = Dto;
+			sourceTree = "<group>";
+		};
+		C854897E2C7A05D3006878E0 /* LockView */ = {
+			isa = PBXGroup;
+			children = (
+				C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */,
+				C85489812C7A05EB006878E0 /* LockView.swift */,
+			);
+			path = LockView;
 			sourceTree = "<group>";
 		};
 		C8DB63ED2C6F2B2100831BA8 /* ScrollView */ = {
@@ -338,6 +352,8 @@
 				C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
+				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,
+				C85489822C7A05EB006878E0 /* LockView.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
