@@ -2,37 +2,119 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var isSheetPresented: Bool = false
+    @ObservedObject var viewModel = HomeViewModel.shared
 
     var body: some View {
         VStack {
-            Button {
-                isSheetPresented = true
-            } label: {
+            if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
                 HStack {
-                    Image(systemName: "plus")
-                        .tint(.white)
-                        .fontWeight(.bold)
-                        .font(.title2)
-                    Text("add friends")
-                        .tint(.white)
-                        .fontWeight(.bold)
-                        .font(.title2)
+                    VStack(alignment: .leading) {
+                        Text(userRecord.username)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 1)
+                        if let userPin = viewModel.userRecord?.pin {
+                            PinButton(pin: userPin)
+                        }
+                    }
                     Spacer()
+                    // profile pic
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .shadow(radius: 10)
                 }
-                .padding(25)
-                .background(Color(UIColor(white: 0.3, alpha: 1.0)))
-                .cornerRadius(20)
+                Button {
+                    isSheetPresented = true
+                } label: {
+                    HStack {
+                        Image(systemName: "plus")
+                            .tint(.white)
+                            .fontWeight(.bold)
+                            .font(.title2)
+                        Text("add friends")
+                            .tint(.white)
+                            .fontWeight(.bold)
+                            .font(.title2)
+                        Spacer()
+                    }
+                    .padding(25)
+                    .background(Color(UIColor(white: 0.3, alpha: 1.0)))
+                    .cornerRadius(20)
+                    .frame(maxWidth: .infinity)
+                }
                 .frame(maxWidth: .infinity)
+                
+                Spacer()
             }
-            .frame(maxWidth: .infinity)
-            
+
         }
+//        .border(.green)
+        .padding(10)
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()
         }
         .frame(maxWidth: .infinity)
     }
 }
+
+
+//struct ProfileView: View {
+//    @State private var isSheetPresented: Bool = false
+//    @ObservedObject var viewModel = HomeViewModel.shared
+//
+//    var body: some View {
+//        VStack {
+//            HStack {
+//                VStack(alignment: .leading) {
+//                    Text("spacex81")
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                        .padding(.bottom, 1)
+//                    PinButton()
+//                }
+//                Spacer()
+//                // profile pic
+//                Image("user1")
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 100, height: 100)
+//                    .clipShape(Circle())
+//                    .shadow(radius: 10)
+//            }
+//            Button {
+//                isSheetPresented = true
+//            } label: {
+//                HStack {
+//                    Image(systemName: "plus")
+//                        .tint(.white)
+//                        .fontWeight(.bold)
+//                        .font(.title2)
+//                    Text("add friends")
+//                        .tint(.white)
+//                        .fontWeight(.bold)
+//                        .font(.title2)
+//                    Spacer()
+//                }
+//                .padding(25)
+//                .background(Color(UIColor(white: 0.3, alpha: 1.0)))
+//                .cornerRadius(20)
+//                .frame(maxWidth: .infinity)
+//            }
+//            .frame(maxWidth: .infinity)
+//            
+//            Spacer()
+//        }
+////        .border(.green)
+//        .padding(10)
+//        .sheet(isPresented: $isSheetPresented) {
+//            AddFriendView()
+//        }
+//        .frame(maxWidth: .infinity)
+//    }
+//}
 
 #Preview {
     ProfileView()

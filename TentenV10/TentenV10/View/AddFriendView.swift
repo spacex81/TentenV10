@@ -74,5 +74,6 @@ struct AddFriendView: View {
                     .padding(.horizontal)
             }
         }
+        .padding(10)
     }
 }

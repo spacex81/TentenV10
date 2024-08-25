@@ -23,11 +23,11 @@
 		C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF152C69F30800BD9D9B /* LiveKitManager.swift */; };
 		C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF172C69F3AF00BD9D9B /* BackgroundTaskManager.swift */; };
 		C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */; };
-		C8144AB02C7B32B30011385D /* Whatever.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AAF2C7B32B30011385D /* Whatever.swift */; };
 		C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB22C7B33850011385D /* ShimmeringViewControllerRepresentable.swift */; };
 		C8144AB52C7B33910011385D /* ShimmeringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB42C7B33910011385D /* ShimmeringViewController.swift */; };
 		C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB62C7B339B0011385D /* ShimmeringView.swift */; };
 		C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB82C7B48DD0011385D /* ProfileView.swift */; };
+		C8144AC02C7B57520011385D /* PinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ABF2C7B57520011385D /* PinButton.swift */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -74,11 +74,11 @@
 		C812FF152C69F30800BD9D9B /* LiveKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitManager.swift; sourceTree = "<group>"; };
 		C812FF172C69F3AF00BD9D9B /* BackgroundTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskManager.swift; sourceTree = "<group>"; };
 		C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
-		C8144AAF2C7B32B30011385D /* Whatever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Whatever.swift; sourceTree = "<group>"; };
 		C8144AB22C7B33850011385D /* ShimmeringViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8144AB42C7B33910011385D /* ShimmeringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringViewController.swift; sourceTree = "<group>"; };
 		C8144AB62C7B339B0011385D /* ShimmeringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringView.swift; sourceTree = "<group>"; };
 		C8144AB82C7B48DD0011385D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		C8144ABF2C7B57520011385D /* PinButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinButton.swift; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				C8144AB12C7B32B60011385D /* ShimmeringText */,
-				C8144AAF2C7B32B30011385D /* Whatever.swift */,
+				C8144ABF2C7B57520011385D /* PinButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -376,9 +376,9 @@
 				C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
+				C8144AC02C7B57520011385D /* PinButton.swift in Sources */,
 				C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */,
 				C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */,
-				C8144AB02C7B32B30011385D /* Whatever.swift in Sources */,
 				C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */,
 				C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */,
 				C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */,

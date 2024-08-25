@@ -2,7 +2,7 @@ import UIKit
 
 class ShimmeringViewController: UIViewController {
     
-    private let shimmeringView = ShimmeringView()
+    let shimmeringView = ShimmeringView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +22,12 @@ class ShimmeringViewController: UIViewController {
             shimmeringView.widthAnchor.constraint(equalToConstant: 200),
             shimmeringView.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Trigger setup of shimmering effect when the view is about to appear
+        shimmeringView.setupShimmeringEffect()
     }
     
     func configure(with text: String, font: UIFont, fontSize: CGFloat) {
