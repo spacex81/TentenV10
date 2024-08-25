@@ -16,7 +16,8 @@ class LongPressCell: BaseCell {
 
     private let longPressGestureRecognizer = UILongPressGestureRecognizer()
     
-    private let lockDistance: CGFloat = 100
+//    private let lockDistance: CGFloat = 100
+    private let lockDistance: CGFloat = 50
     private var longPressGestureBeganPoint = CGPoint.zero
     
     private let feedback = UIImpactFeedbackGenerator(style: .medium)

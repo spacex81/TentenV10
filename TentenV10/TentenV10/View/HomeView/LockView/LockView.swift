@@ -43,32 +43,33 @@ class LockView: UIView {
             let progress = max(0, min(1, CGFloat(self.progress)))
             
             let centerX = (bounds.width - BackgroundSize.start.width) / 2
+            let centerY = 50.0
 
             // Calculate the background origin and size
-            let backgroundOriginX = BackgroundOrigin.start.x + (BackgroundOrigin.end.x - BackgroundOrigin.start.x) * progress
-            let backgroundOriginY = BackgroundOrigin.start.y + (BackgroundOrigin.end.y - BackgroundOrigin.start.y) * progress
+            let backgroundOriginX = BackgroundOrigin.start.x
+            let backgroundOriginY = BackgroundOrigin.start.y
             let backgroundWidth = BackgroundSize.start.width + (BackgroundSize.end.width - BackgroundSize.start.width) * progress
             let backgroundHeight = BackgroundSize.start.height + (BackgroundSize.end.height - BackgroundSize.start.height) * progress
 
             backgroundImageView.frame = CGRect(
-                origin: CGPoint(x: centerX + backgroundOriginX, y: backgroundOriginY),
+                origin: CGPoint(x: centerX + backgroundOriginX, y: centerY + backgroundOriginY),
                 size: CGSize(width: backgroundWidth, height: backgroundHeight)
             )
 
             // Calculate the lock body center
             let lockBodyCenterX = LockBodyCenter.start.x + (LockBodyCenter.end.x - LockBodyCenter.start.x) * progress
             let lockBodyCenterY = LockBodyCenter.start.y + (LockBodyCenter.end.y - LockBodyCenter.start.y) * progress
-            lockBodyImageView.center = CGPoint(x: centerX + lockBodyCenterX, y: lockBodyCenterY)
+            lockBodyImageView.center = CGPoint(x: centerX + lockBodyCenterX, y: centerY + lockBodyCenterY)
 
             // Calculate the lock shackle center
             let lockShackleCenterX = LockShackleCenter.start.x + (LockShackleCenter.end.x - LockShackleCenter.start.x) * progress
             let lockShackleCenterY = LockShackleCenter.start.y + (LockShackleCenter.end.y - LockShackleCenter.start.y) * progress
-            lockShackleImageView.center = CGPoint(x: centerX + lockShackleCenterX, y: lockShackleCenterY)
+            lockShackleImageView.center = CGPoint(x: centerX + lockShackleCenterX, y: centerY +  lockShackleCenterY)
 
             // Calculate the direction indicator center
             let directionIndicatorCenterX = DirectionIndicatorCenter.start.x + (DirectionIndicatorCenter.end.x - DirectionIndicatorCenter.start.x) * progress
             let directionIndicatorCenterY = DirectionIndicatorCenter.start.y + (DirectionIndicatorCenter.end.y - DirectionIndicatorCenter.start.y) * progress
-            directionIndicatorImageView.center = CGPoint(x: centerX + directionIndicatorCenterX, y: directionIndicatorCenterY)
+            directionIndicatorImageView.center = CGPoint(x: centerX + directionIndicatorCenterX, y: centerY + directionIndicatorCenterY)
 
             // Adjust alpha based on progress
             directionIndicatorImageView.alpha = 1 - progress
@@ -118,7 +119,8 @@ extension LockView {
     }
     
     enum BackgroundSize {
-        static let start = CGSize(width: UIImage(named: "bg_recorder_lock")?.size.width ?? 0, height: 150)
+//        static let start = CGSize(width: UIImage(named: "bg_recorder_lock")?.size.width ?? 0, height: 150)
+        static let start = CGSize(width: UIImage(named: "bg_recorder_lock")?.size.width ?? 0, height: 100)
         static let end = UIImage(named: "bg_recorder_lock")?.size ?? .zero
     }
     
@@ -135,12 +137,12 @@ extension LockView {
     
     enum LockBodyCenter {
         static let start = CGPoint(x: BackgroundSize.start.width / 2, y: BackgroundSize.start.height / 2 - 20)
-        static let end = CGPoint(x: BackgroundSize.end.width / 2, y: BackgroundSize.end.height - (BackgroundSize.end.height - lockedLockSize.height) / 2 - lockBodyImageSize.height / 2 - verticalDistance)
+        static let end = CGPoint(x: BackgroundSize.end.width / 2, y: BackgroundSize.end.height - (BackgroundSize.end.height - lockedLockSize.height) / 2 - lockBodyImageSize.height / 2 )
     }
     
     enum LockShackleCenter {
         static let start = CGPoint(x: BackgroundSize.start.width / 2, y: LockBodyCenter.start.y - shackleImageSize.height / 2 - lockBodyImageSize.height / 2 - ShackleBottomMargin.start)
-        static let end = CGPoint(x: BackgroundSize.end.width / 2, y: (BackgroundSize.end.height - lockedLockSize.height) / 2 + shackleImageSize.height / 2 - verticalDistance)
+        static let end = CGPoint(x: BackgroundSize.end.width / 2, y: (BackgroundSize.end.height - lockedLockSize.height) / 2 + shackleImageSize.height / 2)
     }
     
     enum DirectionIndicatorCenter {
