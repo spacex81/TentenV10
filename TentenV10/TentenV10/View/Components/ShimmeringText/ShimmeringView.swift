@@ -38,9 +38,9 @@ class ShimmeringView: UIView {
         
         // Configure gradientLayer
         gradientLayer.colors = [
-            UIColor(white: 1, alpha: 0.3).cgColor, // Slightly tinted clear
-            UIColor(white: 1, alpha: 0.9).cgColor,  // Less intense white
-            UIColor(white: 1, alpha: 0.3).cgColor  // Slightly tinted clear
+            UIColor(white: 1, alpha: 0.5).cgColor, // Slightly tinted clear
+            UIColor(white: 1, alpha: 1.0).cgColor,  // Less intense white
+            UIColor(white: 1, alpha: 0.5).cgColor  // Slightly tinted clear
         ]
         gradientLayer.locations = [0, 0.5, 1]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
