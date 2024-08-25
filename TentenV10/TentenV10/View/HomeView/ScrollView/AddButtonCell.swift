@@ -7,15 +7,16 @@ class AddButtonCell: BaseCell {
 
     private let addButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        let originalImage = UIImage(systemName: "plus")?.scaled(to: CGSize(width: 50, height: 50))
+        let tintedImage = originalImage?.withTintColor(.white)
+        
+        button.setImage(tintedImage, for: .normal)
         button.layer.borderColor = UIColor.gray.cgColor
-        button.layer.borderWidth = 2.0
-        button.layer.cornerRadius = 35 // Adjust if needed
-        button.backgroundColor = .clear
-        button.tintColor = .gray
+        button.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,3 +53,26 @@ class AddButtonCell: BaseCell {
         propertyAnimator?.startAnimation()
     }
 }
+
+extension UIImage {
+    func scaled(to size: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        draw(in: CGRect(origin: .zero, size: size))
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return scaledImage ?? self
+    }
+    
+    // TODO: setImageColor
+    func withTintColor(_ color: UIColor) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            color.setFill()
+            let rect = CGRect(origin: .zero, size: size)
+            context.fill(rect)
+            
+            draw(in: rect, blendMode: .destinationIn, alpha: 1.0)
+        }
+    }
+}
+
