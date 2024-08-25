@@ -116,7 +116,7 @@ struct HomeView: View {
             .ignoresSafeArea()
         )
         .sheet(isPresented: $isSheetPresented) {
-            AddFriendView()
+            ProfileView()
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)

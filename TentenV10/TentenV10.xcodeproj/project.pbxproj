@@ -27,6 +27,7 @@
 		C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB22C7B33850011385D /* ShimmeringViewControllerRepresentable.swift */; };
 		C8144AB52C7B33910011385D /* ShimmeringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB42C7B33910011385D /* ShimmeringViewController.swift */; };
 		C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB62C7B339B0011385D /* ShimmeringView.swift */; };
+		C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB82C7B48DD0011385D /* ProfileView.swift */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -77,6 +78,7 @@
 		C8144AB22C7B33850011385D /* ShimmeringViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8144AB42C7B33910011385D /* ShimmeringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringViewController.swift; sourceTree = "<group>"; };
 		C8144AB62C7B339B0011385D /* ShimmeringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringView.swift; sourceTree = "<group>"; };
+		C8144AB82C7B48DD0011385D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -239,8 +241,9 @@
 			isa = PBXGroup;
 			children = (
 				C8144AAE2C7B32A90011385D /* Components */,
-				C8022C912C71F46A006DE470 /* HomeView */,
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
+				C8022C912C71F46A006DE470 /* HomeView */,
+				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
 				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
@@ -374,6 +377,7 @@
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
 				C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */,
+				C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */,
 				C8144AB02C7B32B30011385D /* Whatever.swift in Sources */,
 				C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */,
 				C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */,

@@ -50,10 +50,6 @@ struct AddFriendView: View {
                 Text(userRecord.username)
                     .font(.title)
                     .padding(.top, 10)
-                
-                Text(userRecord.deviceToken ?? "Empty Device Token")
-                    .font(.title)
-                    .padding(.top, 10)
             }
             Spacer()
             

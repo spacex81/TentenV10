@@ -17,6 +17,8 @@ class AddButtonCell: BaseCell {
         return button
     }()
 
+    private let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,6 +39,7 @@ class AddButtonCell: BaseCell {
     }
     
     @objc private func didTapButton() {
+        impactFeedbackGenerator.impactOccurred()
         onTap?() // Trigger the tap callback
     }
 
