@@ -29,9 +29,12 @@
 		C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB82C7B48DD0011385D /* ProfileView.swift */; };
 		C8144AC02C7B57520011385D /* PinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ABF2C7B57520011385D /* PinButton.swift */; };
 		C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */; };
-		C8144AC62C7C22BB0011385D /* SpeechBubbleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC52C7C22BB0011385D /* SpeechBubbleShape.swift */; };
+		C8144AC62C7C22BB0011385D /* SpeechBubbleShapeUpward.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC52C7C22BB0011385D /* SpeechBubbleShapeUpward.swift */; };
 		C8144AC92C7C2DBE0011385D /* AddFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */; };
 		C8144ACB2C7C2E6D0011385D /* AddFriendButtonPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACA2C7C2E6D0011385D /* AddFriendButtonPreview.swift */; };
+		C8144ACD2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACC2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift */; };
+		C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACE2C7C46710011385D /* HomeViewPreview.swift */; };
+		C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -84,9 +87,12 @@
 		C8144AB82C7B48DD0011385D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C8144ABF2C7B57520011385D /* PinButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinButton.swift; sourceTree = "<group>"; };
 		C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewPreview.swift; sourceTree = "<group>"; };
-		C8144AC52C7C22BB0011385D /* SpeechBubbleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleShape.swift; sourceTree = "<group>"; };
+		C8144AC52C7C22BB0011385D /* SpeechBubbleShapeUpward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleShapeUpward.swift; sourceTree = "<group>"; };
 		C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendButton.swift; sourceTree = "<group>"; };
 		C8144ACA2C7C2E6D0011385D /* AddFriendButtonPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendButtonPreview.swift; sourceTree = "<group>"; };
+		C8144ACC2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleShapeDownward.swift; sourceTree = "<group>"; };
+		C8144ACE2C7C46710011385D /* HomeViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewPreview.swift; sourceTree = "<group>"; };
+		C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToTalkBubble.swift; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -133,11 +139,13 @@
 		C8022C912C71F46A006DE470 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
+				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C8144AC72C7C2D9C0011385D /* AddFriendView */,
 				C854897E2C7A05D3006878E0 /* LockView */,
 				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
 				C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */,
 				C812FF092C69D96200BD9D9B /* HomeView.swift */,
+				C8144ACE2C7C46710011385D /* HomeViewPreview.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -156,7 +164,9 @@
 			children = (
 				C8144AB12C7B32B60011385D /* ShimmeringText */,
 				C8144ABF2C7B57520011385D /* PinButton.swift */,
-				C8144AC52C7C22BB0011385D /* SpeechBubbleShape.swift */,
+				C8144AC52C7C22BB0011385D /* SpeechBubbleShapeUpward.swift */,
+				C8144ACC2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift */,
+				C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -264,7 +274,6 @@
 				C8144AAE2C7B32A90011385D /* Components */,
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
 				C8022C912C71F46A006DE470 /* HomeView */,
-				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
 			);
@@ -394,6 +403,7 @@
 				C8144ACB2C7C2E6D0011385D /* AddFriendButtonPreview.swift in Sources */,
 				C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */,
 				C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */,
+				C8144ACD2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift in Sources */,
 				C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
@@ -408,17 +418,19 @@
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,
+				C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */,
 				C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */,
 				C85489822C7A05EB006878E0 /* LockView.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
-				C8144AC62C7C22BB0011385D /* SpeechBubbleShape.swift in Sources */,
+				C8144AC62C7C22BB0011385D /* SpeechBubbleShapeUpward.swift in Sources */,
 				C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */,
 				C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */,
 				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
 				C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */,
 				C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */,
+				C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
 				C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */,
 				C8144AC92C7C2DBE0011385D /* AddFriendButton.swift in Sources */,

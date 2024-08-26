@@ -88,7 +88,7 @@ struct AddFriendViewPreview: View {
                         .padding()
                         .padding(.horizontal)
                         .background(
-                            SpeechBubbleShape()
+                            SpeechBubbleShapeUpward()
                                 .fill(Color(.secondarySystemBackground))
                                 .offset(y: -5)
                         )

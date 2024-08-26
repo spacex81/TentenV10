@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HomeView: View {
+struct HomeViewPreview: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
@@ -30,7 +30,6 @@ struct HomeView: View {
             Spacer()
 
             VStack {
-                // Main text
                 if let selectedFriend = viewModel.selectedFriend {
                     if viewModel.isPressing && !viewModel.isPublished {
                         ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
@@ -38,27 +37,31 @@ struct HomeView: View {
                             .transition(.opacity)
                     } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
                         ShimmeringViewControllerRepresentable(text: "Slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
-
                             .frame(width: 200, height: 30)
                             .transition(.opacity)
                     } else {
                         Text(selectedFriend.username)
-                            .font(.system(size: 24, weight: .bold, design: .default))
                             .font(.title)
                             .padding(.top, 10)
                             .transition(.opacity)
+                        
+                        Text("hold to talk")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .padding()
+                            .padding(.horizontal)
+                            .background(
+                                SpeechBubbleShapeDownward()
+                                    .fill(Color(.white))
+                                    .offset(y: -5)
+                            )
                     }
                 }
             }
+            .border(.green)
+
 
             ZStack {
-                // Hold to talk bubble
-                if !viewModel.isPressing {
-                    HoldToTalkBubble()
-                        .frame(height: 200)
-                        .offset(y: -110)
-                }
-                
                 // Lock View
                 if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked{
                     VStack {
@@ -67,7 +70,6 @@ struct HomeView: View {
                     .frame(width: 100, height: 200)
                     .offset(y: -100)
                 }
-                
                 // Scroll View
                 CustomCollectionViewRepresentable(
                     selectedFriend: $viewModel.selectedFriend,
@@ -133,10 +135,56 @@ struct HomeView: View {
         .sheet(isPresented: $isSheetPresented) {
             ProfileView()
         }
+        .onAppear {
+            loadTestData() // Load test data for preview
+        }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)
         }
     }
 }
 
+extension HomeViewPreview {
+    private func loadTestData() {
+        viewModel.detailedFriends = [
+            FriendRecord(
+                id: "1",
+                email: "friend1@example.com",
+                username: "Friend One",
+                pin: "1234",
+                profileImageData: UIImage(systemName: "person.fill")?.pngData(),
+                deviceToken: "token1",
+                userId: "user1",
+                isBusy: false
+            ),
+            FriendRecord(
+                id: "2",
+                email: "friend2@example.com",
+                username: "Friend Two",
+                pin: "5678",
+                profileImageData: UIImage(systemName: "person.fill")?.pngData(),
+                deviceToken: "token2",
+                userId: "user2",
+                isBusy: true
+            ),
+            FriendRecord(
+                id: "3",
+                email: "friend3@example.com",
+                username: "Friend Three",
+                pin: "9012",
+                profileImageData: UIImage(systemName: "person.fill")?.pngData(),
+                deviceToken: "token3",
+                userId: "user3",
+                isBusy: false
+            )
+        ]
+        
+        // Set a default selected friend for the preview
+        viewModel.selectedFriend = viewModel.detailedFriends.first
+    }
+}
 
+#Preview {
+    HomeView()
+        .preferredColorScheme(.dark)
+}

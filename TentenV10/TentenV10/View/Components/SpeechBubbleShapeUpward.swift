@@ -1,11 +1,12 @@
 import SwiftUI
 
-struct SpeechBubbleShape: Shape {
+struct SpeechBubbleShapeUpward: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let radius: CGFloat = 10
         let triangleHeight: CGFloat = 10
         let triangleWidth: CGFloat = 20
+        let cornerRadius: CGFloat = 4
         
         // Draw the rounded rectangle
         path.addRoundedRect(in: CGRect(
