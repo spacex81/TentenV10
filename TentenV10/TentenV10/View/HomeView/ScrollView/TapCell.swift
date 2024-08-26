@@ -2,6 +2,7 @@ import UIKit
 
 class TapCell: BaseCell {
     static let reuseIdentifier = "TapCell"
+    var friend: FriendRecord?
 
     var onTap: (() -> Void)? // Closure to handle tap event
 
@@ -39,10 +40,24 @@ class TapCell: BaseCell {
     }
 
     func configure(with friend: FriendRecord) {
+        self.friend = friend
+        
         if let imageData = friend.profileImageData {
             imageView.image = UIImage(data: imageData)
         } else {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
+        }
+        
+        updateCellState()
+    }
+    
+    private func updateCellState() {
+        guard let friend = friend else { return }
+
+        if friend.isBusy {
+            imageView.alpha = 0.5
+        } else {
+            imageView.alpha = 1.0
         }
     }
 

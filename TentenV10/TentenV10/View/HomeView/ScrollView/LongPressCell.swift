@@ -2,6 +2,7 @@ import UIKit
 
 class LongPressCell: BaseCell {
     static let reuseIdentifier = "LongPressCell"
+    var friend: FriendRecord?
 
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
@@ -73,12 +74,29 @@ class LongPressCell: BaseCell {
     }
 
     func configure(with friend: FriendRecord) {
+        self.friend = friend
+        
         if let imageData = friend.profileImageData {
             imageView.image = UIImage(data: imageData)
         } else {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
+        
+        updateCellState()
     }
+    
+    private func updateCellState() {
+        guard let friend = friend else { return }
+
+        if friend.isBusy {
+            longPressGestureRecognizer.isEnabled = false
+            imageView.alpha = 0.5
+        } else {
+            longPressGestureRecognizer.isEnabled = true
+            imageView.alpha = 1.0
+        }
+    }
+
 
     override func applyScaleTransform(_ transform: CGAffineTransform) {
         propertyAnimator = UIViewPropertyAnimator(

@@ -54,9 +54,15 @@ struct HomeView: View {
             ZStack {
                 // Hold to talk bubble
                 if !viewModel.isPressing && !viewModel.isLocked {
-                    HoldToTalkBubble()
-                        .frame(height: 200)
-                        .offset(y: -110)
+                    if !viewModel.isConnected {
+                        HoldToTalkBubble()
+                            .frame(height: 200)
+                            .offset(y: -110)
+                    } else {
+                        HoldToReplyBubble()
+                            .frame(height: 200)
+                            .offset(y: -110)
+                    }
                 }
                 
                 // Lock View
@@ -97,26 +103,24 @@ struct HomeView: View {
                             .opacity(1.0)
                             .frame(width: strokeSize, height: strokeSize)
                 } else {
-                    if viewModel.isConnected {
                         // Cancel Button
-                        Button(action: {
-                            Task {
-                                viewModel.isLocked = false
-                                await viewModel.unpublishAudio()
-                                viewModel.disconnect()
-                            }
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.red)
-                                    .frame(width: 60, height: 60)
-                                
-                                Image(systemName: "xmark")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundColor(.white)
-                                    .frame(width: 30, height: 30)
-                            }
+                    Button(action: {
+                        Task {
+                            viewModel.isLocked = false
+                            await viewModel.unpublishAudio()
+                            viewModel.disconnect()
+                        }
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 60, height: 60)
+                            
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.white)
+                                .frame(width: 30, height: 30)
                         }
                     }
                 }

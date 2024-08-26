@@ -7,7 +7,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
-    
+    @Published var isLocked: Bool = false 
     
     var room: Room?
 
@@ -158,25 +158,21 @@ extension LiveKitManager {
     }
     
     func room(_ room: Room, participant: RemoteParticipant, didSubscribeTrack publication: RemoteTrackPublication) {
-        NSLog("RemoteParticipant-didSubscribeTrack")
         sendMessageToRemoteParticipant(message: "readyToTalk")
         sendLocalNotification(title: "Remote Participant", body: "Remote participant is talking")
         NSLog("LOG: Ready to listen to remote audio stream")
     }
     
     // remote participant left the room
-//    func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
-//        NSLog("LOG: participantDidDisconnect")
-//        NSLog("LOG: remote participant left the room")
-//        if isLocked {
-//            Task {
-//                isLocked = false
-//                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
-//                await unpublishAudio()
-//                await disconnect()
-//            }
-//        }
-//    }
+    func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
+        NSLog("LOG: remote participant left the room")
+        Task {
+            isLocked = false
+            NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
+            await unpublishAudio()
+            await disconnect()
+        }
+    }
     
     
     func sendMessageToRemoteParticipant(message: String) {

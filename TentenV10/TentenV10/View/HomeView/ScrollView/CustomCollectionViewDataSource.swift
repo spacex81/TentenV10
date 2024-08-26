@@ -48,6 +48,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
             let longPressCell = cell as! LongPressCell
             longPressCell.configure(with: friend)
+            // TODO: longPressCell.friend = friend
             
             longPressCell.isPressing = isPressing
             longPressCell.isLocked = isLocked
@@ -63,7 +64,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
             let tapCell = cell as! TapCell
             tapCell.configure(with: friend)
-            
+            // TODO: tapCell.friend = friend
+
             tapCell.isPressing = isPressing
             tapCell.isLocked = isLocked
             tapCell.onTap = { [weak self] in
