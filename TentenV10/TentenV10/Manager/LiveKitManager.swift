@@ -8,6 +8,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
     
+    
     var room: Room?
 
     let livekitUrl = "wss://tentwenty-bp8gb2jg.livekit.cloud"
@@ -131,10 +132,28 @@ extension LiveKitManager {
 
 // MARK: LiveKit Delegate
 extension LiveKitManager {
+//    func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, forTopic topic: String) {
+//        print("Data Received from receiver, you are ok to talk")
+//        // TODO: check if the received message is 'readyToTalk' before setting 'isPublished' to true
+//        DispatchQueue.main.async {
+//            self.isPublished = true
+//        }
+//    }
     func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, forTopic topic: String) {
-        print("Data Received from receiver, you are ok to talk")
-        DispatchQueue.main.async {
-            self.isPublished = true
+        // Convert the received data to a string (or other appropriate format)
+        guard let message = String(data: data, encoding: .utf8) else {
+            print("Failed to decode received data")
+            return
+        }
+
+        // Check if the received message is 'readyToTalk'
+        if message == "readyToTalk" {
+            print("Received 'readyToTalk' message. Setting isPublished to true.")
+            DispatchQueue.main.async {
+                self.isPublished = true
+            }
+        } else {
+            print("Received data: \(message). Ignored.")
         }
     }
     
@@ -144,6 +163,21 @@ extension LiveKitManager {
         sendLocalNotification(title: "Remote Participant", body: "Remote participant is talking")
         NSLog("LOG: Ready to listen to remote audio stream")
     }
+    
+    // remote participant left the room
+//    func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
+//        NSLog("LOG: participantDidDisconnect")
+//        NSLog("LOG: remote participant left the room")
+//        if isLocked {
+//            Task {
+//                isLocked = false
+//                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
+//                await unpublishAudio()
+//                await disconnect()
+//            }
+//        }
+//    }
+    
     
     func sendMessageToRemoteParticipant(message: String) {
         guard let room = room else {

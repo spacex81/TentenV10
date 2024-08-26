@@ -21,15 +21,9 @@ class RepositoryManager: ObservableObject {
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     private var friendsListeners: [ListenerRegistration] = []
     private var userListener: ListenerRegistration?
-//    private var previousUserDto: UserDto?
     
     @Published var userRecord: UserRecord? {
         didSet {
-//            if let deviceToken = deviceToken, let userRecord = userRecord {
-//                if userRecord.deviceToken != deviceToken {
-//                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
-//                }
-//            }
             
             if let userRecord = self.userRecord {
                 // update deviceToken
@@ -79,10 +73,6 @@ class RepositoryManager: ObservableObject {
     
     private func updateRoomName(roomName: String) {
         NSLog("LOG: updateRoomName")
-//        let tokens = [senderToken, receiverToken].sorted()
-//        let roomName = "\(tokens[0])_\(tokens[1])"
-        
-//        liveKitManager.roomName = roomName
         guard var newUserRecord = userRecord else {
             NSLog("LOG: userRecord is not set when trying to update room name")
             return

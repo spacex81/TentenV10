@@ -21,8 +21,6 @@ class HomeViewModel: ObservableObject {
             handlePressingStateChange()
         }
     }
-    @Published var isLocked: Bool = false
-    @Published var progress: Float = 0.0
     
     @Published var detailedFriends: [FriendRecord] = []
     
@@ -31,6 +29,8 @@ class HomeViewModel: ObservableObject {
     
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
+    @Published var isLocked: Bool = false
+    @Published var progress: Float = 0.0
     
     @Published var friendPin: String = ""
     
@@ -49,6 +49,10 @@ class HomeViewModel: ObservableObject {
         liveKitManager.$isPublished
             .receive(on: DispatchQueue.main)
             .assign(to: &$isPublished)
+        
+//        liveKitManager.$isLocked
+//            .receive(on: DispatchQueue.main)
+//            .assign(to: &$isLocked)
     }
     
     private func bindRepositoryManager() {
