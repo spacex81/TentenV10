@@ -47,19 +47,8 @@ class TapCell: BaseCell {
         } else {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
-        
-        updateCellState()
     }
     
-    private func updateCellState() {
-        guard let friend = friend else { return }
-
-        if friend.isBusy {
-            imageView.alpha = 0.5
-        } else {
-            imageView.alpha = 1.0
-        }
-    }
 
     override func applyScaleTransform(_ transform: CGAffineTransform) {
         propertyAnimator = UIViewPropertyAnimator(

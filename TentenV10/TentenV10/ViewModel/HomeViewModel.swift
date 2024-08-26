@@ -15,6 +15,7 @@ class HomeViewModel: ObservableObject {
     @Published var currentUser: User?
     @Published var userRecord: UserRecord?
     @Published var selectedFriend: FriendRecord?
+    @Published var selectedFriendIsBusy: Bool = false
     
     @Published var isPressing: Bool = false {
         didSet {
@@ -22,7 +23,11 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    @Published var detailedFriends: [FriendRecord] = []
+    @Published var detailedFriends: [FriendRecord] = [] {
+        didSet {
+            updateSelectedFriendIsBusy()
+        }
+    }
     
     @Published var needUserFetch: Bool = true
     
@@ -104,6 +109,23 @@ class HomeViewModel: ObservableObject {
                     disconnect()
                 }
             }
+        }
+    }
+    
+    private func updateSelectedFriendIsBusy() {
+        // Check if there's a selected friend
+        guard let selectedFriend = selectedFriend else {
+            selectedFriendIsBusy = false
+            return
+        }
+        
+        // Find the selected friend in the detailedFriends array
+        if let foundFriend = detailedFriends.first(where: { $0.id == selectedFriend.id }) {
+            // Update selectedFriendIsBusy based on the found friend's isBusy status
+            selectedFriendIsBusy = foundFriend.isBusy
+        } else {
+            // If the selected friend is not in the detailedFriends array, set isBusy to false
+            selectedFriendIsBusy = false
         }
     }
 }

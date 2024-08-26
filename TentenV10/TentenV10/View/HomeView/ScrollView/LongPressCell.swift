@@ -90,10 +90,8 @@ class LongPressCell: BaseCell {
 
         if friend.isBusy {
             longPressGestureRecognizer.isEnabled = false
-            imageView.alpha = 0.5
         } else {
             longPressGestureRecognizer.isEnabled = true
-            imageView.alpha = 1.0
         }
     }
 

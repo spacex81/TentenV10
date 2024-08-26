@@ -52,12 +52,19 @@ struct HomeView: View {
             }
 
             ZStack {
-                // Hold to talk bubble
+                // Speech bubble
                 if !viewModel.isPressing && !viewModel.isLocked {
                     if !viewModel.isConnected {
-                        HoldToTalkBubble()
-                            .frame(height: 200)
-                            .offset(y: -110)
+                        if viewModel.selectedFriendIsBusy {
+                            IsBusyBubble()
+                                .frame(height: 200)
+                                .offset(y: -110)
+                        } else {
+                            HoldToTalkBubble()
+                               .frame(height: 200)
+                               .offset(y: -110)
+                        }
+
                     } else {
                         HoldToReplyBubble()
                             .frame(height: 200)
@@ -107,6 +114,7 @@ struct HomeView: View {
                     Button(action: {
                         Task {
                             viewModel.isLocked = false
+                            // TODO: current user's isBusy value to false 
                             await viewModel.unpublishAudio()
                             viewModel.disconnect()
                         }

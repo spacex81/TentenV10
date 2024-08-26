@@ -80,25 +80,31 @@ class AnimatedBackgroundView: UIView {
     }
 
     func setPressingState(_ isPressing: Bool, _ isPublished: Bool) {
-//        let scaleXFactor: CGFloat = isPressing ? 0.85 : 1.0
-//        let scaleYFactor: CGFloat = isPressing ? 0.75 : 1.0
         let scaleXFactor: CGFloat
         let scaleYFactor: CGFloat
+        let cornerRadius: CGFloat
         
         if isPressing && !isPublished {
+            // case 1
             scaleXFactor = 0.85
             scaleYFactor = 0.75
+            cornerRadius = 50
         } else if isPublished {
+            // case 2
             scaleXFactor = 0.95
             scaleYFactor = 0.85
+            cornerRadius = 50
         } else {
+            // case 3
             scaleXFactor = 1.0
             scaleYFactor = 1.0
+            cornerRadius = 0
         }
 
         UIView.animate(withDuration: 0.3) {
             self.imageView.transform = CGAffineTransform(scaleX: scaleXFactor, y: scaleYFactor)
-
+            self.imageView.layer.cornerRadius = cornerRadius
+            
             if isPressing && !isPublished {
                 // Create and add the blur effect view if not already added
                 if self.blurEffectView.superview == nil {
