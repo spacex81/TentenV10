@@ -1,10 +1,9 @@
 import SwiftUI
 
-struct AddFriendView: View {
-    @Environment(\.dismiss) var dismiss
+struct AddFriendViewPreview: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     @State private var isTextFieldFocused = false
-
+    
     // For rainbow background
     @State private var hue: Double = 0.0
     @State private var colors: [Color] = [
@@ -67,6 +66,7 @@ struct AddFriendView: View {
                     isTextFieldFocused = isEditing
                 })
                 .autocapitalization(.none)
+                .autocorrectionDisabled(true)
                 .font(.largeTitle)
                 .accentColor(.white)
             }
@@ -129,9 +129,8 @@ struct AddFriendView: View {
                     }
                     
                     Spacer()
-                        .frame(width: 20)
+                        .frame(width: 7)
                 }
-                .padding(.top, 20)
             }
 
             Spacer()
@@ -156,14 +155,11 @@ struct AddFriendView: View {
             Color(hue: (hue + 0.1).truncatingRemainder(dividingBy: 1.0), saturation: 1, brightness: 1)
         ]
     }
-
 }
 
-extension UIApplication {
-    func endEditing(_ force: Bool = false) {
-        let keyWindow = connectedScenes
-            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-            .first { $0.isKeyWindow }
-        keyWindow?.endEditing(force)
-    }
+
+
+#Preview {
+    AddFriendViewPreview()
+        .preferredColorScheme(.dark)
 }
