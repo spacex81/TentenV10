@@ -34,7 +34,6 @@ class ShimmeringView: UIView {
     }
     
     func setupShimmeringEffect() {
-        NSLog("LOG: setupShimmeringEffect")
         backgroundColor = .clear
         
         // Configure gradientLayer

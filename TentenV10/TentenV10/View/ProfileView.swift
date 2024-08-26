@@ -7,7 +7,10 @@ struct ProfileView: View {
     var body: some View {
         VStack {
             if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
+                
+                // user profile panel
                 HStack {
+                    // username and pin
                     VStack(alignment: .leading) {
                         Text(userRecord.username)
                             .font(.largeTitle)
@@ -26,6 +29,9 @@ struct ProfileView: View {
                         .clipShape(Circle())
                         .shadow(radius: 10)
                 }
+                .padding(10)
+                
+                // add friends button
                 Button {
                     isSheetPresented = true
                 } label: {
@@ -48,11 +54,23 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity)
                 
                 Spacer()
-            }
+                Button(action: {
+                    viewModel.signOut()
+                }) {
+                    Text("Sign Out")
+                        .font(.title2)
+                        .foregroundColor(.red)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
 
+            }
         }
 //        .border(.green)
-        .padding(10)
+        .padding(30)
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()
         }

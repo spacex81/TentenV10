@@ -1,8 +1,5 @@
 import SwiftUI
 
-// TODO: decrease the font sie
-// also I don't want using font size as number '22' and 'title3' at the same time
-// let's just use number
 struct PinButton: View {
     @State private var isPressed = false
     var pin: String
@@ -36,6 +33,8 @@ struct PinText: View {
     @Binding var isPressed: Bool
     var pin: String
     
+    let fontSize: CGFloat = 18 // New font size
+
     var body: some View {
         Button {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.5)) {
@@ -43,31 +42,20 @@ struct PinText: View {
             }
             UIPasteboard.general.string = pin
         } label: {
-            ZStack {
-                HStack {
-                    Text(" PIN:")
-                        .font(.title3)
-                        .foregroundColor(Color(UIColor(white: 0.7, alpha: 1.0)))
-                    
-                    ShimmeringViewControllerRepresentable(
-                        text: pin,
-                        font: UIFont.systemFont(ofSize: 22, weight: .regular),
-                        fontSize: 22
-                    )
-                    .onAppear {
-                        // Log to ensure it appears and animation is added
-                        print("PinText appears, configure shimmering effect.")
-                    }
-                    .offset(x: -5, y: 12)
-                }
-            }
-            .frame(width: 140, height: 30)
+            let adjustedPin = "PIN: " + pin
+            
+            ShimmeringViewControllerRepresentable(
+                text: adjustedPin,
+                font: UIFont.systemFont(ofSize: fontSize, weight: .regular),
+                fontSize: fontSize
+            )
             .padding(3)
             .cornerRadius(30)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color(UIColor(white: 0.3, alpha: 1.0)), lineWidth: 2)
             )
+            .frame(width: 130, height: 30)
         }
     }
 }
@@ -75,7 +63,7 @@ struct PinText: View {
 struct ConfirmationText: View {
     var body: some View {
         Text("pin copied!")
-            .font(.title3)
+            .font(.system(size: 18)) // Match the font size here as well
             .frame(width: 140, height: 30)
             .padding(3)
             .background(
@@ -87,6 +75,6 @@ struct ConfirmationText: View {
 }
 
 #Preview {
-    PinButton(pin: "2frna4m")
+    PinButton(pin: "b0mf7mk")
         .preferredColorScheme(.dark)
 }

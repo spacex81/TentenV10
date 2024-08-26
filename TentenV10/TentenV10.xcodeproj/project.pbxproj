@@ -28,6 +28,7 @@
 		C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB62C7B339B0011385D /* ShimmeringView.swift */; };
 		C8144AB92C7B48DD0011385D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AB82C7B48DD0011385D /* ProfileView.swift */; };
 		C8144AC02C7B57520011385D /* PinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ABF2C7B57520011385D /* PinButton.swift */; };
+		C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */; };
 		C815BC6D2C60849B004CB09E /* TentenV10App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6C2C60849B004CB09E /* TentenV10App.swift */; };
 		C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC6E2C60849B004CB09E /* ContentView.swift */; };
 		C815BC712C60849C004CB09E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C815BC702C60849C004CB09E /* Assets.xcassets */; };
@@ -79,6 +80,7 @@
 		C8144AB62C7B339B0011385D /* ShimmeringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmeringView.swift; sourceTree = "<group>"; };
 		C8144AB82C7B48DD0011385D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C8144ABF2C7B57520011385D /* PinButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinButton.swift; sourceTree = "<group>"; };
+		C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewPreview.swift; sourceTree = "<group>"; };
 		C815BC692C60849B004CB09E /* TentenV10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TentenV10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C815BC6C2C60849B004CB09E /* TentenV10App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TentenV10App.swift; sourceTree = "<group>"; };
 		C815BC6E2C60849B004CB09E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				C8022C912C71F46A006DE470 /* HomeView */,
 				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
+				C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */,
 				C812FF0B2C69D96700BD9D9B /* AuthView.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
 			);
@@ -382,6 +385,7 @@
 				C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */,
 				C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */,
 				C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */,
+				C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */,
 				C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,

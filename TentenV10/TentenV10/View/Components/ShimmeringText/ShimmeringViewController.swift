@@ -17,10 +17,10 @@ class ShimmeringViewController: UIViewController {
         view.addSubview(shimmeringView)
         
         NSLayoutConstraint.activate([
-            shimmeringView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            shimmeringView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            shimmeringView.widthAnchor.constraint(equalToConstant: 200),
-            shimmeringView.heightAnchor.constraint(equalToConstant: 50)
+            shimmeringView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            shimmeringView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            shimmeringView.topAnchor.constraint(equalTo: view.topAnchor),
+            shimmeringView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
