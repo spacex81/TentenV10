@@ -3,6 +3,13 @@ import SwiftUI
 struct AddFriendViewPreview: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     @State private var isTextFieldFocused = false
+    
+    // For rainbow background
+    @State private var hue: Double = 0.0
+    @State private var colors: [Color] = [
+        Color(hue: 0.0, saturation: 1, brightness: 1),
+        Color(hue: 0.1, saturation: 1, brightness: 1)
+    ]
 
     var body: some View {
         VStack {
@@ -45,12 +52,20 @@ struct AddFriendViewPreview: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(Color(UIColor(white: 0.6, alpha: 1.0)))
-                TextField("", text: $viewModel.friendPin, onEditingChanged: { isEditing in
+                TextField("", text: Binding(
+                    get: {
+                        viewModel.friendPin
+                    },
+                    set: { newValue in
+                        if newValue.count <= 7 {
+                            viewModel.friendPin = newValue
+                        }
+                    }
+                ), onEditingChanged: { isEditing in
                     // Update the focus state based on whether the TextField is being edited
                     isTextFieldFocused = isEditing
                 })
                 .autocapitalization(.none)
-                // TODO: remove auto recommend
                 .font(.largeTitle)
                 .accentColor(.white)
             }
@@ -60,7 +75,7 @@ struct AddFriendViewPreview: View {
             .padding(.horizontal)
             
             // Paste from clipboard button
-            if isTextFieldFocused {
+            if isTextFieldFocused && viewModel.friendPin.count == 0 {
                 Button(action: {
                     if let clipboardContent = UIPasteboard.general.string {
                         viewModel.friendPin = clipboardContent
@@ -80,15 +95,40 @@ struct AddFriendViewPreview: View {
                 .transition(.opacity)
                 .animation(.easeInOut, value: isTextFieldFocused)
             }
-
-            if viewModel.friendPin.count > 0 {
-                Button(action: {
-                    viewModel.friendPin = viewModel.friendPin.lowercased()
-                    viewModel.addFriend()
-                }) {
-                    Image(systemName: "arrow.right.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(.blue)
+            
+            if isTextFieldFocused {
+                HStack {
+                    Spacer()
+                    
+                    Button(action: {
+                        viewModel.friendPin = viewModel.friendPin.lowercased()
+                        viewModel.addFriend()
+                    }) {
+                        ZStack {
+                            // Background conditional rendering
+                            if viewModel.friendPin.count < 7 {
+                                Color(.secondarySystemBackground)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            } else {
+                                LinearGradient(gradient: Gradient(colors: colors), startPoint: .trailing, endPoint: .leading)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            }
+                            
+                            // Foreground image
+                            Image(systemName: "arrow.right")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(15)
+                        }
+                        .frame(width: 50, height: 50)
+                    }
+                    .onAppear {
+                        startHueRotation()
+                    }
+                    
+                    Spacer()
+                        .frame(width: 7)
                 }
             }
 
@@ -96,45 +136,26 @@ struct AddFriendViewPreview: View {
         }
 //        .border(.green)
     }
-}
-
-struct SpeechBubbleShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let radius: CGFloat = 10
-        let triangleHeight: CGFloat = 10
-        let triangleWidth: CGFloat = 20
-        
-        // Draw the rounded rectangle
-        path.addRoundedRect(in: CGRect(
-            x: rect.minX,
-            y: rect.minY + triangleHeight, // Move the rectangle down to make space for the triangle
-            width: rect.width,
-            height: rect.height - triangleHeight
-        ), cornerSize: CGSize(width: radius, height: radius))
-        
-        // Draw the triangle (speech bubble tail)
-        let trianglePath = Path { p in
-            p.move(to: CGPoint(x: rect.midX - triangleWidth / 2, y: rect.minY + triangleHeight))
-            p.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
-            p.addLine(to: CGPoint(x: rect.midX + triangleWidth / 2, y: rect.minY + triangleHeight))
-            p.closeSubpath()
+    
+    private func startHueRotation() {
+//        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
+            withAnimation {
+                hue += 0.01
+                if hue > 1.0 { hue = 0.0 }
+                updateColors()
+            }
         }
-        
-        path.addPath(trianglePath)
-        
-        return path
+    }
+
+    private func updateColors() {
+        colors = [
+            Color(hue: hue, saturation: 1, brightness: 1),
+            Color(hue: (hue + 0.1).truncatingRemainder(dividingBy: 1.0), saturation: 1, brightness: 1)
+        ]
     }
 }
 
-extension UIApplication {
-    func endEditing(_ force: Bool = false) {
-        let keyWindow = connectedScenes
-            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-            .first { $0.isKeyWindow }
-        keyWindow?.endEditing(force)
-    }
-}
 
 
 #Preview {
