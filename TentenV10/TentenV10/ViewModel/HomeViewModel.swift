@@ -117,12 +117,8 @@ extension HomeViewModel {
             return
         }
         
-//        repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: true, isBusy: true)
-//        await liveKitManager.connect(roomName: roomName)
-        Task {
-            try await Task.sleep(nanoseconds: 1_000_000_000)
-            liveKitManager.isConnected = true
-        }
+        repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: true, isBusy: true)
+        await liveKitManager.connect(roomName: roomName)
     }
     
     func disconnect() {
@@ -131,30 +127,20 @@ extension HomeViewModel {
             return
         }
 
-//        Task {
-//            await liveKitManager.disconnect()
-//            repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: false, isBusy: false)
-//        }
         Task {
-            liveKitManager.isConnected = false
+            await liveKitManager.disconnect()
+            repoManager.updateCallStatusInFirebase(friendUid: friendUid, hasIncomingCallRequest: false, isBusy: false)
         }
     }
     
     func publishAudio() {
-//        Task {
-//            await liveKitManager.publishAudio()
-//        }
         Task {
-            try await Task.sleep(nanoseconds: 1_000_000_000)
-            liveKitManager.isPublished = true
+            await liveKitManager.publishAudio()
         }
     }
     
     func unpublishAudio() async {
-//        await liveKitManager.unpublishAudio()
-        Task {
-            liveKitManager.isPublished = false 
-        }
+        await liveKitManager.unpublishAudio()
     }
 }
 

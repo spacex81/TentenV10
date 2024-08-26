@@ -22,7 +22,6 @@ class AnimatedBackgroundView: UIView {
     private func setupImageView() {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 50
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
 

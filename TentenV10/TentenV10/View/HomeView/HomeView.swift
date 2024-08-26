@@ -87,8 +87,11 @@ struct HomeView: View {
                 } else {
                     // Cancel Button
                     Button(action: {
-                        viewModel.isPublished = false
-                        viewModel.isLocked = false
+                        Task {
+                            viewModel.isLocked = false
+                            await viewModel.unpublishAudio()
+                            viewModel.disconnect()
+                        }
                     }) {
                         ZStack {
                             Circle()

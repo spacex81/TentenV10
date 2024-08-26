@@ -277,7 +277,7 @@ extension RepositoryManager {
         
         if userDto.hasIncomingCallRequest {
             Task {
-//                await liveKitManager.connect(roomName: roomName)
+                await liveKitManager.connect(roomName: roomName)
             }
         } else {
             Task {
