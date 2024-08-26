@@ -9,7 +9,7 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var profileImageData: Data?
     var deviceToken: String?
     var userId: String // Foreign key to UserRecord
-    var isBusy: Bool = false // New field for busy status
+    var isBusy: Bool = false
 
     // Define the primary key for the table
     static var databaseTableName: String = "friends"
