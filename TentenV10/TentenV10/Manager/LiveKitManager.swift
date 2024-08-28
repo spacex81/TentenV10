@@ -133,13 +133,6 @@ extension LiveKitManager {
 
 // MARK: LiveKit Delegate
 extension LiveKitManager {
-//    func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, forTopic topic: String) {
-//        print("Data Received from receiver, you are ok to talk")
-//        // TODO: check if the received message is 'readyToTalk' before setting 'isPublished' to true
-//        DispatchQueue.main.async {
-//            self.isPublished = true
-//        }
-//    }
     func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, forTopic topic: String) {
         // Convert the received data to a string (or other appropriate format)
         guard let message = String(data: data, encoding: .utf8) else {
@@ -167,7 +160,8 @@ extension LiveKitManager {
     // remote participant left the room
     func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
         NSLog("LOG: remote participant left the room")
-        // 
+        // when this callback runs when isPressing is true
+        // this should not run
         if !isPressing {
             Task {
                 isLocked = false

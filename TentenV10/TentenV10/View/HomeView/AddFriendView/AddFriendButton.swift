@@ -18,6 +18,7 @@ struct AddFriendButton: View {
             impactFeedback.impactOccurred()
             viewModel.friendPin = viewModel.friendPin.lowercased()
             viewModel.addFriend()
+            dismiss()
         }) {
             ZStack {
                 // TODO: need to add some bouncy animation when background changes
