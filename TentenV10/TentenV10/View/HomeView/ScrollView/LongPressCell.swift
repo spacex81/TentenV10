@@ -82,7 +82,7 @@ class LongPressCell: BaseCell {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
         
-        updateCellState()
+//        updateCellState()
     }
     
     private func updateCellState() {
