@@ -77,12 +77,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
     
     private func centerInitialItem() {
-        // Ensure there are enough items to center
-        guard detailedFriends.count > 1 else {
-            NSLog("LOG: number of fetched friends need to be bigger than 1")
-            return
-        }
-        
         DispatchQueue.main.async {
             self.selectedFriend = self.detailedFriends[0]
         }
@@ -119,7 +113,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
         updatedFriends.append(contentsOf: friends)
         updatedFriends.append(FriendRecord.empty) // Add empty at the end
-        if updatedFriends.count > 3, needToCenterInitialItem {
+        if updatedFriends.count >= 3, needToCenterInitialItem {
             centerInitialItem()
             needToCenterInitialItem = false
         }
