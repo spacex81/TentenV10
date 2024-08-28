@@ -58,6 +58,10 @@ class HomeViewModel: ObservableObject {
         liveKitManager.$isLocked
             .receive(on: DispatchQueue.main)
             .assign(to: &$isLocked)
+        
+        liveKitManager.$isPressing
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isPressing)
     }
     
     private func bindRepositoryManager() {

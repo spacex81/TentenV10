@@ -239,8 +239,9 @@ extension RepositoryManager {
                      do {
                          let userDto = try document.data(as: UserDto.self)
                          
-                         self.handleIncomingCallRequest(userDto: userDto)
-//                         self.previousUserDto = userDto
+                         if self.userRecord?.hasIncomingCallRequest != userDto.hasIncomingCallRequest {
+                             self.handleIncomingCallRequest(userDto: userDto)
+                         }
                          
                          let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          

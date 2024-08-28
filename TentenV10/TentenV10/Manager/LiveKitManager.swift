@@ -8,7 +8,8 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
     @Published var isLocked: Bool = false 
-    
+    @Published var isPressing: Bool = false 
+
     var room: Room?
 
     let livekitUrl = "wss://tentwenty-bp8gb2jg.livekit.cloud"
@@ -166,11 +167,14 @@ extension LiveKitManager {
     // remote participant left the room
     func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
         NSLog("LOG: remote participant left the room")
-        Task {
-            isLocked = false
-            NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
-            await unpublishAudio()
-            await disconnect()
+        // 
+        if !isPressing {
+            Task {
+                isLocked = false
+                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
+                await unpublishAudio()
+                await disconnect()
+            }
         }
     }
     
