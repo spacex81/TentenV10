@@ -176,32 +176,34 @@ class RepositoryManager: ObservableObject {
             // Register migrations
             var migrator = DatabaseMigrator()
 
+            // v1: Initial database setup, including 'lastInteraction' in 'friends' table
             migrator.registerMigration("v1") { db in
-               // Create the initial users table
-               try db.create(table: "users") { t in
-                   t.column("id", .text).primaryKey()
-                   t.column("email", .text).notNull()
-                   t.column("username", .text).notNull()
-                   t.column("pin", .text).notNull()
-                   t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
-                   t.column("profileImageData", .blob)
-                   t.column("deviceToken", .text)
-                   t.column("friends", .text)
-                   t.column("roomName", .text).notNull().defaults(to: "testRoom")
-                   t.column("isBusy", .boolean).notNull().defaults(to: false)  // New field with default value
-               }
-               
-               // Create the friends table
-               try db.create(table: "friends") { t in
-                   t.column("id", .text).primaryKey()
-                   t.column("email", .text).notNull()
-                   t.column("username", .text).notNull()
-                   t.column("pin", .text).notNull()
-                   t.column("profileImageData", .blob)
-                   t.column("deviceToken", .text)
-                   t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
-                   t.column("isBusy", .boolean).notNull().defaults(to: false)
-               }
+                // Create the users table
+                try db.create(table: "users") { t in
+                    t.column("id", .text).primaryKey()
+                    t.column("email", .text).notNull()
+                    t.column("username", .text).notNull()
+                    t.column("pin", .text).notNull()
+                    t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
+                    t.column("profileImageData", .blob)
+                    t.column("deviceToken", .text)
+                    t.column("friends", .text)
+                    t.column("roomName", .text).notNull().defaults(to: "testRoom")
+                    t.column("isBusy", .boolean).notNull().defaults(to: false)
+                }
+                
+                // Create the friends table with 'lastInteraction' column
+                try db.create(table: "friends") { t in
+                    t.column("id", .text).primaryKey()
+                    t.column("email", .text).notNull()
+                    t.column("username", .text).notNull()
+                    t.column("pin", .text).notNull()
+                    t.column("profileImageData", .blob)
+                    t.column("deviceToken", .text)
+                    t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
+                    t.column("isBusy", .boolean).notNull().defaults(to: false)
+                    t.column("lastInteraction", .datetime) // Include the lastInteraction column from the start
+                }
             }
 
             // Migrate the database to the latest version
