@@ -612,7 +612,6 @@ extension RepositoryManager {
                 needToUpdateLocal = false
             }
             
-            // fetch detailedFriends by userId
             NSLog("LOG: Fetching detailedFriends from local database")
             let newDetailedFriends = fetchFriendsByUserIdFromDatabase(userId: newUserRecord.id)
             if newDetailedFriends.isEmpty {
