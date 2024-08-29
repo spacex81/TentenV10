@@ -3,6 +3,7 @@ import UIKit
 class LongPressCell: BaseCell {
     static let reuseIdentifier = "LongPressCell"
     var friend: FriendRecord?
+    private let repoManager = RepositoryManager.shared
 
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
@@ -53,6 +54,9 @@ class LongPressCell: BaseCell {
             viewModel.progress = 0
             longPressGestureBeganPoint = locationInContentView
             hasGivenFeedback = false
+            
+            guard let friend = friend else {return}
+            repoManager.updateTimestampWhenLongPress(friendId: friend.id)
         case .changed:
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
             let lockProgress = Float(verticalDistance / lockDistance)

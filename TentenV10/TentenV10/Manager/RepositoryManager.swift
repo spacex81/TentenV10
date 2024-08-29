@@ -688,30 +688,6 @@ extension RepositoryManager {
 
 }
 
-// MARK: Firebase: Firestore RoomDto
-extension RepositoryManager {
-    func fetchRoomFromFirebase(roomId: String) async throws -> RoomDto? {
-        try await withCheckedThrowingContinuation { continuation in
-            roomsCollection.document(roomId).getDocument { document, error in
-                if let error = error {
-                    NSLog("LOG: failed to fetch room dto from firestore: \(error.localizedDescription)")
-                    continuation.resume(returning: nil)
-                } else if let document = document, document.exists {
-                    do {
-                        let roomDto = try document.data(as: RoomDto.self)
-                        continuation.resume(returning: roomDto)
-                    } catch {
-                        NSLog("LOG: Failed to convert firestore document to roomDto: \(error.localizedDescription)")
-                        continuation.resume(returning: nil)
-                    }
-                } else {
-                    NSLog("LOG: Failed to fetch room dto from firestore")
-                    continuation.resume(returning: nil)
-                }
-            }
-        }
-    }
-}
 
 // MARK: Firebase: Storage
 extension RepositoryManager {
@@ -904,5 +880,74 @@ extension RepositoryManager {
         )
         
         return friendRecord
+    }
+}
+
+// MARK: update timestamp on long press
+extension RepositoryManager {
+    func updateTimestampWhenLongPress(friendId: String) {
+        // Get current timestamp
+        let currentTimestamp = Date()
+        
+        // Get current user ID from 'userRecord'
+        guard let currentUserId = userRecord?.id else {
+            NSLog("LOG: currentUserId is not available when updating timestamp")
+            return
+        }
+        
+        guard let userRecord = userRecord else {
+            NSLog("LOG: userRecord is not available when updating timestamp")
+            return
+        }
+        
+        // Just need to update timestamp value in firebase
+        // Memory and Local db update will be handled by room listener
+        
+        // Get room id
+        let roomId = RoomDto.generateRoomId(userId1: currentUserId, userId2: friendId)
+        
+        // Update 'lastInteraction' value in room document
+        updateTimestampInFirebase(roomId: roomId, currentTimestamp: currentTimestamp)
+    }
+}
+
+// MARK: Firebase: Firestore RoomDto
+extension RepositoryManager {
+    func fetchRoomFromFirebase(roomId: String) async throws -> RoomDto? {
+        try await withCheckedThrowingContinuation { continuation in
+            roomsCollection.document(roomId).getDocument { document, error in
+                if let error = error {
+                    NSLog("LOG: failed to fetch room dto from firestore: \(error.localizedDescription)")
+                    continuation.resume(returning: nil)
+                } else if let document = document, document.exists {
+                    do {
+                        let roomDto = try document.data(as: RoomDto.self)
+                        continuation.resume(returning: roomDto)
+                    } catch {
+                        NSLog("LOG: Failed to convert firestore document to roomDto: \(error.localizedDescription)")
+                        continuation.resume(returning: nil)
+                    }
+                } else {
+                    NSLog("LOG: Failed to fetch room dto from firestore")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+    
+    func updateTimestampInFirebase(roomId: String, currentTimestamp: Date) {
+        // Get a reference to the room document
+        let roomDocument = roomsCollection.document(roomId)
+        
+        // Update the 'lastInteraction' field with the current timestamp
+        roomDocument.updateData([
+            "lastInteraction": currentTimestamp
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Failed to update timestamp in Firebase: \(error.localizedDescription)")
+            } else {
+                NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
+            }
+        }
     }
 }
