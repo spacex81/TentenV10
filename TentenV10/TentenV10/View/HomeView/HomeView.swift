@@ -4,6 +4,7 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
+    let repoManager = RepositoryManager.shared
 
     // Size of the collection view item
     var itemSize: CGFloat {
@@ -31,7 +32,25 @@ struct HomeView: View {
 
             VStack {
                 // Main text
-                if let selectedFriend = viewModel.selectedFriend {
+//                if let selectedFriend = viewModel.selectedFriend {
+//                    if viewModel.isPressing && !viewModel.isPublished {
+//                        ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+//                            .frame(width: 200, height: 30)
+//                            .transition(.opacity)
+//                    } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
+//                        ShimmeringViewControllerRepresentable(text: "Slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+//
+//                            .frame(width: 200, height: 30)
+//                            .transition(.opacity)
+//                    } else {
+//                        Text(selectedFriend.username)
+//                            .font(.system(size: 24, weight: .bold, design: .default))
+//                            .font(.title)
+//                            .padding(.top, 10)
+//                            .transition(.opacity)
+//                    }
+//                }
+                if let selectedFriend = repoManager.selectedFriend {
                     if viewModel.isPressing && !viewModel.isPublished {
                         ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
                             .frame(width: 200, height: 30)
@@ -49,27 +68,31 @@ struct HomeView: View {
                             .transition(.opacity)
                     }
                 }
+
             }
 
             ZStack {
                 // Speech bubble
                 if !viewModel.isPressing && !viewModel.isLocked {
-                    if !viewModel.isConnected {
-                        if viewModel.selectedFriendIsBusy {
-                            IsBusyBubble()
-                                .frame(height: 200)
-                                .offset(y: -110)
-                        } else {
-                            HoldToTalkBubble()
-                               .frame(height: 200)
-                               .offset(y: -110)
-                        }
-
-                    } else {
-                        HoldToReplyBubble()
-                            .frame(height: 200)
-                            .offset(y: -110)
-                    }
+//                    if !viewModel.isConnected {
+//                        if viewModel.selectedFriendIsBusy {
+//                            IsBusyBubble()
+//                                .frame(height: 200)
+//                                .offset(y: -110)
+//                        } else {
+//                            HoldToTalkBubble()
+//                               .frame(height: 200)
+//                               .offset(y: -110)
+//                        }
+//
+//                    } else {
+//                        HoldToReplyBubble()
+//                            .frame(height: 200)
+//                            .offset(y: -110)
+//                    }
+                    HoldToTalkBubble()
+                       .frame(height: 200)
+                       .offset(y: -110)
                 }
                 
                 // Lock View
@@ -137,8 +160,14 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
+//            AnimatedBackgroundViewRepresentable(
+//                image: viewModel.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
+//                isPressing: $viewModel.isPressing,
+//                isPublished: $viewModel.isPublished
+//            )
+//            .ignoresSafeArea()
             AnimatedBackgroundViewRepresentable(
-                image: viewModel.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
+                image: repoManager.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
                 isPressing: $viewModel.isPressing,
                 isPublished: $viewModel.isPublished
             )

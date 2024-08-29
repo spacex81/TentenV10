@@ -42,7 +42,7 @@ extension AudioSessionManager {
             do {
                 let optionsString = printAudioSessionOptions(options: configuration.categoryOptions)
 
-                NSLog("LOG: configuring audio session category: \(configuration.category), mode: \(configuration.mode), options: [\(optionsString)], setActive: \(String(describing: setActive))")
+//                NSLog("LOG: configuring audio session category: \(configuration.category), mode: \(configuration.mode), options: [\(optionsString)], setActive: \(String(describing: setActive))")
                 if let setActive {
                     try session.setConfiguration(configuration, active: setActive)
                     NSLog("LOG: Succeed to \(setActive ? "activate" : "deactivate") audio session")
@@ -66,7 +66,7 @@ extension AudioSessionManager {
 
         switch reason {
         case .newDeviceAvailable, .oldDeviceUnavailable, .categoryChange:
-            NSLog("LOG: Route Change -  Category Change")
+//            NSLog("LOG: Route Change -  Category Change")
             let audioSession = AVAudioSession.sharedInstance()
             if audioSession.mode == .voiceChat {
                 do {
@@ -76,7 +76,7 @@ extension AudioSessionManager {
                     let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
 
                     NSLog("LOG: Succeed to change audio session mode from .voiceChat to .videoChat")
-                    NSLog("LOG: configuring audio session category: \(audioSession.category), mode: \(audioSession.mode), options: [\(optionsString)])")
+//                    NSLog("LOG: configuring audio session category: \(audioSession.category), mode: \(audioSession.mode), options: [\(optionsString)])")
 
                 } catch {
                     NSLog("LOG: Failed to change audio session from voiceChat to videoChat")
@@ -84,8 +84,8 @@ extension AudioSessionManager {
             } else {
                 NSLog("LOG: Unhandled cases in route change - category change")
             }
-        case .routeConfigurationChange:
-            NSLog("LOG: Route Change - Configuration Change")
+//        case .routeConfigurationChange:
+//            NSLog("LOG: Route Change - Configuration Change")
         default:
             break
         }

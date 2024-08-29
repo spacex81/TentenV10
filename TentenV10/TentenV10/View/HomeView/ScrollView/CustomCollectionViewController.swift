@@ -4,6 +4,7 @@ import SwiftUI
 class CustomCollectionViewController: UIViewController, UICollectionViewDelegate {
     var collectionView: UICollectionView!
     var dataSource: CustomCollectionViewDataSource!
+    let repoManager = RepositoryManager.shared
 
     @Binding var selectedFriend: FriendRecord?
     @Binding var detailedFriends: [FriendRecord]
@@ -51,9 +52,13 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         collectionView.decelerationRate = .fast
 
         dataSource = CustomCollectionViewDataSource(
-            detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.detailedFriends) }, set: { newFriends in
+//            detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.detailedFriends) }, set: { newFriends in
+//                // Update the original detailedFriends if needed
+//                self.detailedFriends = newFriends
+//            }),
+            detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.repoManager.detailedFriends) }, set: { newFriends in
                 // Update the original detailedFriends if needed
-                self.detailedFriends = newFriends
+                self.repoManager.detailedFriends = newFriends
             }),
             selectedFriend: $selectedFriend,
             isSheetPresented: $isSheetPresented,
@@ -74,12 +79,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
-    }
-    
-    private func centerInitialItem() {
-        DispatchQueue.main.async {
-            self.selectedFriend = self.detailedFriends[0]
-        }
     }
     
     func centerCell(at indexPath: IndexPath) {
@@ -110,13 +109,10 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
     
     private func updatedDetailedFriends(with friends: [FriendRecord]) -> [FriendRecord] {
+        NSLog("LOG: updatedDetailedFriends")
         var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
         updatedFriends.append(contentsOf: friends)
         updatedFriends.append(FriendRecord.empty) // Add empty at the end
-        if updatedFriends.count >= 3, needToCenterInitialItem {
-            centerInitialItem()
-            needToCenterInitialItem = false
-        }
         return updatedFriends
     }
 }

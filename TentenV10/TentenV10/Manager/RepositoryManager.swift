@@ -614,6 +614,7 @@ extension RepositoryManager {
             }
             DispatchQueue.main.async {
                 self.detailedFriends = newDetailedFriends
+                self.selectedFriend = newDetailedFriends[0]
             }
             NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
         } else {

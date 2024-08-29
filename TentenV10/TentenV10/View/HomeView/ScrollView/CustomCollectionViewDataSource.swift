@@ -30,6 +30,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
         let friend = detailedFriends[indexPath.item]
         
         let cell: UICollectionViewCell
@@ -43,6 +44,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
+            NSLog("LOG: add button is set")
         } else if friend == selectedFriend {
             NSLog("LOG: selected friend: \(friend.username)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
@@ -60,6 +62,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
             }
+            NSLog("LOG: long press cell is set")
+
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
             let tapCell = cell as! TapCell
@@ -73,6 +77,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 self?.collectionViewController?.centerCell(at: indexPath)
                 self?.selectedFriend = friend
             }
+            NSLog("LOG: tap cell is set")
+
         }
         
         return cell
