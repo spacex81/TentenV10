@@ -8,6 +8,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var isPressing: Bool
     @Binding var isLocked: Bool
     private weak var collectionViewController: CustomCollectionViewController?
+    private let repoManager = RepositoryManager.shared
 
     init(
         detailedFriends: Binding<[FriendRecord]>,
@@ -75,7 +76,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             tapCell.onTap = { [weak self] in
                 NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)
-                self?.selectedFriend = friend
+//                self?.selectedFriend = friend
+                self?.repoManager.selectedFriend = friend
             }
             NSLog("LOG: tap cell is set")
 

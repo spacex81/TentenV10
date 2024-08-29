@@ -8,6 +8,7 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
     private var previousCenterX: CGFloat?
 
     weak var viewController: CustomCollectionViewController?
+    private let repoManager = RepositoryManager.shared
 
     override init() {
         super.init()
@@ -115,7 +116,8 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
             // Update the selected profile image when snapping
             if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
                let friend = self.viewController?.detailedFriends[indexPath.item - 1] {
-                self.viewController?.selectedFriend = friend
+//                self.viewController?.selectedFriend = friend
+                self.repoManager.selectedFriend = friend
             }
         }
 
