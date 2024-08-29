@@ -76,7 +76,6 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             tapCell.onTap = { [weak self] in
                 NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)
-//                self?.selectedFriend = friend
                 self?.repoManager.selectedFriend = friend
             }
             NSLog("LOG: tap cell is set")

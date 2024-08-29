@@ -324,6 +324,7 @@ extension RepositoryManager {
             do {
                 if friendPin != "" {
                      let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
+                    
                      
                      if !newUserRecord.friends.contains(friendId) {
                          newUserRecord.friends.append(friendId)
@@ -337,6 +338,10 @@ extension RepositoryManager {
                          // fetch detailed friend
                          let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
                          let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
+                         
+                         if self.selectedFriend == nil {
+                             self.selectedFriend = friendRecord
+                         }
                          
                          if !self.detailedFriends.contains(friendRecord) {
                              DispatchQueue.main.async {
@@ -479,11 +484,15 @@ extension RepositoryManager {
                     return
                 }
                 
+                // TODO: fix this function.
+                // instead of returning only friend's id we need to
+                // convert document into 'UserRecord' as variable called 'friendUserRecord' and return that
                 let friendId = document.documentID
                 continuation.resume(returning: friendId)
             }
         }
     }
+
     
     func addFriendIdInFirebase(friendId: String) {
         guard let currentUserId = auth.currentUser?.uid else {
