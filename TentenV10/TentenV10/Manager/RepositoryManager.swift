@@ -17,8 +17,10 @@ class RepositoryManager: ObservableObject {
     let db = Firestore.firestore()
     let storage = Storage.storage()
     let usersCollection: CollectionReference
+    let roomsCollection: CollectionReference
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
+    private var roomsListeners: [ListenerRegistration] = []
     private var friendsListeners: [ListenerRegistration] = []
     private var userListener: ListenerRegistration?
     
@@ -39,6 +41,9 @@ class RepositoryManager: ObservableObject {
                 }
                 if friendsListeners.isEmpty {
                     listenToFriends(userRecord: userRecord)
+                }
+                if roomsListeners.isEmpty {
+                    listenToRooms(userRecord: userRecord)
                 }
                 
                 // update room name
@@ -102,6 +107,7 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
+            print(detailedFriends)
             if detailedFriends.count > 0 && selectedFriend == nil {
                 self.selectedFriend = detailedFriends[0]
             }
@@ -114,6 +120,7 @@ class RepositoryManager: ObservableObject {
 
     init() {
         usersCollection = db.collection("users")
+        roomsCollection = db.collection("rooms")
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceTokenNotification(_:)), name: .didReceiveDeviceToken, object: nil)
         setupDatabase()
         startListeningToAuthChanges()
@@ -202,7 +209,7 @@ class RepositoryManager: ObservableObject {
                     t.column("deviceToken", .text)
                     t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
-                    t.column("lastInteraction", .datetime) // Include the lastInteraction column from the start
+                    t.column("lastInteraction", .datetime)
                 }
             }
 
@@ -216,6 +223,17 @@ class RepositoryManager: ObservableObject {
 
 // MARK: Listener
 extension RepositoryManager {
+    func listenToRooms(userRecord: UserRecord) {
+        let friends = userRecord.friends
+        
+        roomsListeners.forEach { $0.remove() }
+        roomsListeners = []
+        
+        friends.forEach { friendId in
+            let roomId = RoomDto.generateRoomId(userId1: userRecord.id, userId2: friendId)
+            listenToRoom(roomId: roomId)
+        }
+    }
     func listenToFriends(userRecord: UserRecord) {
 //        NSLog("LOG: listenToFriends")
         let friends = userRecord.friends
@@ -229,7 +247,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-////        NSLog("LOG: listenToUser")
+//        NSLog("LOG: listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -283,6 +301,56 @@ extension RepositoryManager {
         }
     }
     
+    func listenToRoom(roomId: String) {
+        let roomListener = roomsCollection.document(roomId).addSnapshotListener { [weak self] document, error in
+            guard let self = self else { return }
+            guard let userRecord = self.userRecord else {
+                NSLog("LOG: userRecord is not set when trying to use it in room listener")
+                return
+            }
+
+            if let error = error {
+                NSLog("LOG: Error listening to room: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, document.exists {
+                Task {
+                    do {
+                        let roomDto = try document.data(as: RoomDto.self)
+                        let friendId = roomDto.getFriendId(currentUserId: userRecord.id)
+                        
+                        // Find the friend in detailedFriends
+                        if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
+                            let currentLastInteraction = self.detailedFriends[index].lastInteraction
+                            let newLastInteraction = roomDto.lastInteraction.dateValue()
+                            
+                            // Update only if the lastInteraction value has changed
+                            if currentLastInteraction != newLastInteraction {
+                                self.detailedFriends[index].lastInteraction = newLastInteraction
+                                
+                                // Save the updated friend record to the database
+                                let updatedFriend = self.detailedFriends[index]
+                                self.createFriendInDatabase(friend: updatedFriend)
+
+                                // Notify the view model or UI to refresh if necessary
+                                DispatchQueue.main.async {
+                                    self.objectWillChange.send()
+                                }
+                            }
+                        } else {
+                            NSLog("LOG: Friend with ID \(String(describing: friendId)) not found in detailedFriends")
+                        }
+                    } catch {
+                        NSLog("LOG: Error decoding roomDto: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+        roomsListeners.append(roomListener)
+    }
+
+    
     func listenToFriend(friendId: String) {
         let friendListener = usersCollection.document(friendId).addSnapshotListener { [weak self] document, error in
             guard let self = self else { return }
@@ -296,16 +364,16 @@ extension RepositoryManager {
                 Task {
                     do {
                         let friendDto = try document.data(as: UserDto.self)
-                        let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
+                        let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
                         
                         DispatchQueue.main.async {
-                            if let index = self.detailedFriends.firstIndex(where: { $0.id == friendRecord.id }) {
-                                self.detailedFriends[index] = friendRecord
+                            if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {
+                                self.detailedFriends[index] = newFriendRecord
                             } else {
-                                self.detailedFriends.append(friendRecord)
+                                self.detailedFriends.append(newFriendRecord)
                             }
                         }
-                        self.createFriendInDatabase(friend: friendRecord)
+                        self.createFriendInDatabase(friend: newFriendRecord)
 
                     } catch {
                         print("Error converting UserDto to FriendRecord: \(error.localizedDescription)")
@@ -328,23 +396,54 @@ extension RepositoryManager {
             }
         
             do {
-                if friendPin != "" {
+                if !friendPin.isEmpty {
                      let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
                     
-                     
                      if !newUserRecord.friends.contains(friendId) {
+                         
+                         let currentTimestamp = Date()
+                         // fetch detailed friend
+                         let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
+
                          newUserRecord.friends.append(friendId)
                          
+                         // Part1
+                         // Storing user information
                          DispatchQueue.main.async {
                              self.userRecord!.friends.append(friendId)
                          }
                          createUserInDatabase(user: newUserRecord)
                          addFriendIdInFirebase(friendId: friendId)
                          
-                         // fetch detailed friend
-                         let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
-                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
+                         // Part2
+                         // Storing room information
+                         let roomId = RoomDto.generateRoomId(userId1: newUserRecord.id, userId2: friendId)
                          
+                         let roomDocRef = db.collection("rooms").document(roomId)
+                         
+                         let roomDoc = try await roomDocRef.getDocument()
+                         
+                         if roomDoc.exists {
+                             // Room exists, update the lastInteraction timestamp
+                             var roomDto = try roomDoc.data(as: RoomDto.self)
+                             roomDto.lastInteraction = Timestamp(date: currentTimestamp)
+                             
+                             try roomDocRef.setData(from: roomDto)
+                         } else {
+                             // Room does not exist, create a new room document
+                             let roomNickname = RoomDto.generateRoomNickName(username1: newUserRecord.username, username2: friendUserDto.username)
+                             
+                             let roomDto = RoomDto(id: roomId, userId1: newUserRecord.id, userId2: friendId, lastInteraction: currentTimestamp, nickname: roomNickname)
+                             
+                             try roomDocRef.setData(from: roomDto)
+                             
+                             // new room is added, so we should listen to this room 
+                             listenToRoom(roomId: roomId)
+                         }
+                         
+                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
+                         // Part3
+                         // Adding friendRecord
                          if self.selectedFriend == nil {
                              // set selected friend if this is the first friend that is added
                              self.selectedFriend = friendRecord
@@ -440,7 +539,7 @@ extension RepositoryManager {
 }
 
 
-// MARK: Firebase: Firestore
+// MARK: Firebase: Firestore UserDto
 extension RepositoryManager {
     func createUserInFirebase(userDto: UserDto) {
         do {
@@ -555,6 +654,31 @@ extension RepositoryManager {
 
 }
 
+// MARK: Firebase: Firestore RoomDto
+extension RepositoryManager {
+    func fetchRoomFromFirebase(roomId: String) async throws -> RoomDto? {
+        try await withCheckedThrowingContinuation { continuation in
+            roomsCollection.document(roomId).getDocument { document, error in
+                if let error = error {
+                    NSLog("LOG: failed to fetch room dto from firestore: \(error.localizedDescription)")
+                    continuation.resume(returning: nil)
+                } else if let document = document, document.exists {
+                    do {
+                        let roomDto = try document.data(as: RoomDto.self)
+                        continuation.resume(returning: roomDto)
+                    } catch {
+                        NSLog("LOG: Failed to convert firestore document to roomDto: \(error.localizedDescription)")
+                        continuation.resume(returning: nil)
+                    }
+                } else {
+                    NSLog("LOG: Failed to fetch room dto from firestore")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+}
+
 // MARK: Firebase: Storage
 extension RepositoryManager {
     func saveProfileImageInFirebase(id: String, profileImageData: Data) async throws -> String {
@@ -594,12 +718,12 @@ extension RepositoryManager {
 extension RepositoryManager {
     func fetchUser(id: String) async throws {
         var newUserRecord: UserRecord?
-        var needToUpdateLocal = false
+        var needToUpdateLocalUserRecord = false
         
         NSLog("LOG: Fetching user from local database")
         newUserRecord = fetchUserFromLocal(id: id)
         if newUserRecord == nil {
-            needToUpdateLocal = true
+            needToUpdateLocalUserRecord = true
             NSLog("LOG: Local database doesn't have user record")
             NSLog("LOG: Fetching user from remote firestore")
             newUserRecord = try await fetchUserFromRemote(id: id)
@@ -609,9 +733,9 @@ extension RepositoryManager {
             DispatchQueue.main.async {
                 self.userRecord = newUserRecord
             }
-            if needToUpdateLocal {
+            if needToUpdateLocalUserRecord {
                 createUserInDatabase(user: newUserRecord)
-                needToUpdateLocal = false
+                needToUpdateLocalUserRecord = false
             }
             
             NSLog("LOG: Fetching detailedFriends from local database")
@@ -729,6 +853,13 @@ extension RepositoryManager {
             throw NSError(domain: "convertUserDtoToFriendRecord", code: -1, userInfo: [NSLocalizedDescriptionKey: "currentUser is null when converting UserDto to FriendRecord"])
         }
         
+        // friend id
+        let friendId = userDto.id!
+        // get room id
+        let roomId = RoomDto.generateRoomId(userId1: userId, userId2: friendId)
+        // get room document by id
+        let roomDto = try await fetchRoomFromFirebase(roomId: roomId)
+        
         let friendRecord = FriendRecord(
             id: userDto.id ?? UUID().uuidString,
             email: userDto.email,
@@ -737,7 +868,8 @@ extension RepositoryManager {
             profileImageData: imageData,
             deviceToken: userDto.deviceToken,
             userId: userId,
-            isBusy: userDto.isBusy
+            isBusy: userDto.isBusy,
+            lastInteraction: roomDto?.lastInteraction.dateValue()
         )
         
         return friendRecord

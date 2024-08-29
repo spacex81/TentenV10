@@ -48,7 +48,7 @@ extension AudioSessionManager {
                     NSLog("LOG: Succeed to \(setActive ? "activate" : "deactivate") audio session")
                 } else {
                     try session.setConfiguration(configuration)
-                    NSLog("LOG: Succeed to configure audio session")
+//                    NSLog("LOG: Succeed to configure audio session")
                 }
             } catch {
                 NSLog("LOG: Failed to configure audio session on customConfig")

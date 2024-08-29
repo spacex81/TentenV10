@@ -105,7 +105,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
     
     private func updatedDetailedFriends(with friends: [FriendRecord]) -> [FriendRecord] {
-        NSLog("LOG: updatedDetailedFriends")
+//        NSLog("LOG: updatedDetailedFriends")
         var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
         updatedFriends.append(contentsOf: friends)
         updatedFriends.append(FriendRecord.empty) // Add empty at the end
