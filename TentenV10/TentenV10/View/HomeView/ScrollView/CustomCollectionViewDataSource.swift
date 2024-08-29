@@ -33,6 +33,12 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
         let friend = detailedFriends[indexPath.item]
+//        if selectedFriend != nil {
+//            NSLog("LOG: selectedFriend")
+//            print(selectedFriend ?? "not selected yet")
+//            NSLog("LOG: friend")
+//            print(friend)
+//        }
         
         let cell: UICollectionViewCell
         
@@ -51,7 +57,6 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
             let longPressCell = cell as! LongPressCell
             longPressCell.configure(with: friend)
-            // TODO: longPressCell.friend = friend
             
             longPressCell.isPressing = isPressing
             longPressCell.isLocked = isLocked
@@ -69,7 +74,6 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
             let tapCell = cell as! TapCell
             tapCell.configure(with: friend)
-            // TODO: tapCell.friend = friend
 
             tapCell.isPressing = isPressing
             tapCell.isLocked = isLocked
@@ -80,6 +84,16 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
 //            NSLog("LOG: tap cell is set")
 
+            
+            /**
+             DO NOT ERASE:
+             there are some occasion when centered cell is set as tap cell
+             in those cases we need to programmatically press the tap cell and
+             turn it into long press cell
+             */
+            if friend.id == selectedFriend?.id {
+                self.repoManager.selectedFriend = friend
+            }
         }
         
         return cell

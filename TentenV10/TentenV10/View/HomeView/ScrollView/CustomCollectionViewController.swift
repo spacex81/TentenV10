@@ -56,7 +56,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         dataSource = CustomCollectionViewDataSource(
             detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.repoManager.detailedFriends) }, set: { newFriends in
                 // Update the original detailedFriends if needed
-                self.repoManager.detailedFriends = newFriends
+//                self.repoManager.detailedFriends = newFriends
             }),
             selectedFriend: $selectedFriend,
             isSheetPresented: $isSheetPresented,

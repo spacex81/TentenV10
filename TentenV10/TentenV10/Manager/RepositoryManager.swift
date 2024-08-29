@@ -110,6 +110,7 @@ class RepositoryManager: ObservableObject {
         didSet {
             // Select friend when app launch
             if detailedFriends.count > 0 && selectedFriend == nil {
+                NSLog("LOG: Initial friend is selected")
                 self.selectedFriend = detailedFriends[0]
             }
         }
