@@ -32,24 +32,6 @@ struct HomeView: View {
 
             VStack {
                 // Main text
-//                if let selectedFriend = viewModel.selectedFriend {
-//                    if viewModel.isPressing && !viewModel.isPublished {
-//                        ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
-//                            .frame(width: 200, height: 30)
-//                            .transition(.opacity)
-//                    } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
-//                        ShimmeringViewControllerRepresentable(text: "Slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
-//
-//                            .frame(width: 200, height: 30)
-//                            .transition(.opacity)
-//                    } else {
-//                        Text(selectedFriend.username)
-//                            .font(.system(size: 24, weight: .bold, design: .default))
-//                            .font(.title)
-//                            .padding(.top, 10)
-//                            .transition(.opacity)
-//                    }
-//                }
                 if let selectedFriend = repoManager.selectedFriend {
                     if viewModel.isPressing && !viewModel.isPublished {
                         ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
@@ -160,12 +142,6 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-//            AnimatedBackgroundViewRepresentable(
-//                image: viewModel.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
-//                isPressing: $viewModel.isPressing,
-//                isPublished: $viewModel.isPublished
-//            )
-//            .ignoresSafeArea()
             AnimatedBackgroundViewRepresentable(
                 image: repoManager.selectedFriend.flatMap { UIImage(data: $0.profileImageData ?? Data()) },
                 isPressing: $viewModel.isPressing,

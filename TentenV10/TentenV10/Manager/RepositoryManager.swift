@@ -209,7 +209,7 @@ class RepositoryManager: ObservableObject {
 // MARK: Listener
 extension RepositoryManager {
     func listenToFriends(userRecord: UserRecord) {
-        NSLog("LOG: listenToFriends")
+//        NSLog("LOG: listenToFriends")
         let friends = userRecord.friends
 
         // Clear existing listeners before setting up new ones
@@ -221,14 +221,12 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-        NSLog("LOG: listenToUser")
+////        NSLog("LOG: listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
              guard let self = self else { return }
              
-             NSLog("LOG: user listener callback")
-
              if let error = error {
                 print("Error listening to user: \(error.localizedDescription)")
                 return
@@ -263,8 +261,8 @@ extension RepositoryManager {
     
     private func handleIncomingCallRequest(userDto: UserDto) {
         let roomName = userDto.roomName
-        NSLog("LOG: handleIncomingCallRequest")
-        NSLog("LOG: room name: \(roomName)")
+//        NSLog("LOG: handleIncomingCallRequest")
+//        NSLog("LOG: room name: \(roomName)")
         
         if userDto.hasIncomingCallRequest {
             Task {
@@ -340,6 +338,7 @@ extension RepositoryManager {
                          let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
                          
                          if self.selectedFriend == nil {
+                             // set selected friend if this is the first friend that is added
                              self.selectedFriend = friendRecord
                          }
                          
@@ -388,7 +387,7 @@ extension RepositoryManager {
             _ = try dbQueue.write { db in
                 try user.save(db)
             }
-            NSLog("LOG: Successfully added new user record")
+//            NSLog("LOG: Successfully added new user record")
         } catch {
             print("Failed to save user: \(error)")
         }
@@ -484,9 +483,6 @@ extension RepositoryManager {
                     return
                 }
                 
-                // TODO: fix this function.
-                // instead of returning only friend's id we need to
-                // convert document into 'UserRecord' as variable called 'friendUserRecord' and return that
                 let friendId = document.documentID
                 continuation.resume(returning: friendId)
             }

@@ -52,10 +52,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         collectionView.decelerationRate = .fast
 
         dataSource = CustomCollectionViewDataSource(
-//            detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.detailedFriends) }, set: { newFriends in
-//                // Update the original detailedFriends if needed
-//                self.detailedFriends = newFriends
-//            }),
             detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.repoManager.detailedFriends) }, set: { newFriends in
                 // Update the original detailedFriends if needed
                 self.repoManager.detailedFriends = newFriends

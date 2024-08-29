@@ -31,7 +31,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
+//        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
         let friend = detailedFriends[indexPath.item]
         
         let cell: UICollectionViewCell
@@ -45,9 +45,9 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
-            NSLog("LOG: add button is set")
+//            NSLog("LOG: add button is set")
         } else if friend == selectedFriend {
-            NSLog("LOG: selected friend: \(friend.username)")
+//            NSLog("LOG: selected friend: \(friend.username)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
             let longPressCell = cell as! LongPressCell
             longPressCell.configure(with: friend)
@@ -56,14 +56,14 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             longPressCell.isPressing = isPressing
             longPressCell.isLocked = isLocked
             longPressCell.onLongPressBegan = { [weak self] in
-                NSLog("LOG: onLongPressBegan")
+//                NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
             }
             longPressCell.onLongPressEnded = { [weak self] in
-                NSLog("LOG: onLongPressEnded")
+//                NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
             }
-            NSLog("LOG: long press cell is set")
+//            NSLog("LOG: long press cell is set")
 
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
@@ -74,11 +74,11 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             tapCell.isPressing = isPressing
             tapCell.isLocked = isLocked
             tapCell.onTap = { [weak self] in
-                NSLog("LOG: onTap")
+//                NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)
                 self?.repoManager.selectedFriend = friend
             }
-            NSLog("LOG: tap cell is set")
+//            NSLog("LOG: tap cell is set")
 
         }
         
