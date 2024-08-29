@@ -8,6 +8,7 @@ class RepositoryManager: ObservableObject {
     static let shared = RepositoryManager()
     
     private let liveKitManager = LiveKitManager.shared
+    weak var collectionViewController: CustomCollectionViewController?
     
     // Local Database
     private var dbQueue: DatabaseQueue!
@@ -77,7 +78,7 @@ class RepositoryManager: ObservableObject {
     }
     
     private func updateRoomName(roomName: String) {
-        NSLog("LOG: updateRoomName")
+//        NSLog("LOG: updateRoomName")
         guard var newUserRecord = userRecord else {
             NSLog("LOG: userRecord is not set when trying to update room name")
             return
@@ -107,7 +108,7 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            print(detailedFriends)
+            // Select friend when app launch
             if detailedFriends.count > 0 && selectedFriend == nil {
                 self.selectedFriend = detailedFriends[0]
             }
@@ -221,6 +222,27 @@ class RepositoryManager: ObservableObject {
     }
 }
 
+// MARK: Utils
+extension RepositoryManager {
+        func sortDetailedFriends() {
+        detailedFriends.sort { (friend1, friend2) -> Bool in
+            if let lastInteraction1 = friend1.lastInteraction, let lastInteraction2 = friend2.lastInteraction {
+                // Both have non-nil lastInteraction, sort by date descending
+                return lastInteraction1 > lastInteraction2
+            } else if friend1.lastInteraction != nil && friend2.lastInteraction == nil {
+                // friend1 has non-nil lastInteraction, friend2 has nil, friend1 comes first
+                return true
+            } else if friend1.lastInteraction == nil && friend2.lastInteraction != nil {
+                // friend1 has nil lastInteraction, friend2 has non-nil, friend2 comes first
+                return false
+            } else {
+                // Both have nil lastInteraction, maintain current order
+                return false
+            }
+        }
+    }
+}
+
 // MARK: Listener
 extension RepositoryManager {
     func listenToRooms(userRecord: UserRecord) {
@@ -327,11 +349,23 @@ extension RepositoryManager {
                             
                             // Update only if the lastInteraction value has changed
                             if currentLastInteraction != newLastInteraction {
+                                // Update timestamp value in detailedFriends
                                 self.detailedFriends[index].lastInteraction = newLastInteraction
+                                
+                                // Sort new detailedFriends
+                                self.sortDetailedFriends()
+                                
+                                // Reposition center cell to selected friend
+                                if let selectedFriend = self.selectedFriend,
+                                   let selectedIndex = self.detailedFriends.firstIndex(where: { $0.id == selectedFriend.id }) {
+
+                                    await self.collectionViewController?.centerCell(at: IndexPath(item: selectedIndex + 1, section: 0))
+                                }
                                 
                                 // Save the updated friend record to the database
                                 let updatedFriend = self.detailedFriends[index]
                                 self.createFriendInDatabase(friend: updatedFriend)
+                                
 
                                 // Notify the view model or UI to refresh if necessary
                                 DispatchQueue.main.async {
@@ -339,7 +373,7 @@ extension RepositoryManager {
                                 }
                             }
                         } else {
-                            NSLog("LOG: Friend with ID \(String(describing: friendId)) not found in detailedFriends")
+//                            NSLog("LOG: Friend with ID \(String(describing: friendId)) not found in detailedFriends")
                         }
                     } catch {
                         NSLog("LOG: Error decoding roomDto: \(error.localizedDescription)")
@@ -437,13 +471,13 @@ extension RepositoryManager {
                              
                              try roomDocRef.setData(from: roomDto)
                              
-                             // new room is added, so we should listen to this room 
+                             // new room is added, so we should listen to this room
                              listenToRoom(roomId: roomId)
                          }
                          
-                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
                          // Part3
                          // Adding friendRecord
+                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
                          if self.selectedFriend == nil {
                              // set selected friend if this is the first friend that is added
                              self.selectedFriend = friendRecord
@@ -455,7 +489,7 @@ extension RepositoryManager {
                              }
                              createFriendInDatabase(friend: friendRecord)
                          } else {
-                             NSLog("LOG: friend is already added-FriendRecord")
+//                             NSLog("LOG: friend is already added-FriendRecord")
                          }
                      } else {
                          NSLog("LOG: friend is already added-FriendID")
@@ -853,11 +887,8 @@ extension RepositoryManager {
             throw NSError(domain: "convertUserDtoToFriendRecord", code: -1, userInfo: [NSLocalizedDescriptionKey: "currentUser is null when converting UserDto to FriendRecord"])
         }
         
-        // friend id
         let friendId = userDto.id!
-        // get room id
         let roomId = RoomDto.generateRoomId(userId1: userId, userId2: friendId)
-        // get room document by id
         let roomDto = try await fetchRoomFromFirebase(roomId: roomId)
         
         let friendRecord = FriendRecord(

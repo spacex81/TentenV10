@@ -30,6 +30,8 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         self._isPublished = isPublished
         self._isLocked = isLocked
         super.init(nibName: nil, bundle: nil)
+        
+        RepositoryManager.shared.collectionViewController = self
     }
 
     required init?(coder: NSCoder) {
