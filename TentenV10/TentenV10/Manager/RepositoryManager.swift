@@ -100,7 +100,13 @@ class RepositoryManager: ObservableObject {
     }
     
     @Published var userDto: UserDto?
-    @Published var detailedFriends: [FriendRecord] = []
+    @Published var detailedFriends: [FriendRecord] = [] {
+        didSet {
+            if detailedFriends.count > 0 && selectedFriend == nil {
+                self.selectedFriend = detailedFriends[0]
+            }
+        }
+    }
     
     @Published var needUserFetch = true
     
@@ -619,7 +625,6 @@ extension RepositoryManager {
             }
             DispatchQueue.main.async {
                 self.detailedFriends = newDetailedFriends
-                self.selectedFriend = newDetailedFriends[0]
             }
             NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
         } else {
