@@ -55,8 +55,6 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
 
         dataSource = CustomCollectionViewDataSource(
             detailedFriends: Binding(get: { self.updatedDetailedFriends(with: self.repoManager.detailedFriends) }, set: { newFriends in
-                // Update the original detailedFriends if needed
-//                self.repoManager.detailedFriends = newFriends
             }),
             selectedFriend: $selectedFriend,
             isSheetPresented: $isSheetPresented,
@@ -109,8 +107,17 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     private func updatedDetailedFriends(with friends: [FriendRecord]) -> [FriendRecord] {
 //        NSLog("LOG: updatedDetailedFriends")
         var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
-        updatedFriends.append(contentsOf: friends)
+        
+        // Iterate over the input friends array
+        for friend in friends {
+            // Check if the friend is already in the updatedFriends array
+            if !updatedFriends.contains(where: { $0.id == friend.id }) {
+                updatedFriends.append(friend)
+            }
+        }
+        
         updatedFriends.append(FriendRecord.empty) // Add empty at the end
+//        print(updatedFriends)
         return updatedFriends
     }
 }

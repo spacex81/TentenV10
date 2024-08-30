@@ -82,6 +82,7 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         return attributesArray
     }
 
+    // MARK: Scroll to snap
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
         let targetRect = CGRect(origin: proposedContentOffset, size: collectionView!.bounds.size)
         guard let attributesArray = super.layoutAttributesForElements(in: targetRect) else {
@@ -114,8 +115,14 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
             springAnimator.startAnimation()
 
             // Update the selected profile image when snapping
+//            if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
+//               let friend = self.viewController?.detailedFriends[indexPath.item - 1] {
+//                self.repoManager.selectedFriend = friend
+//            }
             if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
-               let friend = self.viewController?.detailedFriends[indexPath.item - 1] {
+               let friends = self.viewController?.detailedFriends,
+               indexPath.item > 0 && indexPath.item - 1 < friends.count {
+                let friend = friends[indexPath.item - 1]
                 self.repoManager.selectedFriend = friend
             }
         }

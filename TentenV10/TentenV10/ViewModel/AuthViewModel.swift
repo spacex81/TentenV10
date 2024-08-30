@@ -25,9 +25,26 @@ class AuthViewModel: ObservableObject {
 
 extension AuthViewModel {
     func signIn() {
-        DispatchQueue.main.async {
-            self.repoManager.needUserFetch = false
+        // Check if user logged in with same account
+        if let _ = repoManager.readUserFromDatabase(email: email) {
+            DispatchQueue.main.async {
+                self.repoManager.needUserFetch = false
+            }
+        } else {
+            // If user logged in with different account than set 'needUserFetch' to true
+            // erase current content of user table and friend table
+            repoManager.userRecord = nil
+            repoManager.detailedFriends = []
+            repoManager.selectedFriend = nil
+            repoManager.removeAllListeners()
+            repoManager.eraseAllUsers()
+            repoManager.eraseAllFriends()
+            DispatchQueue.main.async {
+                self.repoManager.needUserFetch = true
+            }
+            
         }
+        
         Task {
             do {
                 let user = try await authManager.signIn(email: email, password: password)

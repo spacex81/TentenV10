@@ -32,7 +32,8 @@ class RepositoryManager: ObservableObject {
                 // update deviceToken
                 if let deviceToken = deviceToken {
                     if userRecord.deviceToken != deviceToken {
-                        updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+                        NSLog("LOG: updateDeviceToken in userRecord-didSet")
+//                        updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
                     }
                 }
                 
@@ -99,7 +100,7 @@ class RepositoryManager: ObservableObject {
         didSet {
             if let deviceToken = deviceToken, let userRecord = userRecord {
                 if userRecord.deviceToken != deviceToken {
-                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+//                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
                 }
             }
         }
@@ -108,6 +109,8 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
+//            NSLog("LOG: detailedFriends-didSet")
+//            print(detailedFriends)
             // Select friend when app launch
             if detailedFriends.count > 0 && selectedFriend == nil {
                 NSLog("LOG: Initial friend is selected")
@@ -529,7 +532,7 @@ extension RepositoryManager {
             _ = try dbQueue.write { db in
                 try user.save(db)
             }
-//            NSLog("LOG: Successfully added new user record")
+            //            NSLog("LOG: Successfully added new user record")
         } catch {
             print("Failed to save user: \(error)")
         }
@@ -546,6 +549,32 @@ extension RepositoryManager {
         }
         
         return nil
+    }
+    
+    func readUserFromDatabase(email: String) -> UserRecord? {
+        do {
+            let userRecord = try dbQueue.read { db in
+                try UserRecord
+                    .filter(UserRecord.Columns.email == email)
+                    .fetchOne(db)
+            }
+            return userRecord
+        } catch {
+            NSLog("LOG: Failed to read user from database: \(error.localizedDescription)")
+        }
+        
+        return nil
+    }
+    
+    func eraseAllUsers() {
+        do {
+            _ = try dbQueue.write { db in
+                try UserRecord.deleteAll(db)
+            }
+            NSLog("LOG: Successfully erased all user records")
+        } catch {
+            NSLog("LOG: Failed to erase user records: \(error.localizedDescription)")
+        }
     }
 }
 
@@ -569,6 +598,17 @@ extension RepositoryManager {
             return friends
         } catch {
             return []
+        }
+    }
+    
+    func eraseAllFriends() {
+        do {
+            _ = try dbQueue.write { db in
+                try FriendRecord.deleteAll(db)
+            }
+            NSLog("LOG: Successfully erased all friend records")
+        } catch {
+            NSLog("LOG: Failed to erase friend records: \(error.localizedDescription)")
         }
     }
 }
@@ -950,5 +990,27 @@ extension RepositoryManager {
                 NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
             }
         }
+    }
+}
+
+extension RepositoryManager {
+    func removeAllListeners() {
+        // Cancel and remove all room listeners
+        for listener in roomsListeners {
+            listener.remove()
+        }
+        roomsListeners.removeAll()
+        
+        // Cancel and remove all friend listeners
+        for listener in friendsListeners {
+            listener.remove()
+        }
+        friendsListeners.removeAll()
+        
+        // Cancel and remove the user listener if it exists
+        userListener?.remove()
+        userListener = nil
+        
+        NSLog("LOG: Successfully removed all listeners")
     }
 }
