@@ -54,6 +54,8 @@ struct HomeView: View {
             }
             .background(Color.black)
             
+            Text("current state: \(viewModel.currentState)")
+            
             VStack {
                 // Main text
                 if let selectedFriend = repoManager.selectedFriend {

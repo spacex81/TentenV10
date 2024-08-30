@@ -4,9 +4,21 @@ class BaseCell: UICollectionViewCell {
     // Common properties and methods
     private var previousIsPressing: Bool = false
     private var previousIsLocked: Bool = false
+    private var previousShrinkWhenListening: Bool = false
     var propertyAnimator: UIViewPropertyAnimator?
     let viewModel = HomeViewModel.shared
+    let repoManager = RepositoryManager.shared
 
+    // set true when repoManager.currentState is .isListening and when cell is not long press
+    var shrinkWhenListening: Bool = false {
+        didSet {
+            if previousShrinkWhenListening != shrinkWhenListening {
+                animateScale()
+                previousShrinkWhenListening = shrinkWhenListening
+            }
+        }
+    }
+    
     var isPressing: Bool = false {
         didSet {
             if previousIsPressing != isPressing {
@@ -24,17 +36,21 @@ class BaseCell: UICollectionViewCell {
             }
         }
     }
-
-    // new
+    
+    // Updated animateScale function
     func animateScale() {
+//        NSLog("LOG: animateScale")
+        
         // Cancel any ongoing animation
         propertyAnimator?.stopAnimation(true)
         
         let scaleTransform: CGAffineTransform
-        if isPressing || isLocked {
+        if isPressing || isLocked || shrinkWhenListening {
             scaleTransform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+//            NSLog("LOG: Shrink")
         } else {
             scaleTransform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+//            NSLog("LOG: Scale")
         }
         
         // Apply the scale transformation to the appropriate subview

@@ -7,9 +7,9 @@ struct RoomDto: Codable {
     var userId2: String
     var lastInteraction: Timestamp
     var nickname: String
-    var isActive: Bool = false
+    var isActive: Int = 0  // Changed to Int with a default value of 0
     
-    init(id: String? = nil, userId1: String, userId2: String, lastInteraction: Date, nickname: String, isActive: Bool = false) {
+    init(id: String? = nil, userId1: String, userId2: String, lastInteraction: Date, nickname: String, isActive: Int = 0) {
         self.id = id
         self.userId1 = userId1
         self.userId2 = userId2

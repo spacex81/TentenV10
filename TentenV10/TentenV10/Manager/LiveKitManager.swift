@@ -5,6 +5,8 @@ import LiveKit
 class LiveKitManager: ObservableObject, RoomDelegate {
     static let shared = LiveKitManager()
     
+    weak var repoManager: RepositoryManager?
+    
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
     @Published var isLocked: Bool = false 
@@ -65,6 +67,7 @@ extension LiveKitManager {
         
         DispatchQueue.main.async {
             self.isConnected = false
+            self.repoManager?.currentState = .idle
         }
         
         NSLog("LOG: LiveKit disconnected")
@@ -79,9 +82,6 @@ extension LiveKitManager {
 
         do {
             try await room.localParticipant.setMicrophone(enabled: true)
-            DispatchQueue.main.async {
-//                self.isPublished = true
-            }
             NSLog("LOG: Microphone enabled and LiveKit Audio track Published")
         } catch {
             NSLog("Failed to enable microphone for LiveKit Room: \(error)")
@@ -145,6 +145,7 @@ extension LiveKitManager {
             print("Received 'readyToTalk' message. Setting isPublished to true.")
             DispatchQueue.main.async {
                 self.isPublished = true
+                self.repoManager?.currentState = .isSpeaking
             }
         } else {
             print("Received data: \(message). Ignored.")
@@ -153,6 +154,7 @@ extension LiveKitManager {
     
     func room(_ room: Room, participant: RemoteParticipant, didSubscribeTrack publication: RemoteTrackPublication) {
         sendMessageToRemoteParticipant(message: "readyToTalk")
+        self.repoManager?.currentState = .isListening
         sendLocalNotification(title: "Remote Participant", body: "Remote participant is talking")
         NSLog("LOG: Ready to listen to remote audio stream")
     }

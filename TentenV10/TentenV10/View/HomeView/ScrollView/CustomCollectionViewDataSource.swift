@@ -32,6 +32,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
+//        NSLog("LOG: currentState: \(repoManager.currentState)")
+        
         let friend = detailedFriends[indexPath.item]
 //        if selectedFriend != nil {
 //            NSLog("LOG: selectedFriend")
@@ -48,6 +50,11 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             
             addButtonCell.isPressing = isPressing
             addButtonCell.isLocked = isLocked
+            if repoManager.currentState == .isListening {
+                addButtonCell.shrinkWhenListening = true
+            } else {
+                addButtonCell.shrinkWhenListening = false
+            }
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
@@ -77,6 +84,12 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
 
             tapCell.isPressing = isPressing
             tapCell.isLocked = isLocked
+            if repoManager.currentState == .isListening {
+                tapCell.shrinkWhenListening = true
+            } else {
+                tapCell.shrinkWhenListening = false
+            }
+            
             tapCell.onTap = { [weak self] in
 //                NSLog("LOG: onTap")
                 self?.collectionViewController?.centerCell(at: indexPath)

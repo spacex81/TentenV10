@@ -25,6 +25,24 @@ class RepositoryManager: ObservableObject {
     private var friendsListeners: [ListenerRegistration] = []
     private var userListener: ListenerRegistration?
     
+    
+    @Published var currentState: UserState = .idle {
+        didSet {
+            if currentState == .isListening {
+                // MARK: 
+                // When app starts to listen to remote participant,
+                // we need to remove cells except the long press cell
+                // in order to do that we need to update the collection view
+                // when 'currentState' value is changed to 'isListening'
+                collectionViewController?.reloadData()
+            } else if currentState == .idle {
+                // MARK:
+                // Make disappeared non long press cell visible again
+                collectionViewController?.reloadData()
+            }
+        }
+    }
+    
     @Published var userRecord: UserRecord? {
         didSet {
             
@@ -130,6 +148,8 @@ class RepositoryManager: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceTokenNotification(_:)), name: .didReceiveDeviceToken, object: nil)
         setupDatabase()
         startListeningToAuthChanges()
+        
+        liveKitManager.repoManager = self
     }
     
     deinit {
@@ -329,6 +349,7 @@ extension RepositoryManager {
     }
     
     func listenToRoom(roomId: String) {
+        NSLog("LOG: listenToRoom")
         let roomListener = roomsCollection.document(roomId).addSnapshotListener { [weak self] document, error in
             guard let self = self else { return }
             guard let userRecord = self.userRecord else {
@@ -357,15 +378,20 @@ extension RepositoryManager {
                                 // Update timestamp value in detailedFriends
                                 self.detailedFriends[index].lastInteraction = newLastInteraction
                                 
+                                NSLog("LOG: Sort new detailedFriends")
                                 // Sort new detailedFriends
                                 self.sortDetailedFriends()
+                                await self.collectionViewController?.reloadData()
                                 
-                                // Reposition center cell to selected friend
-                                if let selectedFriend = self.selectedFriend,
-                                   let selectedIndex = self.detailedFriends.firstIndex(where: { $0.id == selectedFriend.id }) {
-
-                                    await self.collectionViewController?.centerCell(at: IndexPath(item: selectedIndex + 1, section: 0))
+                                // Reposition center cell to first friend
+                                if self.detailedFriends.count > 0 {
+//                                    NSLog("LOG: Center first cell")
+                                    await self.collectionViewController?.centerCell(at: IndexPath(item: 1, section: 0))
+                                    DispatchQueue.main.async {
+                                         self.selectedFriend = self.detailedFriends[0]
+                                    }
                                 }
+
                                 
                                 // Save the updated friend record to the database
                                 let updatedFriend = self.detailedFriends[index]
@@ -468,6 +494,7 @@ extension RepositoryManager {
                              roomDto.lastInteraction = Timestamp(date: currentTimestamp)
                              
                              try roomDocRef.setData(from: roomDto)
+                             listenToRoom(roomId: roomId)
                          } else {
                              // Room does not exist, create a new room document
                              let roomNickname = RoomDto.generateRoomNickName(username1: newUserRecord.username, username2: friendUserDto.username)
@@ -476,7 +503,8 @@ extension RepositoryManager {
                              
                              try roomDocRef.setData(from: roomDto)
                              
-                             // new room is added, so we should listen to this room
+                             // new room is added, start listening to this room
+                             NSLog("LOG: new room is added, start listening to this room")
                              listenToRoom(roomId: roomId)
                          }
                          
@@ -1014,4 +1042,15 @@ extension RepositoryManager {
         
         NSLog("LOG: Successfully removed all listeners")
     }
+}
+
+// MARK: Update 'UserDto.isActive' value
+extension RepositoryManager {
+    // TODO: add two function that increment/decrement isActive value by 1
+}
+
+enum UserState {
+    case isSpeaking
+    case isListening
+    case idle
 }

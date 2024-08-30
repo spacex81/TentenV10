@@ -101,7 +101,9 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
 
     func reloadData() {
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
     private func updatedDetailedFriends(with friends: [FriendRecord]) -> [FriendRecord] {

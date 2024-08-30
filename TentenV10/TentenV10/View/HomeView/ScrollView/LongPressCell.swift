@@ -3,7 +3,6 @@ import UIKit
 class LongPressCell: BaseCell {
     static let reuseIdentifier = "LongPressCell"
     var friend: FriendRecord?
-    private let repoManager = RepositoryManager.shared
 
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
@@ -36,7 +35,8 @@ class LongPressCell: BaseCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
 
-        longPressGestureRecognizer.minimumPressDuration = 0.1
+//        longPressGestureRecognizer.minimumPressDuration = 0.1
+        longPressGestureRecognizer.minimumPressDuration = 0.05
         longPressGestureRecognizer.addTarget(self, action: #selector(didLongPressCell))
         contentView.addGestureRecognizer(longPressGestureRecognizer)
     }
@@ -98,7 +98,7 @@ class LongPressCell: BaseCell {
             longPressGestureRecognizer.isEnabled = true
         }
     }
-
+    
 
     override func applyScaleTransform(_ transform: CGAffineTransform) {
         propertyAnimator = UIViewPropertyAnimator(

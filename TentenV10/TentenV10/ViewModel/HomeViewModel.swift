@@ -16,6 +16,7 @@ class HomeViewModel: ObservableObject {
     @Published var userRecord: UserRecord?
     @Published var selectedFriend: FriendRecord?
     @Published var selectedFriendIsBusy: Bool = false
+    @Published var currentState: UserState = .idle
     
     @Published var isPressing: Bool = false {
         didSet {
@@ -96,6 +97,13 @@ class HomeViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { detailedFriends in
                 self.detailedFriends = detailedFriends
+            }
+            .store(in: &cancellables)
+        
+        repoManager.$currentState
+            .receive(on: DispatchQueue.main)
+            .sink {  currentState in
+                self.currentState = currentState
             }
             .store(in: &cancellables)
     }
