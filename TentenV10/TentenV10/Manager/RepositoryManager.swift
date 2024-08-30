@@ -32,8 +32,8 @@ class RepositoryManager: ObservableObject {
                 // update deviceToken
                 if let deviceToken = deviceToken {
                     if userRecord.deviceToken != deviceToken {
-                        NSLog("LOG: updateDeviceToken in userRecord-didSet")
-//                        updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+//                        NSLog("LOG: updateDeviceToken in userRecord-didSet")
+                        updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
                     }
                 }
                 
@@ -100,7 +100,8 @@ class RepositoryManager: ObservableObject {
         didSet {
             if let deviceToken = deviceToken, let userRecord = userRecord {
                 if userRecord.deviceToken != deviceToken {
-//                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
+//                    NSLog("LOG: updateDeviceToken in deviceToken-didSet")
+                    updateDeviceToken(oldUserRecord: userRecord, newDeviceToken: deviceToken)
                 }
             }
         }
