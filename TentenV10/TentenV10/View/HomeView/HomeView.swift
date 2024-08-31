@@ -102,6 +102,10 @@ struct HomeView: View {
                         HoldToReplyBubble()
                             .frame(height: 200)
                             .offset(y: -110)
+                    } else if viewModel.selectedFriendIsBusy {
+                        IsBusyBubble()
+                            .frame(height: 200)
+                            .offset(y: -110)
                     } else {
                         HoldToTalkBubble()
                             .frame(height: 200)

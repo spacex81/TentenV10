@@ -9,6 +9,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var isLocked: Bool
     private weak var collectionViewController: CustomCollectionViewController?
     private let repoManager = RepositoryManager.shared
+    private let liveKitManager = LiveKitManager.shared
 
     init(
         detailedFriends: Binding<[FriendRecord]>,
@@ -67,6 +68,14 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             
             longPressCell.isPressing = isPressing
             longPressCell.isLocked = isLocked
+            if friend.isBusy && repoManager.currentState == .idle && !liveKitManager.isConnected {
+                NSLog("LOG: long press gesture disabeld")
+                longPressCell.longPressGestureRecognizer.isEnabled = false
+            } else {
+                NSLog("LOG: long press gesture enabled")
+                longPressCell.longPressGestureRecognizer.isEnabled = true
+            }
+            
             longPressCell.onLongPressBegan = { [weak self] in
 //                NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true

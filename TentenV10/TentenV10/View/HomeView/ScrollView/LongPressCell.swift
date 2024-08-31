@@ -15,7 +15,7 @@ class LongPressCell: BaseCell {
         return imageView
     }()
 
-    private let longPressGestureRecognizer = UILongPressGestureRecognizer()
+    let longPressGestureRecognizer = UILongPressGestureRecognizer()
     
 //    private let lockDistance: CGFloat = 100
     private let lockDistance: CGFloat = 50
@@ -89,15 +89,17 @@ class LongPressCell: BaseCell {
 //        updateCellState()
     }
     
-    private func updateCellState() {
-        guard let friend = friend else { return }
-
-        if friend.isBusy {
-            longPressGestureRecognizer.isEnabled = false
-        } else {
-            longPressGestureRecognizer.isEnabled = true
-        }
-    }
+//    private func updateCellState() {
+//        guard let friend = friend else { return }
+//
+//        if friend.isBusy {
+//            longPressGestureRecognizer.isEnabled = false
+//        } else {
+//            if !longPressGestureRecognizer.isEnabled {
+//                longPressGestureRecognizer.isEnabled = true
+//            }
+//        }
+//    }
     
 
     override func applyScaleTransform(_ transform: CGAffineTransform) {
