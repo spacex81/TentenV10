@@ -5,6 +5,7 @@ class AuthViewModel: ObservableObject {
     private let authManager = AuthManager.shared
     private let repoManager = RepositoryManager.shared
     
+    
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var selectedImage: UIImage?
@@ -73,21 +74,35 @@ extension AuthViewModel {
                     NSLog("LOG: profile image is not set")
                     return
                 }
-                guard let profileImageData = selectedImage.jpegData(compressionQuality: 0.8) else {
+
+                // Define a size threshold for the image (e.g., 1024x1024 pixels)
+                let maxSize = CGSize(width: 1024, height: 1024)
+                var finalImage = selectedImage
+
+                // Check if the image exceeds the size threshold and resize if necessary
+                if selectedImage.size.width > maxSize.width || selectedImage.size.height > maxSize.height {
+                    if let resizedImage = resizeImage(selectedImage, targetSize: maxSize) {
+                        finalImage = resizedImage
+                    } else {
+                        NSLog("LOG: Error resizing image")
+                        return
+                    }
+                }
+
+                guard let profileImageData = finalImage.jpegData(compressionQuality: 0.8) else {
                     NSLog("LOG: Error converting UIImage to Data")
                     return
                 }
                 
                 let newUserRecord = UserRecord(id: id, email: email, username: username, pin: pin, profileImageData: profileImageData, deviceToken: deviceToken)
                 
-                // TODO: move to RepositoryManager
                 await repoManager.createUserWhenSignUp(newUserRecord: newUserRecord)
             } catch {
                 NSLog("Error signing up user: \(error.localizedDescription)")
             }
         }
     }
-    
+
     func signOut() {
         NSLog("LOG: signOut")
         DispatchQueue.main.async {
@@ -103,5 +118,26 @@ extension AuthViewModel {
     private func generatePin() -> String {
         let letters = "abcdefghijklmnopqrstuvwxyz0123456789"
         return String((0..<7).map { _ in letters.randomElement()! })
+    }
+    
+    func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage? {
+        let size = image.size
+
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        // Determine the scaling factor that preserves aspect ratio
+        let scaleFactor = min(widthRatio, heightRatio)
+
+        // Compute the new size that preserves aspect ratio
+        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
+
+        // Resize the image
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage
     }
 }
