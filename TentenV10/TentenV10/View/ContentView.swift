@@ -30,13 +30,20 @@ struct ContentView: View {
             VStack {
                 // Email text
                 if let email = viewModel.email {
-                    Text("Logged in as: \(email)")
+                    Text("Email: \(email)")
                 } else {
-                    Text("Email is not set")
+                    Text("Email is empty")
+                }
+                
+                if let userID = viewModel.userID {
+                    Text("User id: \(userID)")
+                } else {
+                    Text("User id is empty")
                 }
                 
                 // Sign out button
                 Button {
+                    // Need to be googleSignOut, appleSignOut, kakaoSignOut if needed. Will see
                     viewModel.googleSignOut()
                 } label: {
                     Text("Sign Out")

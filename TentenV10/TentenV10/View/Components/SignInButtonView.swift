@@ -46,14 +46,14 @@ struct SignInButtonView: View {
         switch loginType {
         case .apple:
             // Handle Apple login
-            print("Handle Apple login")
+            viewModel.appleSignIn()
         case .google:
             Task {
                 await viewModel.googleSignIn()
             }
         case .kakao:
             // Handle Kakao login
-            print("Handle Kakao login")
+            viewModel.kakaoSignIn()
         }
     }
 }
