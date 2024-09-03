@@ -1,5 +1,7 @@
 import SwiftUI
+import FirebaseCore
 import FirebaseAuth
+import GoogleSignIn
 
 enum SocialLoginType: String {
     case apple = "apple"
@@ -15,6 +17,8 @@ struct SignInButtonView: View {
     let loginType: SocialLoginType
     let buttonText: String
     let iconSize: CGFloat
+    
+    let viewModel = TestContentViewModel.shared
     
     var body: some View {
         Button {
@@ -44,13 +48,17 @@ struct SignInButtonView: View {
             // Handle Apple login
             print("Handle Apple login")
         case .google:
-            // Handle Google login
-            print("Handle Google login")
+            Task {
+                await viewModel.googleSignIn()
+            }
         case .kakao:
             // Handle Kakao login
             print("Handle Kakao login")
         }
     }
+}
+
+extension SignInButtonView {
 }
 
 #Preview {
