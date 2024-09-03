@@ -59,6 +59,7 @@
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
+		C8BB1F042C86CA7200F176E6 /* SignInButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */; };
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */; };
 		C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF712C709594002AEDE0 /* CustomCollectionViewController.swift */; };
@@ -116,6 +117,7 @@
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
 		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
+		C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButtonView.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewRepresentable.swift; sourceTree = "<group>"; };
 		C8E9BF712C709594002AEDE0 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */,
 				C8144AD22C7C50C40011385D /* HoldToReplyBubble.swift */,
 				C8144AD42C7C83E00011385D /* IsBusyBubble.swift */,
+				C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8BB1F042C86CA7200F176E6 /* SignInButtonView.swift in Sources */,
 				C8144ACB2C7C2E6D0011385D /* AddFriendButtonPreview.swift in Sources */,
 				C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */,
 				C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */,

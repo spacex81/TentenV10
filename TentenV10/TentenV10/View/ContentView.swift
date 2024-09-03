@@ -16,52 +16,22 @@
 //    }
 //}
 //
+
 import SwiftUI
 import FirebaseAuth
 
 struct ContentView: View {
     
     let iconSize = 20.0
+    
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Image("apple")
-                    .resizable()
-                    .frame(width: iconSize, height: iconSize)
-                    .border(.red)
-                Text("Sign in with Apple")
-                    .font(.headline)
-                    .padding(.leading, 8)
-                    .border(.green)
-            }
-            .padding(.vertical, 10)
-            .border(.black)
-            
-            HStack {
-                Image("google")
-                    .resizable()
-                    .frame(width: iconSize, height: iconSize)
-                    .border(.red)
-                Text("Sign in with Google")
-                    .font(.headline)
-                    .padding(.leading, 8)
-                    .border(.green)
-            }
-            .padding(.vertical, 10)
-            .border(.black)
-            
-            HStack {
-                Image("kakao")
-                    .resizable()
-                    .frame(width: iconSize, height: iconSize)
-                    .border(.red)
-                Text("Sign in with Kakao")
-                    .font(.headline)
-                    .padding(.leading, 8)
-                    .border(.green)
-            }
-            .padding(.vertical, 10)
-            .border(.black)
+            Spacer()
+            SignInButtonView(loginType: .apple, buttonText: "Sign in with Apple", iconSize: iconSize)
+            SignInButtonView(loginType: .google, buttonText: "Sign in with Google", iconSize: iconSize)
+            SignInButtonView(loginType: .kakao, buttonText: "Sign in with Kakao", iconSize: iconSize)
+            Spacer()
+                .frame(height: 100)
         }
         .padding()
     }
@@ -69,4 +39,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .preferredColorScheme(.dark)
 }
