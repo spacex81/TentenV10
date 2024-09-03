@@ -34,12 +34,15 @@ extension AuthViewModel {
         } else {
             // If user logged in with different account than set 'needUserFetch' to true
             // erase current content of user table and friend table
+            
+            // Clean up account
             repoManager.userRecord = nil
             repoManager.detailedFriends = []
             repoManager.selectedFriend = nil
             repoManager.removeAllListeners()
             repoManager.eraseAllUsers()
             repoManager.eraseAllFriends()
+            //
             DispatchQueue.main.async {
                 self.repoManager.needUserFetch = true
             }
@@ -57,6 +60,15 @@ extension AuthViewModel {
     }
     
     func signUp() {
+        // Clean up account
+        repoManager.userRecord = nil
+        repoManager.detailedFriends = []
+        repoManager.selectedFriend = nil
+        repoManager.removeAllListeners()
+        repoManager.eraseAllUsers()
+        repoManager.eraseAllFriends()
+        //
+
         DispatchQueue.main.async {
             self.repoManager.needUserFetch = false
         }
