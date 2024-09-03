@@ -4,6 +4,10 @@ import AuthenticationServices
 import FirebaseCore
 import GoogleSignIn
 
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+
 class TestContentViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     static let shared = TestContentViewModel()
     
@@ -104,6 +108,29 @@ extension TestContentViewModel {
 extension TestContentViewModel {
     func kakaoSignIn() {
         // Handle Kakao Sign-In
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            // MARK: Via app
+            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                if let oauthToken = oauthToken{
+//                    print("Login in with KakaoTalk success")
+                    self.fetchKakaoUserInfo(oauthToken: oauthToken)
+                }
+            }
+        } else {
+            // MARK: Via webview
+            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                if let oauthToken = oauthToken{
+//                    print("Login in with KakaoTalk account success")
+                    self.fetchKakaoUserInfo(oauthToken: oauthToken)
+                }
+            }
+        }
     }
     
     func kakaoSignOut() {
@@ -112,6 +139,28 @@ extension TestContentViewModel {
             self.email = nil
             self.userID = nil
             self.isLoggedIn = false
+        }
+    }
+    
+    func fetchKakaoUserInfo(oauthToken: OAuthToken) {
+        UserApi.shared.me { (user, error) in
+            if let error = error {
+                print("Failed to get user info: \(error.localizedDescription)")
+            } else if let user = user {
+                // Here you can access the user's unique ID
+                let userID = user.id
+                let userEmail = user.kakaoAccount?.email
+                
+                print("User ID: \(String(describing: userID))")
+                print("User Email: \(userEmail ?? "No email provided")")
+                
+                // Now you can save userID to your database to identify the user
+                DispatchQueue.main.async {
+                    self.userID = "\(String(describing: userID))"
+                    self.email = userEmail
+                    self.isLoggedIn = true
+                }
+            }
         }
     }
 }

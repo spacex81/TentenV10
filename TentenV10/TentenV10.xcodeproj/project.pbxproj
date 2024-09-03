@@ -64,6 +64,9 @@
 		C8BB1F092C86D49C00F176E6 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F082C86D49C00F176E6 /* GoogleSignInSwift */; };
 		C8BB1F0B2C86DA0300F176E6 /* GoogleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BB1F0A2C86DA0300F176E6 /* GoogleSignInManager.swift */; };
 		C8BB1F0D2C86DE2C00F176E6 /* TestContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BB1F0C2C86DE2C00F176E6 /* TestContentViewModel.swift */; };
+		C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F112C86F09900F176E6 /* KakaoSDKAuth */; };
+		C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */; };
+		C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F152C86F09900F176E6 /* KakaoSDKUser */; };
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */; };
 		C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF712C709594002AEDE0 /* CustomCollectionViewController.swift */; };
@@ -138,14 +141,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8BB1F092C86D49C00F176E6 /* GoogleSignInSwift in Frameworks */,
+				C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */,
 				C815BC802C608519004CB09E /* FirebaseFunctions in Frameworks */,
 				C8BB1F072C86D49C00F176E6 /* GoogleSignIn in Frameworks */,
 				C815BC852C60852A004CB09E /* GRDB in Frameworks */,
 				C815BC822C608519004CB09E /* FirebaseStorage in Frameworks */,
 				C815BC8B2C608543004CB09E /* WebRTC in Frameworks */,
 				C815BC882C608539004CB09E /* LiveKit in Frameworks */,
+				C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */,
 				C815BC7C2C608519004CB09E /* FirebaseAuth in Frameworks */,
 				C815BC7E2C608519004CB09E /* FirebaseFirestore in Frameworks */,
+				C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +367,9 @@
 				C815BC8A2C608543004CB09E /* WebRTC */,
 				C8BB1F062C86D49C00F176E6 /* GoogleSignIn */,
 				C8BB1F082C86D49C00F176E6 /* GoogleSignInSwift */,
+				C8BB1F112C86F09900F176E6 /* KakaoSDKAuth */,
+				C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */,
+				C8BB1F152C86F09900F176E6 /* KakaoSDKUser */,
 			);
 			productName = TentenV10;
 			productReference = C815BC692C60849B004CB09E /* TentenV10.app */;
@@ -396,6 +405,7 @@
 				C815BC862C608539004CB09E /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
 				C815BC892C608543004CB09E /* XCRemoteSwiftPackageReference "WebRTC" */,
 				C8BB1F052C86D49C00F176E6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			productRefGroup = C815BC6A2C60849B004CB09E /* Products */;
 			projectDirPath = "";
@@ -728,6 +738,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.22.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -775,6 +793,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C8BB1F052C86D49C00F176E6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		C8BB1F112C86F09900F176E6 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKCommon;
+		};
+		C8BB1F152C86F09900F176E6 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

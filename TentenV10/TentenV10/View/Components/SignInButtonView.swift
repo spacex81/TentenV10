@@ -3,6 +3,7 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 
+
 enum SocialLoginType: String {
     case apple = "apple"
     case google = "google"
