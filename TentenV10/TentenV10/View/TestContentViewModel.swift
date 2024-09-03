@@ -13,7 +13,11 @@ class TestContentViewModel: NSObject, ObservableObject, ASAuthorizationControlle
     
     @Published var email: String? = nil
     @Published var isLoggedIn: Bool = false
-    @Published var userID: String?
+    @Published var userID: String? {
+        didSet {
+            print(userID ?? "Empty user id")
+        }
+    }
 }
 
 // MARK: Google sign in
