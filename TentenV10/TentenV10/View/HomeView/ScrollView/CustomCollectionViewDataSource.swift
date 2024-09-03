@@ -68,6 +68,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             
             longPressCell.isPressing = isPressing
             longPressCell.isLocked = isLocked
+            
+            // Control long press recognizer
             if friend.isBusy && repoManager.currentState == .idle && !liveKitManager.isConnected {
                 NSLog("LOG: long press gesture disabeld")
                 longPressCell.longPressGestureRecognizer.isEnabled = false

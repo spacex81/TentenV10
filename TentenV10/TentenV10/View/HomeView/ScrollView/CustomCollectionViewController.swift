@@ -101,6 +101,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
 
     func reloadData() {
+        NSLog("LOG: CustomCollectionViewController-reloadData()")
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }

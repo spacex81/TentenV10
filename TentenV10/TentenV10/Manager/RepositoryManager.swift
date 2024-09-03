@@ -25,21 +25,21 @@ class RepositoryManager: ObservableObject {
     private var friendsListeners: [ListenerRegistration] = []
     private var userListener: ListenerRegistration?
     
+    private var previousState: UserState = .idle
     
     @Published var currentState: UserState = .idle {
         didSet {
-            if currentState == .isListening {
-                // MARK: 
-                // When app starts to listen to remote participant,
-                // we need to remove cells except the long press cell
-                // in order to do that we need to update the collection view
-                // when 'currentState' value is changed to 'isListening'
+            // Check if the state has changed from .isListening to .idle
+            if previousState == .isListening && currentState == .idle {
+                // Reload data only when transitioning from .isListening to .idle
                 collectionViewController?.reloadData()
-            } else if currentState == .idle {
-                // MARK:
-                // Make disappeared non long press cell visible again
+            } else if currentState == .isListening {
+                // When transitioning to .isListening, update the collection view
                 collectionViewController?.reloadData()
             }
+            
+            // Update the previousState to the current state
+            previousState = currentState
         }
     }
     
