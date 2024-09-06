@@ -32,9 +32,11 @@ class RepositoryManager: ObservableObject {
             // Check if the state has changed from .isListening to .idle
             if previousState == .isListening && currentState == .idle {
                 // Reload data only when transitioning from .isListening to .idle
+                NSLog("LOG: reloadData when connection state changed from isListening to idle")
                 collectionViewController?.reloadData()
             } else if currentState == .isListening {
                 // When transitioning to .isListening, update the collection view
+                NSLog("LOG: reloadData when connection state is set to isListening")
                 collectionViewController?.reloadData()
             }
             
@@ -393,6 +395,7 @@ extension RepositoryManager {
                                 NSLog("LOG: Sort new detailedFriends")
                                 // Sort new detailedFriends
                                 self.sortDetailedFriends()
+                                NSLog("LOG: reloadData when detailedFriends is sorted")
                                 await self.collectionViewController?.reloadData()
                                 
                                 // Reposition center cell to first friend

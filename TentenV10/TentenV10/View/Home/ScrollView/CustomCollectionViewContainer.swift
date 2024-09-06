@@ -51,6 +51,7 @@ class CustomCollectionViewContainer: UIView {
     func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
         DispatchQueue.main.async {
             self.collectionViewController.detailedFriends = detailedFriends
+            NSLog("LOG: reloadData() when updateDetailedFriends")
             self.collectionViewController.reloadData()
         }
     }

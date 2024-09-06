@@ -10,7 +10,11 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
     @Published var isLocked: Bool = false 
-    @Published var isPressing: Bool = false 
+    @Published var isPressing: Bool = false {
+        didSet {
+            NSLog("LOG: LiveKitManager-isPressing : \(isPressing ? "true" : "false")")
+        }
+    }
 
     var room: Room?
 

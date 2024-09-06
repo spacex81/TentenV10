@@ -165,7 +165,7 @@ extension HomeViewPreview {
                 profileImageData: UIImage(systemName: "person.fill")?.pngData(),
                 deviceToken: "token2",
                 userId: "user2",
-                isBusy: true
+                isBusy: false
             ),
             FriendRecord(
                 id: "3",
