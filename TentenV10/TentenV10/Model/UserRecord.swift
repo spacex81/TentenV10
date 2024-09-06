@@ -11,12 +11,15 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var deviceToken: String?
     var friends: [String] = []
     var roomName: String = "testRoom"
-    var isBusy: Bool = false  // New field with default value
+    var isBusy: Bool = false
+    var socialLoginId: String
+    var socialLoginType: String
+    var imageOffset: Float = 0.0 
 
     static var databaseTableName: String = "users"
 
     enum Columns: String, ColumnExpression {
-        case id, email, username, pin, hasIncomingCallRequest, profileImageData, deviceToken, friends, roomName, isBusy
+        case id, email, username, pin, hasIncomingCallRequest, profileImageData, deviceToken, friends, roomName, isBusy, socialLoginId, socialLoginType, imageOffset // Add imageOffset to the Columns
     }
 
     func encode(to container: inout PersistenceContainer) {
@@ -32,6 +35,8 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
         }
         container[Columns.roomName] = roomName
         container[Columns.isBusy] = isBusy
+        container[Columns.socialLoginId] = socialLoginId
+        container[Columns.socialLoginType] = socialLoginType
+        container[Columns.imageOffset] = imageOffset // Encode imageOffset
     }
 }
-

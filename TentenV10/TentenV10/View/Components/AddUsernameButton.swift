@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct AddFriendButton: View {
-    @Environment(\.dismiss) var dismiss
+struct AddUsernameButton: View {
     @ObservedObject var viewModel = HomeViewModel.shared
+    private let repoManager = RepositoryManager.shared
     
     @State private var hue: Double = 0.0
     @State private var colors: [Color] = [
@@ -12,18 +12,36 @@ struct AddFriendButton: View {
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
+    var onComplete: (() -> Void)? = nil
 
     var body: some View {
         Button(action: {
+            
             impactFeedback.impactOccurred()
-            viewModel.friendPin = viewModel.friendPin.lowercased()
-            viewModel.addFriend()
-            dismiss()
+            
+            if viewModel.username.count > 0 {
+                guard let userRecord = viewModel.userRecord else {
+                    NSLog("LOG: UserRecord is nil when trying to add username in onboarding")
+                    return
+                }
+                
+                // Add username to local database
+                repoManager.createUserInDatabase(user: userRecord)
+                
+                NSLog("LOG: new username: \(userRecord.username)")
+                // Add username to remote firebase
+                repoManager.updateUserField(userId: userRecord.id, fieldsToUpdate: ["username": userRecord.username])
+                NSLog("LOG: Username successfully updated in Firebase")
+                
+                if let onComplete = onComplete {
+                    onComplete()
+                }
+            }
         }) {
             ZStack {
-                // TODO: need to add some bouncy animation when background changes
+                // Need to add some bouncy animation when background changes
                 // Background
-                if viewModel.friendPin.count < 7 {
+                if viewModel.username.count < 1 {
                     Color(.secondarySystemBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                 } else {
@@ -39,7 +57,7 @@ struct AddFriendButton: View {
                     .padding(15)
             }
             .frame(width: 50, height: 50) // Fix size to avoid shifting
-            .animation(.easeInOut(duration: 0.1), value: viewModel.friendPin.count) // Animate background change
+            .animation(.easeInOut(duration: 0.1), value: viewModel.username.count) // Animate background change
         }
         .onAppear {
             startHueRotation()
@@ -65,7 +83,7 @@ struct AddFriendButton: View {
 }
 
 #Preview {
-    AddFriendButton()
+    AddUsernameButton()
         .preferredColorScheme(.dark)
 }
 

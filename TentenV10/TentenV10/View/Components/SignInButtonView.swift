@@ -1,8 +1,4 @@
 import SwiftUI
-import FirebaseCore
-import FirebaseAuth
-import GoogleSignIn
-
 
 enum SocialLoginType: String {
     case apple = "apple"
@@ -19,26 +15,37 @@ struct SignInButtonView: View {
     let buttonText: String
     let iconSize: CGFloat
     
-    let viewModel = TestContentViewModel.shared
+    @ObservedObject var viewModel = AuthViewModel.shared
     
     var body: some View {
         Button {
             handleSocialLogin(for: loginType)
         } label: {
-            HStack {
-                Image(loginType.iconName)
-                    .resizable()
-                    .frame(width: iconSize, height: iconSize)
-                    .offset(x: loginType == .google ? 5 : 0)
-                Text(buttonText)
-                    .font(.headline)
-                    .padding(.leading, 8)
+            ZStack {
+                // Main content
+                HStack {
+                    if !(viewModel.isLoading[loginType] ?? false) {
+                        // Case 1: Logo and text
+                        Image(loginType.iconName)
+                            .resizable()
+                            .frame(width: iconSize, height: iconSize)
+                            .offset(x: loginType == .google ? 5 : 0)
+                        Text(buttonText)
+                            .font(.headline)
+                            .padding(.leading, 8)
+                    } else {
+                        // Case 2: Loading spinner
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                            .scaleEffect(1.2)
+                    }
+                }
+                .padding(15)
+                .frame(width: UIScreen.main.bounds.width * 0.8)
+                .foregroundColor(.black)
+                .background(Color.white)
+                .cornerRadius(25)
             }
-            .padding(15)
-            .frame(width: UIScreen.main.bounds.width * 0.8)
-            .foregroundColor(.black)
-            .background(Color.white)
-            .cornerRadius(25)
         }
         .padding(.bottom, 5)
     }
@@ -46,20 +53,21 @@ struct SignInButtonView: View {
     private func handleSocialLogin(for loginType: SocialLoginType) {
         switch loginType {
         case .apple:
+            viewModel.isLoading[.apple] = true
             // Handle Apple login
             viewModel.appleSignIn()
         case .google:
             Task {
+                viewModel.isLoading[.google] = true
                 await viewModel.googleSignIn()
             }
         case .kakao:
             // Handle Kakao login
+            viewModel.isLoading[.kakao] = true
             viewModel.kakaoSignIn()
         }
     }
-}
-
-extension SignInButtonView {
+    
 }
 
 #Preview {

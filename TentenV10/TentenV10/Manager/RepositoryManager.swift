@@ -183,10 +183,10 @@ class RepositoryManager: ObservableObject {
             DispatchQueue.main.async {
                 if let user = user {
                     self.currentUser = user
-                    NSLog("self.currentUser is set")
+//                    NSLog("self.currentUser is set")
                 } else {
                     self.currentUser = nil
-                    NSLog("self.currentUser is nil")
+//                    NSLog("self.currentUser is nil")
                 }
             }
         }
@@ -223,6 +223,9 @@ class RepositoryManager: ObservableObject {
                     t.column("friends", .text)
                     t.column("roomName", .text).notNull().defaults(to: "testRoom")
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
+                    t.column("socialLoginId", .text).notNull()  // Updated field name
+                    t.column("socialLoginType", .text).notNull()  // Updated field name
+                    t.column("imageOffset", .double).notNull().defaults(to: 0.0) // New field
                 }
                 
                 // Create the friends table with 'lastInteraction' column
@@ -236,6 +239,13 @@ class RepositoryManager: ObservableObject {
                     t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("lastInteraction", .datetime)
+                }
+            }
+
+            // Add a new migration for the 'imageOffset' field if the table already exists
+            migrator.registerMigration("v2_add_imageOffset") { db in
+                try db.alter(table: "users") { t in
+                    t.add(column: "imageOffset", .double).notNull().defaults(to: 0.0) // Add the imageOffset column
                 }
             }
 
@@ -328,6 +338,8 @@ extension RepositoryManager {
                  }
              } else {
                  print("Document does not exist when trying to listen to user")
+                 AuthManager.shared.isOnboardingComplete = false
+                 AuthManager.shared.signOut()
              }
          }
      }
@@ -544,13 +556,17 @@ extension RepositoryManager {
 
         createUserInDatabase(user: newUserRecord)
         
-        do {
-            let profileImagePath = try await saveProfileImageInFirebase(id: newUserRecord.id, profileImageData: newUserRecord.profileImageData!)
-            let newUserDto = UserDto(id: newUserRecord.id, email: newUserRecord.email, username: newUserRecord.username, pin: newUserRecord.pin, profileImagePath: profileImagePath, deviceToken: newUserRecord.deviceToken)
-            createUserInFirebase(userDto: newUserDto)
-        } catch {
-            NSLog("LOG: Failed to save user when sign up: \(error.localizedDescription)")
-        }
+        let newUserDto = UserDto(
+            id: newUserRecord.id,
+            email: newUserRecord.email,
+            username: newUserRecord.username,
+            pin: newUserRecord.pin,
+            deviceToken: newUserRecord.deviceToken,
+            socialLoginId: newUserRecord.socialLoginId,
+            socialLoginType: newUserRecord.socialLoginType
+        )
+    
+        createUserInFirebase(userDto: newUserDto)
     }
 }
 
@@ -681,6 +697,29 @@ extension RepositoryManager {
         }
     }
     
+    func fetchUserFromFirebase(field: String, value: String) async throws -> UserDto? {
+        try await withCheckedThrowingContinuation { continuation in
+            usersCollection.whereField(field, isEqualTo: value).getDocuments { snapshot, error in
+                if let error = error {
+                    NSLog("LOG: Failed to fetch user dto from Firestore by \(field): \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let snapshot = snapshot, let document = snapshot.documents.first {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        continuation.resume(returning: userDto)
+                    } catch {
+                        NSLog("LOG: Failed to convert Firestore document to UserDto: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    }
+                } else {
+                    // No matching document found
+                    NSLog("LOG: No matching user found for \(field) = \(value)")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+    
     func getFriendByPinFromFirebase(friendPin: String) async throws -> String {
         try await withCheckedThrowingContinuation { continuation in
             usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
@@ -718,16 +757,18 @@ extension RepositoryManager {
     }
     
     func updateDeviceTokenInFirebase(userId: String, newDeviceToken: String) {
-            usersCollection.document(userId).updateData([
-                "deviceToken": newDeviceToken
-            ]) { error in
-                if let error = error {
-                    NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
-                } else {
-                    NSLog("LOG: Device token successfully updated in Firestore")
-                }
+        usersCollection.document(userId).updateData([
+            "deviceToken": newDeviceToken
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
+            } else {
+                NSLog("LOG: Device token successfully updated in Firestore")
             }
         }
+    }
+    
+
     
     func updateCallStatusInFirebase(friendUid: String, hasIncomingCallRequest: Bool, isBusy: Bool) {
         guard let userId = currentUser?.uid else {
@@ -757,6 +798,7 @@ extension RepositoryManager {
     }
 
 }
+
 
 
 // MARK: Firebase: Storage
@@ -878,20 +920,21 @@ extension RepositoryManager {
     }
     
     private func convertUserDtoToUserRecord(userDto: UserDto) async throws -> UserRecord {
-        guard let profileImagePath = userDto.profileImagePath else {
-            throw NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Profile image path is not set."])
-        }
+        var imageData: Data? = nil
         
-        let storageRef = storage.reference(forURL: profileImagePath)
-        let imageData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
-            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                if let error = error {
-                    NSLog("LOG: Error getting image data from profileImagePath: \(error.localizedDescription)")
-                    continuation.resume(throwing: error)
-                } else if let data = data {
-                    continuation.resume(returning: data)
-                } else {
-                    continuation.resume(throwing: NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred while fetching image data."]))
+        // Get profile image data from firebase storage
+        if let profileImagePath = userDto.profileImagePath {
+            let storageRef = storage.reference(forURL: profileImagePath)
+            imageData = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+                storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                    if let error = error {
+                        NSLog("LOG: Error getting image data from profileImagePath: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    } else if let data = data {
+                        continuation.resume(returning: data)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred while fetching image data."]))
+                    }
                 }
             }
         }
@@ -902,14 +945,16 @@ extension RepositoryManager {
             username: userDto.username,
             pin: userDto.pin,
             hasIncomingCallRequest: userDto.hasIncomingCallRequest,
-            profileImageData: imageData,
+            profileImageData: imageData,  // imageData will be nil if profileImagePath was nil
             deviceToken: userDto.deviceToken,
-            friends: userDto.friends
+            friends: userDto.friends,
+            socialLoginId: userDto.socialLoginId,
+            socialLoginType: userDto.socialLoginType
         )
         
         return userRecord
     }
-    
+
     private func convertUserDtoToFriendRecord(userDto: UserDto) async throws -> FriendRecord {
         guard let profileImagePath = userDto.profileImagePath else {
             throw NSError(domain: "AppError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Profile image path is not set."])
@@ -962,11 +1007,6 @@ extension RepositoryManager {
         // Get current user ID from 'userRecord'
         guard let currentUserId = userRecord?.id else {
             NSLog("LOG: currentUserId is not available when updating timestamp")
-            return
-        }
-        
-        guard let userRecord = userRecord else {
-            NSLog("LOG: userRecord is not available when updating timestamp")
             return
         }
         
@@ -1044,9 +1084,34 @@ extension RepositoryManager {
     }
 }
 
+// MARK: Firestore update function
+extension RepositoryManager {
+    
+    // MARK: General update function without completion handler
+    func updateFieldInFirestore(collection: String, documentId: String, fieldsToUpdate: [String: Any]) {
+        db.collection(collection).document(documentId).updateData(fieldsToUpdate) { error in
+            if let error = error {
+                NSLog("LOG: Error updating document in Firestore: \(error.localizedDescription)")
+            } else {
+                NSLog("LOG: Document successfully updated in Firestore")
+            }
+        }
+    }
+    
+    // MARK: Update function for 'users' collection
+    func updateUserField(userId: String, fieldsToUpdate: [String: Any]) {
+        updateFieldInFirestore(collection: "users", documentId: userId, fieldsToUpdate: fieldsToUpdate)
+    }
+
+    // MARK: Update function for 'rooms' collection
+    func updateRoomField(roomId: String, fieldsToUpdate: [String: Any]) {
+        updateFieldInFirestore(collection: "rooms", documentId: roomId, fieldsToUpdate: fieldsToUpdate)
+    }
+}
+
 // MARK: Update 'UserDto.isActive' value
 extension RepositoryManager {
-    // TODO: add two function that increment/decrement isActive value by 1
+    //  add two function that increment/decrement isActive value by 1
 }
 
 enum UserState {

@@ -58,22 +58,22 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity)
                 
                 Spacer()
-                Button(action: {
-                    viewModel.signOut()
-                }) {
-                    Text("Sign Out")
-                        .font(.title2)
-                        .foregroundColor(.red)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.systemBackground))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                }
 
             }
+            
+            Button(action: {
+                viewModel.signOut()
+            }) {
+                Text("Sign Out")
+                    .font(.title2)
+                    .foregroundColor(.red)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+            }
         }
-//        .border(.green)
         .padding(30)
         .sheet(isPresented: $isSheetPresented) {
             AddFriendView()

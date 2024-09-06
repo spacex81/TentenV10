@@ -13,7 +13,46 @@ class HomeViewModel: ObservableObject {
     private let backgroundTaskManager = BackgroundTaskManager.shared
     
     @Published var currentUser: User?
-    @Published var userRecord: UserRecord?
+    @Published var userRecord: UserRecord? {
+        didSet {
+            guard let userRecord = userRecord else {
+                return
+            }
+            
+            print(userRecord)
+            
+//            authManager.isOnboardingComplete = userRecord.username != "default" &&
+//                                               userRecord.profileImageData != nil &&
+//                                               !userRecord.friends.isEmpty
+            if userRecord.username == "default" || userRecord.profileImageData == nil || userRecord.friends.isEmpty {
+                authManager.isOnboardingComplete = false
+            }
+        }
+    }
+
+    // MARK: Onboarding
+    // When username and profile image is set in onboarding phase, set that value is userRecord
+    @Published var username: String = "" {
+        didSet {
+            userRecord?.username = username
+        }
+    }
+    @Published var profileImageData: Data? 
+    {
+        didSet {
+            NSLog("LOG: profileImageData-didSet")
+            userRecord?.profileImageData = profileImageData
+        }
+    }
+    @Published var imageOffset: Float = 0.0 
+    {
+        didSet {
+            // print("HomeViewModel-imageOffset-didSet: \(imageOffset)")
+            userRecord?.imageOffset = Float(imageOffset)
+        }
+    }
+    //
+    
     @Published var selectedFriend: FriendRecord?
     @Published var selectedFriendIsBusy: Bool = false
     @Published var currentState: UserState = .idle
@@ -194,6 +233,7 @@ extension HomeViewModel {
     }
 }
 
+// MARK: Add friend
 extension HomeViewModel {
     func selectFriend(friend: FriendRecord) {
         DispatchQueue.main.async {
@@ -208,6 +248,17 @@ extension HomeViewModel {
                 self.friendPin = "" 
             }
         }
+    }
+}
+
+// MARK: Onboarding
+extension HomeViewModel {
+    func addUsername() {
+        
+    }
+    
+    func addProfileImage() {
+        
     }
 }
 

@@ -1,10 +1,19 @@
 import Foundation
 import UIKit
+import FirebaseAuth
+import AuthenticationServices
+import FirebaseCore
+import GoogleSignIn
 
-class AuthViewModel: ObservableObject {
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
+
+class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    static let shared = AuthViewModel()
+    
     private let authManager = AuthManager.shared
     private let repoManager = RepositoryManager.shared
-    
     
     @Published var email: String = ""
     @Published var password: String = ""
@@ -12,9 +21,15 @@ class AuthViewModel: ObservableObject {
     
     @Published var deviceToken: String?
     
-    init() {
+    @Published var socialLoginId: String = ""
+    @Published var socialLoginType: String = ""
+    
+    @Published var isLoading: [SocialLoginType: Bool] = [:]
+    
+    override init() {
+        super.init()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceTokenNotification(_:)), name: .didReceiveDeviceToken, object: nil)
-
     }
     
     @objc private func handleDeviceTokenNotification(_ notification: Notification) {
@@ -25,7 +40,39 @@ class AuthViewModel: ObservableObject {
 }
 
 extension AuthViewModel {
-    func signIn() {
+    
+    // MARK: Decide to run `signIn()` or `signUp()`
+    func authenticate(for loginType: SocialLoginType) {
+        Task {
+            NSLog("LOG: AuthViewModel-authenticate()")
+            do {
+                let firebaseToken = try await authManager.fetchFirebaseToken(socialLoginId: socialLoginId, socialLoginType: socialLoginType)
+
+                // Use this userDto and reduce the authentication time
+                let userDto =  try await repoManager.fetchUserFromFirebase(field: "socialLoginId", value: socialLoginId)
+                if userDto?.socialLoginType == self.socialLoginType &&
+                   userDto?.socialLoginId == self.socialLoginId
+                {
+                    NSLog("LOG: Signing in")
+                    authManager.isOnboardingComplete = true
+                    signIn(firebaseToken: firebaseToken)
+                    stopLoading(for: loginType)
+                } else {
+                    NSLog("LOG: Signing up")
+                    authManager.isOnboardingComplete = false
+                    authManager.onboardingStep = .username
+                    signUp(firebaseToken: firebaseToken)
+                    stopLoading(for: loginType)
+                }
+
+            } catch {
+                NSLog("LOG: Error when fetching user from firebase using socialLoginId value")
+            }
+       
+        }
+    }
+    
+    func signIn(firebaseToken: String) {
         // Check if user logged in with same account
         if let _ = repoManager.readUserFromDatabase(email: email) {
             DispatchQueue.main.async {
@@ -36,6 +83,9 @@ extension AuthViewModel {
             // erase current content of user table and friend table
             
             // Clean up account
+            HomeViewModel.shared.username = ""
+            HomeViewModel.shared.profileImageData = nil
+            HomeViewModel.shared.imageOffset = 0.0
             repoManager.userRecord = nil
             repoManager.detailedFriends = []
             repoManager.selectedFriend = nil
@@ -51,7 +101,7 @@ extension AuthViewModel {
         
         Task {
             do {
-                let user = try await authManager.signIn(email: email, password: password)
+                let user = try await authManager.signIn(withCustomToken: firebaseToken)
                 try await repoManager.fetchUser(id: user.uid)
             } catch {
                 NSLog("Failed to sign in: \(error.localizedDescription)")
@@ -59,8 +109,13 @@ extension AuthViewModel {
         }
     }
     
-    func signUp() {
+    func signUp(firebaseToken: String) {
+        
         // Clean up account
+        NSLog("LOG: Cleaning up previous account")
+        HomeViewModel.shared.username = ""
+        HomeViewModel.shared.profileImageData = nil
+        HomeViewModel.shared.imageOffset = 0.0
         repoManager.userRecord = nil
         repoManager.detailedFriends = []
         repoManager.selectedFriend = nil
@@ -74,39 +129,13 @@ extension AuthViewModel {
         }
         Task {
             do {
-                let user = try await authManager.signUp(email: email, password: password)
+                let user = try await authManager.signIn(withCustomToken: firebaseToken)
                 let id = user.uid
-                guard let email = user.email else {
-                    NSLog("LOG: firebase auth user doesn't have email info")
-                    return
-                }
-                let username = email.split(separator: "@").first.map(String.init) ?? "User"
+
+                let username = "default"
                 let pin = generatePin()
-                guard let selectedImage = self.selectedImage else {
-                    NSLog("LOG: profile image is not set")
-                    return
-                }
-
-                // Define a size threshold for the image (e.g., 1024x1024 pixels)
-                let maxSize = CGSize(width: 1024, height: 1024)
-                var finalImage = selectedImage
-
-                // Check if the image exceeds the size threshold and resize if necessary
-                if selectedImage.size.width > maxSize.width || selectedImage.size.height > maxSize.height {
-                    if let resizedImage = resizeImage(selectedImage, targetSize: maxSize) {
-                        finalImage = resizedImage
-                    } else {
-                        NSLog("LOG: Error resizing image")
-                        return
-                    }
-                }
-
-                guard let profileImageData = finalImage.jpegData(compressionQuality: 0.8) else {
-                    NSLog("LOG: Error converting UIImage to Data")
-                    return
-                }
                 
-                let newUserRecord = UserRecord(id: id, email: email, username: username, pin: pin, profileImageData: profileImageData, deviceToken: deviceToken)
+                let newUserRecord = UserRecord(id: id, email: email, username: username, pin: pin, deviceToken: deviceToken, socialLoginId: socialLoginId, socialLoginType: socialLoginType)
                 
                 await repoManager.createUserWhenSignUp(newUserRecord: newUserRecord)
             } catch {
@@ -122,6 +151,165 @@ extension AuthViewModel {
             self.repoManager.detailedFriends = []
         }
         authManager.signOut()
+    }
+}
+
+
+// MARK: Google sign in
+extension AuthViewModel {
+    func googleSignIn() async {
+        print("LOG: handleGoogleSignIn")
+        do {
+            guard let user: GIDGoogleUser = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
+            
+            print("LOG: Succeeded to sign in with Google login")
+            
+            DispatchQueue.main.async {
+                self.socialLoginId = user.userID ?? ""
+                self.socialLoginType = "google"
+                
+                self.authenticate(for: .google)
+            }
+            
+
+            // Accessing the email address
+            if let email = user.profile?.email {
+                print("User's email address: \(email)")
+                DispatchQueue.main.async {
+                    self.email = email
+                }
+            } else {
+                print("Email address not available")
+            }
+            
+        }
+        catch {
+            print("GoogleSignInError: failed to sign in with Google, \(error))")
+        }
+    }
+    
+    func googleSignOut() {
+        GoogleSignInManager.shared.signOutFromGoogle()
+        DispatchQueue.main.async {
+            self.email = ""
+            self.socialLoginId = ""
+            self.socialLoginType = ""
+        }
+    }
+}
+
+// MARK: Apple sign in
+extension AuthViewModel {
+    func appleSignIn() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+    
+    // MARK: ASAuthorizationControllerDelegate methods
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            let userID = appleIDCredential.user
+            let email = appleIDCredential.email
+            
+            DispatchQueue.main.async {
+                self.socialLoginId = userID
+                self.socialLoginType = "apple"
+                self.email = email ?? ""
+                
+                self.authenticate(for: .apple)
+            }
+            
+            print("Apple Sign In succeeded, User ID: \(userID), Email: \(email ?? "N/A")")
+        }
+    }
+    
+    func appleSignOut() {
+        DispatchQueue.main.async {
+            self.email = ""
+            self.socialLoginId = ""
+            self.socialLoginType = ""
+        }
+    }
+    
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("Apple Sign In failed: \(error.localizedDescription)")
+    }
+    
+    // MARK: ASAuthorizationControllerPresentationContextProviding method
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
+            return ASPresentationAnchor()
+        }
+        return window
+    }
+}
+
+// MARK: Kakao sign in
+extension AuthViewModel {
+    func kakaoSignIn() {
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            // MARK: Via app
+            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                if let oauthToken = oauthToken{
+//                    print("Login in with KakaoTalk success")
+                    self.fetchKakaoUserInfo(oauthToken: oauthToken)
+                }
+            }
+        } else {
+            // MARK: Via webview
+            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                if let oauthToken = oauthToken{
+//                    print("Login in with KakaoTalk account success")
+                    self.fetchKakaoUserInfo(oauthToken: oauthToken)
+                }
+            }
+        }
+    }
+    
+    func kakaoSignOut() {
+        // Handle Kakao Sign-Out
+        DispatchQueue.main.async {
+            self.email = ""
+            self.socialLoginId = ""
+            self.socialLoginType = ""
+        }
+    }
+    
+    func fetchKakaoUserInfo(oauthToken: OAuthToken) {
+        UserApi.shared.me { (user, error) in
+            if let error = error {
+                print("Failed to get user info: \(error.localizedDescription)")
+            } else if let user = user {
+                // Here you can access the user's unique ID
+                let userID = user.id
+                let userEmail = user.kakaoAccount?.email
+                
+                print("User ID: \(String(describing: userID))")
+                print("User Email: \(userEmail ?? "No email provided")")
+                
+                // Now you can save userID to your database to identify the user
+                DispatchQueue.main.async {
+                    self.socialLoginId = "\(String(describing: userID ?? 1234567890))"
+                    self.socialLoginType = "kakao"
+                    self.email = userEmail ?? ""
+                    
+                    self.authenticate(for: .kakao)
+                }
+            }
+        }
     }
 }
 
@@ -151,5 +339,13 @@ extension AuthViewModel {
         UIGraphicsEndImageContext()
 
         return newImage
+    }
+}
+
+extension AuthViewModel {
+    private func stopLoading(for loginType: SocialLoginType) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.isLoading[loginType] = false
+        }
     }
 }
