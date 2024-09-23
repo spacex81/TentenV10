@@ -48,10 +48,23 @@ class CustomCollectionViewContainer: UIView {
         ])
     }
 
-    func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
+//    func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
+//        DispatchQueue.main.async {
+//            // ERROR
+//            self.collectionViewController.detailedFriends = detailedFriends
+//            self.collectionViewController.reloadData()
+//        }
+//    }
+    func updateDetailedFriends(_ newDetailedFriends: [FriendRecord]) {
         DispatchQueue.main.async {
-            self.collectionViewController.detailedFriends = detailedFriends
-            NSLog("LOG: reloadData() when updateDetailedFriends")
+            // Check if there's any actual change before updating
+            guard newDetailedFriends != self.collectionViewController.detailedFriends else {
+                // If arrays are the same, no need to update
+                return
+            }
+
+            // Update only if there are changes
+            self.collectionViewController.detailedFriends = newDetailedFriends
             self.collectionViewController.reloadData()
         }
     }

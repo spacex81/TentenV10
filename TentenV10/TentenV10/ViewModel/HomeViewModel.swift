@@ -21,9 +21,6 @@ class HomeViewModel: ObservableObject {
             
             print(userRecord)
             
-//            authManager.isOnboardingComplete = userRecord.username != "default" &&
-//                                               userRecord.profileImageData != nil &&
-//                                               !userRecord.friends.isEmpty
             if userRecord.username == "default" || userRecord.profileImageData == nil || userRecord.friends.isEmpty {
                 authManager.isOnboardingComplete = false
             }
@@ -164,6 +161,7 @@ class HomeViewModel: ObservableObject {
     }
     
     private func updateSelectedFriendIsBusy() {
+//        NSLog("LOG: updateSelectedFriendIsBusy")
         // Check if there's a selected friend
         guard let selectedFriend = selectedFriend else {
             selectedFriendIsBusy = false
@@ -223,6 +221,7 @@ extension HomeViewModel {
 
 extension HomeViewModel {
     func fetchUser(id: String) {
+        NSLog("LOG: HomeViewModel-fetchUser")
         Task {
             do {
                 try await repoManager.fetchUser(id: id)

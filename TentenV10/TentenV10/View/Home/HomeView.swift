@@ -33,33 +33,6 @@ struct HomeView: View {
     var body: some View {
         VStack {
             Spacer()
-            
-            // MARK: Monitoring UI for friends' timestamp value
-//            ScrollView(.horizontal, showsIndicators: false) {
-//                HStack(spacing: 20) {
-//                    ForEach(viewModel.detailedFriends, id: \.id) { friend in
-//                        VStack {
-//                            Text(friend.username)
-//                                .font(.headline)
-//                            if let lastInteraction = friend.lastInteraction {
-//                                Text("Last: \(formattedDate(lastInteraction))")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.gray)
-//                            } else {
-//                                Text("No interactions yet")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.gray)
-//                            }
-//                        }
-//                        .padding()
-//                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.1)))
-//                    }
-//                }
-//                .padding(.horizontal)
-//            }
-//            .background(Color.black)
-//            Text("current state: \(viewModel.currentState)")
-            
             VStack {
                 // Main text
                 if let selectedFriend = repoManager.selectedFriend {

@@ -306,7 +306,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-//        NSLog("LOG: listenToUser")
+        NSLog("LOG: User listener is set")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -330,6 +330,7 @@ extension RepositoryManager {
                          
                          if self.userRecord != userRecord {
                              DispatchQueue.main.async {
+                                 NSLog("LOG: UserRecord is set")
                                  self.userRecord = userRecord
                              }
                              self.createUserInDatabase(user: userRecord)
