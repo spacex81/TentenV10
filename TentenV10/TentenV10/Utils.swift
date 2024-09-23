@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CryptoKit
 
 enum OnboardingStep {
     case username
@@ -36,4 +37,18 @@ func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage? {
     UIGraphicsEndImageContext()
 
     return newImage
+}
+
+func generateUUID() -> String {
+    let uuid = UUID().uuidString
+    print("Generated UUID: \(uuid)")
+    return uuid
+}
+
+func generateHash(from input: String) -> String {
+    let inputData = Data(input.utf8)
+    let hashed = SHA256.hash(data: inputData)
+    let hashString = hashed.compactMap { String(format: "%02x", $0) }.joined() // Convert hash bytes to a hex string
+    print("Generated Hash: \(hashString)")
+    return hashString
 }

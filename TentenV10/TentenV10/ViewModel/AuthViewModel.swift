@@ -42,13 +42,13 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
 extension AuthViewModel {
     
     // MARK: Decide to run `signIn()` or `signUp()`
+    // TODO: Error cases for email authentication need to be treated
     func authenticate(for loginType: SocialLoginType) {
         Task {
             NSLog("LOG: AuthViewModel-authenticate()")
             do {
                 let firebaseToken = try await authManager.fetchFirebaseToken(socialLoginId: socialLoginId, socialLoginType: socialLoginType)
 
-                // Use this userDto and reduce the authentication time
                 let userDto =  try await repoManager.fetchUserFromFirebase(field: "socialLoginId", value: socialLoginId)
                 if userDto?.socialLoginType == self.socialLoginType &&
                    userDto?.socialLoginId == self.socialLoginId
@@ -309,6 +309,57 @@ extension AuthViewModel {
                     self.authenticate(for: .kakao)
                 }
             }
+        }
+    }
+}
+
+//func googleSignIn() async {
+//    print("LOG: handleGoogleSignIn")
+//    do {
+//        guard let user: GIDGoogleUser = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
+//        
+//        print("LOG: Succeeded to sign in with Google login")
+//        
+//        DispatchQueue.main.async {
+//            self.socialLoginId = user.userID ?? ""
+//            self.socialLoginType = "google"
+//            
+//            self.authenticate(for: .google)
+//        }
+//        
+//
+//        // Accessing the email address
+//        if let email = user.profile?.email {
+//            print("User's email address: \(email)")
+//            DispatchQueue.main.async {
+//                self.email = email
+//            }
+//        } else {
+//            print("Email address not available")
+//        }
+//        
+//    }
+//    catch {
+//        print("GoogleSignInError: failed to sign in with Google, \(error))")
+//    }
+//}
+
+// MARK: Email sign in
+extension AuthViewModel {
+    func emailSignIn() {
+        DispatchQueue.main.async {
+            self.socialLoginId = generateHash(from: self.email)
+            self.socialLoginType = "email"
+            
+            self.authenticate(for: .email)
+        }
+    }
+    
+    func emailSignOut() {
+        DispatchQueue.main.async {
+            self.email = ""
+            self.socialLoginId = ""
+            self.socialLoginType = ""
         }
     }
 }

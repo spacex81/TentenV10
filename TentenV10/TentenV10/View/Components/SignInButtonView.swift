@@ -71,6 +71,7 @@ struct SignInButtonView: View {
             viewModel.isLoading[.kakao] = true
             viewModel.kakaoSignIn()
         case .email:
+            viewModel.isLoading[.email] = true
             showEmailView = true // Show EmailView when email button is clicked
         }
     }

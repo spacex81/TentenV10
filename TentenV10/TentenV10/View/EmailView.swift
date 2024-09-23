@@ -18,7 +18,7 @@ struct EmailView: View {
 //                .cornerRadius(5.0)
             
             Button(action: {
-//                viewModel.emailSignIn()
+                viewModel.emailSignIn()
             }) {
                 Text("Sign In")
                     .foregroundColor(.black)
