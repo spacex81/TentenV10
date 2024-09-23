@@ -4,6 +4,7 @@ enum SocialLoginType: String {
     case apple = "apple"
     case google = "google"
     case kakao = "kakao"
+    case email = "email"
     
     var iconName: String {
         return self.rawValue
@@ -16,6 +17,7 @@ struct SignInButtonView: View {
     let iconSize: CGFloat
     
     @ObservedObject var viewModel = AuthViewModel.shared
+    @Binding var showEmailView: Bool // Binding to control showing EmailView
     
     var body: some View {
         Button {
@@ -26,10 +28,15 @@ struct SignInButtonView: View {
                 HStack {
                     if !(viewModel.isLoading[loginType] ?? false) {
                         // Case 1: Logo and text
-                        Image(loginType.iconName)
-                            .resizable()
-                            .frame(width: iconSize, height: iconSize)
-                            .offset(x: loginType == .google ? 5 : 0)
+                        if loginType == .email {
+                            Image(systemName: "envelope.fill")
+                        } else {
+                            Image(loginType.iconName)
+                                .resizable()
+                                .frame(width: iconSize, height: iconSize)
+                                .offset(x: loginType == .google ? 5 : 0)
+                        }
+                        
                         Text(buttonText)
                             .font(.headline)
                             .padding(.leading, 8)
@@ -54,7 +61,6 @@ struct SignInButtonView: View {
         switch loginType {
         case .apple:
             viewModel.isLoading[.apple] = true
-            // Handle Apple login
             viewModel.appleSignIn()
         case .google:
             Task {
@@ -62,23 +68,26 @@ struct SignInButtonView: View {
                 await viewModel.googleSignIn()
             }
         case .kakao:
-            // Handle Kakao login
             viewModel.isLoading[.kakao] = true
             viewModel.kakaoSignIn()
+        case .email:
+            showEmailView = true // Show EmailView when email button is clicked
         }
     }
-    
 }
 
 #Preview {
     VStack {
-        SignInButtonView(loginType: .apple, buttonText: "Sign in with Apple", iconSize: 20)
+        SignInButtonView(loginType: .apple, buttonText: "Sign in with Apple", iconSize: 20, showEmailView: .constant(false))
             .preferredColorScheme(.dark)
         
-        SignInButtonView(loginType: .google, buttonText: "Sign in with Google", iconSize: 20)
+        SignInButtonView(loginType: .google, buttonText: "Sign in with Google", iconSize: 20, showEmailView: .constant(false))
             .preferredColorScheme(.dark)
         
-        SignInButtonView(loginType: .kakao, buttonText: "Sign in with Kakao", iconSize: 20)
+        SignInButtonView(loginType: .kakao, buttonText: "Sign in with Kakao", iconSize: 20, showEmailView: .constant(false))
+            .preferredColorScheme(.dark)
+        
+        SignInButtonView(loginType: .email, buttonText: "Sign in with Email", iconSize: 20, showEmailView: .constant(false))
             .preferredColorScheme(.dark)
     }
 }

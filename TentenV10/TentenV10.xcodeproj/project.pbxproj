@@ -62,6 +62,7 @@
 		C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84EF36C2C89ABB10092D6B5 /* SettingView.swift */; };
 		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
 		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
+		C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC4E2CA1AF3700AC1932 /* EmailView.swift */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
@@ -136,6 +137,7 @@
 		C84EF36C2C89ABB10092D6B5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewRepresentable.swift; sourceTree = "<group>"; };
 		C85489812C7A05EB006878E0 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
+		C889DC4E2CA1AF3700AC1932 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
 				C8022C912C71F46A006DE470 /* Home */,
 				C812FF0B2C69D96700BD9D9B /* SocialLoginView.swift */,
+				C889DC4E2CA1AF3700AC1932 /* EmailView.swift */,
 				C8E49F6A2CA12C7300E19E38 /* SplashView.swift */,
 				C8BB1F182C8757B900F176E6 /* Onboarding */,
 			);
@@ -523,6 +526,7 @@
 				C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */,
 				C85489822C7A05EB006878E0 /* LockView.swift in Sources */,
 				C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */,
+				C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
