@@ -15,8 +15,16 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     private let authManager = AuthManager.shared
     private let repoManager = RepositoryManager.shared
     
-    @Published var email: String = ""
-    @Published var password: String = ""
+    @Published var email: String = "" {
+        didSet {
+            NSLog("LOG: email: \(email)")
+        }
+    }
+    @Published var password: String = "" {
+        didSet {
+            NSLog("LOG: password: \(password)")
+        }
+    }
     @Published var errorMsg: String = ""
     @Published var selectedImage: UIImage?
     
@@ -153,7 +161,6 @@ extension AuthViewModel {
             self.repoManager.detailedFriends = []
             self.email = ""
             self.password = ""
-            
         }
         authManager.signOut()
     }
@@ -321,37 +328,12 @@ extension AuthViewModel {
 // MARK: Email sign in
 extension AuthViewModel {
     func emailSignIn() {
-        // Error Case 1
-        guard !email.isEmpty else {
-            errorMsg = "이메일을 입력해주세요."
-            stopLoading(for: .email)
-            return
-        }
-
-        // Error Case 2
-        guard !password.isEmpty else {
-            errorMsg = "비밀번호를 입력해주세요."
-            stopLoading(for: .email)
-            return
-        }
-
-        // Error Case 3
-        guard isValidEmail(email) else {
-            errorMsg = "이메일 형식이 올바르지 않습니다."
-            stopLoading(for: .email)
-            return
-        }
-
         Task {
-            do {
-                let userDto =  try await repoManager.fetchUserFromFirebase(field: "email", value: email)
-                // Error Case 4
-                if let userDto = userDto, userDto.password != password {
-                    errorMsg = "이메일이 이미 사용 중 이거나, 비밀번호가 올바르지 않습니다."
-                    stopLoading(for: .email)
-                    return
-                }
-                
+            // Wait for error checking to complete before proceeding
+            let hasError = await checkErrorCases()
+            
+            // Only proceed with authentication if no errors were detected
+            if !hasError {
                 DispatchQueue.main.async {
                     self.socialLoginId = generateHash(from: self.email)
                     self.socialLoginType = "email"
@@ -359,12 +341,52 @@ extension AuthViewModel {
                     self.showEmailView = false
                     self.authenticate(for: .email)
                 }
-            } catch {
-                NSLog("LOG: emailSignIn-fetchUserFromFirebase-email")
             }
         }
     }
 
+    private func checkErrorCases() async -> Bool {
+        // Error Case 1
+        if email.isEmpty {
+            errorMsg = "이메일을 입력해주세요."
+            stopLoading(for: .email)
+            return true
+        }
+
+        // Error Case 2
+        if password.isEmpty {
+            errorMsg = "비밀번호를 입력해주세요."
+            stopLoading(for: .email)
+            return true
+        }
+
+        // Error Case 3
+        if !isValidEmail(email) {
+            errorMsg = "이메일 형식이 올바르지 않습니다."
+            stopLoading(for: .email)
+            return true
+        }
+
+        // Check against Firebase for existing user with the email
+        do {
+            let userDto = try await repoManager.fetchUserFromFirebase(field: "email", value: email)
+
+            // Error Case 4: Password mismatch
+            if let userDto = userDto, userDto.password != password {
+                errorMsg = "이메일이 이미 사용 중 이거나, 비밀번호가 올바르지 않습니다."
+                stopLoading(for: .email)
+                return true
+            }
+        } catch {
+            NSLog("LOG: emailSignIn - Error fetching user data from Firebase.")
+            errorMsg = "서버 오류가 발생했습니다. 다시 시도해주세요." // Optional: Provide a user-friendly error message
+            stopLoading(for: .email)
+            return true
+        }
+        
+        return false // No errors found
+    }
+    
     func emailSignOut() {
         DispatchQueue.main.async {
             self.email = ""

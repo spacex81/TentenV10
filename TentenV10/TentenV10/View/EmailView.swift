@@ -42,6 +42,9 @@ struct EmailView: View {
                 Button(action: {
                     viewModel.stopLoading(for: .email)
                     viewModel.showEmailView = false
+                    viewModel.email = ""
+                    viewModel.password = ""
+                    viewModel.errorMsg = ""
                 }) {
                     Image(systemName: "arrow.left")
                         .foregroundColor(.white)
