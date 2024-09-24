@@ -317,6 +317,16 @@ extension AuthViewModel {
 // MARK: Email sign in
 extension AuthViewModel {
     func emailSignIn() {
+        guard !email.isEmpty else {
+            errorMsg = "이메일을 입력해주세요."
+            return
+        }
+
+        guard !password.isEmpty else {
+            errorMsg = "비밀번호를 입력해주세요."
+            return
+        }
+        
         guard isValidEmail(email) else {
             errorMsg = "이메일 형식이 올바르지 않습니다."
             return
