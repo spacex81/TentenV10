@@ -27,6 +27,8 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     
     @Published var isLoading: [SocialLoginType: Bool] = [:]
     
+    @Published var showEmailView: Bool = false 
+    
     override init() {
         super.init()
         
@@ -344,8 +346,7 @@ extension AuthViewModel {
             do {
                 let userDto =  try await repoManager.fetchUserFromFirebase(field: "email", value: email)
                 // Error Case 4
-                if userDto?.password != password {
-                    NSLog("LOG: Email is already in use or password is not correct")
+                if let userDto = userDto, userDto.password != password {
                     errorMsg = "이메일이 이미 사용 중 이거나, 비밀번호가 올바르지 않습니다."
                     stopLoading(for: .email)
                     return
@@ -355,6 +356,7 @@ extension AuthViewModel {
                     self.socialLoginId = generateHash(from: self.email)
                     self.socialLoginType = "email"
                     
+                    self.showEmailView = false
                     self.authenticate(for: .email)
                 }
             } catch {

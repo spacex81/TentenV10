@@ -2,7 +2,6 @@ import SwiftUI
 
 struct EmailView: View {
     @ObservedObject var viewModel = AuthViewModel.shared
-    @Binding var showEmailView: Bool // Binding to control visibility of EmailView
     
     var body: some View {
         VStack {
@@ -42,7 +41,7 @@ struct EmailView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     viewModel.stopLoading(for: .email)
-                    showEmailView = false
+                    viewModel.showEmailView = false
                 }) {
                     Image(systemName: "arrow.left")
                         .foregroundColor(.white)
@@ -55,7 +54,7 @@ struct EmailView: View {
 
 #Preview {
     NavigationStack {
-        EmailView(showEmailView: .constant(true)) // For preview purposes
+        EmailView() // For preview purposes
             .preferredColorScheme(.dark)
     }
 }

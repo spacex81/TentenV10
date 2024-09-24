@@ -3,7 +3,8 @@ import FirebaseAuth
 
 struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel.shared
-    @State private var showEmailView = false // State to control EmailView presentation
+    @ObservedObject var authViewModel = AuthViewModel.shared
+//    @State private var showEmailView = false // State to control EmailView presentation
 
     var body: some View {
         NavigationStack {
@@ -17,21 +18,21 @@ struct ContentView: View {
                     }
                 } else {
                     // SocialLoginView with a transition
-                    if !showEmailView {
-                        SocialLoginView(showEmailView: $showEmailView)
+                    if !authViewModel.showEmailView {
+                        SocialLoginView()
                             .transition(.move(edge: .leading)) // Disappears to the left
                             .zIndex(0)
                     }
                     
                     // EmailView with coordinated transition
-                    if showEmailView {
-                        EmailView(showEmailView: $showEmailView)
+                    if authViewModel.showEmailView {
+                        EmailView()
                             .transition(.move(edge: .trailing)) // Appears from the right
                             .zIndex(1)
                     }
                 }
             }
-            .animation(.easeInOut, value: showEmailView) // Animate transitions
+            .animation(.easeInOut, value: authViewModel.showEmailView) // Animate transitions
         }
         .environmentObject(viewModel)
     }

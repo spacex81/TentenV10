@@ -17,7 +17,6 @@ struct SignInButtonView: View {
     let iconSize: CGFloat
     
     @ObservedObject var viewModel = AuthViewModel.shared
-    @Binding var showEmailView: Bool // Binding to control showing EmailView
     
     var body: some View {
         Button {
@@ -72,23 +71,23 @@ struct SignInButtonView: View {
             viewModel.kakaoSignIn()
         case .email:
             viewModel.isLoading[.email] = true
-            showEmailView = true // Show EmailView when email button is clicked
+            viewModel.showEmailView = true // Show EmailView when email button is clicked
         }
     }
 }
 
 #Preview {
     VStack {
-        SignInButtonView(loginType: .apple, buttonText: "Sign in with Apple", iconSize: 20, showEmailView: .constant(false))
+        SignInButtonView(loginType: .apple, buttonText: "Sign in with Apple", iconSize: 20)
             .preferredColorScheme(.dark)
         
-        SignInButtonView(loginType: .google, buttonText: "Sign in with Google", iconSize: 20, showEmailView: .constant(false))
+        SignInButtonView(loginType: .google, buttonText: "Sign in with Google", iconSize: 20)
             .preferredColorScheme(.dark)
         
-        SignInButtonView(loginType: .kakao, buttonText: "Sign in with Kakao", iconSize: 20, showEmailView: .constant(false))
+        SignInButtonView(loginType: .kakao, buttonText: "Sign in with Kakao", iconSize: 20)
             .preferredColorScheme(.dark)
         
-        SignInButtonView(loginType: .email, buttonText: "Sign in with Email", iconSize: 20, showEmailView: .constant(false))
+        SignInButtonView(loginType: .email, buttonText: "Sign in with Email", iconSize: 20)
             .preferredColorScheme(.dark)
     }
 }
