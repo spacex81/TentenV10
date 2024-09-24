@@ -43,7 +43,6 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
 extension AuthViewModel {
     
     // MARK: Decide to run `signIn()` or `signUp()`
-    // TODO: Error cases for email authentication need to be treated
     func authenticate(for loginType: SocialLoginType) {
         Task {
             NSLog("LOG: AuthViewModel-authenticate()")
@@ -136,7 +135,7 @@ extension AuthViewModel {
                 let username = "default"
                 let pin = generatePin()
                 
-                let newUserRecord = UserRecord(id: id, email: email, username: username, pin: pin, deviceToken: deviceToken, socialLoginId: socialLoginId, socialLoginType: socialLoginType)
+                let newUserRecord = UserRecord(id: id, email: email, username: username, password: password, pin: pin, deviceToken: deviceToken, socialLoginId: socialLoginId, socialLoginType: socialLoginType)
                 
                 await repoManager.createUserWhenSignUp(newUserRecord: newUserRecord)
             } catch {
@@ -150,6 +149,9 @@ extension AuthViewModel {
         DispatchQueue.main.async {
             self.repoManager.userRecord = nil
             self.repoManager.detailedFriends = []
+            self.email = ""
+            self.password = ""
+            
         }
         authManager.signOut()
     }
@@ -331,10 +333,23 @@ extension AuthViewModel {
             errorMsg = "이메일 형식이 올바르지 않습니다."
             return
         }
+        
+        // TODO: Check if email is already registered
+        // 이미 등록된 이메일 이거나 비밀번호가 올바르지 않습니다.
+        // use 'email' and 'password' to check if the email is already registered
+//        Task {
+//            do {
+//                let userDto =  try await repoManager.fetchUserFromFirebase(field: "socialLoginId", value: socialLoginId)
+//            } catch {
+//                
+//            }
+//        }
 
         DispatchQueue.main.async {
             self.socialLoginId = generateHash(from: self.email)
             self.socialLoginType = "email"
+            self.email = self.email
+            self.password = self.password
             
             self.authenticate(for: .email)
         }

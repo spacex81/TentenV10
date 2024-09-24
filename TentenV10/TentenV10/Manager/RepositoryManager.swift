@@ -200,6 +200,9 @@ class RepositoryManager: ObservableObject {
         }
     }
     
+}
+
+extension RepositoryManager {
     private func setupDatabase() {
         do {
             let databaseURL = try FileManager.default
@@ -211,13 +214,14 @@ class RepositoryManager: ObservableObject {
             // Register migrations
             var migrator = DatabaseMigrator()
 
-            // v1: Initial database setup, including 'lastInteraction' in 'friends' table
+            // v1: Initial database setup, including 'password' in the 'users' table
             migrator.registerMigration("v1") { db in
                 // Create the users table
                 try db.create(table: "users") { t in
                     t.column("id", .text).primaryKey()
                     t.column("email", .text).notNull()
                     t.column("username", .text).notNull()
+                    t.column("password", .text).notNull() // New password column
                     t.column("pin", .text).notNull()
                     t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
                     t.column("profileImageData", .blob)
@@ -225,9 +229,9 @@ class RepositoryManager: ObservableObject {
                     t.column("friends", .text)
                     t.column("roomName", .text).notNull().defaults(to: "testRoom")
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
-                    t.column("socialLoginId", .text).notNull()  // Updated field name
-                    t.column("socialLoginType", .text).notNull()  // Updated field name
-                    t.column("imageOffset", .double).notNull().defaults(to: 0.0) // New field
+                    t.column("socialLoginId", .text).notNull()
+                    t.column("socialLoginType", .text).notNull()
+                    t.column("imageOffset", .double).notNull().defaults(to: 0.0)
                 }
                 
                 // Create the friends table with 'lastInteraction' column
@@ -244,10 +248,17 @@ class RepositoryManager: ObservableObject {
                 }
             }
 
-            // Add a new migration for the 'imageOffset' field if the table already exists
+            // v2: Migration to add the 'imageOffset' field if the table already exists
             migrator.registerMigration("v2_add_imageOffset") { db in
                 try db.alter(table: "users") { t in
                     t.add(column: "imageOffset", .double).notNull().defaults(to: 0.0) // Add the imageOffset column
+                }
+            }
+
+            // v3: Migration to add the 'password' field if missing from earlier versions
+            migrator.registerMigration("v3_add_password") { db in
+                try db.alter(table: "users") { t in
+                    t.add(column: "password", .text).notNull().defaults(to: "") // Add the password column with a default empty string
                 }
             }
 
@@ -564,6 +575,7 @@ extension RepositoryManager {
             id: newUserRecord.id,
             email: newUserRecord.email,
             username: newUserRecord.username,
+            password: newUserRecord.password, // Include password here
             pin: newUserRecord.pin,
             deviceToken: newUserRecord.deviceToken,
             socialLoginId: newUserRecord.socialLoginId,
@@ -573,6 +585,7 @@ extension RepositoryManager {
         createUserInFirebase(userDto: newUserDto)
     }
 }
+
 
 // MARK: Local Database: User CRUD
 extension RepositoryManager {
@@ -947,6 +960,7 @@ extension RepositoryManager {
             id: userDto.id ?? UUID().uuidString,
             email: userDto.email,
             username: userDto.username,
+            password: userDto.password,
             pin: userDto.pin,
             hasIncomingCallRequest: userDto.hasIncomingCallRequest,
             profileImageData: imageData,  // imageData will be nil if profileImagePath was nil
