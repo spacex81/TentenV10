@@ -51,7 +51,6 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
 }
 
 extension AuthViewModel {
-    
     // MARK: Decide to run `signIn()` or `signUp()`
     func authenticate(for loginType: SocialLoginType) {
         Task {
