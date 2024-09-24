@@ -15,16 +15,8 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     private let authManager = AuthManager.shared
     private let repoManager = RepositoryManager.shared
     
-    @Published var email: String = "" {
-        didSet {
-            NSLog("LOG: email: \(email)")
-        }
-    }
-    @Published var password: String = "" {
-        didSet {
-            NSLog("LOG: password: \(password)")
-        }
-    }
+    @Published var email: String = ""
+    @Published var password: String = ""
     @Published var errorMsg: String = ""
     @Published var selectedImage: UIImage?
     
@@ -336,6 +328,7 @@ extension AuthViewModel {
                 DispatchQueue.main.async {
                     self.socialLoginId = generateHash(from: self.email)
                     self.socialLoginType = "email"
+                    self.errorMsg = "" 
                     
                     self.showEmailView = false
                     self.authenticate(for: .email)
