@@ -26,7 +26,6 @@ struct EmailView: View {
             
             Button(action: {
                 viewModel.emailSignIn()
-                showEmailView = false
             }) {
                 Text("Sign In")
                     .foregroundColor(.black)

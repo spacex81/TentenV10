@@ -737,6 +737,36 @@ extension RepositoryManager {
         }
     }
     
+    func fetchUserFromFirebase(fields: [String: String]) async throws -> UserDto? {
+        try await withCheckedThrowingContinuation { continuation in
+            var query: Query = usersCollection
+
+            // Apply whereField for each key-value pair in the fields dictionary
+            for (field, value) in fields {
+                query = query.whereField(field, isEqualTo: value)
+            }
+
+            query.getDocuments { snapshot, error in
+                if let error = error {
+                    NSLog("LOG: Failed to fetch user from Firestore with fields \(fields): \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                } else if let snapshot = snapshot, let document = snapshot.documents.first {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        continuation.resume(returning: userDto)
+                    } catch {
+                        NSLog("LOG: Failed to convert Firestore document to UserDto: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    }
+                } else {
+                    // No matching document found
+                    NSLog("LOG: No matching user found for fields: \(fields)")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+    
     func getFriendByPinFromFirebase(friendPin: String) async throws -> String {
         try await withCheckedThrowingContinuation { continuation in
             usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in

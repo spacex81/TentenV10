@@ -319,42 +319,50 @@ extension AuthViewModel {
 // MARK: Email sign in
 extension AuthViewModel {
     func emailSignIn() {
+        // Error Case 1
         guard !email.isEmpty else {
             errorMsg = "이메일을 입력해주세요."
+            stopLoading(for: .email)
             return
         }
 
+        // Error Case 2
         guard !password.isEmpty else {
             errorMsg = "비밀번호를 입력해주세요."
+            stopLoading(for: .email)
             return
         }
-        
+
+        // Error Case 3
         guard isValidEmail(email) else {
             errorMsg = "이메일 형식이 올바르지 않습니다."
+            stopLoading(for: .email)
             return
         }
-        
-        // TODO: Check if email is already registered
-        // 이미 등록된 이메일 이거나 비밀번호가 올바르지 않습니다.
-        // use 'email' and 'password' to check if the email is already registered
-//        Task {
-//            do {
-//                let userDto =  try await repoManager.fetchUserFromFirebase(field: "socialLoginId", value: socialLoginId)
-//            } catch {
-//                
-//            }
-//        }
 
-        DispatchQueue.main.async {
-            self.socialLoginId = generateHash(from: self.email)
-            self.socialLoginType = "email"
-            self.email = self.email
-            self.password = self.password
-            
-            self.authenticate(for: .email)
+        Task {
+            do {
+                let userDto =  try await repoManager.fetchUserFromFirebase(field: "email", value: email)
+                // Error Case 4
+                if userDto?.password != password {
+                    NSLog("LOG: Email is already in use or password is not correct")
+                    errorMsg = "이메일이 이미 사용 중 이거나, 비밀번호가 올바르지 않습니다."
+                    stopLoading(for: .email)
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.socialLoginId = generateHash(from: self.email)
+                    self.socialLoginType = "email"
+                    
+                    self.authenticate(for: .email)
+                }
+            } catch {
+                NSLog("LOG: emailSignIn-fetchUserFromFirebase-email")
+            }
         }
     }
-    
+
     func emailSignOut() {
         DispatchQueue.main.async {
             self.email = ""
