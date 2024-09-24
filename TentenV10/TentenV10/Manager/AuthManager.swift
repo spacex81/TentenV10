@@ -9,7 +9,6 @@ class AuthManager: ObservableObject {
     
     @Published var isUserLoggedIn = true
     @Published var isOnboardingComplete = true 
-//    @Published var onboardingStep: OnboardingStep = .username
     @Published var onboardingStep: OnboardingStep = .notificationPermission
 
     @Published var currentUser: User?

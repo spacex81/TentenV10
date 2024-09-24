@@ -248,20 +248,6 @@ extension RepositoryManager {
                 }
             }
 
-            // v2: Migration to add the 'imageOffset' field if the table already exists
-            migrator.registerMigration("v2_add_imageOffset") { db in
-                try db.alter(table: "users") { t in
-                    t.add(column: "imageOffset", .double).notNull().defaults(to: 0.0) // Add the imageOffset column
-                }
-            }
-
-            // v3: Migration to add the 'password' field if missing from earlier versions
-            migrator.registerMigration("v3_add_password") { db in
-                try db.alter(table: "users") { t in
-                    t.add(column: "password", .text).notNull().defaults(to: "") // Add the password column with a default empty string
-                }
-            }
-
             // Migrate the database to the latest version
             try migrator.migrate(dbQueue)
         } catch {
