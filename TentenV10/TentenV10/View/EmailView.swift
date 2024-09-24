@@ -12,10 +12,17 @@ struct EmailView: View {
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(5.0)
 
-//            SecureField("Password", text: $viewModel.password)
-//                .padding()
-//                .background(Color(.secondarySystemBackground))
-//                .cornerRadius(5.0)
+            SecureField("Password", text: $viewModel.password)
+                .padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(5.0)
+            
+            if !viewModel.errorMsg.isEmpty {
+                Text(viewModel.errorMsg)
+                    .foregroundColor(.red)
+                    .font(.caption)
+                    .padding(.top, 5)
+            }
             
             Button(action: {
                 viewModel.emailSignIn()

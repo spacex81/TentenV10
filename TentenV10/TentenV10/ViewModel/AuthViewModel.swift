@@ -17,6 +17,7 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     
     @Published var email: String = ""
     @Published var password: String = ""
+    @Published var errorMsg: String = ""
     @Published var selectedImage: UIImage?
     
     @Published var deviceToken: String?
@@ -313,40 +314,14 @@ extension AuthViewModel {
     }
 }
 
-//func googleSignIn() async {
-//    print("LOG: handleGoogleSignIn")
-//    do {
-//        guard let user: GIDGoogleUser = try await GoogleSignInManager.shared.signInWithGoogle() else { return }
-//        
-//        print("LOG: Succeeded to sign in with Google login")
-//        
-//        DispatchQueue.main.async {
-//            self.socialLoginId = user.userID ?? ""
-//            self.socialLoginType = "google"
-//            
-//            self.authenticate(for: .google)
-//        }
-//        
-//
-//        // Accessing the email address
-//        if let email = user.profile?.email {
-//            print("User's email address: \(email)")
-//            DispatchQueue.main.async {
-//                self.email = email
-//            }
-//        } else {
-//            print("Email address not available")
-//        }
-//        
-//    }
-//    catch {
-//        print("GoogleSignInError: failed to sign in with Google, \(error))")
-//    }
-//}
-
 // MARK: Email sign in
 extension AuthViewModel {
     func emailSignIn() {
+        guard isValidEmail(email) else {
+            errorMsg = "이메일 형식이 올바르지 않습니다."
+            return
+        }
+
         DispatchQueue.main.async {
             self.socialLoginId = generateHash(from: self.email)
             self.socialLoginType = "email"
