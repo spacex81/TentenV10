@@ -2,6 +2,7 @@ import SwiftUI
 import AVFoundation
 
 struct MicPermissionView: View {
+    var onNext: () -> Void
     
     var body: some View {
         VStack {
@@ -27,17 +28,32 @@ struct MicPermissionView: View {
     
     // Function to request microphone permission
     private func requestMicrophonePermission() {
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            if granted {
-                print("Microphone permission granted.")
-            } else {
-                print("Microphone permission denied.")
+        if #available(iOS 17.0, *) {
+            AVAudioApplication.requestRecordPermission { granted in
+                if granted {
+                    print("Microphone permission granted.")
+                    onNext()
+                } else {
+                    print("Microphone permission denied.")
+                }
+            }
+        } else {
+            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                if granted {
+                    print("Microphone permission granted.")
+                    onNext()
+                } else {
+                    print("Microphone permission denied.")
+                }
             }
         }
+        
     }
 }
 
 #Preview {
-    MicPermissionView()
+    MicPermissionView(onNext: {
+        print("Next button pressed")
+    })
         .preferredColorScheme(.dark)
 }

@@ -1,5 +1,14 @@
 import SwiftUI
 
+enum OnboardingStep {
+    case notificationPermission
+    case micPermission
+    case username
+    case profileImage
+    case addFriend
+    case home
+}
+
 struct OnboardingFlowView: View {
     @ObservedObject var viewModel = ContentViewModel.shared
     
@@ -27,6 +36,28 @@ struct OnboardingFlowView: View {
     var body: some View {
         VStack {
             switch viewModel.onboardingStep {
+            case .notificationPermission:
+                NotificationPermissionView() {
+                    DispatchQueue.main.async {
+                        self.viewModel.onboardingStep = .micPermission
+                    }
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),   // Appears from the right
+                    removal: .move(edge: .leading)      // Disappears to the left
+                ))
+                
+            case .micPermission:
+                MicPermissionView() {
+                    DispatchQueue.main.async {
+                        self.viewModel.onboardingStep = .username
+                    }
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),   // Appears from the right
+                    removal: .move(edge: .leading)      // Disappears to the left
+                ))
+
             case .username:
                 UsernameView() {
                     viewModel.onboardingStep = .profileImage // Move to ProfileImageView

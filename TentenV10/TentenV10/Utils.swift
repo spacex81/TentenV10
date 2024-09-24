@@ -9,12 +9,6 @@ import Foundation
 import UIKit
 import CryptoKit
 
-enum OnboardingStep {
-    case username
-    case profileImage
-    case addFriend
-    case home
-}
 
 let maxImageSize = CGSize(width: 1024, height: 1024)
 

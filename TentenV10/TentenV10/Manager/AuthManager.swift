@@ -1,17 +1,16 @@
 import Foundation
 import FirebaseAuth
+import UserNotifications
+import AVFoundation
+
 
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var isUserLoggedIn = true
     @Published var isOnboardingComplete = true 
-//    {
-//        didSet {
-//            NSLog("LOG: isOnboardingComplete: \(isOnboardingComplete ? "true" : "false")")
-//        }
-//    }
-    @Published var onboardingStep: OnboardingStep = .username
+//    @Published var onboardingStep: OnboardingStep = .username
+    @Published var onboardingStep: OnboardingStep = .notificationPermission
 
     @Published var currentUser: User?
     
@@ -22,6 +21,7 @@ class AuthManager: ObservableObject {
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
     init() {
+        setInitialOnboardingStep()
         startListeningToAuthChanges()
     }
     
@@ -49,9 +49,45 @@ class AuthManager: ObservableObject {
             auth.removeStateDidChangeListener(handle)
         }
     }
+    
+    // MARK: Set initial onboarding step based on permissions
+    private func setInitialOnboardingStep() {
+        Task {
+            let notificationGranted = await isNotificationPermissionGranted()
+            let micGranted = await isMicPermissionGranted()
+            
+            DispatchQueue.main.async {
+                if notificationGranted {
+                    if micGranted {
+                        self.onboardingStep = .username
+                    } else {
+                        self.onboardingStep = .micPermission
+                    }
+                } else {
+                    self.onboardingStep = .notificationPermission
+                }
+            }
+        }
+    }
 }
 
-import Foundation
+// MARK: Check permission
+extension AuthManager {
+    // Function to check if notification permission is granted
+    func isNotificationPermissionGranted() async -> Bool {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        return settings.authorizationStatus == .authorized
+    }
+
+    // Function to check if microphone permission is granted
+    func isMicPermissionGranted() async -> Bool {
+        if #available(iOS 17.0, *) {
+            return AVAudioApplication.shared.recordPermission == .granted
+        } else {
+            return AVAudioSession.sharedInstance().recordPermission == .granted
+        }
+    }
+}
 
 extension AuthManager {
     func fetchFirebaseToken(socialLoginId: String, socialLoginType: String) async throws -> String {

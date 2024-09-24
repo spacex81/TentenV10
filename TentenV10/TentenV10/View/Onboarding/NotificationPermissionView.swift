@@ -2,6 +2,7 @@ import SwiftUI
 import UserNotifications
 
 struct NotificationPermissionView: View {
+    var onNext: () -> Void
     
     var body: some View {
         VStack {
@@ -33,14 +34,18 @@ struct NotificationPermissionView: View {
                 print("Error requesting notification permission: \(error.localizedDescription)")
             } else if granted {
                 print("Notification permission granted.")
+                onNext()
             } else {
                 print("Notification permission denied.")
             }
         }
+        
     }
 }
 
 #Preview {
-    NotificationPermissionView()
-        .preferredColorScheme(.dark)
+    return UsernameView(onNext: {
+        print("Next button pressed")
+    })
+    .preferredColorScheme(.dark)
 }
