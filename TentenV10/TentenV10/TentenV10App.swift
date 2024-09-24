@@ -37,12 +37,13 @@ struct TentenV10App: App {
     
     var body: some Scene {
         WindowGroup {
-            SplashView() // Start with SplashView as the initial screen
-                .onOpenURL { url in
-                    if AuthApi.isKakaoTalkLoginUrl(url) {
-                        _ = AuthController.handleOpenUrl(url: url)
-                    }
-                }
+//            SplashView() // Start with SplashView as the initial screen
+//                .onOpenURL { url in
+//                    if AuthApi.isKakaoTalkLoginUrl(url) {
+//                        _ = AuthController.handleOpenUrl(url: url)
+//                    }
+//                }
+            MicPermissionView()
         }
     }
 }
