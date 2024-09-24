@@ -369,7 +369,7 @@ extension AuthViewModel {
 }
 
 extension AuthViewModel {
-    private func stopLoading(for loginType: SocialLoginType) {
+    func stopLoading(for loginType: SocialLoginType) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.isLoading[loginType] = false
         }

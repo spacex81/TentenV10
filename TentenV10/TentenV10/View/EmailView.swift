@@ -41,6 +41,7 @@ struct EmailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    viewModel.stopLoading(for: .email)
                     showEmailView = false
                 }) {
                     Image(systemName: "arrow.left")
