@@ -12,6 +12,9 @@ class HomeViewModel: ObservableObject {
     private let audioSessionManager = AudioSessionManager.shared
     private let backgroundTaskManager = BackgroundTaskManager.shared
     
+    // MARK: Used to manage LiveKit connect/disconnect whis isPressing value changes
+    private var connectTask: Task<Void, Never>?
+    
     @Published var currentUser: User?
     @Published var userRecord: UserRecord? {
         didSet {
@@ -143,22 +146,6 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func handlePressingStateChange() {
-        Task {
-            if isPressing {
-                if !isConnected {
-                    await connect()
-                }
-                publishAudio()
-            } else {
-                if !isLocked {
-                    await unpublishAudio()
-                    disconnect()
-                }
-            }
-        }
-    }
-    
     private func updateSelectedFriendIsBusy() {
 //        NSLog("LOG: updateSelectedFriendIsBusy")
         // Check if there's a selected friend
@@ -174,6 +161,41 @@ class HomeViewModel: ObservableObject {
         } else {
             // If the selected friend is not in the detailedFriends array, set isBusy to false
             selectedFriendIsBusy = false
+        }
+    }
+}
+
+// MARK: Handle isPressing state change
+extension HomeViewModel {
+    private func handlePressingStateChange() {
+        if isPressing {
+            startConnection()
+        } else {
+            if !isLocked {
+                stopConnection()
+            }
+        }
+    }
+    
+    private func startConnection() {
+        // Cancel any existing connection attempt before starting a new one
+        connectTask?.cancel()
+        connectTask = Task {
+            if !isConnected {
+                await connect()
+            }
+            await liveKitManager.publishAudio()
+        }
+    }
+    
+    private func stopConnection() {
+        // Cancel any ongoing connection task
+        connectTask?.cancel()
+        connectTask = nil
+        
+        Task {
+            await liveKitManager.unpublishAudio()
+            disconnect()
         }
     }
 }

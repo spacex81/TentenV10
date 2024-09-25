@@ -31,30 +31,57 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 extension LiveKitManager {
     func connect(roomName: String) async {
         NSLog("LOG: LiveKitManager-connect")
-        if roomName == "testRoom" {
-            NSLog("LOG: Connecting to LiveKit with default room name")
-        } else {
-            NSLog("LOG: Connecting to LiveKit with room name: \(roomName)")
-        }
-        guard let room  = self.room else {
+        
+        guard let room = self.room else {
             print("Room is not set")
             return
         }
         
+        NSLog("LOG: Fetching LiveKit token")
+        
+        // Check if the task has been canceled before fetching the token
+        do {
+            try Task.checkCancellation()
+        } catch {
+            NSLog("LOG: Fetching token canceled due to task cancellation.")
+            return
+        }
+        
         let token = await fetchLivekitToken(roomName: roomName)
+        
+        // Check if the task has been canceled after attempting to fetch the token
+        do {
+            try Task.checkCancellation()
+        } catch {
+            NSLog("LOG: Token fetch process canceled due to task cancellation.")
+            return
+        }
+        
         guard let livekitToken = token else {
-            print("Failed to fetch livekit access token")
+            if Task.isCancelled {
+                NSLog("LOG: Token fetching failed due to task cancellation.")
+            } else {
+                print("Failed to fetch LiveKit access token.")
+            }
             return
         }
         
         do {
+            // Check again before attempting to connect
+            try Task.checkCancellation()
+            
+            NSLog("LOG: Connecting to LiveKit room")
             try await room.connect(url: livekitUrl, token: livekitToken)
             DispatchQueue.main.async {
                 self.isConnected = true
             }
             NSLog("LOG: LiveKit Connected")
         } catch {
-            print("Failed to connect to LiveKit Room")
+            if Task.isCancelled {
+                NSLog("LOG: Connection canceled due to task cancellation.")
+            } else {
+                print("Failed to connect to LiveKit Room: \(error)")
+            }
         }
     }
     
@@ -64,7 +91,7 @@ extension LiveKitManager {
             print("Room is not set")
             return
         }
-
+        
         if isPublished {
             await unpublishAudio()
         }
@@ -80,15 +107,33 @@ extension LiveKitManager {
     
     func publishAudio() async {
         NSLog("LOG: LiveKitManager-publishAudio")
+        
+        // Check if the task has been canceled before starting
+        do {
+            try Task.checkCancellation()
+        } catch {
+            NSLog("LOG: Publishing audio canceled due to task cancellation.")
+            return
+        }
+        
         guard let room = self.room else {
             NSLog("Room is not set")
             return
         }
-
+        
         do {
+            // Check if the task has been canceled before enabling the microphone
+            try Task.checkCancellation()
+            
+            NSLog("LOG: Enabling microphone for LiveKit Room")
             try await room.localParticipant.setMicrophone(enabled: true)
+            NSLog("LOG: Microphone enabled for LiveKit Room")
         } catch {
-            NSLog("Failed to enable microphone for LiveKit Room: \(error)")
+            if Task.isCancelled {
+                NSLog("LOG: Microphone enabling canceled due to task cancellation.")
+            } else {
+                NSLog("Failed to enable microphone for LiveKit Room: \(error)")
+            }
         }
     }
     
@@ -98,7 +143,7 @@ extension LiveKitManager {
             NSLog("Room is not set")
             return
         }
-
+        
         do {
             // Disable the microphone
             try await room.localParticipant.setMicrophone(enabled: false)
@@ -110,27 +155,42 @@ extension LiveKitManager {
             NSLog("Failed to disable microphone and unpublish audio track: \(error)")
         }
     }
-
+    
     func fetchLivekitToken(roomName: String) async -> String? {
         guard let url = URL(string: handleLiveKitTokenUrl) else {
+            NSLog("Failed to create URL")
             return nil
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         let jsonBody: [String: Any] = ["roomName": roomName]
         
         do {
+            // Check for task cancellation before setting up the request body
+            try Task.checkCancellation()
+            
             let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
             request.httpBody = jsonData
             
+            // Check for task cancellation before sending the request
+            try Task.checkCancellation()
+            
             let (data, _) = try await URLSession.shared.data(for: request)
+            
+            // Check for task cancellation before processing the response
+            try Task.checkCancellation()
+            
             let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             return json?["livekitToken"] as? String
         } catch {
-            NSLog("Failed to fetch token: \(error)")
+            if Task.isCancelled {
+                NSLog("LOG: Token fetch canceled due to task cancellation.")
+            } else {
+                NSLog("Failed to fetch token: \(error)")
+            }
             return nil
         }
     }
