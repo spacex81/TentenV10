@@ -1146,13 +1146,58 @@ extension RepositoryManager {
     //  add two function that increment/decrement isActive value by 1
 }
 
+//extension RepositoryManager {
+//    func sendLocalNotification(title: String, body: String) {
+//        let content = UNMutableNotificationContent()
+//        // TODO: Need to set the local notification image with selected friend's profile image
+//        content.title = title
+//        content.body = body
+//        content.sound = .default
+//        
+//        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+//        
+//        UNUserNotificationCenter.current().add(request) { error in
+//            if let error = error {
+//                print("Failed to add notification request: \(error)")
+//            }
+//        }
+//    }
+//}
 extension RepositoryManager {
     func sendLocalNotification(title: String, body: String) {
+        guard let profileImageData = selectedFriend?.profileImageData else {
+            print("No profile image data available for selected friend.")
+            createAndSendNotification(title: title, body: body)
+            return
+        }
+
+        // Save the image data to a temporary file and create the notification
+        if let imageURL = saveImageDataToTemporaryFile(profileImageData) {
+            createAndSendNotification(title: title, body: body, imageURL: imageURL)
+        } else {
+            print("Failed to save profile image to temporary file.")
+            createAndSendNotification(title: title, body: body)
+        }
+    }
+
+    private func createAndSendNotification(title: String, body: String, imageURL: URL? = nil) {
         let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
+//        content.title = title
+        content.title = selectedFriend?.username ?? ""
+//        content.body = body
+        content.body = "📢 말하고 있어요"
         content.sound = .default
         
+        // Add the image attachment if available
+        if let imageURL = imageURL {
+            do {
+                let attachment = try UNNotificationAttachment(identifier: "image", url: imageURL, options: nil)
+                content.attachments = [attachment]
+            } catch {
+                print("Failed to attach image to notification: \(error)")
+            }
+        }
+
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         
         UNUserNotificationCenter.current().add(request) { error in
@@ -1161,7 +1206,22 @@ extension RepositoryManager {
             }
         }
     }
+
+    // Save the image data to a temporary file
+    private func saveImageDataToTemporaryFile(_ data: Data) -> URL? {
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let fileURL = tempDirectory.appendingPathComponent("profileImage.png")
+        
+        do {
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            print("Failed to write image data to file: \(error)")
+            return nil
+        }
+    }
 }
+
 
 enum UserState {
     case isSpeaking
