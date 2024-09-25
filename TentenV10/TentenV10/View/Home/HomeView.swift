@@ -6,6 +6,8 @@ struct HomeView: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     let repoManager = RepositoryManager.shared
     
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     // Size of the collection view item
     var itemSize: CGFloat {
         let screenWidth = UIScreen.main.bounds.width
@@ -42,12 +44,23 @@ struct HomeView: View {
                             .frame(width: 200, height: 30)
                             .transition(.opacity)
                     } else {
-                        Text(selectedFriend.username)
-                            .font(.system(size: 24, weight: .bold, design: .default))
-                            .font(.title)
-                            .padding(.top, 10)
-                            .transition(.opacity)
-                    }
+                        HStack {
+                            Button {
+                                impactFeedback.impactOccurred()
+                            } label: {
+                                Text("👋")
+                                   .font(.system(size: 40, weight: .bold, design: .default))
+                                   .baselineOffset(-10) // Adjust this value to move the emoji down
+                            }
+
+                            // Add distance in the middle
+                            Text(selectedFriend.username)
+                                .font(.system(size: 40, weight: .bold, design: .default))
+                                .padding(.leading, 10) // Adjust the spacing between the emoji and the text
+                                .padding(.top, 10)
+                                .transition(.opacity)
+                        }
+                   }
                 }
                 
             }
