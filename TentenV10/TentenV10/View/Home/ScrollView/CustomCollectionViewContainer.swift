@@ -49,41 +49,16 @@ class CustomCollectionViewContainer: UIView {
         ])
     }
 
-//    func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
-//        DispatchQueue.main.async {
-//            // ERROR
-//            self.collectionViewController.detailedFriends = detailedFriends
-//            self.collectionViewController.reloadData()
-//        }
-//    }
-//    func updateDetailedFriends(_ newDetailedFriends: [FriendRecord]) {
-//        DispatchQueue.main.async {
-//            NSLog("LOG: Old detailedFriends: \(self.collectionViewController.detailedFriends)")
-//            NSLog("LOG: New detailedFriends: \(newDetailedFriends)")
-//            
-//            // Check if there's any actual change before updating
-//            guard newDetailedFriends != self.collectionViewController.detailedFriends else {
-//                // If arrays are the same, no need to update
-//                NSLog("LOG: No need to update collection view controller")
-//                return
-//            }
-//
-//            // Update only if there are changes
-//            NSLog("LOG: Updating collection view controller")
-//            self.collectionViewController.detailedFriends = newDetailedFriends
-//            self.collectionViewController.reloadData()
-//        }
-//    }
     func updateDetailedFriends(_ detailedFriends: [FriendRecord]) {
         DispatchQueue.main.async {
-            // Log the input detailedFriends value
-            NSLog("LOG: Input detailedFriends: \(detailedFriends)")
-            
-            // Log the oldDetailedFriends value
-            NSLog("LOG: Old detailedFriends: \(self.oldDetailedFriends)")
-            
-            // Log the current collectionViewController's detailedFriends
-            NSLog("LOG: Current collectionViewController.detailedFriends: \(self.collectionViewController.detailedFriends)")
+//            // Log the input detailedFriends value
+//            NSLog("LOG: Input detailedFriends: \(detailedFriends)")
+//            
+//            // Log the oldDetailedFriends value
+//            NSLog("LOG: Old detailedFriends: \(self.oldDetailedFriends)")
+//            
+//            // Log the current collectionViewController's detailedFriends
+//            NSLog("LOG: Current collectionViewController.detailedFriends: \(self.collectionViewController.detailedFriends)")
                         
             if detailedFriends != self.oldDetailedFriends {
                 self.collectionViewController.detailedFriends = detailedFriends

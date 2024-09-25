@@ -12,10 +12,10 @@ class ContentViewModel: ObservableObject {
     private var previousOnboarding: OnboardingStep = .username
     @Published var onboardingStep: OnboardingStep = .username {
         didSet {
-            if previousOnboarding != onboardingStep {
-                print("LOG: onboardingStep")
-                print(onboardingStep)
-            }
+//            if previousOnboarding != onboardingStep {
+//                print("LOG: onboardingStep")
+//                print(onboardingStep)
+//            }
             previousOnboarding = onboardingStep
         }
     }

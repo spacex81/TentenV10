@@ -134,7 +134,7 @@ class RepositoryManager: ObservableObject {
 //            print(detailedFriends)
             // Select friend when app launch
             if detailedFriends.count > 0 && selectedFriend == nil {
-                NSLog("LOG: Initial friend is selected")
+//                NSLog("LOG: Initial friend is selected")
                 self.selectedFriend = detailedFriends[0]
             }
         }
@@ -303,7 +303,6 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-        NSLog("LOG: User listener is set")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -361,7 +360,6 @@ extension RepositoryManager {
     }
     
     func listenToRoom(roomId: String) {
-        NSLog("LOG: listenToRoom")
         let roomListener = roomsCollection.document(roomId).addSnapshotListener { [weak self] document, error in
             guard let self = self else { return }
             guard let userRecord = self.userRecord else {
@@ -390,10 +388,10 @@ extension RepositoryManager {
                                 // Update timestamp value in detailedFriends
                                 self.detailedFriends[index].lastInteraction = newLastInteraction
                                 
-                                NSLog("LOG: Sort new detailedFriends")
+//                                NSLog("LOG: Sort new detailedFriends")
                                 // Sort new detailedFriends
                                 self.sortDetailedFriends()
-                                NSLog("LOG: reloadData when detailedFriends is sorted")
+//                                NSLog("LOG: reloadData when detailedFriends is sorted")
                                 await self.collectionViewController?.reloadData()
                                 
                                 // Reposition center cell to first friend
@@ -875,7 +873,7 @@ extension RepositoryManager {
         var newUserRecord: UserRecord?
         var needToUpdateLocalUserRecord = false
         
-        NSLog("LOG: Fetching user from local database")
+//        NSLog("LOG: Fetching user from local database")
         newUserRecord = fetchUserFromLocal(id: id)
         if newUserRecord == nil {
             needToUpdateLocalUserRecord = true
@@ -893,7 +891,7 @@ extension RepositoryManager {
                 needToUpdateLocalUserRecord = false
             }
             
-            NSLog("LOG: Fetching detailedFriends from local database")
+//            NSLog("LOG: Fetching detailedFriends from local database")
             let newDetailedFriends = fetchFriendsByUserIdFromDatabase(userId: newUserRecord.id)
             if newDetailedFriends.isEmpty {
                 NSLog("LOG: detailedFriends in local database is empty")
@@ -906,7 +904,7 @@ extension RepositoryManager {
             DispatchQueue.main.async {
                 self.detailedFriends = newDetailedFriends
             }
-            NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
+//            NSLog("LOG: newDetailedFriends: \(newDetailedFriends)")
         } else {
             NSLog("LOG: Remote firestore doesn't have user record either")
             throw NSError(domain: "signIn", code: -1, userInfo: [NSLocalizedDescriptionKey: "Either local or remote doesn't have user record whent fetching user"])

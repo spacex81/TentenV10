@@ -19,7 +19,6 @@ class HomeViewModel: ObservableObject {
                 return
             }
             
-            print(userRecord)
             
             if userRecord.username == "default" || userRecord.profileImageData == nil || userRecord.friends.isEmpty {
                 authManager.isOnboardingComplete = false
@@ -221,7 +220,6 @@ extension HomeViewModel {
 
 extension HomeViewModel {
     func fetchUser(id: String) {
-        NSLog("LOG: HomeViewModel-fetchUser")
         Task {
             do {
                 try await repoManager.fetchUser(id: id)
