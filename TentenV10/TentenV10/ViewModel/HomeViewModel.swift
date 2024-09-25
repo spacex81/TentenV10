@@ -52,7 +52,6 @@ class HomeViewModel: ObservableObject {
     }
     //
     
-    @Published var selectedFriend: FriendRecord?
     @Published var selectedFriendIsBusy: Bool = false
     @Published var currentState: UserState = .idle
     
@@ -62,12 +61,23 @@ class HomeViewModel: ObservableObject {
         }
     }
     
+    @Published var selectedFriend: FriendRecord? {
+        didSet {
+            NSLog("LOG: HomeViewModel-selectedFriend: ")
+            if let selectedFriend = selectedFriend {
+                print(selectedFriend)
+            }
+        }
+    }
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
+            NSLog("LOG: HomeViewModel-detailedFriends: ")
+            print(detailedFriends)
             updateSelectedFriendIsBusy()
         }
     }
     
+
     @Published var needUserFetch: Bool = true
     
     

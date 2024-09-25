@@ -30,7 +30,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 
 extension LiveKitManager {
     func connect(roomName: String) async {
-        NSLog("LOG: LiveKitManager-connect")
+//        NSLog("LOG: LiveKitManager-connect")
         
         guard let room = self.room else {
             print("Room is not set")
@@ -86,7 +86,7 @@ extension LiveKitManager {
     }
     
     func disconnect() async {
-        NSLog("LOG: LiveKitManager-disconnect")
+//        NSLog("LOG: LiveKitManager-disconnect")
         guard let room  = self.room else {
             print("Room is not set")
             return
@@ -106,7 +106,7 @@ extension LiveKitManager {
     }
     
     func publishAudio() async {
-        NSLog("LOG: LiveKitManager-publishAudio")
+//        NSLog("LOG: LiveKitManager-publishAudio")
         
         // Check if the task has been canceled before starting
         do {
@@ -125,7 +125,7 @@ extension LiveKitManager {
             // Check if the task has been canceled before enabling the microphone
             try Task.checkCancellation()
             
-            NSLog("LOG: Enabling microphone for LiveKit Room")
+//            NSLog("LOG: Enabling microphone for LiveKit Room")
             try await room.localParticipant.setMicrophone(enabled: true)
             NSLog("LOG: Microphone enabled for LiveKit Room")
         } catch {
@@ -138,7 +138,7 @@ extension LiveKitManager {
     }
     
     func unpublishAudio() async {
-        NSLog("LOG: LiveKitManager-unpublishAudio")
+//        NSLog("LOG: LiveKitManager-unpublishAudio")
         guard let room = self.room else {
             NSLog("Room is not set")
             return

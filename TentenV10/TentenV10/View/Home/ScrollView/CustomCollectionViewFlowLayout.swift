@@ -115,10 +115,6 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
             springAnimator.startAnimation()
 
             // Update the selected profile image when snapping
-//            if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
-//               let friend = self.viewController?.detailedFriends[indexPath.item - 1] {
-//                self.repoManager.selectedFriend = friend
-//            }
             if let indexPath = self.collectionView?.indexPathForItem(at: closestAttr.center),
                let friends = self.viewController?.detailedFriends,
                indexPath.item > 0 && indexPath.item - 1 < friends.count {

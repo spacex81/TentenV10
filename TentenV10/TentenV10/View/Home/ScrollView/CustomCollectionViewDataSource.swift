@@ -60,7 +60,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
 //            NSLog("LOG: add button is set")
-        } else if friend == selectedFriend {
+//        } else if friend == selectedFriend {
+        } else if friend.id == selectedFriend?.id {
 //            NSLog("LOG: selected friend: \(friend.username)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
             let longPressCell = cell as! LongPressCell
@@ -79,14 +80,14 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
             
             longPressCell.onLongPressBegan = { [weak self] in
-//                NSLog("LOG: onLongPressBegan")
+                NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
             }
             longPressCell.onLongPressEnded = { [weak self] in
-//                NSLog("LOG: onLongPressEnded")
+                NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
             }
-//            NSLog("LOG: long press cell is set")
+            NSLog("LOG: long press cell is set")
 
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
@@ -106,9 +107,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 self?.collectionViewController?.centerCell(at: indexPath)
                 self?.repoManager.selectedFriend = friend
             }
-//            NSLog("LOG: tap cell is set")
+            NSLog("LOG: tap cell is set")
 
-            
             /**
              DO NOT ERASE:
              there are some occasion when centered cell is set as tap cell
@@ -116,6 +116,10 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
              turn it into long press cell
              */
             if friend.id == selectedFriend?.id {
+//                if let selectedFriend = selectedFriend {
+//                    print("LOG: selectedFriend.id: \(selectedFriend.id)")
+//                    print("LOG: friend.id: \(friend.id)")
+//                }
                 self.repoManager.selectedFriend = friend
             }
         }
