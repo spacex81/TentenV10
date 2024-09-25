@@ -75,14 +75,14 @@ extension AudioSessionManager {
 
                     let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
 
-                    NSLog("LOG: Succeed to change audio session mode from .voiceChat to .videoChat")
+//                    NSLog("LOG: Succeed to change audio session mode from .voiceChat to .videoChat")
 //                    NSLog("LOG: configuring audio session category: \(audioSession.category), mode: \(audioSession.mode), options: [\(optionsString)])")
 
                 } catch {
                     NSLog("LOG: Failed to change audio session from voiceChat to videoChat")
                 }
             } else {
-                NSLog("LOG: Unhandled cases in route change - category change")
+//                NSLog("LOG: Unhandled cases in route change - category change")
             }
 //        case .routeConfigurationChange:
 //            NSLog("LOG: Route Change - Configuration Change")

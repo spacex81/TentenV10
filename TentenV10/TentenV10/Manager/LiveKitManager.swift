@@ -30,6 +30,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 
 extension LiveKitManager {
     func connect(roomName: String) async {
+        NSLog("LOG: LiveKitManager-connect")
         if roomName == "testRoom" {
             NSLog("LOG: Connecting to LiveKit with default room name")
         } else {
@@ -58,7 +59,7 @@ extension LiveKitManager {
     }
     
     func disconnect() async {
-        NSLog("LOG: Disconnecting from LiveKit")
+        NSLog("LOG: LiveKitManager-disconnect")
         guard let room  = self.room else {
             print("Room is not set")
             return
@@ -78,7 +79,7 @@ extension LiveKitManager {
     }
     
     func publishAudio() async {
-        NSLog("LOG: Start enabling microphone for LiveKit audio track")
+        NSLog("LOG: LiveKitManager-publishAudio")
         guard let room = self.room else {
             NSLog("Room is not set")
             return
@@ -86,13 +87,13 @@ extension LiveKitManager {
 
         do {
             try await room.localParticipant.setMicrophone(enabled: true)
-            NSLog("LOG: Microphone enabled and LiveKit Audio track Published")
         } catch {
             NSLog("Failed to enable microphone for LiveKit Room: \(error)")
         }
     }
     
     func unpublishAudio() async {
+        NSLog("LOG: LiveKitManager-unpublishAudio")
         guard let room = self.room else {
             NSLog("Room is not set")
             return
