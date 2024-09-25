@@ -8,8 +8,13 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var isUserLoggedIn = true
-    @Published var isOnboardingComplete = true 
-    @Published var onboardingStep: OnboardingStep = .notificationPermission
+    @Published var isOnboardingComplete = true
+    @Published var previousOnboardingStep: OnboardingStep = .notificationPermission
+    @Published var onboardingStep: OnboardingStep = .notificationPermission {
+        didSet {
+            NSLog("LOG: AuthManager-onboardingStep: \(onboardingStep)")
+        }
+    }
 
     @Published var currentUser: User?
     

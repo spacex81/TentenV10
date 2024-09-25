@@ -9,17 +9,8 @@ class ContentViewModel: ObservableObject {
     
     @Published var isUserLoggedIn = true
     @Published var isOnboardingComplete = true
-    private var previousOnboarding: OnboardingStep = .username
-    @Published var onboardingStep: OnboardingStep = .username {
-        didSet {
-//            if previousOnboarding != onboardingStep {
-//                print("LOG: onboardingStep")
-//                print(onboardingStep)
-//            }
-            previousOnboarding = onboardingStep
-        }
-    }
-    
+    @Published var onboardingStep: OnboardingStep = .username
+
     @Published var username: String = ""
     @Published var profileImage: UIImage? = nil
     

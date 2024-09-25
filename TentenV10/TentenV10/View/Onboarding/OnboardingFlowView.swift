@@ -21,14 +21,23 @@ struct OnboardingFlowView: View {
             // This code should not interfere the 'onboardingStep' value in the middle of onboarding process
             if viewModel.onboardingStep == .username || viewModel.onboardingStep == .home {
                 if userRecord.username == "default" {
-                    authManager.onboardingStep = .username
+                    if authManager.previousOnboardingStep != .username {
+                        authManager.onboardingStep = .username
+                    }
                 } else if userRecord.profileImageData == nil {
-                    authManager.onboardingStep = .profileImage
+                    if authManager.previousOnboardingStep != .profileImage {
+                        authManager.onboardingStep = .profileImage
+                    }
                 } else if userRecord.friends.count == 0 {
-                    authManager.onboardingStep = .addFriend
+                    if authManager.previousOnboardingStep != .addFriend {
+                        authManager.onboardingStep = .addFriend
+                    }
                 } else {
-                    authManager.onboardingStep = .home
+                    if authManager.previousOnboardingStep != .home {
+                        authManager.onboardingStep = .home
+                    }
                 }
+                authManager.previousOnboardingStep = authManager.onboardingStep
             }
         }
     }
