@@ -1146,46 +1146,37 @@ extension RepositoryManager {
     //  add two function that increment/decrement isActive value by 1
 }
 
-//extension RepositoryManager {
-//    func sendLocalNotification(title: String, body: String) {
-//        let content = UNMutableNotificationContent()
-//        // TODO: Need to set the local notification image with selected friend's profile image
-//        content.title = title
-//        content.body = body
-//        content.sound = .default
-//        
-//        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-//        
-//        UNUserNotificationCenter.current().add(request) { error in
-//            if let error = error {
-//                print("Failed to add notification request: \(error)")
-//            }
-//        }
-//    }
-//}
 extension RepositoryManager {
-    func sendLocalNotification(title: String, body: String) {
+    func sendLocalNotification(type: String) {
         guard let profileImageData = selectedFriend?.profileImageData else {
             print("No profile image data available for selected friend.")
-            createAndSendNotification(title: title, body: body)
+            createAndSendNotification(type: type)
             return
         }
 
         // Save the image data to a temporary file and create the notification
         if let imageURL = saveImageDataToTemporaryFile(profileImageData) {
-            createAndSendNotification(title: title, body: body, imageURL: imageURL)
+            createAndSendNotification(type: type, imageURL: imageURL)
         } else {
             print("Failed to save profile image to temporary file.")
-            createAndSendNotification(title: title, body: body)
+            createAndSendNotification(type: type)
         }
     }
 
-    private func createAndSendNotification(title: String, body: String, imageURL: URL? = nil) {
+    private func createAndSendNotification(type: String, imageURL: URL? = nil) {
         let content = UNMutableNotificationContent()
-//        content.title = title
         content.title = selectedFriend?.username ?? ""
-//        content.body = body
-        content.body = "📢 말하고 있어요"
+
+        // Customize the body text based on the notification type
+        switch type {
+        case "startSpeaking":
+            content.body = "📢 말하고 있어요" // Friend is talking
+        case "endSpeaking":
+            content.body = "🔕 말하기가 끝났어요" // Friend stopped talking
+        default:
+            content.body = "알 수 없는 알림 유형" // Unknown notification type
+        }
+
         content.sound = .default
         
         // Add the image attachment if available
@@ -1221,7 +1212,6 @@ extension RepositoryManager {
         }
     }
 }
-
 
 enum UserState {
     case isSpeaking
