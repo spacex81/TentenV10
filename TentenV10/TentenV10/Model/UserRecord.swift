@@ -6,7 +6,7 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var id: String
     var email: String
     var username: String
-    var password: String // New password field
+    var password: String 
     var pin: String
     var hasIncomingCallRequest: Bool = false
     var profileImageData: Data?

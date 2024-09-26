@@ -34,6 +34,9 @@ struct NotificationPermissionView: View {
                 print("Error requesting notification permission: \(error.localizedDescription)")
             } else if granted {
                 print("Notification permission granted.")
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
                 onNext()
             } else {
                 print("Notification permission denied.")

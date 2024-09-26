@@ -20,7 +20,13 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     @Published var errorMsg: String = ""
     @Published var selectedImage: UIImage?
     
-    @Published var deviceToken: String?
+    @Published var deviceToken: String? {
+        didSet {
+            if let deviceToken = deviceToken {
+                NSLog("LOG: AuthViewModel-deviceToken: \(deviceToken)")
+            }
+        }
+    }
     
     @Published var socialLoginId: String = ""
     @Published var socialLoginType: String = ""

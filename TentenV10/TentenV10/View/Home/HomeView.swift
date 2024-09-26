@@ -47,6 +47,7 @@ struct HomeView: View {
                         HStack {
                             Button {
                                 impactFeedback.impactOccurred()
+                                // TODO: Send remote notification
                             } label: {
                                 Text("👋")
                                    .font(.system(size: 40, weight: .bold, design: .default))
@@ -172,6 +173,17 @@ struct HomeView: View {
         )
         .sheet(isPresented: $isSheetPresented) {
             ProfileView()
+        }
+        .onAppear {
+            Task {
+                // Checking microphone permission
+                let isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
+                print("Microphone Permission Granted: \(isMicPermissionGranted)")
+
+                // Checking notification permission
+                let isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
+                print("Notification Permission Granted: \(isNotificationPermissionGranted)")
+            }
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)
