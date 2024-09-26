@@ -65,7 +65,7 @@ struct HomeView: View {
                                         request.httpBody = jsonData
                                         
                                         Task {
-                                            let (data, _) = try await URLSession.shared.data(for: request)
+                                            let (_, _) = try await URLSession.shared.data(for: request)
                                         }
                                     } catch {
                                         NSLog("LOG: Error when serializing the json body when sending poke")

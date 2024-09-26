@@ -85,6 +85,10 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
+            NSLog("LOG: RepositoryManager-selectedFriend")
+            if let selectedFriend = selectedFriend {
+                print(selectedFriend)
+            }
             // update room name
             if let senderToken = userRecord?.deviceToken,
                let receiverToken = selectedFriend?.deviceToken {
@@ -445,6 +449,11 @@ extension RepositoryManager {
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {
                                 self.detailedFriends[index] = newFriendRecord
+                                
+                                // MARK: When one of the friend reinstall the app and changes the device token value, we need to update that
+                                if self.selectedFriend?.id == newFriendRecord.id {
+                                    self.selectedFriend = newFriendRecord
+                                }
                             } else {
                                 self.detailedFriends.append(newFriendRecord)
                             }
