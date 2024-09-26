@@ -47,7 +47,30 @@ struct HomeView: View {
                         HStack {
                             Button {
                                 impactFeedback.impactOccurred()
-                                // TODO: Send remote notification
+                                if let selectedFriend = repoManager.selectedFriend, let receiverToken = selectedFriend.deviceToken {
+                                    let handleRegularNotificationUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/handleRegularNotification"
+                                    guard let url = URL(string: handleRegularNotificationUrl) else {
+                                        NSLog("Failed to create URL")
+                                        return
+                                    }
+                                    
+                                    var request = URLRequest(url: url)
+                                    request.httpMethod = "POST"
+                                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                                    
+                                    let jsonBody: [String: Any] = ["receiverToken": receiverToken, "notificationType": "poke", "username": selectedFriend.username]
+                                    
+                                    do {
+                                        let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
+                                        request.httpBody = jsonData
+                                        
+                                        Task {
+                                            let (data, _) = try await URLSession.shared.data(for: request)
+                                        }
+                                    } catch {
+                                        NSLog("LOG: Error when serializing the json body when sending poke")
+                                    }
+                                }
                             } label: {
                                 Text("👋")
                                    .font(.system(size: 40, weight: .bold, design: .default))
