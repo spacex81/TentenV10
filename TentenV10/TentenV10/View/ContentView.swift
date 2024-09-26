@@ -45,8 +45,8 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel.shared
     @ObservedObject var authViewModel = AuthViewModel.shared
 
-    @State private var isNotificationPermissionGranted = false
-    @State private var isMicPermissionGranted = false
+    @State private var isNotificationPermissionGranted = true
+    @State private var isMicPermissionGranted = true
 
     var body: some View {
         NavigationStack {
