@@ -66,6 +66,7 @@
 		C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */; };
 		C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC562CA2959200AC1932 /* MicPermissionView.swift */; };
 		C889DC592CA2967100AC1932 /* StackedNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC582CA2967100AC1932 /* StackedNotificationsView.swift */; };
+		C8AF0B2A2CA53B82003F3D2E /* PermissionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
@@ -144,6 +145,7 @@
 		C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		C889DC562CA2959200AC1932 /* MicPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicPermissionView.swift; sourceTree = "<group>"; };
 		C889DC582CA2967100AC1932 /* StackedNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedNotificationsView.swift; sourceTree = "<group>"; };
+		C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionButton.swift; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */,
 				C81B48552C883B4500E1164B /* AddUsernameButton.swift */,
 				C81B48572C88553600E1164B /* AddProfilePictureButton.swift */,
+				C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				C8144ACD2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift in Sources */,
 				C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */,
 				C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */,
+				C8AF0B2A2CA53B82003F3D2E /* PermissionButton.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
 				C8144AC02C7B57520011385D /* PinButton.swift in Sources */,

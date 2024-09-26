@@ -6,23 +6,17 @@ struct NotificationPermissionView: View {
     
     var body: some View {
         VStack {
-            Text("알림을 허용해주세요")
-                .font(.title)
-                .padding()
-            
-            Text("친구가 말하고 있을 때 알려드릴게요!")
-                .font(.headline)
-                .padding()
-            
-            // Button to request notification permission
-            Button(action: requestNotificationPermission) {
-                Text("계속")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+            VStack {
+                Text("알림을 허용해주세요")
+                    .font(.title)
+                
+                Text("친구가 말하고 있을 때 알려드릴게요!")
+                    .font(.headline)
             }
-            .padding()
+            .padding(.vertical, 50)
+            
+            // Use PermissionButton with notification permission request action
+            PermissionButton(action: requestNotificationPermission)
         }
     }
     
@@ -42,12 +36,11 @@ struct NotificationPermissionView: View {
                 print("Notification permission denied.")
             }
         }
-        
     }
 }
 
 #Preview {
-    return UsernameView(onNext: {
+    NotificationPermissionView(onNext: {
         print("Next button pressed")
     })
     .preferredColorScheme(.dark)

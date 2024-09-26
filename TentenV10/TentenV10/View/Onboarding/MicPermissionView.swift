@@ -6,23 +6,17 @@ struct MicPermissionView: View {
     
     var body: some View {
         VStack {
-            Text("마이크 접근을 허용해주세요")
-                .font(.title)
-                .padding()
-            
-            Text("친구와 대화할 때 마이크를 사용해요!")
-                .font(.headline)
-                .padding()
-            
-            // Button to request microphone permission
-            Button(action: requestMicrophonePermission) {
-                Text("계속")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(10)
+            VStack {
+                Text("마이크 접근을 허용해주세요")
+                    .font(.title)
+                
+                Text("친구와 대화할 때 마이크를 사용해요!")
+                    .font(.headline)
             }
-            .padding()
+            .padding(.vertical, 50)
+            
+            // Use PermissionButton with microphone permission request action
+            PermissionButton(action: requestMicrophonePermission)
         }
     }
     
@@ -47,7 +41,6 @@ struct MicPermissionView: View {
                 }
             }
         }
-        
     }
 }
 
@@ -55,5 +48,5 @@ struct MicPermissionView: View {
     MicPermissionView(onNext: {
         print("Next button pressed")
     })
-        .preferredColorScheme(.dark)
+    .preferredColorScheme(.dark)
 }
