@@ -9,8 +9,8 @@ class AuthManager: ObservableObject {
     
     @Published var isUserLoggedIn = true
     @Published var isOnboardingComplete = true
-    @Published var previousOnboardingStep: OnboardingStep = .notificationPermission
-    @Published var onboardingStep: OnboardingStep = .notificationPermission {
+    @Published var previousOnboardingStep: OnboardingStep = .username
+    @Published var onboardingStep: OnboardingStep = .username {
         didSet {
             NSLog("LOG: AuthManager-onboardingStep: \(onboardingStep)")
         }
@@ -25,7 +25,6 @@ class AuthManager: ObservableObject {
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
     init() {
-        setInitialOnboardingStep()
         startListeningToAuthChanges()
     }
     
@@ -51,26 +50,6 @@ class AuthManager: ObservableObject {
     func stopListeningToAuthChanges() {
         if let handle = authStateListenerHandle {
             auth.removeStateDidChangeListener(handle)
-        }
-    }
-    
-    // MARK: Set initial onboarding step based on permissions
-    private func setInitialOnboardingStep() {
-        Task {
-            let notificationGranted = await isNotificationPermissionGranted()
-            let micGranted = await isMicPermissionGranted()
-            
-            DispatchQueue.main.async {
-                if notificationGranted {
-                    if micGranted {
-                        self.onboardingStep = .username
-                    } else {
-                        self.onboardingStep = .micPermission
-                    }
-                } else {
-                    self.onboardingStep = .notificationPermission
-                }
-            }
         }
     }
 }

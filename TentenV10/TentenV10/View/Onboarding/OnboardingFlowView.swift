@@ -1,8 +1,6 @@
 import SwiftUI
 
 enum OnboardingStep {
-    case notificationPermission
-    case micPermission
     case username
     case profileImage
     case addFriend
@@ -18,7 +16,6 @@ struct OnboardingFlowView: View {
     init() {
         // MARK: When onboarding stops in the middle and app is relaunched
         if let userRecord = repoManager.userRecord {
-            // This code should not interfere the 'onboardingStep' value in the middle of onboarding process
             if viewModel.onboardingStep == .username || viewModel.onboardingStep == .home {
                 if userRecord.username == "default" {
                     if authManager.previousOnboardingStep != .username {
@@ -45,28 +42,6 @@ struct OnboardingFlowView: View {
     var body: some View {
         VStack {
             switch viewModel.onboardingStep {
-            case .notificationPermission:
-                NotificationPermissionView() {
-                    DispatchQueue.main.async {
-                        self.viewModel.onboardingStep = .micPermission
-                    }
-                }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing),   // Appears from the right
-                    removal: .move(edge: .leading)      // Disappears to the left
-                ))
-                
-            case .micPermission:
-                MicPermissionView() {
-                    DispatchQueue.main.async {
-                        self.viewModel.onboardingStep = .username
-                    }
-                }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing),   // Appears from the right
-                    removal: .move(edge: .leading)      // Disappears to the left
-                ))
-
             case .username:
                 UsernameView() {
                     viewModel.onboardingStep = .profileImage // Move to ProfileImageView

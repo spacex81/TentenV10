@@ -67,16 +67,7 @@ extension AuthViewModel {
                 } else {
                     NSLog("LOG: Signing up")
                     authManager.isOnboardingComplete = false
-                    // TODO:
-                    let isNotificationPermissionGranted = await authManager.isNotificationPermissionGranted()
-                    let isMicPermissionGranted = await authManager.isMicPermissionGranted()
-                    if !isNotificationPermissionGranted {
-                        authManager.onboardingStep = .notificationPermission
-                    } else if !isMicPermissionGranted {
-                        authManager.onboardingStep = .micPermission
-                    } else {
-                        authManager.onboardingStep = .username
-                    }
+                    authManager.onboardingStep = .username
                     signUp(firebaseToken: firebaseToken)
                     stopLoading(for: loginType)
                 }
