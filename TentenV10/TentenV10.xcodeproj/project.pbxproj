@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -57,6 +57,7 @@
 		C81B48542C8839EB00E1164B /* FocusTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48532C8839EB00E1164B /* FocusTextField.swift */; };
 		C81B48562C883B4500E1164B /* AddUsernameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48552C883B4500E1164B /* AddUsernameButton.swift */; };
 		C81B48582C88553600E1164B /* AddProfilePictureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48572C88553600E1164B /* AddProfilePictureButton.swift */; };
+		C828E79B2CAA6F920084DBE4 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
 		C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84EF36C2C89ABB10092D6B5 /* SettingView.swift */; };
@@ -89,6 +90,30 @@
 		C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */; };
 		C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C828E7992CAA6F920084DBE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C815BC612C60849B004CB09E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C828E7932CAA6F920084DBE4;
+			remoteInfo = NotificationServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C828E79C2CAA6F920084DBE4 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C828E79B2CAA6F920084DBE4 /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C8022C8F2C70DBA1006DE470 /* AddButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButtonCell.swift; sourceTree = "<group>"; };
@@ -137,6 +162,7 @@
 		C81B48532C8839EB00E1164B /* FocusTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTextField.swift; sourceTree = "<group>"; };
 		C81B48552C883B4500E1164B /* AddUsernameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUsernameButton.swift; sourceTree = "<group>"; };
 		C81B48572C88553600E1164B /* AddProfilePictureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfilePictureButton.swift; sourceTree = "<group>"; };
+		C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C82CA7242C6B014B00B4BFD0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		C82F66DE2C74A09D004E33FA /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		C84EF36C2C89ABB10092D6B5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -165,6 +191,20 @@
 		C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C828E79F2CAA6F920084DBE4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C828E7932CAA6F920084DBE4 /* NotificationServiceExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C828E79F2CAA6F920084DBE4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NotificationServiceExtension; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		C815BC662C60849B004CB09E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -182,6 +222,13 @@
 				C815BC7C2C608519004CB09E /* FirebaseAuth in Frameworks */,
 				C815BC7E2C608519004CB09E /* FirebaseFirestore in Frameworks */,
 				C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C828E7912CAA6F920084DBE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				C815BC6B2C60849B004CB09E /* TentenV10 */,
+				C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */,
 				C815BC6A2C60849B004CB09E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -264,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				C815BC692C60849B004CB09E /* TentenV10.app */,
+				C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -428,10 +477,12 @@
 				C815BC652C60849B004CB09E /* Sources */,
 				C815BC662C60849B004CB09E /* Frameworks */,
 				C815BC672C60849B004CB09E /* Resources */,
+				C828E79C2CAA6F920084DBE4 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C828E79A2CAA6F920084DBE4 /* PBXTargetDependency */,
 			);
 			name = TentenV10;
 			packageProductDependencies = (
@@ -452,6 +503,28 @@
 			productReference = C815BC692C60849B004CB09E /* TentenV10.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C828E7932CAA6F920084DBE4 /* NotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C828E7A02CAA6F920084DBE4 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
+			buildPhases = (
+				C828E7902CAA6F920084DBE4 /* Sources */,
+				C828E7912CAA6F920084DBE4 /* Frameworks */,
+				C828E7922CAA6F920084DBE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */,
+			);
+			name = NotificationServiceExtension;
+			packageProductDependencies = (
+			);
+			productName = NotificationServiceExtension;
+			productReference = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -459,11 +532,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					C815BC682C60849B004CB09E = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					C828E7932CAA6F920084DBE4 = {
+						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
@@ -489,6 +565,7 @@
 			projectRoot = "";
 			targets = (
 				C815BC682C60849B004CB09E /* TentenV10 */,
+				C828E7932CAA6F920084DBE4 /* NotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -503,6 +580,13 @@
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,
 				C815BC712C60849C004CB09E /* Assets.xcassets in Resources */,
 				C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C828E7922CAA6F920084DBE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,7 +664,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C828E7902CAA6F920084DBE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C828E79A2CAA6F920084DBE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C828E7932CAA6F920084DBE4 /* NotificationServiceExtension */;
+			targetProxy = C828E7992CAA6F920084DBE4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C815BC752C60849C004CB09E /* Debug */ = {
@@ -724,13 +823,14 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -761,15 +861,68 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C828E79D2CAA6F920084DBE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GHJU9V8GHS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C828E79E2CAA6F920084DBE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GHJU9V8GHS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -793,6 +946,15 @@
 			buildConfigurations = (
 				C815BC782C60849C004CB09E /* Debug */,
 				C815BC792C60849C004CB09E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C828E7A02CAA6F920084DBE4 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C828E79D2CAA6F920084DBE4 /* Debug */,
+				C828E79E2CAA6F920084DBE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
