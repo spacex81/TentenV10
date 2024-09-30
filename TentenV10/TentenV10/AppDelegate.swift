@@ -11,6 +11,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         FirebaseApp.configure()
         
+        //
+        // Store data in App Group
+        let sharedDefaults = UserDefaults(suiteName: "group.tech.komaki.TentenV10.Notification")
+        sharedDefaults?.set("Hello from Main App", forKey: "sharedKey")
+        sharedDefaults?.synchronize() // Ensure data is saved
+        //
+        
         UNUserNotificationCenter.current().delegate = self
 
         return true

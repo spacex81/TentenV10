@@ -1,6 +1,7 @@
 import UserNotifications
 import Intents
 import UIKit
+import os.log
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -11,8 +12,15 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
-        NSLog("Notification received in service extension")
-        NSLog("Notification content: \(request.content)")
+        os_log("Notification received in service extension")
+        os_log("Notification content: %{public}@", "\(request.content.userInfo)")
+        
+        //
+        if let sharedDefaults = UserDefaults(suiteName: "group.tech.komaki.TentenV10.Notification"),
+           let sharedData = sharedDefaults.string(forKey: "sharedKey") {
+            os_log("Shared data: %{public}@", sharedData) // This should log "Hello from Main App"
+        }
+        //
         
         // Modify the notification content with custom logic
         setAppIconToCustom(request: request, contentHandler: contentHandler)
