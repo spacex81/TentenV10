@@ -11,7 +11,8 @@ class RepositoryManager: ObservableObject {
     weak var collectionViewController: CustomCollectionViewController?
     
     // Local Database
-    private var dbQueue: DatabaseQueue!
+//    private var dbQueue: DatabaseQueue!
+    private var dbPool: DatabasePool!
     
     // Firebase
     let auth = Auth.auth()
@@ -206,26 +207,86 @@ class RepositoryManager: ObservableObject {
     
 }
 
+//extension RepositoryManager {
+//    private func setupDatabase() {
+//        do {
+//            let databaseURL = try FileManager.default
+//                .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//                .appendingPathComponent("db.sqlite")
+//            
+//            dbQueue = try DatabaseQueue(path: databaseURL.path)
+//
+//            // Register migrations
+//            var migrator = DatabaseMigrator()
+//
+//            // v1: Initial database setup, including 'password' in the 'users' table
+//            migrator.registerMigration("v1") { db in
+//                // Create the users table
+//                try db.create(table: "users") { t in
+//                    t.column("id", .text).primaryKey()
+//                    t.column("email", .text).notNull()
+//                    t.column("username", .text).notNull()
+//                    t.column("password", .text).notNull() // New password column
+//                    t.column("pin", .text).notNull()
+//                    t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
+//                    t.column("profileImageData", .blob)
+//                    t.column("deviceToken", .text)
+//                    t.column("friends", .text)
+//                    t.column("roomName", .text).notNull().defaults(to: "testRoom")
+//                    t.column("isBusy", .boolean).notNull().defaults(to: false)
+//                    t.column("socialLoginId", .text).notNull()
+//                    t.column("socialLoginType", .text).notNull()
+//                    t.column("imageOffset", .double).notNull().defaults(to: 0.0)
+//                }
+//                
+//                // Create the friends table with 'lastInteraction' column
+//                try db.create(table: "friends") { t in
+//                    t.column("id", .text).primaryKey()
+//                    t.column("email", .text).notNull()
+//                    t.column("username", .text).notNull()
+//                    t.column("pin", .text).notNull()
+//                    t.column("profileImageData", .blob)
+//                    t.column("deviceToken", .text)
+//                    t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
+//                    t.column("isBusy", .boolean).notNull().defaults(to: false)
+//                    t.column("lastInteraction", .datetime)
+//                }
+//            }
+//
+//            // Migrate the database to the latest version
+//            try migrator.migrate(dbQueue)
+//        } catch {
+//            NSLog("LOG: Error setting up database: \(error)")
+//        }
+//    }
+//}
+
 extension RepositoryManager {
     private func setupDatabase() {
         do {
-            let databaseURL = try FileManager.default
-                .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                .appendingPathComponent("db.sqlite")
+            // Use the App Group container for the database
+            guard let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.GHJU9V8GHS.tech.komaki.TentenV10") else {
+                NSLog("LOG: Could not find app group container.")
+                return
+            }
             
-            dbQueue = try DatabaseQueue(path: databaseURL.path)
-
+            // Set the path for the shared database
+            let databaseURL = appGroupURL.appendingPathComponent("db.sqlite")
+            
+            // Use DatabasePool for concurrent access between app and extension
+            dbPool = try DatabasePool(path: databaseURL.path)
+            
             // Register migrations
             var migrator = DatabaseMigrator()
 
-            // v1: Initial database setup, including 'password' in the 'users' table
+            // v1: Initial database setup
             migrator.registerMigration("v1") { db in
                 // Create the users table
                 try db.create(table: "users") { t in
                     t.column("id", .text).primaryKey()
                     t.column("email", .text).notNull()
                     t.column("username", .text).notNull()
-                    t.column("password", .text).notNull() // New password column
+                    t.column("password", .text).notNull()
                     t.column("pin", .text).notNull()
                     t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
                     t.column("profileImageData", .blob)
@@ -237,7 +298,7 @@ extension RepositoryManager {
                     t.column("socialLoginType", .text).notNull()
                     t.column("imageOffset", .double).notNull().defaults(to: 0.0)
                 }
-                
+
                 // Create the friends table with 'lastInteraction' column
                 try db.create(table: "friends") { t in
                     t.column("id", .text).primaryKey()
@@ -253,7 +314,7 @@ extension RepositoryManager {
             }
 
             // Migrate the database to the latest version
-            try migrator.migrate(dbQueue)
+            try migrator.migrate(dbPool)
         } catch {
             NSLog("LOG: Error setting up database: \(error)")
         }
@@ -584,7 +645,7 @@ extension RepositoryManager {
 extension RepositoryManager {
     func createUserInDatabase(user: UserRecord) {
         do {
-            _ = try dbQueue.write { db in
+            _ = try dbPool.write { db in
                 try user.save(db)
             }
             //            NSLog("LOG: Successfully added new user record")
@@ -595,7 +656,7 @@ extension RepositoryManager {
     
     func readUserFromDatabase(id: String) -> UserRecord? {
         do {
-            let userRecord = try dbQueue.read { db in
+            let userRecord = try dbPool.read { db in
                 try UserRecord.fetchOne(db, key: id)
             }
             return userRecord
@@ -608,7 +669,7 @@ extension RepositoryManager {
     
     func readUserFromDatabase(email: String) -> UserRecord? {
         do {
-            let userRecord = try dbQueue.read { db in
+            let userRecord = try dbPool.read { db in
                 try UserRecord
                     .filter(UserRecord.Columns.email == email)
                     .fetchOne(db)
@@ -623,7 +684,7 @@ extension RepositoryManager {
     
     func eraseAllUsers() {
         do {
-            _ = try dbQueue.write { db in
+            _ = try dbPool.write { db in
                 try UserRecord.deleteAll(db)
             }
             NSLog("LOG: Successfully erased all user records")
@@ -637,7 +698,7 @@ extension RepositoryManager {
 extension RepositoryManager {
     func createFriendInDatabase(friend: FriendRecord) {
         do {
-            _ = try dbQueue.write { db in
+            _ = try dbPool.write { db in
                 try friend.save(db)
             }
         } catch {
@@ -647,7 +708,7 @@ extension RepositoryManager {
     
     func fetchFriendsByUserIdFromDatabase(userId: String) -> [FriendRecord] {
         do {
-            let friends = try dbQueue.read { db in
+            let friends = try dbPool.read { db in
                 try FriendRecord.filter(Column("userId") == userId).fetchAll(db)
             }
             return friends
@@ -658,7 +719,7 @@ extension RepositoryManager {
     
     func eraseAllFriends() {
         do {
-            _ = try dbQueue.write { db in
+            _ = try dbPool.write { db in
                 try FriendRecord.deleteAll(db)
             }
             NSLog("LOG: Successfully erased all friend records")

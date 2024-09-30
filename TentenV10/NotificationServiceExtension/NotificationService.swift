@@ -1,12 +1,15 @@
 import UserNotifications
 import Intents
 import UIKit
+import GRDB
 import os.log
 
 class NotificationService: UNNotificationServiceExtension {
 
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
+    
+    var dbPool: DatabasePool?
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
@@ -15,15 +18,32 @@ class NotificationService: UNNotificationServiceExtension {
         os_log("Notification received in service extension")
         os_log("Notification content: %{public}@", "\(request.content.userInfo)")
         
-        //
-        if let sharedDefaults = UserDefaults(suiteName: "group.GHJU9V8GHS.tech.komaki.TentenV10"),
-           let sharedData = sharedDefaults.string(forKey: "sharedKey") {
-            os_log("Shared data: %{public}@", sharedData) // This should log "Hello from Main App"
+        if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.GHJU9V8GHS.tech.komaki.TentenV10") {
+            let databaseURL = appGroupURL.appendingPathComponent("db.sqlite")
+            do {
+                dbPool = try DatabasePool(path: databaseURL.path)
+                
+                // Perform database operations here
+                fetchFriends()
+                
+            } catch {
+                NSLog("Failed to open database in extension: \(error.localizedDescription)")
+            }
         }
-        //
         
         // Modify the notification content with custom logic
         setAppIconToCustom(request: request, contentHandler: contentHandler)
+    }
+    
+    func fetchFriends() {
+        do {
+            let friends = try dbPool?.read { db in
+                try FriendRecord.fetchAll(db)
+            }
+            print(friends ?? "No friends found")
+        } catch {
+            NSLog("Error fetching friends: \(error)")
+        }
     }
     
     private func setAppIconToCustom(request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {

@@ -10,6 +10,7 @@
 		C8022C902C70DBA1006DE470 /* AddButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C8F2C70DBA1006DE470 /* AddButtonCell.swift */; };
 		C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */; };
 		C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */; };
+		C8050FD42CAAC72700786DF1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8050FD32CAAC72700786DF1 /* GRDB */; };
 		C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = C812FEE52C68ECDC00BD9D9B /* test.wav */; };
 		C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */; };
 		C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF052C69D70E00BD9D9B /* AuthManager.swift */; };
@@ -229,6 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8050FD42CAAC72700786DF1 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +259,13 @@
 				C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */,
 			);
 			path = AnimatedBackgroundView;
+			sourceTree = "<group>";
+		};
+		C8050FD22CAAC72600786DF1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		C8144AAE2C7B32A90011385D /* Components */ = {
@@ -304,6 +313,7 @@
 			children = (
 				C815BC6B2C60849B004CB09E /* TentenV10 */,
 				C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */,
+				C8050FD22CAAC72600786DF1 /* Frameworks */,
 				C815BC6A2C60849B004CB09E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -520,6 +530,7 @@
 			);
 			name = NotificationServiceExtension;
 			packageProductDependencies = (
+				C8050FD32CAAC72700786DF1 /* GRDB */,
 			);
 			productName = NotificationServiceExtension;
 			productReference = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */;
@@ -1015,6 +1026,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C8050FD32CAAC72700786DF1 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8E49F672CA113B700E19E38 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
 		C815BC7B2C608519004CB09E /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C815BC7A2C608518004CB09E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
