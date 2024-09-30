@@ -86,7 +86,6 @@ struct HomeView: View {
                         }
                    }
                 }
-                
             }
             
             ZStack {
