@@ -16,7 +16,7 @@ class NotificationService: UNNotificationServiceExtension {
         os_log("Notification content: %{public}@", "\(request.content.userInfo)")
         
         //
-        if let sharedDefaults = UserDefaults(suiteName: "group.tech.komaki.TentenV10.Notification"),
+        if let sharedDefaults = UserDefaults(suiteName: "group.GHJU9V8GHS.tech.komaki.TentenV10"),
            let sharedData = sharedDefaults.string(forKey: "sharedKey") {
             os_log("Shared data: %{public}@", sharedData) // This should log "Hello from Main App"
         }
