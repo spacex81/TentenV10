@@ -67,6 +67,7 @@
 		C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC562CA2959200AC1932 /* MicPermissionView.swift */; };
 		C889DC592CA2967100AC1932 /* StackedNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC582CA2967100AC1932 /* StackedNotificationsView.swift */; };
 		C8AF0B2A2CA53B82003F3D2E /* PermissionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */; };
+		C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
@@ -146,6 +147,7 @@
 		C889DC562CA2959200AC1932 /* MicPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicPermissionView.swift; sourceTree = "<group>"; };
 		C889DC582CA2967100AC1932 /* StackedNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedNotificationsView.swift; sourceTree = "<group>"; };
 		C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionButton.swift; sourceTree = "<group>"; };
+		C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PPPangramSansRounded-Bold.otf"; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				C812FEE52C68ECDC00BD9D9B /* test.wav */,
 				C815BC8E2C60858B004CB09E /* Info.plist */,
 				C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */,
+				C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */,
 				C815BC722C60849C004CB09E /* Preview Content */,
 			);
 			path = TentenV10;
@@ -496,6 +499,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
+				C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */,
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,
 				C815BC712C60849C004CB09E /* Assets.xcassets in Resources */,
 				C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */,

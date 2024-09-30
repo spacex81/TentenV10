@@ -35,5 +35,9 @@
 		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
+    <key>UIAppFonts</key>
+    <array>
+        <string>PPPangramSansRounded-Bold.otf</string>
+    </array>
 </dict>
 </plist>
