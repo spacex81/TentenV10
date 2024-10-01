@@ -4,6 +4,8 @@ struct ProfileView: View {
 //    @State private var isSheetPresented: Bool = false
     @State private var isAddFriendSheetPresented: Bool = false
     @State private var isDeleteFriendSheetPresented: Bool = false
+    @State private var friendToDelete: FriendRecord?
+    
 //   @ObservedObject var viewModel = HomeViewModel.shared // Case 1: Use on real app
     let viewModel = HomeViewModel.shared // Case 2: Only use when building with preview
     
@@ -82,7 +84,7 @@ struct ProfileView: View {
                                 
                                 // Three-dot menu button
                                 Button(action: {
-                                    isDeleteFriendSheetPresented = true
+                                    friendToDelete = friend
                                 }) {
                                     Image(systemName: "ellipsis")
                                         .foregroundColor(Color.gray)
@@ -100,9 +102,14 @@ struct ProfileView: View {
         .sheet(isPresented: $isAddFriendSheetPresented) {
             AddFriendView()
         }
+        .onChange(of: friendToDelete) { _, _ in
+            if friendToDelete != nil {
+                isDeleteFriendSheetPresented = true
+            }
+        }
         .sheet(isPresented: $isDeleteFriendSheetPresented) {
-                DeleteFriendView()
-                    .presentationDetents([.fraction(0.4)])  // Set sheet to half height
+            DeleteFriendView(friend: $friendToDelete)
+                .presentationDetents([.fraction(0.4)])  // Set sheet to half height
         }
         .frame(maxWidth: .infinity)
     }
@@ -128,6 +135,18 @@ var dummyUserRecord: UserRecord {
         imageOffset: 0.0
     )
 }
+
+let dummyFriend = FriendRecord(
+    id: UUID().uuidString,
+    email: "friend1@example.com",
+    username: "Dummy Friend",
+    pin: "111111",
+    profileImageData: UIImage(named: "user2")?.pngData(),
+    deviceToken: nil,
+    userId: "userId1",
+    isBusy: false,
+    lastInteraction: Date()
+)
 
 var dummyFriends: [FriendRecord] {
     return [
