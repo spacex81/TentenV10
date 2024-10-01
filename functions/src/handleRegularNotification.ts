@@ -18,12 +18,12 @@ type NotificationType = 'connect' | 'disconnect' | 'poke';
 // Notification configuration based on type
 const NOTIFICATION_CONFIG: Record<NotificationType, { title: string; body: string }> = {
     connect: {
-        title: 'Connect Title',
-        body: 'Connect',
+        title: 'Username',
+        body: '📢 말하고 있어요',
     },
     disconnect: {
-        title: 'Disconnect Title',
-        body: 'Disconnect',
+        title: 'Username',
+        body: '✌️ 끝!',
     },
     poke: {
         title: 'Username',
@@ -40,7 +40,7 @@ export const handleRegularNotification = functions
 
     // Ensure the receiverToken is provided in the request body
     // const { receiverToken, notificationType, username } = req.body;
-    const { receiverToken, notificationType, username, senderId } = req.body;
+    const { receiverToken, notificationType, senderId } = req.body;
 
     if (!receiverToken) {
         res.status(400).send('receiverToken is required');
@@ -50,9 +50,6 @@ export const handleRegularNotification = functions
         res.status(400).send('notificationType is required');
     }
 
-    if (!username) {
-        res.status(400).send('username is required');
-    }
 
     if (!senderId) {
         res.status(400).send('senderId is required');
@@ -60,9 +57,6 @@ export const handleRegularNotification = functions
 
     // Safely typecast notificationType to the correct type
     var config = NOTIFICATION_CONFIG[notificationType as NotificationType];
-    if (notificationType === 'poke' && username) {
-        config.title = username
-    }
 
     const PAYLOAD = JSON.stringify({
         aps: {

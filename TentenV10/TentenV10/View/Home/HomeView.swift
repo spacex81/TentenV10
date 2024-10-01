@@ -66,7 +66,6 @@ struct HomeView: View {
                                     let jsonBody: [String: Any] = [
                                         "receiverToken": receiverToken,
                                         "notificationType": "poke",
-                                        "username": selectedFriend.username,
                                         "senderId": senderId
                                     ]
                                     

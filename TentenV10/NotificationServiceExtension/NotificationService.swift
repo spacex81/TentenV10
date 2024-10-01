@@ -22,10 +22,6 @@ class NotificationService: UNNotificationServiceExtension {
             let databaseURL = appGroupURL.appendingPathComponent("db.sqlite")
             do {
                 dbPool = try DatabasePool(path: databaseURL.path)
-                
-                // Perform database operations here
-                fetchFriends()
-                
             } catch {
                 NSLog("Failed to open database in extension: \(error.localizedDescription)")
             }
@@ -51,9 +47,6 @@ class NotificationService: UNNotificationServiceExtension {
                 }
             }
         }
-
-        // Modify the notification content with custom logic
-//        setAppIconToCustom(request: request, contentHandler: contentHandler)
     }
     
     func fetchFriendRecord(senderId: String, completion: @escaping (FriendRecord?) -> Void) {
@@ -69,16 +62,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     
-    func fetchFriends() {
-        do {
-            let friends = try dbPool?.read { db in
-                try FriendRecord.fetchAll(db)
-            }
-            print(friends ?? "No friends found")
-        } catch {
-            NSLog("Error fetching friends: \(error)")
-        }
-    }
     
     private func setAppIconToCustom(username: String, avatarImage: UIImage? = nil, request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {
         
