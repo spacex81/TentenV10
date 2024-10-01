@@ -151,9 +151,6 @@ extension LiveKitManager {
             // Disable the microphone
             try await room.localParticipant.setMicrophone(enabled: false)
             
-            if !self.isPublished {
-                notificationManager?.sendRemoteNotification(type: "disconnect")
-            }
             DispatchQueue.main.async {
                 self.isPublished = false
             }
@@ -219,7 +216,7 @@ extension LiveKitManager {
             if let repoManager = self.repoManager, notificationManager == nil {
                 notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
             }
-            
+    
             notificationManager?.sendRemoteNotification(type: "connect")
             
             DispatchQueue.main.async {
@@ -260,6 +257,19 @@ extension LiveKitManager {
                 await disconnect()
             }
         }
+    }
+    
+//    func room(_ room: Room, participant: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
+//        // TODO:
+//        if let repoManager = self.repoManager, notificationManager == nil {
+//            notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
+//        }
+//        
+//        notificationManager?.sendRemoteNotification(type: "connect")
+//    }
+//    
+    func room(_ room: Room, participant: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
+        notificationManager?.sendRemoteNotification(type: "disconnect")
     }
     
     
