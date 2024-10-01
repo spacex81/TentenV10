@@ -2,8 +2,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var isSheetPresented: Bool = false
-//   @ObservedObject var viewModel = HomeViewModel.shared
-    let viewModel = HomeViewModel.shared
+//   @ObservedObject var viewModel = HomeViewModel.shared // Case 1
+    // This view model is not updated on realtime
+    let viewModel = HomeViewModel.shared // Case 2
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
@@ -58,41 +59,43 @@ struct ProfileView: View {
                 }
                 .frame(maxWidth: .infinity)
                 
-                ScrollView(.vertical, showsIndicators: true) {
-                    VStack(spacing: 15) {
+                // Friends List with Three-dot Button
+                ScrollView {
+                    VStack {
                         ForEach(viewModel.detailedFriends, id: \.id) { friend in
                             HStack {
-                                if let friendImageData = friend.profileImageData,
-                                   let friendImage = UIImage(data: friendImageData) {
-                                    Image(uiImage: friendImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                        .shadow(radius: 5)
-                                } else {
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                        .shadow(radius: 5)
-                                }
-                                VStack(alignment: .leading) {
+                                // Friend's profile pic and name
+                                HStack {
+                                    if let friendImageData = friend.profileImageData, let friendImage = UIImage(data: friendImageData) {
+                                        Image(uiImage: friendImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .shadow(radius: 5)
+                                    }
                                     Text(friend.username)
                                         .font(.headline)
+                                        .padding(.leading, 10)
                                 }
                                 Spacer()
+                                
+                                // Three-dot menu button
+                                Button(action: {
+                                    // TODO: Implement action for the menu
+                                    print("Three dot menu tapped for \(friend.username)")
+                                }) {
+                                    Image(systemName: "ellipsis")
+                                        .foregroundColor(Color.gray)
+                                        .padding(.trailing, 10)
+                                }
                             }
                             .padding()
-                            .cornerRadius(10)
                         }
                     }
-                    .padding(.horizontal)
                 }
-                .frame(maxWidth: .infinity)
                 .background(Color.clear)
-//                Spacer()
+                //                Spacer()
             }
             
 //            Button(action: {
