@@ -15,7 +15,7 @@ struct DeleteFriendView: View {
             Spacer()
 
             Button {
-                
+                dismiss()
             } label: {
                 Text("delete friend")
             }
