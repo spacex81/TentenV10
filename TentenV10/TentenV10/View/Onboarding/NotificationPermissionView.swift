@@ -9,8 +9,6 @@ struct NotificationPermissionView: View {
             VStack {
                 Text("알림을 허용해주세요")
                     .font(.title)
-                
-                
                 Text("친구가 말하고 있을 때 알려드릴게요!")
                     .font(.headline)
             }

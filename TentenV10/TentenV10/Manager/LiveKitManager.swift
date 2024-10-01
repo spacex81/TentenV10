@@ -222,13 +222,13 @@ extension LiveKitManager {
         sendMessageToRemoteParticipant(message: "readyToTalk")
         self.repoManager?.currentState = .isListening
         // Send notification when the friend starts speaking
-        self.repoManager?.sendLocalNotification(type: "startSpeaking")
+//        self.repoManager?.sendLocalNotification(type: "startSpeaking")
         NSLog("LOG: Ready to listen to remote audio stream")
     }
     
     func room(_ room: Room, participant: RemoteParticipant, didUnsubscribeTrack publication: RemoteTrackPublication) {
         // Send notification when the friend stops speaking
-        self.repoManager?.sendLocalNotification(type: "endSpeaking")
+//        self.repoManager?.sendLocalNotification(type: "endSpeaking")
         NSLog("LOG: Remote participant stopped talking")
     }
     
