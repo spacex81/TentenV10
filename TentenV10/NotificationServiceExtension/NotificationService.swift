@@ -31,6 +31,11 @@ class NotificationService: UNNotificationServiceExtension {
             }
         }
         
+        if let customData = request.content.userInfo["customData"] as? [String: Any],
+           let senderId = customData["senderId"] as? String {
+            os_log("Sender's ID: %{public}@", senderId)
+        }
+        
         // Modify the notification content with custom logic
         setAppIconToCustom(request: request, contentHandler: contentHandler)
     }

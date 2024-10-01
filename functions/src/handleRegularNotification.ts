@@ -40,7 +40,7 @@ export const handleRegularNotification = functions
 
     // Ensure the receiverToken is provided in the request body
     // const { receiverToken, notificationType, username } = req.body;
-    const { receiverToken, notificationType, username } = req.body;
+    const { receiverToken, notificationType, username, senderId } = req.body;
 
     if (!receiverToken) {
         res.status(400).send('receiverToken is required');
@@ -52,6 +52,10 @@ export const handleRegularNotification = functions
 
     if (!username) {
         res.status(400).send('username is required');
+    }
+
+    if (!senderId) {
+        res.status(400).send('senderId is required');
     }
 
     // Safely typecast notificationType to the correct type
@@ -74,7 +78,8 @@ export const handleRegularNotification = functions
         },
         customData: {
             channelUUID: channelUUID,
-            notificationType: notificationType
+            notificationType: notificationType,
+            senderId: senderId
         },
     });
 

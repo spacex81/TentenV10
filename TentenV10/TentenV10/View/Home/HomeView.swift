@@ -47,7 +47,12 @@ struct HomeView: View {
                         HStack {
                             Button {
                                 impactFeedback.impactOccurred()
-                                if let selectedFriend = repoManager.selectedFriend, let receiverToken = selectedFriend.deviceToken {
+                                if
+                                    let selectedFriend = repoManager.selectedFriend,
+                                    let receiverToken = selectedFriend.deviceToken,
+                                    let senderId = AuthManager.shared.currentUser?.uid
+                                {
+                                    
                                     let handleRegularNotificationUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/handleRegularNotification"
                                     guard let url = URL(string: handleRegularNotificationUrl) else {
                                         NSLog("Failed to create URL")
@@ -58,7 +63,12 @@ struct HomeView: View {
                                     request.httpMethod = "POST"
                                     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                                     
-                                    let jsonBody: [String: Any] = ["receiverToken": receiverToken, "notificationType": "poke", "username": selectedFriend.username]
+                                    let jsonBody: [String: Any] = [
+                                        "receiverToken": receiverToken,
+                                        "notificationType": "poke",
+                                        "username": selectedFriend.username,
+                                        "senderId": senderId
+                                    ]
                                     
                                     do {
                                         let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
