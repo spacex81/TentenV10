@@ -2,7 +2,8 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var isSheetPresented: Bool = false
-    @ObservedObject var viewModel = HomeViewModel.shared
+//   @ObservedObject var viewModel = HomeViewModel.shared
+    let viewModel = HomeViewModel.shared
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
@@ -82,9 +83,30 @@ struct ProfileView: View {
     }
 }
 
-
+var dummyUserRecord: UserRecord {
+    let image = UIImage(named: "user1")!  // Use system image for preview
+    let imageData = image.pngData()
+    return UserRecord(
+        id: UUID().uuidString,
+        email: "john.doe@example.com",
+        username: "John Doe",
+        password: "dummyPassword123",
+        pin: "123456",
+        hasIncomingCallRequest: false,
+        profileImageData: imageData,
+        deviceToken: nil,
+        friends: ["friend1", "friend2"],
+        roomName: "testRoom",
+        isBusy: false,
+        socialLoginId: "dummySocialLoginId",
+        socialLoginType: "facebook",
+        imageOffset: 0.0
+    )
+}
 
 #Preview {
-    ProfileView()
+    HomeViewModel.shared.userRecord = dummyUserRecord
+    
+    return ProfileView()
         .preferredColorScheme(.dark)
 }
