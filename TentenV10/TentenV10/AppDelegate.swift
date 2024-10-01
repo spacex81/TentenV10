@@ -31,6 +31,19 @@ extension AppDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error)")
     }
+    
+    // Handle notifications when app is in the foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Show the notification alert, sound, and badge in the foreground
+        if #available(iOS 14.0, *) {
+            completionHandler([.banner, .sound, .badge])
+        } else {
+            // For older iOS versions, continue using .alert (which is still available)
+            completionHandler([.alert, .sound, .badge])
+        }
+    }
 }
 
 // MARK: - Notification and Microphone Permissions

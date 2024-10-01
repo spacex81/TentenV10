@@ -65,6 +65,7 @@ export const handleRegularNotification = functions
                 title: config.title,
                 body: config.body,
             },
+            "showWhenLocked": true,
             category: "INSendMessageIntent",
             "thread-id": "unique-conversation-id",
             badge: 0,
