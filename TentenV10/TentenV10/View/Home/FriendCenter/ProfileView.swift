@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @State private var isSheetPresented: Bool = false
-//   @ObservedObject var viewModel = HomeViewModel.shared // Case 1
-    // This view model is not updated on realtime
-    let viewModel = HomeViewModel.shared // Case 2
+//    @State private var isSheetPresented: Bool = false
+    @State private var isAddFriendSheetPresented: Bool = false
+    @State private var isDeleteFriendSheetPresented: Bool = false
+//   @ObservedObject var viewModel = HomeViewModel.shared // Case 1: Use on real app
+    let viewModel = HomeViewModel.shared // Case 2: Only use when building with preview
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
@@ -38,7 +39,7 @@ struct ProfileView: View {
                 
                 // add friends button
                 Button {
-                    isSheetPresented = true
+                    isAddFriendSheetPresented = true
                     impactFeedback.impactOccurred()
                 } label: {
                     HStack {
@@ -82,8 +83,10 @@ struct ProfileView: View {
                                 
                                 // Three-dot menu button
                                 Button(action: {
-                                    // TODO: Implement action for the menu
-                                    print("Three dot menu tapped for \(friend.username)")
+                                    // TODO: display 'DeleteFriendView' as sheet.
+                                    // This sheet should appear from the bottom
+                                    // And the sheet should only half height of the screen
+                                    isDeleteFriendSheetPresented = true
                                 }) {
                                     Image(systemName: "ellipsis")
                                         .foregroundColor(Color.gray)
@@ -95,25 +98,15 @@ struct ProfileView: View {
                     }
                 }
                 .background(Color.clear)
-                //                Spacer()
             }
-            
-//            Button(action: {
-//                viewModel.signOut()
-//            }) {
-//                Text("Sign Out")
-//                    .font(.title2)
-//                    .foregroundColor(.red)
-//                    .padding()
-//                    .frame(maxWidth: .infinity)
-//                    .background(Color(.systemBackground))
-//                    .cornerRadius(10)
-//                    .padding(.horizontal)
-//            }
         }
         .padding(30)
-        .sheet(isPresented: $isSheetPresented) {
+        .sheet(isPresented: $isAddFriendSheetPresented) {
             AddFriendView()
+        }
+        .sheet(isPresented: $isDeleteFriendSheetPresented) {
+                DeleteFriendView()
+                    .presentationDetents([.fraction(0.5)])  // Set sheet to half height
         }
         .frame(maxWidth: .infinity)
     }
