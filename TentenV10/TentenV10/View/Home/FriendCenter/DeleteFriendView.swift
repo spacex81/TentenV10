@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct DeleteFriendView: View {
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Spacer()
+
+            Button {
+                
+            } label: {
+                Text("delete friend")
+            }
+            Spacer()
+            
+            Button {
+                dismiss()
+            } label: {
+                Text("close")
+            }
+            Spacer()
+
+        }
     }
 }
 
 #Preview {
     DeleteFriendView()
+        .preferredColorScheme(.dark)
 }

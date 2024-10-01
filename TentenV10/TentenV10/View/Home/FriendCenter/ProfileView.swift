@@ -9,7 +9,6 @@ struct ProfileView: View {
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
-
     var body: some View {
         VStack {
             if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
@@ -83,9 +82,6 @@ struct ProfileView: View {
                                 
                                 // Three-dot menu button
                                 Button(action: {
-                                    // TODO: display 'DeleteFriendView' as sheet.
-                                    // This sheet should appear from the bottom
-                                    // And the sheet should only half height of the screen
                                     isDeleteFriendSheetPresented = true
                                 }) {
                                     Image(systemName: "ellipsis")
@@ -106,7 +102,7 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $isDeleteFriendSheetPresented) {
                 DeleteFriendView()
-                    .presentationDetents([.fraction(0.5)])  // Set sheet to half height
+                    .presentationDetents([.fraction(0.4)])  // Set sheet to half height
         }
         .frame(maxWidth: .infinity)
     }

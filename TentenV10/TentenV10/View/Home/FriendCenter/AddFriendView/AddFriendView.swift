@@ -9,6 +9,7 @@ struct AddFriendView: View {
         VStack {
             if isTextFieldFocused {
                 HStack {
+                    Spacer()
                      Button(action: {
                         isTextFieldFocused = false
                         viewModel.friendPin = ""
