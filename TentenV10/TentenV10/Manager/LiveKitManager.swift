@@ -150,6 +150,10 @@ extension LiveKitManager {
         do {
             // Disable the microphone
             try await room.localParticipant.setMicrophone(enabled: false)
+            
+            if !self.isPublished {
+                notificationManager?.sendRemoteNotification(type: "disconnect")
+            }
             DispatchQueue.main.async {
                 self.isPublished = false
             }
@@ -211,16 +215,19 @@ extension LiveKitManager {
         // Check if the received message is 'readyToTalk'
         if message == "readyToTalk" {
             print("Received 'readyToTalk' message. Setting isPublished to true.")
-            DispatchQueue.main.async {
-                self.isPublished = true
-                self.repoManager?.currentState = .isSpeaking
-            }
             
             if let repoManager = self.repoManager, notificationManager == nil {
                 notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
             }
             
             notificationManager?.sendRemoteNotification(type: "connect")
+            
+            DispatchQueue.main.async {
+                self.isPublished = true
+                self.repoManager?.currentState = .isSpeaking
+            }
+            
+
         } else {
             print("Received data: \(message). Ignored.")
         }
