@@ -58,22 +58,55 @@ struct ProfileView: View {
                 }
                 .frame(maxWidth: .infinity)
                 
-                Spacer()
-
+                ScrollView(.vertical, showsIndicators: true) {
+                    VStack(spacing: 15) {
+                        ForEach(viewModel.detailedFriends, id: \.id) { friend in
+                            HStack {
+                                if let friendImageData = friend.profileImageData,
+                                   let friendImage = UIImage(data: friendImageData) {
+                                    Image(uiImage: friendImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 5)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 5)
+                                }
+                                VStack(alignment: .leading) {
+                                    Text(friend.username)
+                                        .font(.headline)
+                                }
+                                Spacer()
+                            }
+                            .padding()
+                            .cornerRadius(10)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .frame(maxWidth: .infinity)
+                .background(Color.clear)
+//                Spacer()
             }
             
-            Button(action: {
-                viewModel.signOut()
-            }) {
-                Text("Sign Out")
-                    .font(.title2)
-                    .foregroundColor(.red)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-            }
+//            Button(action: {
+//                viewModel.signOut()
+//            }) {
+//                Text("Sign Out")
+//                    .font(.title2)
+//                    .foregroundColor(.red)
+//                    .padding()
+//                    .frame(maxWidth: .infinity)
+//                    .background(Color(.systemBackground))
+//                    .cornerRadius(10)
+//                    .padding(.horizontal)
+//            }
         }
         .padding(30)
         .sheet(isPresented: $isSheetPresented) {
@@ -104,8 +137,48 @@ var dummyUserRecord: UserRecord {
     )
 }
 
+var dummyFriends: [FriendRecord] {
+    return [
+        FriendRecord(
+            id: UUID().uuidString,
+            email: "friend1@example.com",
+            username: "Friend 1",
+            pin: "111111",
+            profileImageData: UIImage(named: "user2")?.pngData(), // Image from Assets
+            deviceToken: nil,
+            userId: "userId1",
+            isBusy: false,
+            lastInteraction: Date()
+        ),
+        FriendRecord(
+            id: UUID().uuidString,
+            email: "friend2@example.com",
+            username: "Friend 2",
+            pin: "222222",
+            profileImageData: UIImage(named: "user3")?.pngData(), // Image from Assets
+            deviceToken: nil,
+            userId: "userId2",
+            isBusy: false,
+            lastInteraction: Date()
+        ),
+        // Add more friends with images from "user4" to "user10"
+        FriendRecord(
+            id: UUID().uuidString,
+            email: "friend3@example.com",
+            username: "Friend 3",
+            pin: "333333",
+            profileImageData: UIImage(named: "user4")?.pngData(),
+            deviceToken: nil,
+            userId: "userId3",
+            isBusy: false,
+            lastInteraction: Date()
+        )
+    ]
+}
+
 #Preview {
     HomeViewModel.shared.userRecord = dummyUserRecord
+    HomeViewModel.shared.detailedFriends = dummyFriends
     
     return ProfileView()
         .preferredColorScheme(.dark)

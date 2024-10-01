@@ -1,7 +1,7 @@
 import GRDB
 import SwiftUI
 
-struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
+struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable, Identifiable {
     var id: String
     var email: String
     var username: String
