@@ -34,11 +34,40 @@ class NotificationService: UNNotificationServiceExtension {
         if let customData = request.content.userInfo["customData"] as? [String: Any],
            let senderId = customData["senderId"] as? String {
             os_log("Sender's ID: %{public}@", senderId)
+            
+            // Fetch the FriendRecord corresponding to senderId
+            fetchFriendRecord(senderId: senderId) { friendRecord in
+                guard let friendRecord = friendRecord else {
+                    os_log("Friend record not found for senderId: %{public}@", senderId)
+                    return
+                }
+                
+                // Update the notification with the friend’s username and profile image
+                if let profileImageData = friendRecord.profileImageData,
+                   let profileImage = UIImage(data: profileImageData) {
+                    self.setAppIconToCustom(username: friendRecord.username, avatarImage: profileImage, request: request, contentHandler: contentHandler)
+                } else {
+                    self.setAppIconToCustom(username: friendRecord.username, request: request, contentHandler: contentHandler)
+                }
+            }
         }
-        
+
         // Modify the notification content with custom logic
-        setAppIconToCustom(request: request, contentHandler: contentHandler)
+//        setAppIconToCustom(request: request, contentHandler: contentHandler)
     }
+    
+    func fetchFriendRecord(senderId: String, completion: @escaping (FriendRecord?) -> Void) {
+        do {
+            let friendRecord = try dbPool?.read { db in
+                try FriendRecord.fetchOne(db, key: senderId)
+            }
+            completion(friendRecord)
+        } catch {
+            os_log("Error fetching friend for senderId: %{public}@", senderId)
+            completion(nil)
+        }
+    }
+
     
     func fetchFriends() {
         do {
@@ -51,22 +80,21 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
     
-    private func setAppIconToCustom(request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {
-        // Load the custom image ("user1") from your asset catalog
-        guard let avatarImage = UIImage(named: "user1") else {
-            // Fallback: If image is missing, show the default notification
-            contentHandler(bestAttemptContent!)
-            return
+    private func setAppIconToCustom(username: String, avatarImage: UIImage? = nil, request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {
+        
+        var avatar: INImage? = nil
+        if let avatarImage = avatarImage {
+            avatar = INImage(imageData: avatarImage.pngData()!)
+        } else {
+            // Fallback to default image
+            avatar = INImage(imageData: UIImage(named: "user1")!.pngData()!)
         }
-
-        // Convert UIImage to INImage for the intent
-        let avatar = INImage(imageData: avatarImage.pngData()!)
-
-        // Configure the sender and receiver with their images and properties
+        
+        // Configure the sender and receiver with the friend’s username and profile image
         let senderPerson = INPerson(
             personHandle: INPersonHandle(value: "unique-sender-id", type: .unknown),
             nameComponents: nil,
-            displayName: "Sender name",
+            displayName: username,
             image: avatar,
             contactIdentifier: nil,
             customIdentifier: nil,
@@ -96,8 +124,7 @@ class NotificationService: UNNotificationServiceExtension {
             sender: senderPerson,
             attachments: nil
         )
-
-        // Attach the custom image to the sender
+        
         intent.setImage(avatar, forParameterNamed: \.sender)
         
         // Create the interaction and donate it
