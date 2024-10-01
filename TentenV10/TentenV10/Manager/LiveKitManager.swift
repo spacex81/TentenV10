@@ -6,6 +6,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     static let shared = LiveKitManager()
     
     weak var repoManager: RepositoryManager?
+    var notificationManager: NotificationManager?
     
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
@@ -25,6 +26,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     init() {
         let roomOptions = RoomOptions(adaptiveStream: true, dynacast: true)
         room = Room(delegate: self, roomOptions: roomOptions)
+
     }
 }
 
@@ -213,6 +215,12 @@ extension LiveKitManager {
                 self.isPublished = true
                 self.repoManager?.currentState = .isSpeaking
             }
+            
+            if let repoManager = self.repoManager, notificationManager == nil {
+                notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
+            }
+            
+            notificationManager?.sendRemoteNotification(type: "connect")
         } else {
             print("Received data: \(message). Ignored.")
         }

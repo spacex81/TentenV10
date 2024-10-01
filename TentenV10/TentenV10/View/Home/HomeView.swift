@@ -4,8 +4,10 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
-    let repoManager = RepositoryManager.shared
     
+    let repoManager = RepositoryManager.shared
+    let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
+
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     
     // Size of the collection view item
@@ -47,39 +49,7 @@ struct HomeView: View {
                         HStack {
                             Button {
                                 impactFeedback.impactOccurred()
-                                if
-                                    let selectedFriend = repoManager.selectedFriend,
-                                    let receiverToken = selectedFriend.deviceToken,
-                                    let senderId = AuthManager.shared.currentUser?.uid
-                                {
-                                    
-                                    let handleRegularNotificationUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/handleRegularNotification"
-                                    guard let url = URL(string: handleRegularNotificationUrl) else {
-                                        NSLog("Failed to create URL")
-                                        return
-                                    }
-                                    
-                                    var request = URLRequest(url: url)
-                                    request.httpMethod = "POST"
-                                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                                    
-                                    let jsonBody: [String: Any] = [
-                                        "receiverToken": receiverToken,
-                                        "notificationType": "poke",
-                                        "senderId": senderId
-                                    ]
-                                    
-                                    do {
-                                        let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
-                                        request.httpBody = jsonData
-                                        
-                                        Task {
-                                            let (_, _) = try await URLSession.shared.data(for: request)
-                                        }
-                                    } catch {
-                                        NSLog("LOG: Error when serializing the json body when sending poke")
-                                    }
-                                }
+                                notificationManager.sendRemoteNotification(type: "poke")
                             } label: {
                                 Text("👋")
                                    .font(.system(size: 40, weight: .bold, design: .default))
