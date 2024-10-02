@@ -100,37 +100,11 @@ struct ProfileView: View {
             .sheet(isPresented: $isAddFriendSheetPresented) {
                 AddFriendView()
             }
-            
-            // Overlay for DeleteView with animation
-            if showDeleteOverlay {
-                Color.black.opacity(0.5)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation {
-                            showDeleteOverlay = false  // Dismiss overlay with animation
-                        }
-                    }
-
-                // Bottom to top sliding DeleteView
-                GeometryReader { geometry in
-                    VStack {
-                        Spacer()
-                        DeleteView(friend: $friendToDelete)
-                            .frame(width: geometry.size.width, height: geometry.size.height * 0.4)  // Full width, 40% height
-                            .background(Color.white)
-                            .cornerRadius(20)
-                            .shadow(radius: 10)
-                            .transition(.move(edge: .bottom))  // Transition animation from bottom to top
-                    }
-                }
-                .zIndex(1)  // Ensure the DeleteView appears above everything else
-            }
         }
     }
 }
 
 #Preview {
-    
     var dummyUserRecord: UserRecord {
         let image = UIImage(named: "user1")!  // Use system image for preview
         let imageData = image.pngData()
