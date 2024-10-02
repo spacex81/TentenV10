@@ -92,6 +92,7 @@
 		C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */; };
 		C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */; };
 		C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
+		C8FDA2182CACD7D50026EBC8 /* DeleteFriendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +195,7 @@
 		C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewContainer.swift; sourceTree = "<group>"; };
 		C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFriendCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -457,6 +459,7 @@
 				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C8144AC72C7C2D9C0011385D /* AddFriendView */,
 				C8B2E1372CAC2299005E53A6 /* DeleteFriendView.swift */,
+				C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */,
 			);
 			path = FriendCenter;
 			sourceTree = "<group>";
@@ -656,6 +659,7 @@
 				C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */,
 				C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */,
 				C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */,
+				C8FDA2182CACD7D50026EBC8 /* DeleteFriendCard.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
