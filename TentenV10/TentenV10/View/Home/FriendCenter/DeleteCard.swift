@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct DeleteFriendCard: View {
+struct DeleteCard: View {
     var body: some View {
         Text("Delete Friend Card")
     }
 }
 
 #Preview {
-    DeleteFriendCard()
+    DeleteCard()
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DeleteFriendView: View {
+struct DeleteView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var friend: FriendRecord?  // Binding the friend to ProfileView
     
@@ -44,6 +44,6 @@ struct DeleteFriendView: View {
         lastInteraction: Date()
     )
     
-    DeleteFriendView(friend: .constant(dummyFriend))
+    DeleteView(friend: .constant(dummyFriend))
         .preferredColorScheme(.dark)
 }

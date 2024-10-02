@@ -108,7 +108,7 @@ struct ProfileView: View {
             }
         }
         .sheet(isPresented: $isDeleteFriendSheetPresented) {
-            DeleteFriendView(friend: $friendToDelete)
+            DeleteView(friend: $friendToDelete)
                 .presentationDetents([.fraction(0.4)])  // Set sheet to half height
         }
         .frame(maxWidth: .infinity)

@@ -73,7 +73,7 @@
 		C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
-		C8B2E1382CAC2299005E53A6 /* DeleteFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B2E1372CAC2299005E53A6 /* DeleteFriendView.swift */; };
+		C8B2E1382CAC2299005E53A6 /* DeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B2E1372CAC2299005E53A6 /* DeleteView.swift */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
@@ -92,7 +92,7 @@
 		C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */; };
 		C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */; };
 		C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
-		C8FDA2182CACD7D50026EBC8 /* DeleteFriendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */; };
+		C8FDA2182CACD7D50026EBC8 /* DeleteCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FDA2172CACD7D50026EBC8 /* DeleteCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,7 +181,7 @@
 		C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PPPangramSansRounded-Bold.otf"; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
-		C8B2E1372CAC2299005E53A6 /* DeleteFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFriendView.swift; sourceTree = "<group>"; };
+		C8B2E1372CAC2299005E53A6 /* DeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteView.swift; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
@@ -195,7 +195,7 @@
 		C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewContainer.swift; sourceTree = "<group>"; };
 		C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFriendCard.swift; sourceTree = "<group>"; };
+		C8FDA2172CACD7D50026EBC8 /* DeleteCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -458,8 +458,8 @@
 			children = (
 				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C8144AC72C7C2D9C0011385D /* AddFriendView */,
-				C8B2E1372CAC2299005E53A6 /* DeleteFriendView.swift */,
-				C8FDA2172CACD7D50026EBC8 /* DeleteFriendCard.swift */,
+				C8B2E1372CAC2299005E53A6 /* DeleteView.swift */,
+				C8FDA2172CACD7D50026EBC8 /* DeleteCard.swift */,
 			);
 			path = FriendCenter;
 			sourceTree = "<group>";
@@ -659,7 +659,7 @@
 				C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */,
 				C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */,
 				C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */,
-				C8FDA2182CACD7D50026EBC8 /* DeleteFriendCard.swift in Sources */,
+				C8FDA2182CACD7D50026EBC8 /* DeleteCard.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
@@ -669,7 +669,7 @@
 				C81B48582C88553600E1164B /* AddProfilePictureButton.swift in Sources */,
 				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
 				C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */,
-				C8B2E1382CAC2299005E53A6 /* DeleteFriendView.swift in Sources */,
+				C8B2E1382CAC2299005E53A6 /* DeleteView.swift in Sources */,
 				C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */,
 				C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
