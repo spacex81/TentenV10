@@ -98,7 +98,7 @@ extension AuthViewModel {
             repoManager.selectedFriend = nil
             repoManager.removeAllListeners()
             repoManager.eraseAllUsers()
-            repoManager.eraseAllFriends()
+            repoManager.eraseAllFriendsFromDatabase()
             //
             DispatchQueue.main.async {
                 self.repoManager.needUserFetch = true
@@ -128,7 +128,7 @@ extension AuthViewModel {
         repoManager.selectedFriend = nil
         repoManager.removeAllListeners()
         repoManager.eraseAllUsers()
-        repoManager.eraseAllFriends()
+        repoManager.eraseAllFriendsFromDatabase()
         //
 
         DispatchQueue.main.async {

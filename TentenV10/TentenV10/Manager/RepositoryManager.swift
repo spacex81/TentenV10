@@ -207,60 +207,6 @@ class RepositoryManager: ObservableObject {
     
 }
 
-//extension RepositoryManager {
-//    private func setupDatabase() {
-//        do {
-//            let databaseURL = try FileManager.default
-//                .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//                .appendingPathComponent("db.sqlite")
-//            
-//            dbQueue = try DatabaseQueue(path: databaseURL.path)
-//
-//            // Register migrations
-//            var migrator = DatabaseMigrator()
-//
-//            // v1: Initial database setup, including 'password' in the 'users' table
-//            migrator.registerMigration("v1") { db in
-//                // Create the users table
-//                try db.create(table: "users") { t in
-//                    t.column("id", .text).primaryKey()
-//                    t.column("email", .text).notNull()
-//                    t.column("username", .text).notNull()
-//                    t.column("password", .text).notNull() // New password column
-//                    t.column("pin", .text).notNull()
-//                    t.column("hasIncomingCallRequest", .boolean).notNull().defaults(to: false)
-//                    t.column("profileImageData", .blob)
-//                    t.column("deviceToken", .text)
-//                    t.column("friends", .text)
-//                    t.column("roomName", .text).notNull().defaults(to: "testRoom")
-//                    t.column("isBusy", .boolean).notNull().defaults(to: false)
-//                    t.column("socialLoginId", .text).notNull()
-//                    t.column("socialLoginType", .text).notNull()
-//                    t.column("imageOffset", .double).notNull().defaults(to: 0.0)
-//                }
-//                
-//                // Create the friends table with 'lastInteraction' column
-//                try db.create(table: "friends") { t in
-//                    t.column("id", .text).primaryKey()
-//                    t.column("email", .text).notNull()
-//                    t.column("username", .text).notNull()
-//                    t.column("pin", .text).notNull()
-//                    t.column("profileImageData", .blob)
-//                    t.column("deviceToken", .text)
-//                    t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
-//                    t.column("isBusy", .boolean).notNull().defaults(to: false)
-//                    t.column("lastInteraction", .datetime)
-//                }
-//            }
-//
-//            // Migrate the database to the latest version
-//            try migrator.migrate(dbQueue)
-//        } catch {
-//            NSLog("LOG: Error setting up database: \(error)")
-//        }
-//    }
-//}
-
 extension RepositoryManager {
     private func setupDatabase() {
         do {
@@ -534,6 +480,7 @@ extension RepositoryManager {
     }
 }
 
+// MARK: Adding/Deleting friend
 extension RepositoryManager {
     func addFriend(friendPin: String) async {
             guard var newUserRecord = userRecord else {
@@ -614,6 +561,23 @@ extension RepositoryManager {
             } catch {
                 NSLog("LOG: Error adding friend by pin: \(error.localizedDescription)")
             }
+    }
+    
+    func deleteFriend(friendId: String) {
+        guard let currentUserId = auth.currentUser?.uid else {
+            NSLog("LOG: currentUserId is not set when removing friend id")
+            return
+        }
+        print("RepositoryManager-deleteFriend")
+        // TODO: Add delete friend feature
+        // 1) delete friend from memory
+        // use 'friendId' to remove FriendRecord from 'self.detailedFriends'
+        // 2) delete friend from local db
+        // use 'eraseFriendFromDatabase(friendId: String)'
+        // 3) delete friend from current user's firebase document using 'friendId'
+        // use 'updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction)'
+        // 4) delete current user from friend's firebase document using 'currentUserId'
+        // use 'updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction)'
     }
 }
 
@@ -717,7 +681,19 @@ extension RepositoryManager {
         }
     }
     
-    func eraseAllFriends() {
+    func eraseFriendFromDatabase(friendId: String) {
+        do {
+            _ = try dbPool.write { db in
+                // Find the friend by friendId and delete it
+                try FriendRecord.filter(Column("id") == friendId).deleteAll(db)
+            }
+            NSLog("LOG: Successfully erased friend with id: \(friendId)")
+        } catch {
+            NSLog("LOG: Failed to erase friend with id \(friendId): \(error.localizedDescription)")
+        }
+    }
+    
+    func eraseAllFriendsFromDatabase() {
         do {
             _ = try dbPool.write { db in
                 try FriendRecord.deleteAll(db)
@@ -841,6 +817,7 @@ extension RepositoryManager {
     }
 
     
+    // MARK: Stop using these functions, replace them with 'updateFriendListInFirebase'
     func addFriendIdInFirebase(friendId: String) {
         guard let currentUserId = auth.currentUser?.uid else {
             NSLog("LOG: currentUserId is not set when adding friend id")
@@ -856,6 +833,53 @@ extension RepositoryManager {
             }
         }
     }
+    
+    // MARK: Stop using these functions, replace them with 'updateFriendListInFirebase'
+    func removeFriendIdInFirebase(friendId: String) {
+        guard let currentUserId = auth.currentUser?.uid else {
+            NSLog("LOG: currentUserId is not set when removing friend id")
+            return
+        }
+        
+        let currentUserRef = usersCollection.document(currentUserId)
+        currentUserRef.updateData([
+            "friends": FieldValue.arrayRemove([friendId])
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Failed to remove friend from Firestore: \(error.localizedDescription)")
+            } else {
+                NSLog("LOG: Successfully removed friend with id: \(friendId) from Firestore")
+            }
+        }
+    }
+    
+    func updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction) {
+        let userRef = usersCollection.document(documentId)
+        
+        let updateData: [String: Any]
+        
+        switch action {
+        case .add:
+            updateData = ["friends": FieldValue.arrayUnion([friendId])]
+        case .remove:
+            updateData = ["friends": FieldValue.arrayRemove([friendId])]
+        }
+        
+        userRef.updateData(updateData) { error in
+            if let error = error {
+                NSLog("LOG: Failed to update friends list in Firestore: \(error.localizedDescription)")
+            } else {
+                let actionString = action == .add ? "added to" : "removed from"
+                NSLog("LOG: Successfully \(actionString) friends list with id: \(friendId)")
+            }
+        }
+    }
+
+    enum FriendAction {
+        case add
+        case remove
+    }
+
     
     func updateDeviceTokenInFirebase(userId: String, newDeviceToken: String) {
         usersCollection.document(userId).updateData([

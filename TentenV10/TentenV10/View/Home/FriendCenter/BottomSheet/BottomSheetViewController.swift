@@ -41,8 +41,8 @@ final class BottomSheetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("BottomSheetViewController-viewDidLoad")
-        print(friendToDelete ?? "friendToDelete is nil")
+//        print("BottomSheetViewController-viewDidLoad")
+//        print(friendToDelete ?? "friendToDelete is nil")
         
         setupViews()
         setupGesture()
@@ -102,10 +102,11 @@ final class BottomSheetViewController: UIViewController {
         // Add a "Delete" action with red color
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
             // TODO: Implement friend delete function
-            // Delete friend in memory
-//            'self.repoManager.detailedFriends'
-            // Delete friend in local db
-            // Delete friend in remote firebase
+            if let friendToDelete = self.friendToDelete {
+                self.repoManager.deleteFriend(friendId: friendToDelete.id)
+            } else {
+                print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
+            }
             self.dismissBottomSheet() // Close the bottom sheet after deleting
         }
         
