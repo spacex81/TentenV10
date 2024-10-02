@@ -124,12 +124,24 @@ final class BottomSheetViewController: UIViewController {
 //        present(alertVC, animated: false, completion: nil)
 //    }
     
+//    @objc private func dismissBottomSheet() {
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.contentView.frame.origin.y = self.view.frame.height
+//            self.dimmingView.alpha = 0
+//        }) { _ in
+//            self.dismiss(animated: false)
+//            self.onDismiss?()
+//        }
+//    }
     @objc private func dismissBottomSheet() {
+        // Animate only the bottom sheet's dismissal without affecting the ProfileView
         UIView.animate(withDuration: 0.3, animations: {
-            self.contentView.frame.origin.y = self.view.frame.height
-            self.dimmingView.alpha = 0
+            self.contentView.frame.origin.y = self.view.frame.height  // Move bottom sheet off screen
+            self.dimmingView.alpha = 0  // Fade out the dimming view
         }) { _ in
-            self.dismiss(animated: false)
+            // Instead of dismissing the entire ProfileView, simply remove the bottom sheet's view
+            self.contentView.removeFromSuperview()
+            self.dimmingView.removeFromSuperview()
             self.onDismiss?()
         }
     }
