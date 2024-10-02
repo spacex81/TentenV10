@@ -4,6 +4,7 @@ import UIKit
 struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
     
     @Binding var isPresented: Bool
+    @Binding var friendToDelete: FriendRecord?
     
     class Coordinator: NSObject, UIViewControllerTransitioningDelegate {
         var parent: BottomSheetViewControllerRepresentable
@@ -24,7 +25,7 @@ struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
         if isPresented {
             let bottomSheetVC = BottomSheetViewController()
             bottomSheetVC.modalPresentationStyle = .overFullScreen
-            
+            bottomSheetVC.friendToDelete = friendToDelete
             bottomSheetVC.onDismiss = {
                 DispatchQueue.main.async {
                     self.isPresented = false
@@ -40,7 +41,7 @@ struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
         if isPresented {
             let bottomSheetVC = BottomSheetViewController()
             bottomSheetVC.modalPresentationStyle = .overFullScreen
-            
+            bottomSheetVC.friendToDelete = friendToDelete
             bottomSheetVC.onDismiss = {
                 DispatchQueue.main.async {
                     self.isPresented = false

@@ -3,6 +3,9 @@ import UIKit
 final class BottomSheetViewController: UIViewController {
     
     var onDismiss: (() -> Void)?
+    var friendToDelete: FriendRecord?
+    
+    let repoManager = RepositoryManager.shared
     
     private let contentView: UIView = {
         let view = UIView()
@@ -17,14 +20,6 @@ final class BottomSheetViewController: UIViewController {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
         view.alpha = 0
         return view
-    }()
-    
-    private let sheetLabel: UILabel = {
-        let label = UILabel()
-        label.text = "This is a bottom sheet"
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        return label
     }()
     
     private let deleteButton: UIButton = {
@@ -46,6 +41,8 @@ final class BottomSheetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("BottomSheetViewController-viewDidLoad")
+        print(friendToDelete ?? "friendToDelete is nil")
         
         setupViews()
         setupGesture()
@@ -104,7 +101,11 @@ final class BottomSheetViewController: UIViewController {
         
         // Add a "Delete" action with red color
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            print("Friend deleted")
+            // TODO: Implement friend delete function
+            // Delete friend in memory
+//            'self.repoManager.detailedFriends'
+            // Delete friend in local db
+            // Delete friend in remote firebase
             self.dismissBottomSheet() // Close the bottom sheet after deleting
         }
         
