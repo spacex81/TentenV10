@@ -118,21 +118,7 @@ final class BottomSheetViewController: UIViewController {
         // Present the alert controller
         present(alertController, animated: true, completion: nil)
     }
-//    @objc private func deleteFriendAction() {
-//        let alertVC = CustomAlertViewController()
-//        alertVC.modalPresentationStyle = .overFullScreen
-//        present(alertVC, animated: false, completion: nil)
-//    }
     
-//    @objc private func dismissBottomSheet() {
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.contentView.frame.origin.y = self.view.frame.height
-//            self.dimmingView.alpha = 0
-//        }) { _ in
-//            self.dismiss(animated: false)
-//            self.onDismiss?()
-//        }
-//    }
     @objc private func dismissBottomSheet() {
         // Animate only the bottom sheet's dismissal without affecting the ProfileView
         UIView.animate(withDuration: 0.3, animations: {
