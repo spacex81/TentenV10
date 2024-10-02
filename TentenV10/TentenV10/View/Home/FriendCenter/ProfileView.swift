@@ -5,7 +5,8 @@ struct ProfileView: View {
     @State private var friendToDelete: FriendRecord?
     
     // State for showing delete view as an overlay
-    @State private var showDeleteOverlay = false
+//    @State private var showDeleteOverlay = false
+    @State private var showBottomSheet = false
     
     let viewModel = HomeViewModel.shared
 
@@ -81,7 +82,8 @@ struct ProfileView: View {
                                     Button(action: {
                                         withAnimation {
                                             friendToDelete = friend
-                                            showDeleteOverlay = true
+//                                            showDeleteOverlay = true
+                                            showBottomSheet = true
                                         }
                                     }) {
                                         Image(systemName: "ellipsis")
@@ -100,6 +102,7 @@ struct ProfileView: View {
             .sheet(isPresented: $isAddFriendSheetPresented) {
                 AddFriendView()
             }
+            .background(BottomSheetViewControllerRepresentable(isPresented: $showBottomSheet))
         }
     }
 }
