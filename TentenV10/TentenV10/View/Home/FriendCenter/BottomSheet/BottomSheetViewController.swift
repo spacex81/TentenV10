@@ -101,9 +101,9 @@ final class BottomSheetViewController: UIViewController {
         
         // Add a "Delete" action with red color
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            // TODO: Implement friend delete function
             if let friendToDelete = self.friendToDelete {
                 self.repoManager.deleteFriend(friendId: friendToDelete.id)
+                // TODO: Also notifiy your friend to delete 
             } else {
                 print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
             }

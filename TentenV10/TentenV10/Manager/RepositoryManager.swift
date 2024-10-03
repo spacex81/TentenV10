@@ -483,84 +483,84 @@ extension RepositoryManager {
 // MARK: Adding/Deleting friend
 extension RepositoryManager {
     func addFriend(friendPin: String) async {
-            guard var newUserRecord = userRecord else {
-                NSLog("LOG: userRecord is nil when adding friend")
-                return
-            }
+        guard var newUserRecord = userRecord else {
+            NSLog("LOG: userRecord is nil when adding friend")
+            return
+        }
         
-            do {
-                if !friendPin.isEmpty {
-                     let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
+        do {
+            if !friendPin.isEmpty {
+                let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
+                
+                if !newUserRecord.friends.contains(friendId) {
                     
-                     if !newUserRecord.friends.contains(friendId) {
-                         
-                         let currentTimestamp = Date()
-                         // fetch detailed friend
-                         let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
-
-                         newUserRecord.friends.append(friendId)
-                         
-                         // Part1
-                         // Storing user information
-                         DispatchQueue.main.async {
-                             self.userRecord!.friends.append(friendId)
-                         }
-                         createUserInDatabase(user: newUserRecord)
-                         addFriendIdInFirebase(friendId: friendId)
-                         
-                         // Part2
-                         // Storing room information
-                         let roomId = RoomDto.generateRoomId(userId1: newUserRecord.id, userId2: friendId)
-                         
-                         let roomDocRef = db.collection("rooms").document(roomId)
-                         
-                         let roomDoc = try await roomDocRef.getDocument()
-                         
-                         if roomDoc.exists {
-                             // Room exists, update the lastInteraction timestamp
-                             var roomDto = try roomDoc.data(as: RoomDto.self)
-                             roomDto.lastInteraction = Timestamp(date: currentTimestamp)
-                             
-                             try roomDocRef.setData(from: roomDto)
-                             listenToRoom(roomId: roomId)
-                         } else {
-                             // Room does not exist, create a new room document
-                             let roomNickname = RoomDto.generateRoomNickName(username1: newUserRecord.username, username2: friendUserDto.username)
-                             
-                             let roomDto = RoomDto(id: roomId, userId1: newUserRecord.id, userId2: friendId, lastInteraction: currentTimestamp, nickname: roomNickname)
-                             
-                             try roomDocRef.setData(from: roomDto)
-                             
-                             // new room is added, start listening to this room
-                             NSLog("LOG: new room is added, start listening to this room")
-                             listenToRoom(roomId: roomId)
-                         }
-                         
-                         // Part3
-                         // Adding friendRecord
-                         let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
-                         if self.selectedFriend == nil {
-                             // set selected friend if this is the first friend that is added
-                             self.selectedFriend = friendRecord
-                         }
-                         
-                         if !self.detailedFriends.contains(friendRecord) {
-                             DispatchQueue.main.async {
-                                 self.detailedFriends.append(friendRecord)
-                             }
-                             createFriendInDatabase(friend: friendRecord)
-                         } else {
-//                             NSLog("LOG: friend is already added-FriendRecord")
-                         }
-                     } else {
-                         NSLog("LOG: friend is already added-FriendID")
-                     }
-                 } else {
-                     throw NSError(domain: "addFriendError", code: -1, userInfo: [NSLocalizedDescriptionKey: "friendPin is not set when trying to add friend by pin"])
-                 }
-            } catch {
-                NSLog("LOG: Error adding friend by pin: \(error.localizedDescription)")
+                    let currentTimestamp = Date()
+                    // fetch detailed friend
+                    let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
+                    
+                    newUserRecord.friends.append(friendId)
+                    
+                    // Part1
+                    // Storing user information
+                    DispatchQueue.main.async {
+                        self.userRecord!.friends.append(friendId)
+                    }
+                    createUserInDatabase(user: newUserRecord)
+                    addFriendIdInFirebase(friendId: friendId)
+                    
+                    // Part2
+                    // Storing room information
+                    let roomId = RoomDto.generateRoomId(userId1: newUserRecord.id, userId2: friendId)
+                    
+                    let roomDocRef = db.collection("rooms").document(roomId)
+                    
+                    let roomDoc = try await roomDocRef.getDocument()
+                    
+                    if roomDoc.exists {
+                        // Room exists, update the lastInteraction timestamp
+                        var roomDto = try roomDoc.data(as: RoomDto.self)
+                        roomDto.lastInteraction = Timestamp(date: currentTimestamp)
+                        
+                        try roomDocRef.setData(from: roomDto)
+                        listenToRoom(roomId: roomId)
+                    } else {
+                        // Room does not exist, create a new room document
+                        let roomNickname = RoomDto.generateRoomNickName(username1: newUserRecord.username, username2: friendUserDto.username)
+                        
+                        let roomDto = RoomDto(id: roomId, userId1: newUserRecord.id, userId2: friendId, lastInteraction: currentTimestamp, nickname: roomNickname)
+                        
+                        try roomDocRef.setData(from: roomDto)
+                        
+                        // new room is added, start listening to this room
+                        NSLog("LOG: new room is added, start listening to this room")
+                        listenToRoom(roomId: roomId)
+                    }
+                    
+                    // Part3
+                    // Adding friendRecord
+                    let friendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendUserDto)
+                    if self.selectedFriend == nil {
+                        // set selected friend if this is the first friend that is added
+                        self.selectedFriend = friendRecord
+                    }
+                    
+                    if !self.detailedFriends.contains(friendRecord) {
+                        DispatchQueue.main.async {
+                            self.detailedFriends.append(friendRecord)
+                        }
+                        createFriendInDatabase(friend: friendRecord)
+                    } else {
+                        //                             NSLog("LOG: friend is already added-FriendRecord")
+                    }
+                } else {
+                    NSLog("LOG: friend is already added-FriendID")
+                }
+            } else {
+                throw NSError(domain: "addFriendError", code: -1, userInfo: [NSLocalizedDescriptionKey: "friendPin is not set when trying to add friend by pin"])
             }
+        } catch {
+            NSLog("LOG: Error adding friend by pin: \(error.localizedDescription)")
+        }
     }
     
     func deleteFriend(friendId: String) {
@@ -568,16 +568,26 @@ extension RepositoryManager {
             NSLog("LOG: currentUserId is not set when removing friend id")
             return
         }
+        
         print("RepositoryManager-deleteFriend")
-        // TODO: Add delete friend feature
-        // 1) delete friend from memory
-        // use 'friendId' to remove FriendRecord from 'self.detailedFriends'
-        // 2) delete friend from local db
-        // use 'eraseFriendFromDatabase(friendId: String)'
-        // 3) delete friend from current user's firebase document using 'friendId'
-        // use 'updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction)'
-        // 4) delete current user from friend's firebase document using 'currentUserId'
-        // use 'updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction)'
+        
+        // 1) Delete friend from memory (self.detailedFriends)
+        if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
+            self.detailedFriends.remove(at: index)
+            NSLog("LOG: Successfully removed friend from memory")
+        } else {
+            NSLog("LOG: Failed to find friend in memory")
+            return
+        }
+        
+        // 2) Delete friend from local database
+        eraseFriendFromDatabase(friendId: friendId)
+        NSLog("LOG: Successfully removed friend from local database")
+        
+        // 3) Delete friend from current user's Firebase document
+        updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
+        
+        NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
     }
 }
 
