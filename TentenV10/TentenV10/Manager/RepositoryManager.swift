@@ -89,7 +89,20 @@ class RepositoryManager: ObservableObject {
             NSLog("LOG: RepositoryManager-selectedFriend")
             if let selectedFriend = selectedFriend {
                 print(selectedFriend)
+            } else {
+                print("selectedFriend is nil")
             }
+            
+            // Define the conditions for better readability
+            let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
+            let isSelectedFriendNotInList = (selectedFriend != nil && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
+
+            // Combine the conditions
+            if isSelectedFriendNil || isSelectedFriendNotInList {
+                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
+                self.selectedFriend = detailedFriends[0]
+            }
+            
             // update room name
             if let senderToken = userRecord?.deviceToken,
                let receiverToken = selectedFriend?.deviceToken {
@@ -135,13 +148,10 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-//            NSLog("LOG: detailedFriends-didSet")
-//            print(detailedFriends)
-            // Select friend when app launch
-            if detailedFriends.count > 0 && selectedFriend == nil {
-//                NSLog("LOG: Initial friend is selected")
-                self.selectedFriend = detailedFriends[0]
-            }
+//            if detailedFriends.count > 0 && selectedFriend == nil {
+////                NSLog("LOG: Initial friend is selected")
+//                self.selectedFriend = detailedFriends[0]
+//            }
         }
     }
     
