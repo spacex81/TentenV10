@@ -22,8 +22,10 @@ class RepositoryManager: ObservableObject {
     let roomsCollection: CollectionReference
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
-    private var roomsListeners: [ListenerRegistration] = []
-    private var friendsListeners: [ListenerRegistration] = []
+//    private var roomsListeners: [ListenerRegistration] = []
+//    private var friendsListeners: [ListenerRegistration] = []
+    private var roomsListeners: [String: ListenerRegistration] = [:]
+    private var friendsListeners: [String: ListenerRegistration] = [:]
     private var userListener: ListenerRegistration?
     
     private var previousState: UserState = .idle
@@ -307,21 +309,21 @@ extension RepositoryManager {
     func listenToRooms(userRecord: UserRecord) {
         let friends = userRecord.friends
         
-        roomsListeners.forEach { $0.remove() }
-        roomsListeners = []
+        roomsListeners.forEach { $0.value.remove() }
+        roomsListeners.removeAll()
         
         friends.forEach { friendId in
             let roomId = RoomDto.generateRoomId(userId1: userRecord.id, userId2: friendId)
             listenToRoom(roomId: roomId)
         }
     }
+    
     func listenToFriends(userRecord: UserRecord) {
-//        NSLog("LOG: listenToFriends")
         let friends = userRecord.friends
 
         // Clear existing listeners before setting up new ones
-        friendsListeners.forEach { $0.remove() }
-        friendsListeners = []
+        friendsListeners.forEach { $0.value.remove() }
+        friendsListeners.removeAll()
 
         // Listen to each friend
         friends.forEach { listenToFriend(friendId: $0) }
@@ -448,7 +450,7 @@ extension RepositoryManager {
                 }
             }
         }
-        roomsListeners.append(roomListener)
+        roomsListeners[roomId] = roomListener
     }
 
     
@@ -490,7 +492,7 @@ extension RepositoryManager {
             }
         }
 
-        friendsListeners.append(friendListener)
+        friendsListeners[friendId] = friendListener
     }
 }
 
@@ -602,8 +604,30 @@ extension RepositoryManager {
         updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
         
         // 4) Remove friend id in UserRecord.friends
-        // TODO:
         updateCurrentUserFriends(friendId: friendId)
+        
+        // 5) Remove friend listener using friendId
+        if let listener = friendsListeners[friendId] {
+            listener.remove()
+            friendsListeners.removeValue(forKey: friendId)
+            NSLog("LOG: Successfully removed listener for friendId: \(friendId)")
+        } else {
+            NSLog("LOG: No listener found for friendId: \(friendId)")
+        }
+        
+        let roomId = RoomDto.generateRoomId(userId1: currentUserId, userId2: friendId)
+        
+        // 6) Remove room from firebase
+        removeRoomFromFirebase(roomId: roomId)
+        
+        // 7) Remove room listener
+        if let roomListener = roomsListeners[roomId] {
+            roomListener.remove()
+            roomsListeners.removeValue(forKey: roomId)
+            NSLog("LOG: Successfully removed room listener for roomId: \(roomId)")
+        } else {
+            NSLog("LOG: No room listener found for roomId: \(roomId)")
+        }
         
         NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
     }
@@ -1234,19 +1258,29 @@ extension RepositoryManager {
             }
         }
     }
+    
+    func removeRoomFromFirebase(roomId: String) {
+        roomsCollection.document(roomId).delete { error in
+            if let error = error {
+                NSLog("LOG: Failed to remove room from Firebase: \(error.localizedDescription)")
+            } else {
+                NSLog("LOG: Successfully removed room with id: \(roomId) from Firebase")
+            }
+        }
+    }
 }
 
 extension RepositoryManager {
     func removeAllListeners() {
         // Cancel and remove all room listeners
         for listener in roomsListeners {
-            listener.remove()
+            listener.value.remove()
         }
         roomsListeners.removeAll()
         
         // Cancel and remove all friend listeners
         for listener in friendsListeners {
-            listener.remove()
+            listener.value.remove()
         }
         friendsListeners.removeAll()
         
