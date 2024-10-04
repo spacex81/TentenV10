@@ -23,7 +23,12 @@ class RepositoryManager: ObservableObject {
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     private var roomsListeners: [String: ListenerRegistration] = [:]
-    private var friendsListeners: [String: ListenerRegistration] = [:]
+    private var friendsListeners: [String: ListenerRegistration] = [:] {
+        didSet {
+            NSLog("LOG: friendsListeners")
+            print(friendsListeners)
+        }
+    }
     private var userListener: ListenerRegistration?
     
     private var previousState: UserState = .idle
@@ -348,14 +353,16 @@ extension RepositoryManager {
                              self.handleIncomingCallRequest(userDto: userDto)
                          }
                          
-                         let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
+                         let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
-                         if self.userRecord != userRecord {
+                         self.handleRemovedFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
+                         
+                         if self.userRecord != updatedUserRecord {
                              DispatchQueue.main.async {
 //                                 NSLog("LOG: UserRecord is set")
-                                 self.userRecord = userRecord
+                                 self.userRecord = updatedUserRecord
                              }
-                             self.createUserInDatabase(user: userRecord)
+                             self.createUserInDatabase(user: updatedUserRecord)
                          }
                      } catch {
                          print("Error converting UserDto to UserRecord: \(error.localizedDescription)")
@@ -368,6 +375,20 @@ extension RepositoryManager {
              }
          }
      }
+    
+    private func handleRemovedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+        // Compare old friends list with the new one
+        let oldFriends = Set(oldUserRecord?.friends ?? [])
+        let newFriends = Set(newUserRecord.friends)
+        
+        // Find friends that were removed
+        let removedFriends = oldFriends.subtracting(newFriends)
+        
+        // Delete each friend no longer in the new friends list
+        removedFriends.forEach { friendId in
+            self.deleteFriend(friendId: friendId)
+        }
+    }
     
     private func handleIncomingCallRequest(userDto: UserDto) {
         let roomName = userDto.roomName
@@ -629,6 +650,13 @@ extension RepositoryManager {
             NSLog("LOG: No room listener found for roomId: \(roomId)")
         }
         
+        if detailedFriends.count > 0 {
+            selectedFriend = detailedFriends[0]
+        } else {
+            selectedFriend = nil
+            ContentViewModel.shared.onboardingStep = .addFriend
+        }
+
         NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
     }
     

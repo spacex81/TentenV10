@@ -100,19 +100,16 @@ final class BottomSheetViewController: UIViewController {
         )
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            if let friendToDelete = self.friendToDelete {
+            if
+                let friendToDelete = self.friendToDelete,
+                let currentUser = self.repoManager.userRecord
+            {
                 // 1) Delete friend
                 self.repoManager.deleteFriend(friendId: friendToDelete.id)
-                // 2-1) If we have friends left, than update the selectedFriend
-                if self.repoManager.detailedFriends.count > 0 {
-                    self.repoManager.selectedFriend = self.repoManager.detailedFriends[0]
-                } else {
-                // 2-2) If we no longer have friends, move to 'AddView'
-                    self.repoManager.selectedFriend = nil
-                    // TODO: Move to AddView
-                    ContentViewModel.shared.onboardingStep = .addFriend
-                }
-                // TODO: Also notifiy your friend to delete
+                
+                // 2) Delete current user from friend's friend list
+                self.repoManager.updateFriendListInFirebase(documentId: friendToDelete.id, friendId: currentUser.id, action: .remove)
+                
             } else {
                 print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
             }
