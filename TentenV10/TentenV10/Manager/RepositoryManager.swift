@@ -93,6 +93,10 @@ class RepositoryManager: ObservableObject {
     @Published var selectedFriend: FriendRecord? {
         didSet {
             NSLog("LOG: RepositoryManager-selectedFriend")
+            Task {
+                NSLog("LOG: reloadData() is run when selectedFriend has changed")
+                await self.collectionViewController?.reloadData()
+        ///
             if let selectedFriend = selectedFriend {
                 print(selectedFriend)
             } else {
@@ -101,7 +105,7 @@ class RepositoryManager: ObservableObject {
             
             // Define the conditions for better readability
             let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
-            let isSelectedFriendNotInList = (selectedFriend != nil && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
+            let isSelectedFriendNotInList = (selectedFriend != nil && detailedFriends.count > 0 && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
 
             // Combine the conditions
             if isSelectedFriendNil || isSelectedFriendNotInList {
@@ -119,10 +123,9 @@ class RepositoryManager: ObservableObject {
                      updateRoomName(roomName: roomName)
                 }
             }
-            
-            Task {
-                await self.collectionViewController?.reloadData()
+        ///
             }
+
         }
     }
     
@@ -158,10 +161,8 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-//            if detailedFriends.count > 0 && selectedFriend == nil {
-////                NSLog("LOG: Initial friend is selected")
-//                self.selectedFriend = detailedFriends[0]
-//            }
+            NSLog("LOG: detailedFriends")
+            print(detailedFriends)
         }
     }
     
@@ -654,7 +655,9 @@ extension RepositoryManager {
             selectedFriend = detailedFriends[0]
         } else {
             selectedFriend = nil
-            ContentViewModel.shared.onboardingStep = .addFriend
+            DispatchQueue.main.async {
+                ContentViewModel.shared.onboardingStep = .addFriend
+            }
         }
 
         NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
