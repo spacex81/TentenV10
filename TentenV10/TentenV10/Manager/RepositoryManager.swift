@@ -87,12 +87,12 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-//            NSLog("LOG: RepositoryManager-selectedFriend")
-//            if let selectedFriend = selectedFriend {
-//                print(selectedFriend)
-//            } else {
+            NSLog("LOG: RepositoryManager-selectedFriend")
+            if let selectedFriend = selectedFriend {
+                print(selectedFriend)
+            } else {
 //                print("selectedFriend is nil")
-//            }
+            }
             
             // Define the conditions for better readability
             let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
@@ -352,7 +352,7 @@ extension RepositoryManager {
                          
                          if self.userRecord != userRecord {
                              DispatchQueue.main.async {
-                                 NSLog("LOG: UserRecord is set")
+//                                 NSLog("LOG: UserRecord is set")
                                  self.userRecord = userRecord
                              }
                              self.createUserInDatabase(user: userRecord)

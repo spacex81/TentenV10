@@ -67,8 +67,8 @@ struct ContentView: View {
             isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
 
             // Log the permission statuses
-            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
-            print("Microphone Permission Granted: \(isMicPermissionGranted)")
+//            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
+//            print("Microphone Permission Granted: \(isMicPermissionGranted)")
         }
     }
 }

@@ -183,7 +183,7 @@ struct HomeView: View {
 
                 // Checking notification permission
                 let isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
-                print("Notification Permission Granted: \(isNotificationPermissionGranted)")
+//                print("Notification Permission Granted: \(isNotificationPermissionGranted)")
             }
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
