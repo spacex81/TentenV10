@@ -96,7 +96,9 @@ class RepositoryManager: ObservableObject {
             Task {
                 NSLog("LOG: reloadData() is run when selectedFriend has changed")
                 await self.collectionViewController?.reloadData()
-        ///
+            }
+            
+            ///
             if let selectedFriend = selectedFriend {
                 print(selectedFriend)
             } else {
@@ -105,13 +107,18 @@ class RepositoryManager: ObservableObject {
             
             // Define the conditions for better readability
             let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
-            let isSelectedFriendNotInList = (selectedFriend != nil && detailedFriends.count > 0 && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
-
+//                let isSelectedFriendNotInList = (selectedFriend != nil && detailedFriends.count > 0 && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
+            
             // Combine the conditions
-            if isSelectedFriendNil || isSelectedFriendNotInList {
-//                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
+//                if isSelectedFriendNil || isSelectedFriendNotInList {
+//                    //                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
+//                    self.selectedFriend = detailedFriends[0]
+//                }
+            if isSelectedFriendNil {
+                //                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
                 self.selectedFriend = detailedFriends[0]
             }
+
             
             // update room name
             if let senderToken = userRecord?.deviceToken,
@@ -120,12 +127,10 @@ class RepositoryManager: ObservableObject {
                 let roomName = "\(tokens[0])_\(tokens[1])"
                 
                 if userRecord?.roomName != roomName {
-                     updateRoomName(roomName: roomName)
+                    updateRoomName(roomName: roomName)
                 }
             }
-        ///
-            }
-
+            ///
         }
     }
     
@@ -163,6 +168,10 @@ class RepositoryManager: ObservableObject {
         didSet {
             NSLog("LOG: detailedFriends")
             print(detailedFriends)
+            Task {
+                NSLog("LOG: reloadData() is run when selectedFriend has changed")
+                await self.collectionViewController?.reloadData()
+            }
         }
     }
     
@@ -588,7 +597,7 @@ extension RepositoryManager {
                         }
                         createFriendInDatabase(friend: friendRecord)
                     } else {
-                        //                             NSLog("LOG: friend is already added-FriendRecord")
+                        // NSLog("LOG: friend is already added-FriendRecord")
                     }
                 } else {
                     NSLog("LOG: friend is already added-FriendID")
@@ -661,6 +670,10 @@ extension RepositoryManager {
         }
 
         NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
+        NSLog("LOG: deleteFriend-selectedFriend")
+        print(selectedFriend ?? "selectedFriend is nil")
+        NSLog("LOG: deletedFriend-detailedFriends")
+        print(detailedFriends)
     }
     
     private func updateCurrentUserFriends(friendId: String) {
