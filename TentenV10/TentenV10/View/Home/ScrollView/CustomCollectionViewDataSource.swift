@@ -28,20 +28,22 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        NSLog("LOG: Number of items in section: \(detailedFriends.count)")
         return detailedFriends.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
-//        NSLog("LOG: currentState: \(repoManager.currentState)")
+        NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
+        NSLog("LOG: currentState: \(repoManager.currentState)")
+        NSLog("LOG: detailedFriends count: \(detailedFriends.count)")
         
         let friend = detailedFriends[indexPath.item]
-//        if selectedFriend != nil {
-//            NSLog("LOG: selectedFriend")
-//            print(selectedFriend ?? "not selected yet")
-//            NSLog("LOG: friend")
-//            print(friend)
-//        }
+        if selectedFriend != nil {
+            NSLog("LOG: selectedFriend")
+            print(selectedFriend ?? "not selected yet")
+            NSLog("LOG: friend")
+            print(friend)
+        }
         
         let cell: UICollectionViewCell
         
@@ -59,9 +61,9 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
-//            NSLog("LOG: add button is set")
-//        } else if friend == selectedFriend {
+            NSLog("LOG: add button is set for \(friend.username)")
         } else if friend.id == selectedFriend?.id {
+//        } else if friend.id == self.repoManager.selectedFriend?.id {
 //            NSLog("LOG: selected friend: \(friend.username)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: LongPressCell.reuseIdentifier, for: indexPath) as! LongPressCell
             let longPressCell = cell as! LongPressCell
@@ -87,7 +89,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
             }
-            NSLog("LOG: long press cell is set")
+            NSLog("LOG: long press cell is set for \(friend.username)")
 
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: TapCell.reuseIdentifier, for: indexPath) as! TapCell
@@ -107,7 +109,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 self?.collectionViewController?.centerCell(at: indexPath)
                 self?.repoManager.selectedFriend = friend
             }
-            NSLog("LOG: tap cell is set")
+            NSLog("LOG: tap cell is set for \(friend.username)")
 
             /**
              DO NOT ERASE:
@@ -115,13 +117,9 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
              in those cases we need to programmatically press the tap cell and
              turn it into long press cell
              */
-            if friend.id == selectedFriend?.id {
-//                if let selectedFriend = selectedFriend {
-//                    print("LOG: selectedFriend.id: \(selectedFriend.id)")
-//                    print("LOG: friend.id: \(friend.id)")
-//                }
-                self.repoManager.selectedFriend = friend
-            }
+//            if friend.id == selectedFriend?.id {
+//                self.repoManager.selectedFriend = friend
+//            }
         }
         
         return cell

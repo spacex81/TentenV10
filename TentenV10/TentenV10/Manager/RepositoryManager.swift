@@ -113,6 +113,10 @@ class RepositoryManager: ObservableObject {
                      updateRoomName(roomName: roomName)
                 }
             }
+            
+            Task {
+                await self.collectionViewController?.reloadData()
+            }
         }
     }
     
@@ -597,7 +601,31 @@ extension RepositoryManager {
         // 3) Delete friend from current user's Firebase document
         updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
         
+        // 4) Remove friend id in UserRecord.friends
+        // TODO:
+        updateCurrentUserFriends(friendId: friendId)
+        
         NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
+    }
+    
+    private func updateCurrentUserFriends(friendId: String) {
+        guard let currentUser = readUserFromDatabase(id: auth.currentUser?.uid ?? "") else {
+            NSLog("LOG: Failed to retrieve current user from local database")
+            return
+        }
+        
+        // Check if friend is in the list
+        if let index = currentUser.friends.firstIndex(of: friendId) {
+            var updatedUser = currentUser
+            updatedUser.friends.remove(at: index) // Remove friend ID from friends list
+
+            // Update the user record in the database
+            createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord
+            
+            NSLog("LOG: Successfully removed friend from currentUser.friends and updated in local database")
+        } else {
+            NSLog("LOG: Friend ID not found in currentUser.friends")
+        }
     }
 }
 

@@ -77,6 +77,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         ])
     }
     
+    // MARK: Used when tap to center
     func centerCell(at indexPath: IndexPath) {
         guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return }
         
@@ -101,7 +102,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     }
 
     func reloadData() {
-//        NSLog("LOG: CustomCollectionViewController-reloadData()")
+        NSLog("LOG: CustomCollectionViewController-reloadData()")
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
