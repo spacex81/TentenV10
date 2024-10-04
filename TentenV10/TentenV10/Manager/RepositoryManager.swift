@@ -98,7 +98,6 @@ class RepositoryManager: ObservableObject {
                 await self.collectionViewController?.reloadData()
             }
             
-            ///
             if let selectedFriend = selectedFriend {
                 print(selectedFriend)
             } else {
@@ -107,19 +106,12 @@ class RepositoryManager: ObservableObject {
             
             // Define the conditions for better readability
             let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
-//                let isSelectedFriendNotInList = (selectedFriend != nil && detailedFriends.count > 0 && !detailedFriends.contains(where: { $0.id == selectedFriend!.id }))
-            
-            // Combine the conditions
-//                if isSelectedFriendNil || isSelectedFriendNotInList {
-//                    //                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
-//                    self.selectedFriend = detailedFriends[0]
-//                }
+
             if isSelectedFriendNil {
-                //                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
+                NSLog("LOG: IF selectedFriend is nil but you have friends, set selectedFriend")
                 self.selectedFriend = detailedFriends[0]
             }
 
-            
             // update room name
             if let senderToken = userRecord?.deviceToken,
                let receiverToken = selectedFriend?.deviceToken {
@@ -130,7 +122,6 @@ class RepositoryManager: ObservableObject {
                     updateRoomName(roomName: roomName)
                 }
             }
-            ///
         }
     }
     
@@ -532,6 +523,11 @@ extension RepositoryManager {
     func addFriend(friendPin: String) async {
         guard var newUserRecord = userRecord else {
             NSLog("LOG: userRecord is nil when adding friend")
+            return
+        }
+        
+        if friendPin == newUserRecord.pin {
+            NSLog("LOG: This is your pin. Please enter your friend's pin")
             return
         }
         
