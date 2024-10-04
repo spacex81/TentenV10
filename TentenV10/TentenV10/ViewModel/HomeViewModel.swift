@@ -63,16 +63,16 @@ class HomeViewModel: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-            NSLog("LOG: HomeViewModel-selectedFriend: ")
-            if let selectedFriend = selectedFriend {
-                print(selectedFriend)
-            }
+//            NSLog("LOG: HomeViewModel-selectedFriend: ")
+//            if let selectedFriend = selectedFriend {
+//                print(selectedFriend)
+//            }
         }
     }
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: HomeViewModel-detailedFriends: ")
-            print(detailedFriends)
+//            NSLog("LOG: HomeViewModel-detailedFriends: ")
+//            print(detailedFriends)
             updateSelectedFriendIsBusy()
         }
     }

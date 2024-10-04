@@ -22,8 +22,6 @@ class RepositoryManager: ObservableObject {
     let roomsCollection: CollectionReference
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
-//    private var roomsListeners: [ListenerRegistration] = []
-//    private var friendsListeners: [ListenerRegistration] = []
     private var roomsListeners: [String: ListenerRegistration] = [:]
     private var friendsListeners: [String: ListenerRegistration] = [:]
     private var userListener: ListenerRegistration?
@@ -35,11 +33,11 @@ class RepositoryManager: ObservableObject {
             // Check if the state has changed from .isListening to .idle
             if previousState == .isListening && currentState == .idle {
                 // Reload data only when transitioning from .isListening to .idle
-                NSLog("LOG: reloadData when connection state changed from isListening to idle")
+//                NSLog("LOG: reloadData when connection state changed from isListening to idle")
                 collectionViewController?.reloadData()
             } else if currentState == .isListening {
                 // When transitioning to .isListening, update the collection view
-                NSLog("LOG: reloadData when connection state is set to isListening")
+//                NSLog("LOG: reloadData when connection state is set to isListening")
                 collectionViewController?.reloadData()
             }
             
@@ -50,7 +48,8 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-            
+//            NSLog("LOG: RepositoryManager-userRecord")
+//            print(userRecord ?? "userRecord is nil")
             if let userRecord = self.userRecord {
                 // update deviceToken
                 if let deviceToken = deviceToken {
@@ -88,12 +87,12 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-selectedFriend")
-            if let selectedFriend = selectedFriend {
-                print(selectedFriend)
-            } else {
-                print("selectedFriend is nil")
-            }
+//            NSLog("LOG: RepositoryManager-selectedFriend")
+//            if let selectedFriend = selectedFriend {
+//                print(selectedFriend)
+//            } else {
+//                print("selectedFriend is nil")
+//            }
             
             // Define the conditions for better readability
             let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
@@ -101,7 +100,7 @@ class RepositoryManager: ObservableObject {
 
             // Combine the conditions
             if isSelectedFriendNil || isSelectedFriendNotInList {
-                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
+//                NSLog("LOG: selectedFriend is nil or selectedFriend doesn't exist in detailedFriends, setting up first friend as selected")
                 self.selectedFriend = detailedFriends[0]
             }
             
@@ -186,7 +185,7 @@ class RepositoryManager: ObservableObject {
     }
     
     private func updateDeviceToken(oldUserRecord: UserRecord, newDeviceToken: String) {
-        NSLog("LOG: updateDeviceToken")
+//        NSLog("LOG: updateDeviceToken")
         var newUserRecord = oldUserRecord
         newUserRecord.deviceToken = newDeviceToken
 
@@ -478,6 +477,7 @@ extension RepositoryManager {
                                     self.selectedFriend = newFriendRecord
                                 }
                             } else {
+                                NSLog("LOG: New friend is added in friend listener")
                                 self.detailedFriends.append(newFriendRecord)
                             }
                         }
@@ -580,14 +580,14 @@ extension RepositoryManager {
     }
     
     func deleteFriend(friendId: String) {
+        NSLog("LOG: RepositoryManager-deleteFriend")
+        
         guard let currentUserId = auth.currentUser?.uid else {
             NSLog("LOG: currentUserId is not set when removing friend id")
             return
         }
         
-        print("RepositoryManager-deleteFriend")
-        
-        // 1) Delete friend from memory (self.detailedFriends)
+        // 1) Delete friend from memory
         if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
             self.detailedFriends.remove(at: index)
             NSLog("LOG: Successfully removed friend from memory")
@@ -642,6 +642,10 @@ extension RepositoryManager {
         if let index = currentUser.friends.firstIndex(of: friendId) {
             var updatedUser = currentUser
             updatedUser.friends.remove(at: index) // Remove friend ID from friends list
+            
+            DispatchQueue.main.async {
+                self.userRecord = updatedUser
+            }
 
             // Update the user record in the database
             createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord

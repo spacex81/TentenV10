@@ -108,6 +108,7 @@ final class BottomSheetViewController: UIViewController {
                     self.repoManager.selectedFriend = self.repoManager.detailedFriends[0]
                 } else {
                 // 2-2) If we no longer have friends, move to 'AddView'
+                    self.repoManager.selectedFriend = nil
                 }
                 // TODO: Also notifiy your friend to delete
             } else {
