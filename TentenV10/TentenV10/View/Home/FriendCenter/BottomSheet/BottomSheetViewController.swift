@@ -109,6 +109,8 @@ final class BottomSheetViewController: UIViewController {
                 } else {
                 // 2-2) If we no longer have friends, move to 'AddView'
                     self.repoManager.selectedFriend = nil
+                    // TODO: Move to AddView
+                    ContentViewModel.shared.onboardingStep = .addFriend
                 }
                 // TODO: Also notifiy your friend to delete
             } else {

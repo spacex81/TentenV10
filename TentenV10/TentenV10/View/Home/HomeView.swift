@@ -178,11 +178,11 @@ struct HomeView: View {
         .onAppear {
             Task {
                 // Checking microphone permission
-                let isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
-                print("Microphone Permission Granted: \(isMicPermissionGranted)")
+//                let isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
+//                print("Microphone Permission Granted: \(isMicPermissionGranted)")
 
                 // Checking notification permission
-                let isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
+//                let isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
 //                print("Notification Permission Granted: \(isNotificationPermissionGranted)")
             }
         }

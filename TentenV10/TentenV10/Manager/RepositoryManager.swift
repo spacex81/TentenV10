@@ -91,7 +91,7 @@ class RepositoryManager: ObservableObject {
             if let selectedFriend = selectedFriend {
                 print(selectedFriend)
             } else {
-//                print("selectedFriend is nil")
+                print("selectedFriend is nil")
             }
             
             // Define the conditions for better readability
