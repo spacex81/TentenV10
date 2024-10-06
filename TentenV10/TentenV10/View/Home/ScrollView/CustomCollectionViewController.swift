@@ -105,6 +105,8 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         NSLog("LOG: CustomCollectionViewController-reloadData()")
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.collectionView.collectionViewLayout.invalidateLayout() // Invalidate layout to force update
+            self.collectionView.layoutIfNeeded() // Ensure layout is updated immediately
         }
     }
     
