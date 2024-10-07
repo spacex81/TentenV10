@@ -104,13 +104,6 @@ class RepositoryManager: ObservableObject {
                 print("selectedFriend is nil")
             }
             
-            // Define the conditions for better readability
-            let isSelectedFriendNil = (selectedFriend == nil && detailedFriends.count > 0)
-
-            if isSelectedFriendNil {
-                NSLog("LOG: IF selectedFriend is nil but you have friends, set selectedFriend")
-                self.selectedFriend = detailedFriends[0]
-            }
 
             // update room name
             if let senderToken = userRecord?.deviceToken,
@@ -159,6 +152,11 @@ class RepositoryManager: ObservableObject {
         didSet {
             NSLog("LOG: detailedFriends")
             print(detailedFriends)
+            
+            if detailedFriends.count > 0 && selectedFriend == nil {
+                selectedFriend = detailedFriends[0]
+            }
+            
             Task {
                 NSLog("LOG: reloadData() is run when detailedFriends has changed")
                 await self.collectionViewController?.reloadData()
