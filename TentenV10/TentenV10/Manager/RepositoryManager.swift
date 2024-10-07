@@ -160,7 +160,7 @@ class RepositoryManager: ObservableObject {
             NSLog("LOG: detailedFriends")
             print(detailedFriends)
             Task {
-                NSLog("LOG: reloadData() is run when selectedFriend has changed")
+                NSLog("LOG: reloadData() is run when detailedFriends has changed")
                 await self.collectionViewController?.reloadData()
             }
         }

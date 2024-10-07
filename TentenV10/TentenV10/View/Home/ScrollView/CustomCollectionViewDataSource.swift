@@ -61,7 +61,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             addButtonCell.onTap = { [weak self] in
                 self?.isSheetPresented = true // Update the binding to present the sheet
             }
-            NSLog("LOG: add button is set for \(friend.username)")
+//            NSLog("LOG: add button is set for \(friend.username)")
         } else if friend.id == selectedFriend?.id {
 //        } else if friend.id == self.repoManager.selectedFriend?.id {
 //            NSLog("LOG: selected friend: \(friend.username)")
