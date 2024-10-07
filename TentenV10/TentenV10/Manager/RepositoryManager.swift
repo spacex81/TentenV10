@@ -150,8 +150,8 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: detailedFriends")
-            print(detailedFriends)
+//            NSLog("LOG: detailedFriends")
+//            print(detailedFriends)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]

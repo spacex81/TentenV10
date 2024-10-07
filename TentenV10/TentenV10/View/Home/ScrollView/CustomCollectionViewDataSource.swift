@@ -34,16 +34,16 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         NSLog("LOG: collectionView-cellForItemAt: \(indexPath.item)")
-        NSLog("LOG: currentState: \(repoManager.currentState)")
-        NSLog("LOG: detailedFriends count: \(detailedFriends.count)")
+//        NSLog("LOG: currentState: \(repoManager.currentState)")
+//        NSLog("LOG: detailedFriends count: \(detailedFriends.count)")
         
         let friend = detailedFriends[indexPath.item]
-        if selectedFriend != nil {
-            NSLog("LOG: selectedFriend")
-            print(selectedFriend ?? "not selected yet")
-            NSLog("LOG: friend")
-            print(friend)
-        }
+//        if selectedFriend != nil {
+//            NSLog("LOG: selectedFriend")
+//            print(selectedFriend ?? "not selected yet")
+//            NSLog("LOG: friend")
+//            print(friend)
+//        }
         
         let cell: UICollectionViewCell
         
