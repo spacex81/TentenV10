@@ -257,6 +257,8 @@ extension RepositoryManager {
                     t.column("profileImageData", .blob)
                     t.column("deviceToken", .text)
                     t.column("friends", .text)
+                    t.column("receivedInvitations", .text)  // New column
+                    t.column("sentInvitations", .text)      // New column
                     t.column("roomName", .text).notNull().defaults(to: "testRoom")
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("socialLoginId", .text).notNull()
@@ -1189,7 +1191,10 @@ extension RepositoryManager {
             deviceToken: userDto.deviceToken,
             friends: userDto.friends,
             socialLoginId: userDto.socialLoginId,
-            socialLoginType: userDto.socialLoginType
+            socialLoginType: userDto.socialLoginType,
+            imageOffset: userDto.imageOffset,
+            receivedInvitations: userDto.receivedInvitations,
+            sentInvitations: userDto.sentInvitations
         )
         
         return userRecord
