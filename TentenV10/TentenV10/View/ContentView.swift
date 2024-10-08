@@ -17,7 +17,13 @@ struct ContentView: View {
                     if isNotificationPermissionGranted && isMicPermissionGranted {
                         // Show Home or Onboarding Flow based on the onboarding status
                         if viewModel.isOnboardingComplete {
-                            HomeView()
+                            ZStack {
+                                HomeView()
+                                
+                                if viewModel.showPopup {
+                                    InvitationView()
+                                }
+                            }
                         } else {
                             OnboardingFlowView()
                         }
@@ -54,6 +60,10 @@ struct ContentView: View {
         .onAppear {
             // Check permissions when the view appears
             checkPermissions()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                viewModel.generateInvitations()
+                viewModel.showPopup = true
+            })
         }
         .environmentObject(viewModel)
     }

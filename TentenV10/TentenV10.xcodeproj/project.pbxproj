@@ -50,6 +50,9 @@
 		C815BC8B2C608543004CB09E /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = C815BC8A2C608543004CB09E /* WebRTC */; };
 		C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C815BC8C2C60854C004CB09E /* AppDelegate.swift */; };
 		C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */; };
+		C819BE3E2CB5506B00642D48 /* InvitationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C819BE3D2CB5506B00642D48 /* InvitationView.swift */; };
+		C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C819BE3F2CB5507D00642D48 /* InvitationCard.swift */; };
+		C819BE422CB5507D00642D48 /* StackedInvitationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C819BE402CB5507D00642D48 /* StackedInvitationCard.swift */; };
 		C81B484A2C87583800E1164B /* UsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48492C87583800E1164B /* UsernameView.swift */; };
 		C81B484C2C87584300E1164B /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B484B2C87584300E1164B /* ProfileImageView.swift */; };
 		C81B484E2C87596400E1164B /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B484D2C87596400E1164B /* AddView.swift */; };
@@ -158,6 +161,9 @@
 		C815BC8C2C60854C004CB09E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C815BC8E2C60858B004CB09E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C819BE3D2CB5506B00642D48 /* InvitationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationView.swift; sourceTree = "<group>"; };
+		C819BE3F2CB5507D00642D48 /* InvitationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationCard.swift; sourceTree = "<group>"; };
+		C819BE402CB5507D00642D48 /* StackedInvitationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedInvitationCard.swift; sourceTree = "<group>"; };
 		C81B48492C87583800E1164B /* UsernameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameView.swift; sourceTree = "<group>"; };
 		C81B484B2C87584300E1164B /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		C81B484D2C87596400E1164B /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
@@ -276,6 +282,8 @@
 		C8144AAE2C7B32A90011385D /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C819BE3F2CB5507D00642D48 /* InvitationCard.swift */,
+				C819BE402CB5507D00642D48 /* StackedInvitationCard.swift */,
 				C812FF132C69DB3500BD9D9B /* ImagePicker.swift */,
 				C8144AB12C7B32B60011385D /* ShimmeringText */,
 				C8144ABF2C7B57520011385D /* PinButton.swift */,
@@ -401,6 +409,7 @@
 			children = (
 				C8144AAE2C7B32A90011385D /* Components */,
 				C815BC6E2C60849B004CB09E /* ContentView.swift */,
+				C819BE3D2CB5506B00642D48 /* InvitationView.swift */,
 				C8022C912C71F46A006DE470 /* Home */,
 				C812FF0B2C69D96700BD9D9B /* SocialLoginView.swift */,
 				C889DC4E2CA1AF3700AC1932 /* EmailView.swift */,
@@ -656,11 +665,14 @@
 				C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */,
 				C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */,
 				C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */,
+				C819BE3E2CB5506B00642D48 /* InvitationView.swift in Sources */,
 				C81B484C2C87584300E1164B /* ProfileImageView.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,
 				C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */,
+				C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */,
+				C819BE422CB5507D00642D48 /* StackedInvitationCard.swift in Sources */,
 				C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */,
 				C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */,
 				C85489822C7A05EB006878E0 /* LockView.swift in Sources */,
