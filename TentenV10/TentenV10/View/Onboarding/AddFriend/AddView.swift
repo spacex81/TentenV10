@@ -30,11 +30,15 @@ struct AddView: View {
             }
             VStack {
                 VStack {
-                    Text("add more friends")
+                    Text("이 앱을 사용 하기위해선")
                         .font(.title)
                         .fontWeight(.bold)
-                    Text("you need at least 1 friend to")
-                    Text("accept your request")
+                    Text("적어도 1명의 친구를 추가해야 해요")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 10)
+                    Text("여러분에게 소중한 친구를 추가해 보세요🤗")
+                    Text("언제나 대화 할 수 있어요")
                 }
                 .padding(.bottom, 50)
                 
