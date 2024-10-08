@@ -17,7 +17,9 @@ struct AddFriendButton: View {
         Button(action: {
             impactFeedback.impactOccurred()
             viewModel.friendPin = viewModel.friendPin.lowercased()
-            viewModel.addFriend()
+            // TODO: Instead of adding friend directly, we should send invitation
+//            viewModel.addFriend()
+            viewModel.inviteFriend()
             dismiss()
         }) {
             ZStack {

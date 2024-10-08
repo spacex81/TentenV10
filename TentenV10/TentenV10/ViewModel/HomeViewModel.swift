@@ -262,7 +262,7 @@ extension HomeViewModel {
     }
 }
 
-// MARK: Add friend
+// MARK: Friend
 extension HomeViewModel {
     func selectFriend(friend: FriendRecord) {
         DispatchQueue.main.async {
@@ -275,6 +275,15 @@ extension HomeViewModel {
             await repoManager.addFriend(friendPin: friendPin)
             DispatchQueue.main.async {
                 self.friendPin = "" 
+            }
+        }
+    }
+    
+    func inviteFriend() {
+        Task {
+            await repoManager.inviteFriend(friendPin: friendPin)
+            DispatchQueue.main.async {
+                self.friendPin = ""
             }
         }
     }

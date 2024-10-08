@@ -257,8 +257,8 @@ extension RepositoryManager {
                     t.column("profileImageData", .blob)
                     t.column("deviceToken", .text)
                     t.column("friends", .text)
-                    t.column("receivedInvitations", .text)  // New column
-                    t.column("sentInvitations", .text)      // New column
+                    t.column("receivedInvitations", .text)
+                    t.column("sentInvitations", .text)
                     t.column("roomName", .text).notNull().defaults(to: "testRoom")
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("socialLoginId", .text).notNull()
@@ -274,7 +274,7 @@ extension RepositoryManager {
                     t.column("pin", .text).notNull()
                     t.column("profileImageData", .blob)
                     t.column("deviceToken", .text)
-                    t.column("userId", .text).notNull().references("users", onDelete: .cascade) // Foreign key reference to users
+                    t.column("userId", .text).notNull().references("users", onDelete: .cascade)
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("lastInteraction", .datetime)
                 }
@@ -518,6 +518,32 @@ extension RepositoryManager {
     }
 }
 
+// MARK: Invite friend
+extension RepositoryManager {
+    func inviteFriend(friendPin: String) async {
+        guard var newUserRecord = userRecord else {
+            NSLog("LOG: userRecord is nil when adding friend")
+            return
+        }
+        
+        if friendPin == newUserRecord.pin {
+            NSLog("LOG: This is your pin. Please enter your friend's pin")
+            return
+        }
+        
+        do {
+            if !friendPin.isEmpty {
+                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
+                // get current user id
+                // add 'friendId' to current user's 'sentInvitations' in firestore
+                // add current user id to friend's 'receivedInvitations' in firestore
+            }
+        } catch {
+            NSLog("LOG: Error inviting friend by pin: \(error.localizedDescription)")
+        }
+    }
+}
+
 // MARK: Adding/Deleting friend
 extension RepositoryManager {
     func addFriend(friendPin: String) async {
@@ -533,7 +559,7 @@ extension RepositoryManager {
         
         do {
             if !friendPin.isEmpty {
-                let friendId = try await getFriendByPinFromFirebase(friendPin: friendPin)
+                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
                 
                 if !newUserRecord.friends.contains(friendId) {
                     
@@ -913,7 +939,32 @@ extension RepositoryManager {
         }
     }
     
-    func getFriendByPinFromFirebase(friendPin: String) async throws -> String {
+//    func getFriendByPinFromFirebase(friendPin: String) async throws -> FriendRecord {
+//        try await withCheckedThrowingContinuation { continuation in
+//            usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
+//                if let error = error {
+//                    continuation.resume(throwing: error)
+//                }
+//                
+//                guard let documents = snapshot?.documents, let document = documents.first else {
+//                    let error = NSError(domain: "getFriendIdByPinError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No such friend with pin: \(friendPin)"])
+//                    continuation.resume(throwing: error)
+//                    return
+//                }
+//                
+//                do {
+//                    let userDto = try document.data(as: UserDto.self)
+//                    let friendRecord = await convertUserDtoToFriendRecord(userDto: userDto)
+//                    continuation.resume(returning: friendRecord)
+//                } catch {
+//                    continuation.resume(throwing: error)
+//                }
+//            }
+//        }
+//    }
+
+    
+    func getFriendIdByPinFromFirebase(friendPin: String) async throws -> String {
         try await withCheckedThrowingContinuation { continuation in
             usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
                 if let error = error {
@@ -990,6 +1041,10 @@ extension RepositoryManager {
             }
         }
     }
+    
+    // TODO: reference 'updateFriendListInFirebase' and a new function called 'updateInvitationListInFirebase'
+    // param1: 'documentId', param2: 'friendId', param3: 'action'
+    // we need to add fourth parameter to choose between 'receivedInvitations' or 'sentInvitations'
 
     enum FriendAction {
         case add
