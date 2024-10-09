@@ -61,16 +61,9 @@ struct OnboardingFlowView: View {
                 ))
                 
             case .addFriend:
-//                ZStack {
-//                    HomeView()
-//                    
-//                    if viewModel.showPopup {
-//                        InvitationView()
-//                    }
-//                }
                 ZStack {
                     AddView {
-                        viewModel.onboardingStep = .home // Complete onboarding
+                        viewModel.onboardingStep = .home
                         viewModel.isOnboardingComplete = true
                     }
                     

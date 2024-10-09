@@ -52,13 +52,13 @@ class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func generateInvitations() {
-        let count = Int.random(in: 1...3)
-        invitations = (0..<count).map { i in
-            Invitation(name: "user\(i + 1)")
-        }
-        previousInvitationCount = invitations.count
-    }
+//    func generateInvitations() {
+//        let count = Int.random(in: 1...3)
+//        invitations = (0..<count).map { i in
+//            Invitation(name: "user\(i + 1)")
+//        }
+//        previousInvitationCount = invitations.count
+//    }
     
     func handleButtonPress() {
         if !invitations.isEmpty {
@@ -74,6 +74,6 @@ class ContentViewModel: ObservableObject {
 }
 
 struct Invitation: Identifiable {
-    let id = UUID()
-    let name: String
+    let id: String
+//    let name: String
 }

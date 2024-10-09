@@ -15,13 +15,25 @@ struct InvitationCard: View {
 
     var body: some View {
         VStack {
-            Text(invitation.name)
+//            Text(invitation.name)
+//                .font(.title2)
+//                .fontWeight(.bold)
+//                .padding(.bottom, 5)
+//                .padding(.top, 5)
+            Text("Komaki")
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.bottom, 5)
                 .padding(.top, 5)
+
             
-            Image(invitation.name)
+//            Image(invitation.name)
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
+//                .clipShape(Circle())
+//                .padding(.bottom, 10)
+            Image("user1")
                 .resizable()
                 .scaledToFill()
                 .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)

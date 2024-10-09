@@ -356,6 +356,18 @@ extension RepositoryManager {
                          
                          let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
+                         NSLog("LOG: listenToUser-updateUserRecord")
+                         print(updatedUserRecord)
+                         
+                         if updatedUserRecord.receivedInvitations.count > 0 {
+                             let invitations = updatedUserRecord.receivedInvitations
+                             self.handleReceivedInvitations(invitations: invitations)
+                         }
+                         
+                         if updatedUserRecord.sentInvitations.count > 0 {
+                             self.handleSentInvitations()
+                         }
+                         
                          self.handleRemovedFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
                          
                          if self.userRecord != updatedUserRecord {
@@ -376,6 +388,19 @@ extension RepositoryManager {
              }
          }
      }
+    
+    private func handleReceivedInvitations(invitations: [String]) {
+        NSLog("LOG: handleReceivedInvitations")
+        ContentViewModel.shared.invitations = invitations.map { id in
+            Invitation(id: id)
+        }
+        ContentViewModel.shared.previousInvitationCount = invitations.count
+        ContentViewModel.shared.showPopup = true
+    }
+    
+    private func handleSentInvitations() {
+        NSLog("LOG: handleSentInvitations")
+    }
     
     private func handleRemovedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
         // Compare old friends list with the new one
