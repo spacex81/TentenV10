@@ -359,14 +359,12 @@ extension RepositoryManager {
                          NSLog("LOG: listenToUser-updateUserRecord")
                          print(updatedUserRecord)
                          
-                         if updatedUserRecord.receivedInvitations.count > 0 {
-                             let invitations = updatedUserRecord.receivedInvitations
-                             self.handleReceivedInvitations(invitations: invitations)
-                         }
+                         let invitations = updatedUserRecord.receivedInvitations
+                         self.handleReceivedInvitations(invitations: invitations)
                          
-                         if updatedUserRecord.sentInvitations.count > 0 {
-                             self.handleSentInvitations()
-                         }
+//                         if updatedUserRecord.sentInvitations.count > 0 {
+//                             self.handleSentInvitations()
+//                         }
                          
                          self.handleRemovedFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
                          
@@ -391,11 +389,19 @@ extension RepositoryManager {
     
     private func handleReceivedInvitations(invitations: [String]) {
         NSLog("LOG: handleReceivedInvitations")
-        ContentViewModel.shared.invitations = invitations.map { id in
-            Invitation(id: id)
+        let contentViewModel = ContentViewModel.shared
+        
+        if invitations.count > 0 {
+            DispatchQueue.main.async {
+                contentViewModel.invitations = invitations.map { id in
+                     Invitation(id: id)
+                 }
+                contentViewModel.previousInvitationCount = invitations.count
+                contentViewModel.showPopup = true
+            }
+        } else {
+            contentViewModel.showPopup = false
         }
-        ContentViewModel.shared.previousInvitationCount = invitations.count
-        ContentViewModel.shared.showPopup = true
     }
     
     private func handleSentInvitations() {
