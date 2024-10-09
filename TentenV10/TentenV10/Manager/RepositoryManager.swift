@@ -521,12 +521,12 @@ extension RepositoryManager {
 // MARK: Invite friend
 extension RepositoryManager {
     func inviteFriend(friendPin: String) async {
-        guard var newUserRecord = userRecord else {
+        guard let userRecord = userRecord else {
             NSLog("LOG: userRecord is nil when adding friend")
             return
         }
         
-        if friendPin == newUserRecord.pin {
+        if friendPin == userRecord.pin {
             NSLog("LOG: This is your pin. Please enter your friend's pin")
             return
         }
@@ -535,8 +535,11 @@ extension RepositoryManager {
             if !friendPin.isEmpty {
                 let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
                 // get current user id
+                let currentUserId = userRecord.id
                 // add 'friendId' to current user's 'sentInvitations' in firestore
+                updateInvitationListInFirebase(documentId: currentUserId, friendId: friendId, action: .add, listType: .sent)
                 // add current user id to friend's 'receivedInvitations' in firestore
+                updateInvitationListInFirebase(documentId: friendId, friendId: currentUserId, action: .add, listType: .received)
             }
         } catch {
             NSLog("LOG: Error inviting friend by pin: \(error.localizedDescription)")
@@ -1020,7 +1023,7 @@ extension RepositoryManager {
         }
     }
     
-    func updateFriendListInFirebase(documentId: String, friendId: String, action: FriendAction) {
+    func updateFriendListInFirebase(documentId: String, friendId: String, action: ActionType) {
         let userRef = usersCollection.document(documentId)
         
         let updateData: [String: Any]
@@ -1042,13 +1045,47 @@ extension RepositoryManager {
         }
     }
     
-    // TODO: reference 'updateFriendListInFirebase' and a new function called 'updateInvitationListInFirebase'
-    // param1: 'documentId', param2: 'friendId', param3: 'action'
-    // we need to add fourth parameter to choose between 'receivedInvitations' or 'sentInvitations'
+    func updateInvitationListInFirebase(documentId: String, friendId: String, action: ActionType, listType: InvitationListType) {
+        let userRef = usersCollection.document(documentId)
+        
+        let updateData: [String: Any]
+        let fieldName: String
+        
+        // Determine which list to update based on listType
+        switch listType {
+        case .received:
+            fieldName = "receivedInvitations"
+        case .sent:
+            fieldName = "sentInvitations"
+        }
+        
+        // Set the updateData based on the action (add or remove)
+        switch action {
+        case .add:
+            updateData = [fieldName: FieldValue.arrayUnion([friendId])]
+        case .remove:
+            updateData = [fieldName: FieldValue.arrayRemove([friendId])]
+        }
+        
+        // Update the Firestore document
+        userRef.updateData(updateData) { error in
+            if let error = error {
+                NSLog("LOG: Failed to update \(fieldName) list in Firestore: \(error.localizedDescription)")
+            } else {
+                let actionString = action == .add ? "added to" : "removed from"
+                NSLog("LOG: Successfully \(actionString) \(fieldName) list with id: \(friendId)")
+            }
+        }
+    }
 
-    enum FriendAction {
+    enum ActionType {
         case add
         case remove
+    }
+    
+    enum InvitationListType {
+        case received
+        case sent
     }
 
     

@@ -60,10 +60,10 @@ struct ContentView: View {
         .onAppear {
             // Check permissions when the view appears
             checkPermissions()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-                viewModel.generateInvitations()
-                viewModel.showPopup = true
-            })
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+//                viewModel.generateInvitations()
+//                viewModel.showPopup = true
+//            })
         }
         .environmentObject(viewModel)
     }
