@@ -91,12 +91,17 @@ struct InvitationCard: View {
     
 
     private func accept() {
-        NSLog("LOG: accept")
-        removeInvitationInFirebase()
+        NSLog("LOG: accept()")
         
         if !viewModel.receivedInvitations.isEmpty {
             viewModel.previousInvitationCount = viewModel.receivedInvitations.count
             removeInvitationInMemory()
+            removeInvitationInFirebase()
+            
+            // Add friend
+            Task {
+                await repoManager.addFriend(friendId: invitation.id)
+            }
         }
         if viewModel.receivedInvitations.isEmpty {
             withAnimation {
@@ -106,14 +111,17 @@ struct InvitationCard: View {
     }
     
     private func decline() {
-        NSLog("LOG: decline")
-        // Remove invitation from firestore
-        removeInvitationInFirebase()
+        NSLog("LOG: decline()")
         
         if !viewModel.receivedInvitations.isEmpty {
             viewModel.previousInvitationCount = viewModel.receivedInvitations.count
             removeInvitationInMemory()
+            removeInvitationInFirebase()
+            
+            // Delete friendRecord from local db
+            repoManager.eraseFriendFromDatabase(friendId: invitation.id)
         }
+        
         if viewModel.receivedInvitations.isEmpty {
             withAnimation {
                 viewModel.showPopup = false
@@ -122,6 +130,12 @@ struct InvitationCard: View {
     }
     
     private func removeInvitationInMemory() {
+        
+        guard var currentUser = repoManager.userRecord else {
+            NSLog("LOG: userRecord is not set when removing invitation in firebase")
+            return
+        }
+        
         if let index = viewModel.receivedInvitations.firstIndex(where: { $0.id == invitation.id }) {
             viewModel.receivedInvitations.remove(at: index)
         }
@@ -137,5 +151,4 @@ struct InvitationCard: View {
         repoManager.updateInvitationListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove, listType: .received)
         repoManager.updateInvitationListInFirebase(documentId: friendId, friendId: currentUserId, action: .remove, listType: .sent)
     }
-    private func removeInvitationInDatabase() {}
 }

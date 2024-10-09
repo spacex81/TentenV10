@@ -57,24 +57,8 @@ class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-//    func handleButtonPress() {
-//        if !receivedInvitations.isEmpty {
-//            previousInvitationCount = receivedInvitations.count
-//            receivedInvitations.removeLast()
-//        }
-//        if receivedInvitations.isEmpty {
-//            withAnimation {
-//                showPopup = false
-//            }
-//        }
-//    }
-    
 }
 
-//struct Invitation: Identifiable {
-//    let id: String
-////    let name: String
-//}
 struct Invitation: Identifiable {
     let id: String
     let username: String
