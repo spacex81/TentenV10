@@ -61,9 +61,22 @@ struct OnboardingFlowView: View {
                 ))
                 
             case .addFriend:
-                AddView {
-                    viewModel.onboardingStep = .home // Complete onboarding
-                    viewModel.isOnboardingComplete = true 
+//                ZStack {
+//                    HomeView()
+//                    
+//                    if viewModel.showPopup {
+//                        InvitationView()
+//                    }
+//                }
+                ZStack {
+                    AddView {
+                        viewModel.onboardingStep = .home // Complete onboarding
+                        viewModel.isOnboardingComplete = true
+                    }
+                    
+                    if viewModel.showPopup {
+                        InvitationView()
+                    }
                 }
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing),   // Appears from the right
@@ -79,6 +92,12 @@ struct OnboardingFlowView: View {
             }
         }
         .animation(.easeInOut, value: viewModel.onboardingStep)
+//        .onAppear {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+//                viewModel.generateInvitations()
+//                viewModel.showPopup = true
+//            })
+//        }
     }
 }
 

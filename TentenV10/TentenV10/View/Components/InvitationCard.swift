@@ -19,6 +19,7 @@ struct InvitationCard: View {
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.bottom, 5)
+                .padding(.top, 5)
             
             Image(invitation.name)
                 .resizable()
