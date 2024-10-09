@@ -266,7 +266,7 @@ extension RepositoryManager {
                     t.column("imageOffset", .double).notNull().defaults(to: 0.0)
                 }
 
-                // Create the friends table with 'lastInteraction' column
+                // Create the friends table with 'lastInteraction' column and new 'isAccepted' column
                 try db.create(table: "friends") { t in
                     t.column("id", .text).primaryKey()
                     t.column("email", .text).notNull()
@@ -277,6 +277,7 @@ extension RepositoryManager {
                     t.column("userId", .text).notNull().references("users", onDelete: .cascade)
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("lastInteraction", .datetime)
+                    t.column("isAccepted", .boolean).notNull().defaults(to: false) // New column
                 }
             }
 
@@ -391,6 +392,15 @@ extension RepositoryManager {
         NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
         
+        // TODO: each element of 'invitations' is a id of a friend
+        // check if local database already stores a FriendRecord corresponds each that id
+        // use 'func fetchFriendsByUserIdFromDatabase(userId: String) -> [FriendRecord] {'
+        
+        // if not, fetch FriendRecord that corresponds to that id and store it on local db
+        // use 'func fetchFriendFromFirebase(friendId: String) async throws -> FriendRecord {'
+        // use 'func createFriendInDatabase(friend: FriendRecord) {'
+
+        
         if invitations.count > 0 {
             DispatchQueue.main.async {
                 contentViewModel.invitations = invitations.map { id in
@@ -400,7 +410,9 @@ extension RepositoryManager {
                 contentViewModel.showPopup = true
             }
         } else {
-            contentViewModel.showPopup = false
+            DispatchQueue.main.async {
+                contentViewModel.showPopup = false
+            }
         }
     }
     
@@ -919,6 +931,17 @@ extension RepositoryManager {
             }
         }
     }
+    
+    func fetchFriendFromFirebase(friendId: String) async throws -> FriendRecord {
+        // Fetch the UserDto using the friendId
+        let userDto = try await fetchUserFromFirebase(userId: friendId)
+        
+        // Convert the UserDto to a FriendRecord
+        let friendRecord = try await convertUserDtoToFriendRecord(userDto: userDto)
+        
+        return friendRecord
+    }
+
     
     func fetchUserFromFirebase(field: String, value: String) async throws -> UserDto? {
         try await withCheckedThrowingContinuation { continuation in
