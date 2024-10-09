@@ -22,7 +22,7 @@ class ContentViewModel: ObservableObject {
     
     // MARK: Invitation
     @Published var showPopup: Bool = false
-    @Published var invitations: [Invitation] = []
+    @Published var receivedInvitations: [Invitation] = []
     @Published var previousInvitationCount: Int = 0
     //
     
@@ -61,11 +61,11 @@ class ContentViewModel: ObservableObject {
 //    }
     
     func handleButtonPress() {
-        if !invitations.isEmpty {
-            previousInvitationCount = invitations.count
-            invitations.removeLast()
+        if !receivedInvitations.isEmpty {
+            previousInvitationCount = receivedInvitations.count
+            receivedInvitations.removeLast()
         }
-        if invitations.isEmpty {
+        if receivedInvitations.isEmpty {
             withAnimation {
                 showPopup = false
             }
@@ -73,7 +73,13 @@ class ContentViewModel: ObservableObject {
     }
 }
 
+//struct Invitation: Identifiable {
+//    let id: String
+////    let name: String
+//}
 struct Invitation: Identifiable {
     let id: String
-//    let name: String
+    let username: String
+    let profileImageData: Data
 }
+

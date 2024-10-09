@@ -17,14 +17,14 @@ struct InvitationView: View {
             .transition(.opacity)
             .animation(.easeInOut, value: viewModel.showPopup)
         
-        let transitionType: AnyTransition = (viewModel.previousInvitationCount == 2 && viewModel.invitations.count == 1) ? .identity : .scale
+        let transitionType: AnyTransition = (viewModel.previousInvitationCount == 2 && viewModel.receivedInvitations.count == 1) ? .identity : .scale
         
-        if viewModel.invitations.count == 1 {
-            InvitationCard(showPopup: $viewModel.showPopup, invitation: viewModel.invitations.last!, onButtonPressed: viewModel.handleButtonPress)
+        if viewModel.receivedInvitations.count == 1 {
+            InvitationCard(showPopup: $viewModel.showPopup, invitation: viewModel.receivedInvitations.last!, onButtonPressed: viewModel.handleButtonPress)
                 .transition(transitionType)
                 .zIndex(1)
-        } else if viewModel.invitations.count > 1 {
-            StackedInvitationCard(showPopup: $viewModel.showPopup, invitations: viewModel.invitations, onButtonPressed: viewModel.handleButtonPress)
+        } else if viewModel.receivedInvitations.count > 1 {
+            StackedInvitationCard(showPopup: $viewModel.showPopup, invitations: viewModel.receivedInvitations, onButtonPressed: viewModel.handleButtonPress)
                 .transition(.scale)
                 .zIndex(1)
         }

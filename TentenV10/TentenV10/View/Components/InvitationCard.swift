@@ -15,30 +15,29 @@ struct InvitationCard: View {
 
     var body: some View {
         VStack {
-//            Text(invitation.name)
-//                .font(.title2)
-//                .fontWeight(.bold)
-//                .padding(.bottom, 5)
-//                .padding(.top, 5)
-            Text("Komaki")
+            Text(invitation.username)
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.bottom, 5)
                 .padding(.top, 5)
 
             
-//            Image(invitation.name)
-//                .resizable()
-//                .scaledToFill()
-//                .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
-//                .clipShape(Circle())
-//                .padding(.bottom, 10)
-            Image("user1")
-                .resizable()
-                .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
-                .clipShape(Circle())
-                .padding(.bottom, 10)
+            if let uiImage = UIImage(data: invitation.profileImageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
+                    .clipShape(Circle())
+                    .padding(.bottom, 10)
+            } else {
+                // Fallback image if data is not valid
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.3)
+                    .clipShape(Circle())
+                    .padding(.bottom, 10)
+            }
             
             Text("친구 요청이 왔어요🥳")
                 .font(.body)

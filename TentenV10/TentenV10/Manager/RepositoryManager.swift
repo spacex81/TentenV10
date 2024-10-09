@@ -361,7 +361,7 @@ extension RepositoryManager {
                          print(updatedUserRecord)
                          
                          let invitations = updatedUserRecord.receivedInvitations
-                         self.handleReceivedInvitations(invitations: invitations)
+                         self.handleReceivedInvitations(friendIds: invitations)
                          
 //                         if updatedUserRecord.sentInvitations.count > 0 {
 //                             self.handleSentInvitations()
@@ -388,26 +388,27 @@ extension RepositoryManager {
          }
      }
     
-    private func handleReceivedInvitations(invitations: [String]) {
+    private func handleReceivedInvitations(friendIds: [String]) {
         NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
-        
-        // TODO: each element of 'invitations' is a id of a friend
-        // check if local database already stores a FriendRecord corresponds each that id
-        // use 'func fetchFriendsByUserIdFromDatabase(userId: String) -> [FriendRecord] {'
-        
-        // if not, fetch FriendRecord that corresponds to that id and store it on local db
-        // use 'func fetchFriendFromFirebase(friendId: String) async throws -> FriendRecord {'
-        // use 'func createFriendInDatabase(friend: FriendRecord) {'
 
-        
-        if invitations.count > 0 {
+        if friendIds.count > 0 {
             DispatchQueue.main.async {
-                contentViewModel.invitations = invitations.map { id in
-                     Invitation(id: id)
-                 }
-                contentViewModel.previousInvitationCount = invitations.count
-                contentViewModel.showPopup = true
+                Task {
+                    var invitations: [Invitation] = []
+                    for id in friendIds {
+                        do {
+                            let invitation = try await self.processFriendInvitation(friendId: id)
+                            invitations.append(invitation)
+                        } catch {
+                            NSLog("LOG: Error processing friend invitation for id \(id): \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    contentViewModel.receivedInvitations = invitations
+                    contentViewModel.previousInvitationCount = friendIds.count
+                    contentViewModel.showPopup = true
+                }
             }
         } else {
             DispatchQueue.main.async {
@@ -415,6 +416,28 @@ extension RepositoryManager {
             }
         }
     }
+
+    private func processFriendInvitation(friendId: String) async throws -> Invitation {
+        // Check if the local database already has a FriendRecord corresponding to the friendId
+        let localFriendRecords = fetchFriendsByUserIdFromDatabase(userId: friendId)
+        if let localFriend = localFriendRecords.first {
+            // If a FriendRecord exists locally, use it to create and return an Invitation
+            return Invitation(id: localFriend.id, username: localFriend.username, profileImageData: localFriend.profileImageData ?? Data())
+        } else {
+            // If not, fetch the FriendRecord from Firebase
+            do {
+                let fetchedFriend = try await fetchFriendFromFirebase(friendId: friendId)
+                // Store the fetched FriendRecord in the local database
+                createFriendInDatabase(friend: fetchedFriend)
+                // Use the fetched FriendRecord to create and return an Invitation
+                return Invitation(id: fetchedFriend.id, username: fetchedFriend.username, profileImageData: fetchedFriend.profileImageData ?? Data())
+            } catch {
+                NSLog("LOG: Error fetching friend from Firebase: \(error.localizedDescription)")
+                throw error
+            }
+        }
+    }
+
     
     private func handleSentInvitations() {
         NSLog("LOG: handleSentInvitations")
