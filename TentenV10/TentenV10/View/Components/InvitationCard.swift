@@ -103,6 +103,7 @@ struct InvitationCard: View {
                 await repoManager.addFriend(friendId: invitation.id)
             }
         }
+        
         if viewModel.receivedInvitations.isEmpty {
             withAnimation {
                 viewModel.showPopup = false

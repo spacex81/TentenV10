@@ -150,8 +150,8 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-//            NSLog("LOG: detailedFriends")
-//            print(detailedFriends)
+            NSLog("LOG: detailedFriends")
+            print(detailedFriends)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -363,8 +363,7 @@ extension RepositoryManager {
                          let invitations = updatedUserRecord.receivedInvitations
                          self.handleReceivedInvitations(friendIds: invitations)
                          
-                         self.handleRemovedFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
-                         self.handleAddedFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
+                         self.handleFriendsUpdate(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
                          
                          if self.userRecord != updatedUserRecord {
                              DispatchQueue.main.async {
@@ -443,8 +442,79 @@ extension RepositoryManager {
         NSLog("LOG: handleSentInvitations")
     }
     
-    private func handleRemovedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-        NSLog("LOG: handleRemovedFriends")
+//    private func handleRemovedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+//        NSLog("LOG: handleRemovedFriends")
+//        // Compare old friends list with the new one
+//        let oldFriends = Set(oldUserRecord?.friends ?? [])
+//        let newFriends = Set(newUserRecord.friends)
+//        NSLog("LOG: oldFriends")
+//        print(oldFriends)
+//        NSLog("LOG: newFriends")
+//        print(newFriends)
+//        
+//        // Find friends that were removed
+//        let removedFriends = oldFriends.subtracting(newFriends)
+//        
+//        // Delete each friend no longer in the new friends list
+//        removedFriends.forEach { friendId in
+//            self.deleteFriend(friendId: friendId)
+//        }
+//    }
+//    
+//    private func handleAddedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+//        NSLog("LOG: handleAddedFriends")
+//        // Compare old friends list with the new one
+//        let oldFriends = Set(oldUserRecord?.friends ?? [])
+//        let newFriends = Set(newUserRecord.friends)
+//        NSLog("LOG: oldFriends")
+//        print(oldFriends)
+//        NSLog("LOG: newFriends")
+//        print(newFriends)
+//        
+//        // Find friends that were added
+//        let addedFriends = newFriends.subtracting(oldFriends)
+//        
+//        // Add each friend not previously in the old friends list
+//        addedFriends.forEach { friendId in
+//            Task {
+//                do {
+//                    await self.addFriend(friendId: friendId)
+//                } catch {
+//                    NSLog("LOG: Error adding friend with id \(friendId): \(error.localizedDescription)")
+//                }
+//            }
+//        }
+//    }
+//    private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+//        NSLog("LOG: handleFriendsUpdate")
+//        // Compare old friends list with the new one
+//        let oldFriends = Set(oldUserRecord?.friends ?? [])
+//        let newFriends = Set(newUserRecord.friends)
+//        NSLog("LOG: oldFriends")
+//        print(oldFriends)
+//        NSLog("LOG: newFriends")
+//        print(newFriends)
+//        
+//        // Find friends that were removed
+////        let removedFriends = oldFriends.subtracting(newFriends)
+//        // Find friends that were added
+//        let addedFriends = newFriends.subtracting(oldFriends)
+//        
+//        
+//        // Handle removed friends
+////        removedFriends.forEach { friendId in
+////            self.deleteFriend(friendId: friendId)
+////        }
+//        
+//        // Handle added friends
+//        addedFriends.forEach { friendId in
+//            Task {
+//                await self.addFriend(friendId: friendId)
+//            }
+//        }
+//    }
+    private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+        NSLog("LOG: handleFriendsUpdate")
         // Compare old friends list with the new one
         let oldFriends = Set(oldUserRecord?.friends ?? [])
         let newFriends = Set(newUserRecord.friends)
@@ -455,37 +525,24 @@ extension RepositoryManager {
         
         // Find friends that were removed
         let removedFriends = oldFriends.subtracting(newFriends)
-        
-        // Delete each friend no longer in the new friends list
-        removedFriends.forEach { friendId in
-            self.deleteFriend(friendId: friendId)
-        }
-    }
-    
-    private func handleAddedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-        NSLog("LOG: handleAddedFriends")
-        // Compare old friends list with the new one
-        let oldFriends = Set(oldUserRecord?.friends ?? [])
-        let newFriends = Set(newUserRecord.friends)
-        NSLog("LOG: oldFriends")
-        print(oldFriends)
-        NSLog("LOG: newFriends")
-        print(newFriends)
-        
         // Find friends that were added
         let addedFriends = newFriends.subtracting(oldFriends)
         
-        // Add each friend not previously in the old friends list
-        addedFriends.forEach { friendId in
-            Task {
-                do {
+        if addedFriends.count > 0 {
+             // Handle added friends
+            addedFriends.forEach { friendId in
+                Task {
                     await self.addFriend(friendId: friendId)
-                } catch {
-                    NSLog("LOG: Error adding friend with id \(friendId): \(error.localizedDescription)")
                 }
+            }
+        } else {
+            // Handle removed friends
+            removedFriends.forEach { friendId in
+                self.deleteFriend(friendId: friendId)
             }
         }
     }
+
 
     private func handleIncomingCallRequest(userDto: UserDto) {
         let roomName = userDto.roomName

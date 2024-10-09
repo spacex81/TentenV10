@@ -77,11 +77,18 @@ struct OnboardingFlowView: View {
                 ))
                 
             case .home:
-                HomeView()
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .trailing),   // Appears from the right
-                        removal: .move(edge: .leading)      // Disappears to the left
-                    ))
+//                HomeView()
+                ZStack {
+                    HomeView()
+                    
+                    if viewModel.showPopup {
+                        InvitationView()
+                    }
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),   // Appears from the right
+                    removal: .move(edge: .leading)      // Disappears to the left
+                ))
             }
         }
         .animation(.easeInOut, value: viewModel.onboardingStep)
