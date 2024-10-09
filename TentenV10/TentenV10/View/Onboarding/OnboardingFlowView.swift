@@ -63,7 +63,7 @@ struct OnboardingFlowView: View {
             case .addFriend:
                 ZStack {
                     AddView {
-                        viewModel.onboardingStep = .home
+//                        viewModel.onboardingStep = .home
                         viewModel.isOnboardingComplete = true
                     }
                     
