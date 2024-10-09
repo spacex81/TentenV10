@@ -20,11 +20,11 @@ struct InvitationView: View {
         let transitionType: AnyTransition = (viewModel.previousInvitationCount == 2 && viewModel.receivedInvitations.count == 1) ? .identity : .scale
         
         if viewModel.receivedInvitations.count == 1 {
-            InvitationCard(showPopup: $viewModel.showPopup, invitation: viewModel.receivedInvitations.last!, onButtonPressed: viewModel.handleButtonPress)
+            InvitationCard(showPopup: $viewModel.showPopup, invitation: viewModel.receivedInvitations.last!)
                 .transition(transitionType)
                 .zIndex(1)
         } else if viewModel.receivedInvitations.count > 1 {
-            StackedInvitationCard(showPopup: $viewModel.showPopup, invitations: viewModel.receivedInvitations, onButtonPressed: viewModel.handleButtonPress)
+            StackedInvitationCard(showPopup: $viewModel.showPopup, invitations: viewModel.receivedInvitations)
                 .transition(.scale)
                 .zIndex(1)
         }

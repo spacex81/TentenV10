@@ -7,6 +7,7 @@ class ContentViewModel: ObservableObject {
     static let shared = ContentViewModel()
     
     let authManager = AuthManager.shared
+    let repoManager = RepositoryManager.shared
     
     // MARK: Authentication
     @Published var isUserLoggedIn = true
@@ -21,7 +22,11 @@ class ContentViewModel: ObservableObject {
     @Published var profileImage: UIImage? = nil
     
     // MARK: Invitation
-    @Published var showPopup: Bool = false
+    @Published var showPopup: Bool = false {
+        didSet {
+            NSLog("LOG: showPopup is \(showPopup)")
+        }
+    }
     @Published var receivedInvitations: [Invitation] = []
     @Published var previousInvitationCount: Int = 0
     //
@@ -52,25 +57,18 @@ class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-//    func generateInvitations() {
-//        let count = Int.random(in: 1...3)
-//        invitations = (0..<count).map { i in
-//            Invitation(name: "user\(i + 1)")
+//    func handleButtonPress() {
+//        if !receivedInvitations.isEmpty {
+//            previousInvitationCount = receivedInvitations.count
+//            receivedInvitations.removeLast()
 //        }
-//        previousInvitationCount = invitations.count
+//        if receivedInvitations.isEmpty {
+//            withAnimation {
+//                showPopup = false
+//            }
+//        }
 //    }
     
-    func handleButtonPress() {
-        if !receivedInvitations.isEmpty {
-            previousInvitationCount = receivedInvitations.count
-            receivedInvitations.removeLast()
-        }
-        if receivedInvitations.isEmpty {
-            withAnimation {
-                showPopup = false
-            }
-        }
-    }
 }
 
 //struct Invitation: Identifiable {

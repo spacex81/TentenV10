@@ -11,7 +11,9 @@ import SwiftUI
 struct InvitationCard: View {
     @Binding var showPopup: Bool
     var invitation: Invitation
-    var onButtonPressed: () -> Void
+    
+    @ObservedObject var viewModel = ContentViewModel.shared
+    let repoManager = RepositoryManager.shared
 
     var body: some View {
         VStack {
@@ -46,7 +48,7 @@ struct InvitationCard: View {
             VStack {
                 Button(action: {
                     withAnimation {
-                        onButtonPressed()
+                        accept()
                     }
                 }) {
                     Text("수락")
@@ -61,7 +63,7 @@ struct InvitationCard: View {
                 
                 Button(action: {
                     withAnimation {
-                        onButtonPressed()
+                        decline()
                     }
                 }) {
                     Text("거절")
@@ -86,4 +88,54 @@ struct InvitationCard: View {
         )
         .shadow(radius: 10)
     }
+    
+
+    private func accept() {
+        NSLog("LOG: accept")
+        removeInvitationInFirebase()
+        
+        if !viewModel.receivedInvitations.isEmpty {
+            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
+            removeInvitationInMemory()
+        }
+        if viewModel.receivedInvitations.isEmpty {
+            withAnimation {
+                viewModel.showPopup = false
+            }
+        }
+    }
+    
+    private func decline() {
+        NSLog("LOG: decline")
+        // Remove invitation from firestore
+        removeInvitationInFirebase()
+        
+        if !viewModel.receivedInvitations.isEmpty {
+            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
+            removeInvitationInMemory()
+        }
+        if viewModel.receivedInvitations.isEmpty {
+            withAnimation {
+                viewModel.showPopup = false
+            }
+        }
+    }
+    
+    private func removeInvitationInMemory() {
+        if let index = viewModel.receivedInvitations.firstIndex(where: { $0.id == invitation.id }) {
+            viewModel.receivedInvitations.remove(at: index)
+        }
+    }
+    
+    private func removeInvitationInFirebase() {
+        guard let currentUserId = repoManager.userRecord?.id else {
+            NSLog("LOG: userRecord is not set when removing invitation in firebase")
+            return
+        }
+        let friendId = invitation.id
+        
+        repoManager.updateInvitationListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove, listType: .received)
+        repoManager.updateInvitationListInFirebase(documentId: friendId, friendId: currentUserId, action: .remove, listType: .sent)
+    }
+    private func removeInvitationInDatabase() {}
 }

@@ -357,7 +357,7 @@ extension RepositoryManager {
                          
                          let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
-                         NSLog("LOG: listenToUser-updateUserRecord")
+                         NSLog("LOG: listenToUser-updatedUserRecord")
                          print(updatedUserRecord)
                          
                          let invitations = updatedUserRecord.receivedInvitations
@@ -456,6 +456,9 @@ extension RepositoryManager {
             self.deleteFriend(friendId: friendId)
         }
     }
+    
+    // TODO: create new function called 'handleAddedFriends'
+    // this will
     
     private func handleIncomingCallRequest(userDto: UserDto) {
         let roomName = userDto.roomName
