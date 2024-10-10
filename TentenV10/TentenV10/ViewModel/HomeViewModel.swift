@@ -320,7 +320,7 @@ extension HomeViewModel {
             backgroundTaskManager.stopAudioTask()
 
         case .inactive:
-//            NSLog("LOG: App is inactive")
+            NSLog("LOG: App is inactive")
 
         case .background:
 //            NSLog("LOG: App is in the background")
