@@ -104,7 +104,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     func reloadData() {
 //        NSLog("LOG: CustomCollectionViewController-reloadData()")
         
-        let itemCount = collectionView.numberOfItems(inSection: 0)
+//        let itemCount = collectionView.numberOfItems(inSection: 0)
 //        NSLog("LOG: itemCount: \(itemCount)")
         DispatchQueue.main.async {
             self.collectionView.reloadData()

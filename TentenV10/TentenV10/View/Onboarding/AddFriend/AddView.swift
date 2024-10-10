@@ -40,8 +40,8 @@ struct AddView: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .padding(.bottom, 10)
-                    Text("여러분에게 소중한 친구를 추가해 보세요🤗")
-                    Text("언제나 대화 할 수 있어요")
+                    Text("여러분에게 소중한 친구를 추가해 보세요")
+                    Text("언제나 대화 할 수 있어요🤗")
                 }
                 .padding(.bottom, 50)
                 
