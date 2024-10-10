@@ -72,6 +72,9 @@ struct AddView: View {
                 onNext()
             }
         }
+        .onAppear {
+            NSLog("LOG: AddView")
+        }
     }
 }
 

@@ -176,6 +176,7 @@ struct HomeView: View {
             ProfileView()
         }
         .onAppear {
+            NSLog("LOG: HomeView")
             Task {
                 // Checking microphone permission
 //                let isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()

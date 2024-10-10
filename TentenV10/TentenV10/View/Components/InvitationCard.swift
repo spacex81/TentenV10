@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Firebase
 
 struct InvitationCard: View {
     @Binding var showPopup: Bool
@@ -90,15 +91,61 @@ struct InvitationCard: View {
     }
     
 
+//    private func accept() {
+//        NSLog("LOG: accept()")
+//        
+//        if !viewModel.receivedInvitations.isEmpty {
+//            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
+//            removeInvitationInMemory()
+//            removeInvitationInFirebase()
+//            
+//            // Add friend
+//            Task {
+//                await repoManager.addFriend(friendId: invitation.id)
+//            }
+//        }
+//        
+//        if viewModel.receivedInvitations.isEmpty {
+//            withAnimation {
+//                viewModel.showPopup = false
+//            }
+//        }
+//    }
     private func accept() {
         NSLog("LOG: accept()")
+        
+        guard let currentUserId = repoManager.userRecord?.id else {
+            NSLog("LOG: userRecord is not set when removing invitation in firebase")
+            return
+        }
+        let friendId = invitation.id
         
         if !viewModel.receivedInvitations.isEmpty {
             viewModel.previousInvitationCount = viewModel.receivedInvitations.count
             removeInvitationInMemory()
-            removeInvitationInFirebase()
+
+            // Prepare updates for the current user
+            let currentUserUpdates: [String: Any] = [
+                "receivedInvitations": FieldValue.arrayRemove([friendId]),
+                "friends": FieldValue.arrayUnion([friendId])
+            ]
             
-            // Add friend
+            // Update current user's document in Firebase
+            repoManager.updateFieldInFirestore(
+                collection: "users",
+                documentId: currentUserId,
+                fieldsToUpdate: currentUserUpdates
+            )
+            
+            // Remove the friendId from the 'sentInvitations' array in the friend's document
+            repoManager.updateInvitationListInFirebase(
+                documentId: friendId,
+                friendId: currentUserId,
+                action: .remove,
+                listType: .sent
+            )
+            
+            // Add the friend to the local database asynchronously
             Task {
                 await repoManager.addFriend(friendId: invitation.id)
             }
@@ -110,6 +157,7 @@ struct InvitationCard: View {
             }
         }
     }
+
     
     private func decline() {
         NSLog("LOG: decline()")

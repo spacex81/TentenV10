@@ -14,7 +14,11 @@ class ContentViewModel: ObservableObject {
     //
     
     // MARK: Onboarding
-    @Published var isOnboardingComplete = true
+    @Published var isOnboardingComplete = true {
+        didSet {
+            NSLog("LOG: isOnboardingComplete is \(isOnboardingComplete)")
+        }
+    }
     @Published var onboardingStep: OnboardingStep = .username
     //
 
