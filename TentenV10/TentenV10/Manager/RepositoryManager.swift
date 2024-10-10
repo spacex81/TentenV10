@@ -92,17 +92,17 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-selectedFriend")
+//            NSLog("LOG: RepositoryManager-selectedFriend")
             Task {
-                NSLog("LOG: reloadData() is run when selectedFriend has changed")
+//                NSLog("LOG: reloadData() is run when selectedFriend has changed")
                 await self.collectionViewController?.reloadData()
             }
             
-            if let selectedFriend = selectedFriend {
-                print(selectedFriend)
-            } else {
-                print("selectedFriend is nil")
-            }
+//            if let selectedFriend = selectedFriend {
+//                print(selectedFriend)
+//            } else {
+//                print("selectedFriend is nil")
+//            }
             
 
             // update room name
@@ -150,8 +150,8 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: detailedFriends")
-            print(detailedFriends)
+//            NSLog("LOG: detailedFriends")
+//            print(detailedFriends)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -387,7 +387,9 @@ extension RepositoryManager {
     private func handleReceivedInvitations(friendIds: [String]) {
         NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
+        
 
+        
         if friendIds.count > 0 {
             DispatchQueue.main.async {
                 Task {
@@ -401,6 +403,8 @@ extension RepositoryManager {
                         }
                     }
                     
+                    NSLog("LOG: Updating receivedInvitations in listenToUser")
+                    print(invitations)
                     contentViewModel.receivedInvitations = invitations
                     contentViewModel.previousInvitationCount = friendIds.count
                     contentViewModel.showPopup = true
@@ -518,10 +522,10 @@ extension RepositoryManager {
         // Compare old friends list with the new one
         let oldFriends = Set(oldUserRecord?.friends ?? [])
         let newFriends = Set(newUserRecord.friends)
-        NSLog("LOG: oldFriends")
-        print(oldFriends)
-        NSLog("LOG: newFriends")
-        print(newFriends)
+//        NSLog("LOG: oldFriends")
+//        print(oldFriends)
+//        NSLog("LOG: newFriends")
+//        print(newFriends)
         
         // Find friends that were removed
         let removedFriends = oldFriends.subtracting(newFriends)
@@ -653,7 +657,7 @@ extension RepositoryManager {
                                     self.selectedFriend = newFriendRecord
                                 }
                             } else {
-                                NSLog("LOG: New friend is added in friend listener")
+//                                NSLog("LOG: New friend is added in friend listener")
                                 self.detailedFriends.append(newFriendRecord)
                             }
                         }
@@ -809,7 +813,7 @@ extension RepositoryManager {
                 // Part1
                 // Storing user information
                 DispatchQueue.main.async {
-                    NSLog("LOG: Updating adding friendId to userRecord.friends")
+//                    NSLog("LOG: Updating adding friendId to userRecord.friends")
                     self.userRecord!.friends.append(friendId)
                 }
                 
@@ -1687,7 +1691,7 @@ extension RepositoryManager {
             if let error = error {
                 NSLog("LOG: Error updating document in Firestore: \(error.localizedDescription)")
             } else {
-                NSLog("LOG: Document successfully updated in Firestore")
+//                NSLog("LOG: Document successfully updated in Firestore")
             }
         }
     }

@@ -28,10 +28,15 @@ class ContentViewModel: ObservableObject {
     // MARK: Invitation
     @Published var showPopup: Bool = false {
         didSet {
-            NSLog("LOG: showPopup is \(showPopup)")
+//            NSLog("LOG: showPopup is \(showPopup)")
         }
     }
-    @Published var receivedInvitations: [Invitation] = []
+    @Published var receivedInvitations: [Invitation] = [] {
+        didSet {
+            NSLog("LOG: receivedInvitations")
+            print(receivedInvitations)
+        }
+    }
     @Published var previousInvitationCount: Int = 0
     //
     

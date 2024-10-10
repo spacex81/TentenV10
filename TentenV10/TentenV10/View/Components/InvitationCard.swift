@@ -88,29 +88,11 @@ struct InvitationCard: View {
                 .opacity(0.3)
         )
         .shadow(radius: 10)
+        .onAppear {
+            NSLog("LOG: InvitationCard appeared")
+        }
     }
     
-
-//    private func accept() {
-//        NSLog("LOG: accept()")
-//        
-//        if !viewModel.receivedInvitations.isEmpty {
-//            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
-//            removeInvitationInMemory()
-//            removeInvitationInFirebase()
-//            
-//            // Add friend
-//            Task {
-//                await repoManager.addFriend(friendId: invitation.id)
-//            }
-//        }
-//        
-//        if viewModel.receivedInvitations.isEmpty {
-//            withAnimation {
-//                viewModel.showPopup = false
-//            }
-//        }
-//    }
     private func accept() {
         NSLog("LOG: accept()")
         
