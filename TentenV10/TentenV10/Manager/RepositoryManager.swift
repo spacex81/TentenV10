@@ -524,7 +524,7 @@ extension RepositoryManager {
         print(newFriends)
         
         // Find friends that were removed
-        let removedFriends = oldFriends.subtracting(newFriends)
+//        let removedFriends = oldFriends.subtracting(newFriends)
         // Find friends that were added
         let addedFriends = newFriends.subtracting(oldFriends)
         

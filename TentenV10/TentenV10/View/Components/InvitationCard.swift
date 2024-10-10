@@ -137,12 +137,17 @@ struct InvitationCard: View {
                 fieldsToUpdate: currentUserUpdates
             )
             
-            // Remove the friendId from the 'sentInvitations' array in the friend's document
-            repoManager.updateInvitationListInFirebase(
+            // Prepare updates for the friend's document
+            let friendUpdates: [String: Any] = [
+                "sentInvitations": FieldValue.arrayRemove([currentUserId]),
+                "friends": FieldValue.arrayUnion([currentUserId])
+            ]
+            
+            // Update friend's document in Firebase
+            repoManager.updateFieldInFirestore(
+                collection: "users",
                 documentId: friendId,
-                friendId: currentUserId,
-                action: .remove,
-                listType: .sent
+                fieldsToUpdate: friendUpdates
             )
             
             // Add the friend to the local database asynchronously
