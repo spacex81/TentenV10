@@ -1,6 +1,6 @@
 import Foundation
 
-class TaskQueue {
+class FriendsUpdateTaskQueue {
     private var tasks: [() -> Void] = [] {
         didSet {
 //            NSLog("LOG: Tasks count: \(tasks.count)")
@@ -8,7 +8,7 @@ class TaskQueue {
     }
     private var isRunning = false
 
-    static let shared = TaskQueue()
+    static let shared = FriendsUpdateTaskQueue()
 
     private init() {}
 

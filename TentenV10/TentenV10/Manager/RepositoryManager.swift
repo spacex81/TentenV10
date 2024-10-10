@@ -14,6 +14,7 @@ class RepositoryManager: ObservableObject {
 //    private var dbQueue: DatabaseQueue!
     private var dbPool: DatabasePool!
     
+    
     // Firebase
     let auth = Auth.auth()
     let db = Firestore.firestore()
@@ -388,7 +389,7 @@ extension RepositoryManager {
 //        NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
 
-        TaskQueue.shared.addTask {
+        ReceivedInvitationsTaskQueue.shared.addTask {
 //            NSLog("LOG: Running handleReceivedInvitations task")
 
             if friendIds.count > 0 {
@@ -411,14 +412,14 @@ extension RepositoryManager {
                         contentViewModel.showPopup = true
 
                         // Mark the task as completed
-                        TaskQueue.shared.taskCompleted()
+                        ReceivedInvitationsTaskQueue.shared.taskCompleted()
                     }
                 }
             } else {
                 DispatchQueue.main.async {
                     contentViewModel.showPopup = false
                     // Mark the task as completed
-                    TaskQueue.shared.taskCompleted()
+                    ReceivedInvitationsTaskQueue.shared.taskCompleted()
                 }
             }
         }

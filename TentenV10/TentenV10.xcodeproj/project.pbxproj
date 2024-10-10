@@ -61,6 +61,7 @@
 		C81B48542C8839EB00E1164B /* FocusTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48532C8839EB00E1164B /* FocusTextField.swift */; };
 		C81B48562C883B4500E1164B /* AddUsernameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48552C883B4500E1164B /* AddUsernameButton.swift */; };
 		C81B48582C88553600E1164B /* AddProfilePictureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B48572C88553600E1164B /* AddProfilePictureButton.swift */; };
+		C82185482CB7F29100934D42 /* FriendsUpdateQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */; };
 		C828E79B2CAA6F920084DBE4 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
@@ -96,7 +97,7 @@
 		C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */; };
 		C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */; };
 		C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
-		C8FC31F22CB7DA6D009CDAE8 /* TaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FC31F12CB7DA6D009CDAE8 /* TaskQueue.swift */; };
+		C8FC31F22CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +174,7 @@
 		C81B48532C8839EB00E1164B /* FocusTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTextField.swift; sourceTree = "<group>"; };
 		C81B48552C883B4500E1164B /* AddUsernameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUsernameButton.swift; sourceTree = "<group>"; };
 		C81B48572C88553600E1164B /* AddProfilePictureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfilePictureButton.swift; sourceTree = "<group>"; };
+		C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsUpdateQueue.swift; sourceTree = "<group>"; };
 		C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C82CA7242C6B014B00B4BFD0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		C82F66DE2C74A09D004E33FA /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
@@ -203,7 +205,7 @@
 		C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewContainer.swift; sourceTree = "<group>"; };
 		C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		C8FC31F12CB7DA6D009CDAE8 /* TaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskQueue.swift; sourceTree = "<group>"; };
+		C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedInvitationsTaskQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -360,7 +362,8 @@
 				C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */,
 				C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */,
 				C815BC722C60849C004CB09E /* Preview Content */,
-				C8FC31F12CB7DA6D009CDAE8 /* TaskQueue.swift */,
+				C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */,
+				C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */,
 			);
 			path = TentenV10;
 			sourceTree = "<group>";
@@ -692,13 +695,14 @@
 				C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */,
 				C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */,
 				C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */,
-				C8FC31F22CB7DA6D009CDAE8 /* TaskQueue.swift in Sources */,
+				C8FC31F22CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift in Sources */,
 				C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
 				C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */,
 				C8144AD32C7C50C40011385D /* HoldToReplyBubble.swift in Sources */,
 				C8144AC92C7C2DBE0011385D /* AddFriendButton.swift in Sources */,
 				C8BB1F0B2C86DA0300F176E6 /* GoogleSignInManager.swift in Sources */,
+				C82185482CB7F29100934D42 /* FriendsUpdateQueue.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,
 				C81B48502C88247A00E1164B /* Utils.swift in Sources */,
 				C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */,
