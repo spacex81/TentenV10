@@ -3,7 +3,7 @@ import Foundation
 class TaskQueue {
     private var tasks: [() -> Void] = [] {
         didSet {
-            NSLog("LOG: Tasks count: \(tasks.count)")
+//            NSLog("LOG: Tasks count: \(tasks.count)")
         }
     }
     private var isRunning = false

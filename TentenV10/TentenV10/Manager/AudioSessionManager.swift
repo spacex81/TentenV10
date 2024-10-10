@@ -119,7 +119,7 @@ extension AudioSessionManager {
     }
 
     func stopTestAudio() {
-        NSLog("LOG: Stop playing test audio")
+//        NSLog("LOG: Stop playing test audio")
         audioPlayer?.stop()
     }
 }

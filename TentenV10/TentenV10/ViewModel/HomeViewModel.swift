@@ -316,14 +316,14 @@ extension HomeViewModel {
         switch newScenePhase {
 
         case .active:
-             NSLog("LOG: App is active and in the foreground")
+//             NSLog("LOG: App is active and in the foreground")
             backgroundTaskManager.stopAudioTask()
 
         case .inactive:
-            NSLog("LOG: App is inactive")
+//            NSLog("LOG: App is inactive")
 
         case .background:
-            NSLog("LOG: App is in the background")
+//            NSLog("LOG: App is in the background")
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
 

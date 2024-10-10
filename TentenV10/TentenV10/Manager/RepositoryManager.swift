@@ -25,8 +25,8 @@ class RepositoryManager: ObservableObject {
     private var roomsListeners: [String: ListenerRegistration] = [:]
     private var friendsListeners: [String: ListenerRegistration] = [:] {
         didSet {
-            NSLog("LOG: friendsListeners")
-            print(friendsListeners)
+//            NSLog("LOG: friendsListeners")
+//            print(friendsListeners)
         }
     }
     private var userListener: ListenerRegistration?
@@ -53,8 +53,8 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-userRecord")
-            print(userRecord ?? "userRecord is nil")
+//            NSLog("LOG: RepositoryManager-userRecord")
+//            print(userRecord ?? "userRecord is nil")
             if let userRecord = self.userRecord {
                 // update deviceToken
                 if let deviceToken = deviceToken {
@@ -357,8 +357,8 @@ extension RepositoryManager {
                          
                          let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
-                         NSLog("LOG: listenToUser-updatedUserRecord")
-                         print(updatedUserRecord)
+//                         NSLog("LOG: listenToUser-updatedUserRecord")
+//                         print(updatedUserRecord)
                          
                          let invitations = updatedUserRecord.receivedInvitations
                          self.handleReceivedInvitations(friendIds: invitations)
@@ -385,11 +385,11 @@ extension RepositoryManager {
      }
     
     private func handleReceivedInvitations(friendIds: [String]) {
-        NSLog("LOG: handleReceivedInvitations")
+//        NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
 
         TaskQueue.shared.addTask {
-            NSLog("LOG: Running handleReceivedInvitations task")
+//            NSLog("LOG: Running handleReceivedInvitations task")
 
             if friendIds.count > 0 {
                 DispatchQueue.main.async {
@@ -525,7 +525,7 @@ extension RepositoryManager {
 //        }
 //    }
     private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-        NSLog("LOG: handleFriendsUpdate")
+//        NSLog("LOG: handleFriendsUpdate")
         // Compare old friends list with the new one
         let oldFriends = Set(oldUserRecord?.friends ?? [])
         let newFriends = Set(newUserRecord.friends)
@@ -940,11 +940,11 @@ extension RepositoryManager {
             }
         }
 
-        NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
-        NSLog("LOG: deleteFriend-selectedFriend")
-        print(selectedFriend ?? "selectedFriend is nil")
-        NSLog("LOG: deletedFriend-detailedFriends")
-        print(detailedFriends)
+//        NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
+//        NSLog("LOG: deleteFriend-selectedFriend")
+//        print(selectedFriend ?? "selectedFriend is nil")
+//        NSLog("LOG: deletedFriend-detailedFriends")
+//        print(detailedFriends)
     }
     
     private func updateCurrentUserFriends(friendId: String) {
@@ -1078,7 +1078,7 @@ extension RepositoryManager {
                 // Find the friend by friendId and delete it
                 try FriendRecord.filter(Column("id") == friendId).deleteAll(db)
             }
-            NSLog("LOG: Successfully erased friend with id: \(friendId)")
+//            NSLog("LOG: Successfully erased friend with id: \(friendId)")
         } catch {
             NSLog("LOG: Failed to erase friend with id \(friendId): \(error.localizedDescription)")
         }
@@ -1089,7 +1089,7 @@ extension RepositoryManager {
             _ = try dbPool.write { db in
                 try FriendRecord.deleteAll(db)
             }
-            NSLog("LOG: Successfully erased all friend records")
+//            NSLog("LOG: Successfully erased all friend records")
         } catch {
             NSLog("LOG: Failed to erase friend records: \(error.localizedDescription)")
         }
@@ -1246,7 +1246,7 @@ extension RepositoryManager {
     
     // MARK: Stop using these functions, replace them with 'updateFriendListInFirebase'
     func addFriendIdInFirebase(friendId: String) {
-        NSLog("LOG: RepositoryManager-addFriendIdInFirebase")
+//        NSLog("LOG: RepositoryManager-addFriendIdInFirebase")
         guard let currentUserId = auth.currentUser?.uid else {
             NSLog("LOG: currentUserId is not set when adding friend id")
             return
@@ -1354,7 +1354,7 @@ extension RepositoryManager {
             if let error = error {
                 NSLog("LOG: Error updating device token in Firestore: \(error.localizedDescription)")
             } else {
-                NSLog("LOG: Device token successfully updated in Firestore")
+//                NSLog("LOG: Device token successfully updated in Firestore")
             }
         }
     }

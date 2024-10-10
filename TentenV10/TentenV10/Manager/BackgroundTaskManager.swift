@@ -68,7 +68,7 @@ extension BackgroundTaskManager {
     
     func endAudioTask() {
         isBackgroundAudioTaskRunning = false
-        NSLog("LOG: Ending background audio task")
+//        NSLog("LOG: Ending background audio task")
         if audioTaskId != .invalid {
             UIApplication.shared.endBackgroundTask(audioTaskId)
             audioTaskId = .invalid
