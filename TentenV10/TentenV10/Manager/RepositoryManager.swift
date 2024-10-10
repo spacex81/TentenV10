@@ -526,32 +526,34 @@ extension RepositoryManager {
 //        }
 //    }
     private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-//        NSLog("LOG: handleFriendsUpdate")
-        // Compare old friends list with the new one
-        let oldFriends = Set(oldUserRecord?.friends ?? [])
-        let newFriends = Set(newUserRecord.friends)
-//        NSLog("LOG: oldFriends")
-//        print(oldFriends)
-//        NSLog("LOG: newFriends")
-//        print(newFriends)
-        
-        // Find friends that were removed
-        let removedFriends = oldFriends.subtracting(newFriends)
-        // Find friends that were added
-        let addedFriends = newFriends.subtracting(oldFriends)
-        
-        if addedFriends.count > 0 {
-             // Handle added friends
-            addedFriends.forEach { friendId in
-                Task {
-                    await self.addFriend(friendId: friendId)
-                }
-            }
-        }
-        else {
+        FriendsUpdateTaskQueue.shared.addTask {
+            NSLog("LOG: handleFriendsUpdate")
+            
+            // Compare old friends list with the new one
+            let oldFriends = Set(oldUserRecord?.friends ?? [])
+            let newFriends = Set(newUserRecord.friends)
+            NSLog("LOG: oldFriends")
+            print(oldFriends)
+            NSLog("LOG: newFriends")
+            print(newFriends)
+            
+            // Find friends that were removed and added
+            let removedFriends = oldFriends.subtracting(newFriends)
+            let addedFriends = newFriends.subtracting(oldFriends)
+            
             // Handle removed friends
             removedFriends.forEach { friendId in
                 self.deleteFriend(friendId: friendId)
+            }
+            
+            // Handle added friends asynchronously
+            Task {
+                for friendId in addedFriends {
+                    await self.addFriend(friendId: friendId)
+                }
+                
+                // Mark the task as completed once all operations are done
+                FriendsUpdateTaskQueue.shared.taskCompleted()
             }
         }
     }
