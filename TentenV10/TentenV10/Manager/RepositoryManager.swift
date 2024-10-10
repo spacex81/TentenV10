@@ -535,12 +535,13 @@ extension RepositoryManager {
                     await self.addFriend(friendId: friendId)
                 }
             }
-        } else {
-            // Handle removed friends
-            removedFriends.forEach { friendId in
-                self.deleteFriend(friendId: friendId)
-            }
         }
+//        else {
+//            // Handle removed friends
+//            removedFriends.forEach { friendId in
+//                self.deleteFriend(friendId: friendId)
+//            }
+//        }
     }
 
 
