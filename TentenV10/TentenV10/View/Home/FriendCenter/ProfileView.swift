@@ -9,9 +9,9 @@ struct ProfileView: View {
     @State private var showImageBottomSheet = false
 
     // MARK: Use this for preview
-    let viewModel = HomeViewModel.shared
+//    let viewModel = HomeViewModel.shared
     // MARK: Use this for real app
-//    @ObservedObject var viewModel = HomeViewModel.shared
+    @ObservedObject var viewModel = HomeViewModel.shared
 
     var body: some View {
         ZStack {

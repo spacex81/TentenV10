@@ -87,8 +87,8 @@ final class ImageBottomSheetViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
         dimmingView.addGestureRecognizer(tapGesture)
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        contentView.addGestureRecognizer(panGesture)
+//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+//        contentView.addGestureRecognizer(panGesture)
     }
     
     
