@@ -169,7 +169,9 @@ class HomeViewModel: ObservableObject {
         
         // TODO: Need add another condition
         // if room.isActive
-        if selectedFriend.isBusy {
+//        repoManager.currentSpeakerId == selectedFriend.id
+        let currentSpeakerIsSelected = repoManager.currentSpeakerId == selectedFriend.id
+        if selectedFriend.isBusy && !currentSpeakerIsSelected {
             selectedFriendIsBusy = true
         } else {
             selectedFriendIsBusy = false
