@@ -54,8 +54,9 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-//            NSLog("LOG: RepositoryManager-userRecord")
-//            print(userRecord ?? "userRecord is nil")
+            NSLog("LOG: RepositoryManager-userRecord")
+            print(userRecord ?? "userRecord is nil")
+            
             if let userRecord = self.userRecord {
                 // update deviceToken
                 if let deviceToken = deviceToken {
@@ -76,6 +77,8 @@ class RepositoryManager: ObservableObject {
                     listenToRooms(userRecord: userRecord)
                 }
                 
+                syncDetailedFriends(friendIds: userRecord.friends)
+                
                 // update room name
                 if let senderToken = userRecord.deviceToken,
                    let receiverToken = selectedFriend?.deviceToken {
@@ -87,6 +90,24 @@ class RepositoryManager: ObservableObject {
                          updateRoomName(roomName: roomName)
                     }            
                 }
+            }
+        }
+    }
+    
+    func syncDetailedFriends(friendIds: [String]) {
+        // Find friends in 'detailedFriends' that are not in 'friendIds'
+        let friendsToRemove = detailedFriends.filter { !friendIds.contains($0.id) }
+        
+        // Remove each of these friends from 'detailedFriends' and the local database
+        for friend in friendsToRemove {
+            if let index = detailedFriends.firstIndex(where: { $0.id == friend.id }) {
+                // Remove from the detailedFriends array
+                detailedFriends.remove(at: index)
+                
+                // Remove from the local database
+                eraseFriendFromDatabase(friendId: friend.id)
+                
+                NSLog("LOG: Removed friend with ID \(friend.id) from detailedFriends and local database")
             }
         }
     }
@@ -151,8 +172,12 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: detailedFriends")
+            NSLog("LOG: repoManager-detailedFriends")
             print(detailedFriends)
+            
+            NSLog("LOG: repoManager-detailedFriends from local db")
+            let friendsFromDb = fetchAllFriendsFromDatabase()
+            print(friendsFromDb)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -345,6 +370,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
+        NSLog("LOG: RepositoryManager-listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -372,7 +398,7 @@ extension RepositoryManager {
                          let invitations = updatedUserRecord.receivedInvitations
                          self.handleReceivedInvitations(friendIds: invitations)
                          
-                         self.handleFriendsUpdate(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
+                         self.handleUpdateFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
                          
                          if self.userRecord != updatedUserRecord {
                              DispatchQueue.main.async {
@@ -462,9 +488,9 @@ extension RepositoryManager {
         NSLog("LOG: handleSentInvitations")
     }
     
-    private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
+    private func handleUpdateFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
         FriendsUpdateTaskQueue.shared.addTask {
-//            NSLog("LOG: handleFriendsUpdate")
+            NSLog("LOG: handleUpdateFriends")
             
             // Compare old friends list with the new one
             let oldFriends = Set(oldUserRecord?.friends ?? [])
@@ -591,25 +617,6 @@ extension RepositoryManager {
         roomsListeners[roomId] = roomListener
     }
     
-    // TODO: Change this function to run with task queue
-//    func updateCurrentSpeaker(roomDto: RoomDto, currentUserId: String) {
-//        NSLog("LOG: updateCurrentSpeaker")
-//        guard let friendId = roomDto.getFriendId(currentUserId: currentUserId) else {
-//            NSLog("LOG: RepositoryManager-updateCurrentSpeaker: friendId is nil")
-//            return
-//        }
-//        
-//        NSLog("friendId: \(friendId)")
-//        // If updated RoomDto's isActive is 1 and 'currentSpeakerId' is nil
-//        // set 'friendId' as 'currentSpeakerId'
-//        // if isActive is 0 and 'currentSpeakerId' is same with 'friendId',
-//        // erase 'currentSpeakerId' to nil
-//        if roomDto.isActive == 1 && currentSpeakerId == nil {
-//            currentSpeakerId = friendId
-//        } else if roomDto.isActive == 0 && currentSpeakerId == friendId {
-//            currentSpeakerId = nil
-//        }
-//    }
     func updateCurrentSpeaker(roomDto: RoomDto, currentUserId: String) {
 //        NSLog("LOG: updateCurrentSpeaker")
 
@@ -914,6 +921,7 @@ extension RepositoryManager {
         
         // 4) Delete friend from current user's Firebase document
         updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
+        updateFriendListInFirebase(documentId: friendId, friendId: currentUserId, action: .remove)
         
         // 5) Remove friend listener using friendId
         if let listener = friendsListeners[friendId] {
@@ -972,10 +980,16 @@ extension RepositoryManager {
         // Check if friend is in the list
         if let index = currentUser.friends.firstIndex(of: friendId) {
             var updatedUser = currentUser
+            
+            NSLog("LOG: friendId: \(friendId)")
+            NSLog("LOG: index: \(index)")
+
+            NSLog("LOG: updatedUser.friends before remove")
+            print(updatedUser.friends)
             updatedUser.friends.remove(at: index) // Remove friend ID from friends list
             
-            NSLog("LOG: updatedUser")
-            print(updatedUser)
+            NSLog("LOG: updatedUser.friends after remove")
+            print(updatedUser.friends)
             
             DispatchQueue.main.async {
                 self.userRecord = updatedUser

@@ -15,11 +15,14 @@ struct SplashView: View {
             Image("app_logo")
         }
         .onAppear {
+            // Show splash screen for 1 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation {
                     isActive = true
                 }
             }
+            
+            // 
         }
         .fullScreenCover(isPresented: $isActive) {
             // Navigate to ContentView after the splash screen
