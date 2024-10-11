@@ -9,7 +9,7 @@ struct IsBusyBubble: View {
             
             // Container view for both text and speech bubble
             VStack {
-                Text("is busy")
+                Text("대화 중")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.black)

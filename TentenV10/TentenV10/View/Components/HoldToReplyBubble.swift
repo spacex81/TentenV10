@@ -9,8 +9,7 @@ struct HoldToReplyBubble: View {
             
             // Container view for both text and speech bubble
             VStack {
-//                Text("hold to reply")
-                Text("눌러서 말하기")
+                Text("눌러서 대답하기")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.black)
