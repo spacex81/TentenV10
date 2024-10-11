@@ -521,8 +521,8 @@ extension RepositoryManager {
                 Task {
                     do {
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
-                        print(roomDto)
+//                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
+//                        print(roomDto)
                         let friendId = roomDto.getFriendId(currentUserId: userRecord.id)
                         
                         // Find the friend in detailedFriends
@@ -727,10 +727,9 @@ extension RepositoryManager {
                     
                     if roomDoc.exists {
                         // Room exists, update the lastInteraction timestamp
-//                        var roomDto = try roomDoc.data(as: RoomDto.self)
-                        var roomDto = try self.convertRoomDocumentToRoomDto(document: roomDoc)
-                        NSLog("LOG: Room document converted successfully to RoomDto in addFriend")
-                        print(roomDto)
+                        let roomDto = try self.convertRoomDocumentToRoomDto(document: roomDoc)
+//                        NSLog("LOG: Room document converted successfully to RoomDto in addFriend")
+//                        print(roomDto)
 
                         try roomDocRef.setData(from: roomDto)
                         listenToRoom(roomId: roomId)
@@ -1652,8 +1651,8 @@ extension RepositoryManager {
                 } else if let document = document, document.exists {
                     do {
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-                        NSLog("LOG: Room document converted successfully to RoomDto in fetchRoomFromFirebase")
-                        print(roomDto)
+//                        NSLog("LOG: Room document converted successfully to RoomDto in fetchRoomFromFirebase")
+//                        print(roomDto)
                         continuation.resume(returning: roomDto)
                     } catch {
                         NSLog("LOG: Failed to convert firestore document to roomDto: \(error.localizedDescription)")
