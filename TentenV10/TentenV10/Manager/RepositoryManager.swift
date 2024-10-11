@@ -577,8 +577,8 @@ extension RepositoryManager {
                 Task {
                     do {
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-                        NSLog("LOG: Updated RoomDto")
-                        print(roomDto)
+//                        NSLog("LOG: Updated RoomDto")
+//                        print(roomDto)
                         
                         self.updateCurrentSpeaker(roomDto: roomDto, currentUserId: currentUserId)
                         await self.updateLastInteraction(roomDto: roomDto, currentUserId: currentUserId)
@@ -611,7 +611,7 @@ extension RepositoryManager {
 //        }
 //    }
     func updateCurrentSpeaker(roomDto: RoomDto, currentUserId: String) {
-        NSLog("LOG: updateCurrentSpeaker")
+//        NSLog("LOG: updateCurrentSpeaker")
 
         UpdateCurrentSpeakerQueue.shared.addTask {
             guard let friendId = roomDto.getFriendId(currentUserId: currentUserId) else {
@@ -952,15 +952,23 @@ extension RepositoryManager {
     }
     
     private func updateCurrentUserFriends(friendId: String) {
+        NSLog("LOG: updateCurrentUserFriends")
+        
         guard let currentUser = readUserFromDatabase(id: auth.currentUser?.uid ?? "") else {
             NSLog("LOG: Failed to retrieve current user from local database")
             return
         }
         
+        NSLog("LOG: currentUser")
+        print(currentUser)
+        
         // Check if friend is in the list
         if let index = currentUser.friends.firstIndex(of: friendId) {
             var updatedUser = currentUser
             updatedUser.friends.remove(at: index) // Remove friend ID from friends list
+            
+            NSLog("LOG: updatedUser")
+            print(updatedUser)
             
             DispatchQueue.main.async {
                 self.userRecord = updatedUser
