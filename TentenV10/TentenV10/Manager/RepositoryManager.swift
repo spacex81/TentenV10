@@ -1533,7 +1533,7 @@ extension RepositoryManager {
 
 // MARK: update timestamp on long press
 extension RepositoryManager {
-    func updateTimestampWhenLongPress(friendId: String) {
+    func updateFirebaseWhenLongPressStart(friendId: String) {
         // Get current timestamp
         let currentTimestamp = Date()
         
@@ -1550,7 +1550,22 @@ extension RepositoryManager {
         let roomId = RoomDto.generateRoomId(userId1: currentUserId, userId2: friendId)
         
         // Update 'lastInteraction' value in room document
-        updateTimestampInFirebase(roomId: roomId, currentTimestamp: currentTimestamp)
+//        updateTimestampInFirebase(roomId: roomId, currentTimestamp: currentTimestamp)
+        
+        // Get a reference to the room document
+        let roomDocument = roomsCollection.document(roomId)
+        
+        // Update the 'lastInteraction' field with the current timestamp
+        roomDocument.updateData([
+            "lastInteraction": currentTimestamp,
+            "isActive": true,
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Failed to update timestamp in Firebase: \(error.localizedDescription)")
+            } else {
+//                NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
+            }
+        }
     }
 }
 

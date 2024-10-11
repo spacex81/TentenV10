@@ -56,7 +56,7 @@ class LongPressCell: BaseCell {
             hasGivenFeedback = false
             
             guard let friend = friend else {return}
-            repoManager.updateTimestampWhenLongPress(friendId: friend.id)
+            repoManager.updateFirebaseWhenLongPressStart(friendId: friend.id)
         case .changed:
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
             let lockProgress = Float(verticalDistance / lockDistance)
