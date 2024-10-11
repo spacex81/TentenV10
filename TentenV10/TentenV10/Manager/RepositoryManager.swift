@@ -77,6 +77,7 @@ class RepositoryManager: ObservableObject {
                     listenToRooms(userRecord: userRecord)
                 }
                 
+                syncFriendInfo()
                 syncDetailedFriends(friendIds: userRecord.friends)
                 
                 // update room name
@@ -93,6 +94,46 @@ class RepositoryManager: ObservableObject {
             }
         }
     }
+    
+    func syncFriendInfo() {
+        Task {
+            NSLog("LOG: SplashView-syncFriendInfo")
+            // Ensure we have the user record and the list of friends
+            guard var friendIds = userRecord?.friends else {
+                NSLog("LOG: No friends to sync.")
+                return
+            }
+
+            // Create a list to keep track of friends to remove
+            var friendsToRemove: [String] = []
+
+            // Iterate over each friend ID
+            for friendId in friendIds {
+                do {
+                    // Check if the friend has deleted the current user
+                    let isDeleted = try await checkIfFriendDeletedYou(friendId: friendId, currentUserId: userRecord?.id ?? "")
+                    if isDeleted {
+                        // If the friend has deleted the user, add their ID to the list for removal
+                        friendsToRemove.append(friendId)
+                    }
+                } catch {
+                    NSLog("LOG: Error checking if friend deleted you for friendId \(friendId): \(error.localizedDescription)")
+                }
+            }
+
+            // Remove friends who have deleted the user from the user record
+            if !friendsToRemove.isEmpty {
+                // Update the userRecord with filtered friendIds
+                friendIds.removeAll { friendsToRemove.contains($0) }
+                userRecord?.friends = friendIds
+                
+                // Update the database or Firestore if needed
+                // Example: repoManager.updateUserRecordInDatabase(repoManager.userRecord)
+                NSLog("LOG: Updated userRecord friends after sync: \(friendIds)")
+            }
+        }
+    }
+
     
     func syncDetailedFriends(friendIds: [String]) {
         // Find friends in 'detailedFriends' that are not in 'friendIds'
@@ -495,10 +536,10 @@ extension RepositoryManager {
             // Compare old friends list with the new one
             let oldFriends = Set(oldUserRecord?.friends ?? [])
             let newFriends = Set(newUserRecord.friends)
-//            NSLog("LOG: oldFriends")
-//            print(oldFriends)
-//            NSLog("LOG: newFriends")
-//            print(newFriends)
+            NSLog("LOG: oldFriends")
+            print(oldFriends)
+            NSLog("LOG: newFriends")
+            print(newFriends)
             
             // Find friends that were removed and added
             let removedFriends = oldFriends.subtracting(newFriends)
@@ -1208,6 +1249,25 @@ extension RepositoryManager {
         }
     }
     
+    func checkIfFriendDeletedYou(friendId: String, currentUserId: String) async throws -> Bool {
+        do {
+            // Fetch the friend's UserDto from Firestore
+            let friendDto = try await fetchUserFromFirebase(userId: friendId)
+            
+            // Check if the current user's ID is present in the friend's 'friends' field
+            if friendDto.friends.contains(currentUserId) {
+                // The friend still has the current user in their friends list
+                return false
+            } else {
+                // The friend does not have the current user in their friends list
+                return true
+            }
+        } catch {
+            NSLog("LOG: Failed to check if friend deleted you: \(error.localizedDescription)")
+            throw error
+        }
+    }
+    
     func fetchFriendFromFirebase(friendId: String) async throws -> FriendRecord {
         // Fetch the UserDto using the friendId
         let userDto = try await fetchUserFromFirebase(userId: friendId)
@@ -1319,7 +1379,7 @@ extension RepositoryManager {
     
     // MARK: Stop using these functions, replace them with 'updateFriendListInFirebase'
     func addFriendIdInFirebase(friendId: String) {
-//        NSLog("LOG: RepositoryManager-addFriendIdInFirebase")
+        NSLog("LOG: RepositoryManager-addFriendIdInFirebase")
         guard let currentUserId = auth.currentUser?.uid else {
             NSLog("LOG: currentUserId is not set when adding friend id")
             return
@@ -1355,6 +1415,7 @@ extension RepositoryManager {
     }
     
     func updateFriendListInFirebase(documentId: String, friendId: String, action: ActionType) {
+        NSLog("LOG: RepositoryManager-updateFriendListInFirebase")
         let userRef = usersCollection.document(documentId)
         
         let updateData: [String: Any]
