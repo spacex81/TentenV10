@@ -504,112 +504,7 @@ extension RepositoryManager {
         }
     }
     
-    func listenToRoom(roomId: String) {
-        let roomListener = roomsCollection.document(roomId).addSnapshotListener { [weak self] document, error in
-            guard let self = self else { return }
-            guard let userRecord = self.userRecord else {
-                NSLog("LOG: userRecord is not set when trying to use it in room listener")
-                return
-            }
-
-            if let error = error {
-                NSLog("LOG: Error listening to room: \(error.localizedDescription)")
-                return
-            }
-
-            if let document = document, document.exists {
-                Task {
-                    do {
-                        let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-//                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
-//                        print(roomDto)
-                        let friendId = roomDto.getFriendId(currentUserId: userRecord.id)
-                        
-                        // Find the friend in detailedFriends
-                        if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
-                            let currentLastInteraction = self.detailedFriends[index].lastInteraction
-                            let newLastInteraction = roomDto.lastInteraction.dateValue()
-                            
-                            // Update only if the lastInteraction value has changed
-                            if currentLastInteraction != newLastInteraction {
-                                // Update timestamp value in detailedFriends
-                                self.detailedFriends[index].lastInteraction = newLastInteraction
-                                
-//                                NSLog("LOG: Sort new detailedFriends")
-                                // Sort new detailedFriends
-                                self.sortDetailedFriends()
-//                                NSLog("LOG: reloadData when detailedFriends is sorted")
-                                await self.collectionViewController?.reloadData()
-                                
-                                // Reposition center cell to first friend
-                                if self.detailedFriends.count > 0 {
-//                                    NSLog("LOG: Center first cell")
-                                    await self.collectionViewController?.centerCell(at: IndexPath(item: 1, section: 0))
-                                    DispatchQueue.main.async {
-                                         self.selectedFriend = self.detailedFriends[0]
-                                    }
-                                }
-
-                                
-                                // Save the updated friend record to the database
-                                let updatedFriend = self.detailedFriends[index]
-                                self.createFriendInDatabase(friend: updatedFriend)
-                                
-
-                                // Notify the view model or UI to refresh if necessary
-                                DispatchQueue.main.async {
-                                    self.objectWillChange.send()
-                                }
-                            }
-                        } else {
-//                            NSLog("LOG: Friend with ID \(String(describing: friendId)) not found in detailedFriends")
-                        }
-                    } catch {
-                        NSLog("LOG: Error decoding roomDto: \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-        roomsListeners[roomId] = roomListener
-    }
     
-    enum RoomDocumentConvertError: Error {
-        case missingField(String)
-        case invalidDataType(String)
-        case documentConversionFailed
-    }
-    
-    func convertRoomDocumentToRoomDto(document: DocumentSnapshot) throws -> RoomDto {
-        guard let data = document.data() else {
-            throw RoomDocumentConvertError.documentConversionFailed
-        }
-        
-        guard let userId1 = data["userId1"] as? String else {
-            throw RoomDocumentConvertError.missingField("userId1")
-        }
-        
-        guard let userId2 = data["userId2"] as? String else {
-            throw RoomDocumentConvertError.missingField("userId2")
-        }
-        
-        guard let timestamp = data["lastInteraction"] as? Timestamp else {
-            throw RoomDocumentConvertError.invalidDataType("lastInteraction")
-        }
-        
-        guard let nickname = data["nickname"] as? String else {
-            throw RoomDocumentConvertError.missingField("nickname")
-        }
-        
-        guard let isActive = data["isActive"] as? Int else {
-            throw RoomDocumentConvertError.invalidDataType("isActive")
-        }
-        
-        // Convert the Firestore Timestamp to a Date
-        let date = timestamp.dateValue()
-        
-        // Create and return a RoomDto instance using the original initializer
-        return RoomDto(id: document.documentID, userId1: userId1, userId2: userId2, lastInteraction: date, nickname: nickname, isActive: isActive)
-    }
     
     func listenToFriend(friendId: String) {
         let friendListener = usersCollection.document(friendId).addSnapshotListener { [weak self] document, error in
@@ -651,6 +546,85 @@ extension RepositoryManager {
         }
 
         friendsListeners[friendId] = friendListener
+    }
+}
+
+// MARK: Listen to room
+extension RepositoryManager {
+    func listenToRoom(roomId: String) {
+        let roomListener = roomsCollection.document(roomId).addSnapshotListener { [weak self] document, error in
+            guard let self = self else { return }
+            guard let userRecord = self.userRecord else {
+                NSLog("LOG: userRecord is not set when trying to use it in room listener")
+                return
+            }
+            let currentUserId = userRecord.id
+
+            if let error = error {
+                NSLog("LOG: Error listening to room: \(error.localizedDescription)")
+                return
+            }
+
+            if let document = document, document.exists {
+                Task {
+                    do {
+                        let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
+//                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
+                        
+//                        print(roomDto)
+                        
+                        await self.updateLastInteraction(roomDto: roomDto, currentUserId: currentUserId)
+                    } catch {
+                        NSLog("LOG: Error decoding roomDto: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+        roomsListeners[roomId] = roomListener
+    }
+    
+    func updateLastInteraction(roomDto: RoomDto, currentUserId: String) async {
+        let friendId = roomDto.getFriendId(currentUserId: currentUserId)
+        
+        // Find the friend in detailedFriends
+        if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
+            let currentLastInteraction = self.detailedFriends[index].lastInteraction
+            let newLastInteraction = roomDto.lastInteraction.dateValue()
+            
+            // Update only if the lastInteraction value has changed
+            if currentLastInteraction != newLastInteraction {
+                // Update timestamp value in detailedFriends
+                self.detailedFriends[index].lastInteraction = newLastInteraction
+                
+//                                NSLog("LOG: Sort new detailedFriends")
+                // Sort new detailedFriends
+                self.sortDetailedFriends()
+//                                NSLog("LOG: reloadData when detailedFriends is sorted")
+                await self.collectionViewController?.reloadData()
+                
+                // Reposition center cell to first friend
+                if self.detailedFriends.count > 0 {
+//                                    NSLog("LOG: Center first cell")
+                    await self.collectionViewController?.centerCell(at: IndexPath(item: 1, section: 0))
+                    DispatchQueue.main.async {
+                         self.selectedFriend = self.detailedFriends[0]
+                    }
+                }
+
+                
+                // Save the updated friend record to the database
+                let updatedFriend = self.detailedFriends[index]
+                self.createFriendInDatabase(friend: updatedFriend)
+                
+
+                // Notify the view model or UI to refresh if necessary
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
+            }
+        } else {
+//                            NSLog("LOG: Friend with ID \(String(describing: friendId)) not found in detailedFriends")
+        }
     }
 }
 
@@ -1488,6 +1462,10 @@ extension RepositoryManager {
         }
     }
     
+}
+
+// MARK: Convert functions
+extension RepositoryManager {
     private func convertUserDtoToUserRecord(userDto: UserDto) async throws -> UserRecord {
         var imageData: Data? = nil
         
@@ -1569,6 +1547,44 @@ extension RepositoryManager {
         
         return friendRecord
     }
+        enum RoomDocumentConvertError: Error {
+        case missingField(String)
+        case invalidDataType(String)
+        case documentConversionFailed
+    }
+    
+    func convertRoomDocumentToRoomDto(document: DocumentSnapshot) throws -> RoomDto {
+        guard let data = document.data() else {
+            throw RoomDocumentConvertError.documentConversionFailed
+        }
+        
+        guard let userId1 = data["userId1"] as? String else {
+            throw RoomDocumentConvertError.missingField("userId1")
+        }
+        
+        guard let userId2 = data["userId2"] as? String else {
+            throw RoomDocumentConvertError.missingField("userId2")
+        }
+        
+        guard let timestamp = data["lastInteraction"] as? Timestamp else {
+            throw RoomDocumentConvertError.invalidDataType("lastInteraction")
+        }
+        
+        guard let nickname = data["nickname"] as? String else {
+            throw RoomDocumentConvertError.missingField("nickname")
+        }
+        
+        guard let isActive = data["isActive"] as? Int else {
+            throw RoomDocumentConvertError.invalidDataType("isActive")
+        }
+        
+        // Convert the Firestore Timestamp to a Date
+        let date = timestamp.dateValue()
+        
+        // Create and return a RoomDto instance using the original initializer
+        return RoomDto(id: document.documentID, userId1: userId1, userId2: userId2, lastInteraction: date, nickname: nickname, isActive: isActive)
+    }
+
 }
 
 // MARK: update firebase on long press start/end
