@@ -454,88 +454,17 @@ extension RepositoryManager {
         NSLog("LOG: handleSentInvitations")
     }
     
-//    private func handleRemovedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-//        NSLog("LOG: handleRemovedFriends")
-//        // Compare old friends list with the new one
-//        let oldFriends = Set(oldUserRecord?.friends ?? [])
-//        let newFriends = Set(newUserRecord.friends)
-//        NSLog("LOG: oldFriends")
-//        print(oldFriends)
-//        NSLog("LOG: newFriends")
-//        print(newFriends)
-//        
-//        // Find friends that were removed
-//        let removedFriends = oldFriends.subtracting(newFriends)
-//        
-//        // Delete each friend no longer in the new friends list
-//        removedFriends.forEach { friendId in
-//            self.deleteFriend(friendId: friendId)
-//        }
-//    }
-//    
-//    private func handleAddedFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-//        NSLog("LOG: handleAddedFriends")
-//        // Compare old friends list with the new one
-//        let oldFriends = Set(oldUserRecord?.friends ?? [])
-//        let newFriends = Set(newUserRecord.friends)
-//        NSLog("LOG: oldFriends")
-//        print(oldFriends)
-//        NSLog("LOG: newFriends")
-//        print(newFriends)
-//        
-//        // Find friends that were added
-//        let addedFriends = newFriends.subtracting(oldFriends)
-//        
-//        // Add each friend not previously in the old friends list
-//        addedFriends.forEach { friendId in
-//            Task {
-//                do {
-//                    await self.addFriend(friendId: friendId)
-//                } catch {
-//                    NSLog("LOG: Error adding friend with id \(friendId): \(error.localizedDescription)")
-//                }
-//            }
-//        }
-//    }
-//    private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
-//        NSLog("LOG: handleFriendsUpdate")
-//        // Compare old friends list with the new one
-//        let oldFriends = Set(oldUserRecord?.friends ?? [])
-//        let newFriends = Set(newUserRecord.friends)
-//        NSLog("LOG: oldFriends")
-//        print(oldFriends)
-//        NSLog("LOG: newFriends")
-//        print(newFriends)
-//        
-//        // Find friends that were removed
-////        let removedFriends = oldFriends.subtracting(newFriends)
-//        // Find friends that were added
-//        let addedFriends = newFriends.subtracting(oldFriends)
-//        
-//        
-//        // Handle removed friends
-////        removedFriends.forEach { friendId in
-////            self.deleteFriend(friendId: friendId)
-////        }
-//        
-//        // Handle added friends
-//        addedFriends.forEach { friendId in
-//            Task {
-//                await self.addFriend(friendId: friendId)
-//            }
-//        }
-//    }
     private func handleFriendsUpdate(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
         FriendsUpdateTaskQueue.shared.addTask {
-            NSLog("LOG: handleFriendsUpdate")
+//            NSLog("LOG: handleFriendsUpdate")
             
             // Compare old friends list with the new one
             let oldFriends = Set(oldUserRecord?.friends ?? [])
             let newFriends = Set(newUserRecord.friends)
-            NSLog("LOG: oldFriends")
-            print(oldFriends)
-            NSLog("LOG: newFriends")
-            print(newFriends)
+//            NSLog("LOG: oldFriends")
+//            print(oldFriends)
+//            NSLog("LOG: newFriends")
+//            print(newFriends)
             
             // Find friends that were removed and added
             let removedFriends = oldFriends.subtracting(newFriends)
@@ -907,11 +836,11 @@ extension RepositoryManager {
         eraseFriendFromDatabase(friendId: friendId)
         NSLog("LOG: Successfully removed friend from local database")
         
-        // 3) Delete friend from current user's Firebase document
-        updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
-        
-        // 4) Remove friend id in UserRecord.friends
+        // 3) Remove friend id in UserRecord.friends
         updateCurrentUserFriends(friendId: friendId)
+        
+        // 4) Delete friend from current user's Firebase document
+        updateFriendListInFirebase(documentId: currentUserId, friendId: friendId, action: .remove)
         
         // 5) Remove friend listener using friendId
         if let listener = friendsListeners[friendId] {
@@ -1392,7 +1321,7 @@ extension RepositoryManager {
             if let error = error {
                 NSLog("Error updating call request: \(error.localizedDescription)")
             } else {
-                NSLog("Successfully updated call request and room name for both user and friend.")
+//                NSLog("Successfully updated call request and room name for both user and friend.")
             }
         }
     }

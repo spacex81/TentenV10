@@ -105,7 +105,7 @@ extension LiveKitManager {
             self.repoManager?.currentState = .idle
         }
         
-        NSLog("LOG: LiveKit disconnected")
+//        NSLog("LOG: LiveKit disconnected")
     }
     
     func publishAudio() async {
@@ -154,7 +154,7 @@ extension LiveKitManager {
             DispatchQueue.main.async {
                 self.isPublished = false
             }
-            NSLog("LOG: Microphone disabled and LiveKit Audio track unpublished")
+//            NSLog("LOG: Microphone disabled and LiveKit Audio track unpublished")
         } catch {
             NSLog("Failed to disable microphone and unpublish audio track: \(error)")
         }
@@ -246,13 +246,13 @@ extension LiveKitManager {
     
     // remote participant left the room
     func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
-        NSLog("LOG: remote participant left the room")
+//        NSLog("LOG: remote participant left the room")
         // when this callback runs when isPressing is true
         // this should not run
         if !isPressing {
             Task {
                 isLocked = false
-                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
+//                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
                 await unpublishAudio()
                 await disconnect()
             }
