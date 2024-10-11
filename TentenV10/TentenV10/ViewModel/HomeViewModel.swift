@@ -67,13 +67,16 @@ class HomeViewModel: ObservableObject {
 //            if let selectedFriend = selectedFriend {
 //                print(selectedFriend)
 //            }
+            
+            updateSelectedFriendIsBusy()
         }
     }
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
 //            NSLog("LOG: HomeViewModel-detailedFriends: ")
 //            print(detailedFriends)
-            updateSelectedFriendIsBusy()
+            
+//            updateSelectedFriendIsBusy()
         }
     }
     
@@ -164,14 +167,16 @@ class HomeViewModel: ObservableObject {
             return
         }
         
-        // Find the selected friend in the detailedFriends array
-        if let foundFriend = detailedFriends.first(where: { $0.id == selectedFriend.id }) {
-            // Update selectedFriendIsBusy based on the found friend's isBusy status
-            selectedFriendIsBusy = foundFriend.isBusy
-        } else {
-            // If the selected friend is not in the detailedFriends array, set isBusy to false
-            selectedFriendIsBusy = false
-        }
+        selectedFriendIsBusy = selectedFriend.isBusy
+        
+//        // Find the selected friend in the detailedFriends array
+//        if let foundFriend = detailedFriends.first(where: { $0.id == selectedFriend.id }) {
+//            // Update selectedFriendIsBusy based on the found friend's isBusy status
+//            selectedFriendIsBusy = foundFriend.isBusy
+//        } else {
+//            // If the selected friend is not in the detailedFriends array, set isBusy to false
+//            selectedFriendIsBusy = false
+//        }
     }
 }
 
