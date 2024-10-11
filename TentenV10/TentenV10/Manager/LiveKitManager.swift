@@ -32,15 +32,15 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 
 extension LiveKitManager {
     func connect(roomName: String) async {
-        NSLog("LOG: LiveKitManager-connect")
-        NSLog("LOG: roomName: \(roomName)")
+//        NSLog("LOG: LiveKitManager-connect")
+//        NSLog("LOG: roomName: \(roomName)")
         
         guard let room = self.room else {
             print("Room is not set")
             return
         }
         
-        NSLog("LOG: Fetching LiveKit token")
+//        NSLog("LOG: Fetching LiveKit token")
         
         // Check if the task has been canceled before fetching the token
         do {
@@ -73,12 +73,12 @@ extension LiveKitManager {
             // Check again before attempting to connect
             try Task.checkCancellation()
             
-            NSLog("LOG: Connecting to LiveKit room")
+//            NSLog("LOG: Connecting to LiveKit room")
             try await room.connect(url: livekitUrl, token: livekitToken)
             DispatchQueue.main.async {
                 self.isConnected = true
             }
-            NSLog("LOG: LiveKit Connected")
+//            NSLog("LOG: LiveKit Connected")
         } catch {
             if Task.isCancelled {
                 NSLog("LOG: Connection canceled due to task cancellation.")
@@ -130,7 +130,7 @@ extension LiveKitManager {
             
 //            NSLog("LOG: Enabling microphone for LiveKit Room")
             try await room.localParticipant.setMicrophone(enabled: true)
-            NSLog("LOG: Microphone enabled for LiveKit Room")
+//            NSLog("LOG: Microphone enabled for LiveKit Room")
         } catch {
             if Task.isCancelled {
                 NSLog("LOG: Microphone enabling canceled due to task cancellation.")

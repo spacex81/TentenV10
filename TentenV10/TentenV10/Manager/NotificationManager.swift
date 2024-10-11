@@ -27,7 +27,7 @@ class NotificationManager {
     }
 
     func sendRemoteNotification(type: String) {
-        NSLog("LOG: sendRemoteNotification of type: \(type)")
+//        NSLog("LOG: sendRemoteNotification of type: \(type)")
         if
             let selectedFriend = repoManager.selectedFriend,
             let receiverToken = selectedFriend.deviceToken,

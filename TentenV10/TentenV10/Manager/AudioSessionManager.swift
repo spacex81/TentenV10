@@ -45,7 +45,7 @@ extension AudioSessionManager {
 //                NSLog("LOG: configuring audio session category: \(configuration.category), mode: \(configuration.mode), options: [\(optionsString)], setActive: \(String(describing: setActive))")
                 if let setActive {
                     try session.setConfiguration(configuration, active: setActive)
-                    NSLog("LOG: Succeed to \(setActive ? "activate" : "deactivate") audio session")
+//                    NSLog("LOG: Succeed to \(setActive ? "activate" : "deactivate") audio session")
                 } else {
                     try session.setConfiguration(configuration)
 //                    NSLog("LOG: Succeed to configure audio session")

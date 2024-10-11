@@ -1589,7 +1589,7 @@ extension RepositoryManager {
             if let error = error {
                 NSLog("LOG: Failed to update timestamp in Firebase: \(error.localizedDescription)")
             } else {
-                NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
+//                NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
             }
         }
     }
