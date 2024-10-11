@@ -826,7 +826,7 @@ extension RepositoryManager {
         // 1) Delete friend from memory
         if let index = self.detailedFriends.firstIndex(where: { $0.id == friendId }) {
             self.detailedFriends.remove(at: index)
-            NSLog("LOG: Successfully removed friend from memory")
+//            NSLog("LOG: Successfully removed friend from memory")
         } else {
             NSLog("LOG: Failed to find friend in memory")
             return
@@ -834,7 +834,7 @@ extension RepositoryManager {
         
         // 2) Delete friend from local database
         eraseFriendFromDatabase(friendId: friendId)
-        NSLog("LOG: Successfully removed friend from local database")
+//        NSLog("LOG: Successfully removed friend from local database")
         
         // 3) Remove friend id in UserRecord.friends
         updateCurrentUserFriends(friendId: friendId)
@@ -846,7 +846,7 @@ extension RepositoryManager {
         if let listener = friendsListeners[friendId] {
             listener.remove()
             friendsListeners.removeValue(forKey: friendId)
-            NSLog("LOG: Successfully removed listener for friendId: \(friendId)")
+//            NSLog("LOG: Successfully removed listener for friendId: \(friendId)")
         } else {
             NSLog("LOG: No listener found for friendId: \(friendId)")
         }
@@ -860,7 +860,7 @@ extension RepositoryManager {
         if let roomListener = roomsListeners[roomId] {
             roomListener.remove()
             roomsListeners.removeValue(forKey: roomId)
-            NSLog("LOG: Successfully removed room listener for roomId: \(roomId)")
+//            NSLog("LOG: Successfully removed room listener for roomId: \(roomId)")
         } else {
             NSLog("LOG: No room listener found for roomId: \(roomId)")
         }
@@ -903,7 +903,7 @@ extension RepositoryManager {
             // Update the user record in the database
             createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord
             
-            NSLog("LOG: Successfully removed friend from currentUser.friends and updated in local database")
+//            NSLog("LOG: Successfully removed friend from currentUser.friends and updated in local database")
         } else {
             NSLog("LOG: Friend ID not found in currentUser.friends")
         }
@@ -1599,7 +1599,7 @@ extension RepositoryManager {
             if let error = error {
                 NSLog("LOG: Failed to remove room from Firebase: \(error.localizedDescription)")
             } else {
-                NSLog("LOG: Successfully removed room with id: \(roomId) from Firebase")
+//                NSLog("LOG: Successfully removed room with id: \(roomId) from Firebase")
             }
         }
     }

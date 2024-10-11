@@ -5,7 +5,11 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var detailedFriends: [FriendRecord]
     @Binding var selectedFriend: FriendRecord?
     @Binding var isSheetPresented: Bool
-    @Binding var isPressing: Bool
+    @Binding var isPressing: Bool {
+        didSet {
+            NSLog("LOG: CollectionView-DataSource: isPressing is \(isPressing)")
+        }
+    }
     @Binding var isLocked: Bool
     private weak var collectionViewController: CustomCollectionViewController?
     private let repoManager = RepositoryManager.shared
@@ -84,11 +88,14 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             longPressCell.onLongPressBegan = { [weak self] in
                 NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
+                self?.collectionViewController?.reloadData()
             }
             longPressCell.onLongPressEnded = { [weak self] in
                 NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
+                self?.collectionViewController?.reloadData()
             }
+
 //            NSLog("LOG: long press cell is set for \(friend.username)")
 
         } else {
@@ -109,17 +116,8 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
                 self?.collectionViewController?.centerCell(at: indexPath)
                 self?.repoManager.selectedFriend = friend
             }
+            
 //            NSLog("LOG: tap cell is set for \(friend.username)")
-
-            /**
-             DO NOT ERASE:
-             there are some occasion when centered cell is set as tap cell
-             in those cases we need to programmatically press the tap cell and
-             turn it into long press cell
-             */
-//            if friend.id == selectedFriend?.id {
-//                self.repoManager.selectedFriend = friend
-//            }
         }
         
         return cell

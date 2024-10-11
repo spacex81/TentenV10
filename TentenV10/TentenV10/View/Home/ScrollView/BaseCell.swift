@@ -12,6 +12,8 @@ class BaseCell: UICollectionViewCell {
     // set true when repoManager.currentState is .isListening and when cell is not long press
     var shrinkWhenListening: Bool = false {
         didSet {
+//            NSLog("LOG: previousShrinkWhenListening is \(previousShrinkWhenListening)")
+//            NSLog("LOG: shrinkWhenListening is \(shrinkWhenListening)")
             if previousShrinkWhenListening != shrinkWhenListening {
                 animateScale()
                 previousShrinkWhenListening = shrinkWhenListening
@@ -21,6 +23,8 @@ class BaseCell: UICollectionViewCell {
     
     var isPressing: Bool = false {
         didSet {
+            NSLog("LOG: BaseCell: previousIsPressing is \(previousIsPressing)")
+            NSLog("LOG: BaseCell: isPressing is \(isPressing)")
             if previousIsPressing != isPressing {
                 animateScale()
                 previousIsPressing = isPressing
@@ -30,6 +34,8 @@ class BaseCell: UICollectionViewCell {
 
     var isLocked: Bool = false {
         didSet {
+//            NSLog("LOG: previousIsLocked is \(previousIsLocked)")
+//            NSLog("LOG: isLocked is \(isLocked)")
             if previousIsLocked != isLocked {
                 animateScale()
                 previousIsLocked = isLocked
