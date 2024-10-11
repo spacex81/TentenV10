@@ -106,6 +106,10 @@ class AnimatedBackgroundView: UIView {
             self.imageView.layer.cornerRadius = cornerRadius
             
             if isPressing && !isPublished {
+                NSLog("LOG: Start wiggle animation")
+                NSLog("LOG: Wiggle-isPressing is \(isPressing)")
+                NSLog("LOG: Wiggle-isPublished is \(isPublished)")
+                
                 // Create and add the blur effect view if not already added
                 if self.blurEffectView.superview == nil {
                     let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)

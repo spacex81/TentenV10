@@ -211,7 +211,8 @@ extension LiveKitManager {
 
         // Check if the received message is 'readyToTalk'
         if message == "readyToTalk" {
-            print("Received 'readyToTalk' message. Setting isPublished to true.")
+//            print("Received 'readyToTalk' message. Setting isPublished to true.")
+            print("LOG: LiveKit remote audio is published")
             
             if let repoManager = self.repoManager, notificationManager == nil {
                 notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
