@@ -168,6 +168,14 @@ class RepositoryManager: ObservableObject {
     @Published var needUserFetch = true
     
     @Published var currentUser: User?
+    
+    // MARK: Listen to room
+    var currentSpeakerId: String? {
+        didSet {
+            NSLog("LOG: currentSpeakerId is \(currentSpeakerId ?? "nil")")
+        }
+    }
+    //
 
     init() {
         usersCollection = db.collection("users")
@@ -569,10 +577,10 @@ extension RepositoryManager {
                 Task {
                     do {
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-//                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
+                        NSLog("LOG: Updated RoomDto")
+                        print(roomDto)
                         
-//                        print(roomDto)
-                        
+                        self.updateCurrentSpeaker(roomDto: roomDto, currentUserId: currentUserId)
                         await self.updateLastInteraction(roomDto: roomDto, currentUserId: currentUserId)
                     } catch {
                         NSLog("LOG: Error decoding roomDto: \(error.localizedDescription)")
@@ -581,6 +589,50 @@ extension RepositoryManager {
             }
         }
         roomsListeners[roomId] = roomListener
+    }
+    
+    // TODO: Change this function to run with task queue
+//    func updateCurrentSpeaker(roomDto: RoomDto, currentUserId: String) {
+//        NSLog("LOG: updateCurrentSpeaker")
+//        guard let friendId = roomDto.getFriendId(currentUserId: currentUserId) else {
+//            NSLog("LOG: RepositoryManager-updateCurrentSpeaker: friendId is nil")
+//            return
+//        }
+//        
+//        NSLog("friendId: \(friendId)")
+//        // If updated RoomDto's isActive is 1 and 'currentSpeakerId' is nil
+//        // set 'friendId' as 'currentSpeakerId'
+//        // if isActive is 0 and 'currentSpeakerId' is same with 'friendId',
+//        // erase 'currentSpeakerId' to nil
+//        if roomDto.isActive == 1 && currentSpeakerId == nil {
+//            currentSpeakerId = friendId
+//        } else if roomDto.isActive == 0 && currentSpeakerId == friendId {
+//            currentSpeakerId = nil
+//        }
+//    }
+    func updateCurrentSpeaker(roomDto: RoomDto, currentUserId: String) {
+        NSLog("LOG: updateCurrentSpeaker")
+
+        UpdateCurrentSpeakerQueue.shared.addTask {
+            guard let friendId = roomDto.getFriendId(currentUserId: currentUserId) else {
+                NSLog("LOG: RepositoryManager-updateCurrentSpeaker: friendId is nil")
+                UpdateCurrentSpeakerQueue.shared.taskCompleted()
+                return
+            }
+
+//            NSLog("LOG: friendId: \(friendId)")
+//            NSLog("LOG: isActive: \(roomDto.isActive)")
+//            NSLog("LOG: currentSpeakerId: \(self.currentSpeakerId ?? "nil")")
+            
+            if roomDto.isActive == 1 && self.currentSpeakerId == nil {
+                self.currentSpeakerId = friendId
+            } else if roomDto.isActive == 0 && self.currentSpeakerId == friendId {
+                self.currentSpeakerId = nil
+            }
+
+            // Mark the task as completed
+            UpdateCurrentSpeakerQueue.shared.taskCompleted()
+        }
     }
     
     func updateLastInteraction(roomDto: RoomDto, currentUserId: String) async {

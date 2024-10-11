@@ -65,6 +65,7 @@
 		C828E79B2CAA6F920084DBE4 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
+		C831526A2CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */; };
 		C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84EF36C2C89ABB10092D6B5 /* SettingView.swift */; };
 		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
 		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
@@ -178,6 +179,7 @@
 		C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C82CA7242C6B014B00B4BFD0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		C82F66DE2C74A09D004E33FA /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCurrentSpeakerQueue.swift; sourceTree = "<group>"; };
 		C84EF36C2C89ABB10092D6B5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewRepresentable.swift; sourceTree = "<group>"; };
 		C85489812C7A05EB006878E0 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				C815BCBC2C60D49E004CB09E /* ViewModel */,
 				C815BCBB2C60D499004CB09E /* Model */,
 				C815BCBA2C60D492004CB09E /* Manager */,
+				C83152682CB91881009B76BA /* TaskQueue */,
 				C815BC6C2C60849B004CB09E /* TentenV10App.swift */,
 				C815BC8C2C60854C004CB09E /* AppDelegate.swift */,
 				C82CA7242C6B014B00B4BFD0 /* DummyData.swift */,
@@ -362,8 +365,6 @@
 				C815BC8F2C6085DA004CB09E /* GoogleService-Info.plist */,
 				C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */,
 				C815BC722C60849C004CB09E /* Preview Content */,
-				C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */,
-				C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */,
 			);
 			path = TentenV10;
 			sourceTree = "<group>";
@@ -432,6 +433,16 @@
 				C8E28C282C80449F008A5238 /* RoomDto.swift */,
 			);
 			path = Dto;
+			sourceTree = "<group>";
+		};
+		C83152682CB91881009B76BA /* TaskQueue */ = {
+			isa = PBXGroup;
+			children = (
+				C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */,
+				C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */,
+				C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */,
+			);
+			path = TaskQueue;
 			sourceTree = "<group>";
 		};
 		C854897E2C7A05D3006878E0 /* LockView */ = {
@@ -719,6 +730,7 @@
 				C889DC592CA2967100AC1932 /* StackedNotificationsView.swift in Sources */,
 				C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */,
 				C8D8D0F52CAD4C810010E3B8 /* BottomSheetViewController.swift in Sources */,
+				C831526A2CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift in Sources */,
 				C8D8D0F62CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
