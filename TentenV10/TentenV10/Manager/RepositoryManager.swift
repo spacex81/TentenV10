@@ -726,7 +726,8 @@ extension RepositoryManager {
             if !friendPin.isEmpty {
                 let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
                 
-                if !newUserRecord.friends.contains(friendId) {
+//                if !newUserRecord.friends.contains(friendId) {
+                if !newUserRecord.friends.contains(friendId) || !friendExistInDatabase(userId: friendId) {
                     
                     let currentTimestamp = Date()
                     // fetch detailed friend
@@ -810,7 +811,8 @@ extension RepositoryManager {
         }
         
         do {
-            if !newUserRecord.friends.contains(friendId) {
+//            if !newUserRecord.friends.contains(friendId) {
+            if !newUserRecord.friends.contains(friendId) || !friendExistInDatabase(userId: friendId) {
                 let currentTimestamp = Date()
                 // fetch detailed friend
                 let friendUserDto = try await fetchUserFromFirebase(userId: friendId)
@@ -1105,6 +1107,15 @@ extension RepositoryManager {
             return friends
         } catch {
             return []
+        }
+    }
+    
+    func friendExistInDatabase(userId: String) -> Bool {
+        let friends = fetchFriendsByUserIdFromDatabase(userId: userId)
+        if friends.count > 0 {
+            return true
+        } else {
+            return false
         }
     }
     
