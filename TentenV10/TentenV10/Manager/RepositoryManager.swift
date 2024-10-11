@@ -793,6 +793,8 @@ extension RepositoryManager {
                     } else {
                         // NSLog("LOG: friend is already added-FriendRecord")
                     }
+                    
+                    await collectionViewController?.reloadData()
                 } else {
                     NSLog("LOG: friend is already added-FriendID")
                 }
@@ -941,6 +943,10 @@ extension RepositoryManager {
             DispatchQueue.main.async {
                 ContentViewModel.shared.onboardingStep = .addFriend
             }
+        }
+        
+        Task {
+            await self.collectionViewController?.reloadData()
         }
 
 //        NSLog("LOG: Successfully removed friend with id: \(friendId) from Firebase")
