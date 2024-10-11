@@ -873,6 +873,8 @@ extension RepositoryManager {
                 }
             } else {
                 NSLog("LOG: friend is already added-FriendID")
+                NSLog("LOG: newUserRecord")
+                print(newUserRecord)
             }
 
         } catch {
@@ -901,6 +903,9 @@ extension RepositoryManager {
         // 2) Delete friend from local database
         eraseFriendFromDatabase(friendId: friendId)
 //        NSLog("LOG: Successfully removed friend from local database")
+        let currentFriends = fetchAllFriendsFromDatabase()
+        NSLog("LOG: currentFriends")
+        print(currentFriends)
         
         // 3) Remove friend id in UserRecord.friends
         updateCurrentUserFriends(friendId: friendId)
@@ -976,6 +981,13 @@ extension RepositoryManager {
 
             // Update the user record in the database
             createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord
+            let userFromDb = readUserFromDatabase(id: updatedUser.id)
+            NSLog("LOG: userFromDb")
+            print(userFromDb ?? "userFromDb is nil")
+            
+//            let userRecordsFromDb = readAllUsersFromDatabase()
+//            NSLog("LOG: userRecordsFromDb")
+//            print(userRecordsFromDb)
             
 //            NSLog("LOG: Successfully removed friend from currentUser.friends and updated in local database")
         } else {
@@ -1034,6 +1046,18 @@ extension RepositoryManager {
         return nil
     }
     
+    func readAllUsersFromDatabase() -> [UserRecord] {
+        do {
+            let userRecords = try dbPool.read { db in
+                try UserRecord.fetchAll(db)
+            }
+            return userRecords
+        } catch {
+            NSLog("LOG: Failed to read all users from database: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
     func readUserFromDatabase(email: String) -> UserRecord? {
         do {
             let userRecord = try dbPool.read { db in
@@ -1080,6 +1104,18 @@ extension RepositoryManager {
             }
             return friends
         } catch {
+            return []
+        }
+    }
+    
+    func fetchAllFriendsFromDatabase() -> [FriendRecord] {
+        do {
+            let friends = try dbPool.read { db in
+                try FriendRecord.fetchAll(db)
+            }
+            return friends
+        } catch {
+            NSLog("LOG: Failed to fetch all friends: \(error.localizedDescription)")
             return []
         }
     }

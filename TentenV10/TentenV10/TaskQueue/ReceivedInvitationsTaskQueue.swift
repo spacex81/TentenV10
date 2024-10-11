@@ -1,46 +1,35 @@
 import Foundation
 
 class ReceivedInvitationsTaskQueue {
-    private var tasks: [() -> Void] = [] {
-        didSet {
-//            NSLog("LOG: Tasks count: \(tasks.count)")
-        }
-    }
+    private var tasks: [() -> Void] = []
     private var isRunning = false
+    private let queue = DispatchQueue(label: "com.receivedInvitationsTask.queue")
 
     static let shared = ReceivedInvitationsTaskQueue()
 
     private init() {}
 
     func addTask(_ task: @escaping () -> Void) {
-        tasks.append(task)
-        runNext()
+        queue.async {
+            self.tasks.append(task)
+            self.runNext()
+        }
     }
 
-//    private func runNext() {
-//        guard !isRunning, !tasks.isEmpty else { return }
-//
-//        isRunning = true
-//        let task = tasks.removeFirst()
-//        task()
-//    }
     private func runNext() {
-        // Check again to ensure tasks is not empty before accessing it
-        guard !isRunning, !tasks.isEmpty else { return }
+        queue.async {
+            guard !self.isRunning, !self.tasks.isEmpty else { return }
 
-        isRunning = true
-        // Safely access and remove the first task
-        if let task = tasks.first {
-            tasks.removeFirst()
+            self.isRunning = true
+            let task = self.tasks.removeFirst()
             task()
-        } else {
-            // If for any reason tasks is empty at this point, mark isRunning as false
-            isRunning = false
         }
     }
 
     func taskCompleted() {
-        isRunning = false
-        runNext()
+        queue.async {
+            self.isRunning = false
+            self.runNext()
+        }
     }
 }

@@ -76,7 +76,7 @@ struct AddView: View {
             }
         }
         .onAppear {
-            NSLog("LOG: AddView")
+//            NSLog("LOG: AddView")
         }
     }
 }
