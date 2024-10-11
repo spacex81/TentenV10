@@ -1,6 +1,6 @@
 import UIKit
 
-final class BottomSheetViewController: UIViewController {
+final class DeleteBottomSheetViewController: UIViewController {
     
     var onDismiss: (() -> Void)?
     var friendToDelete: FriendRecord?

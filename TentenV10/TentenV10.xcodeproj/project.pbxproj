@@ -88,8 +88,8 @@
 		C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F112C86F09900F176E6 /* KakaoSDKAuth */; };
 		C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */; };
 		C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F152C86F09900F176E6 /* KakaoSDKUser */; };
-		C8D8D0F52CAD4C810010E3B8 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F32CAD4C810010E3B8 /* BottomSheetViewController.swift */; };
-		C8D8D0F62CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F42CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift */; };
+		C8D8D0F52CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */; };
+		C8D8D0F62CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */; };
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E49F692CA113B700E19E38 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8E49F682CA113B700E19E38 /* GRDB */; };
 		C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E49F6A2CA12C7300E19E38 /* SplashView.swift */; };
@@ -198,8 +198,8 @@
 		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
 		C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButtonView.swift; sourceTree = "<group>"; };
 		C8BB1F0A2C86DA0300F176E6 /* GoogleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInManager.swift; sourceTree = "<group>"; };
-		C8D8D0F32CAD4C810010E3B8 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
-		C8D8D0F42CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewController.swift; sourceTree = "<group>"; };
+		C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E49F6A2CA12C7300E19E38 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewRepresentable.swift; sourceTree = "<group>"; };
@@ -506,8 +506,8 @@
 		C8D8D0F22CAD4C640010E3B8 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				C8D8D0F32CAD4C810010E3B8 /* BottomSheetViewController.swift */,
-				C8D8D0F42CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift */,
+				C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */,
+				C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -729,9 +729,9 @@
 				C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */,
 				C889DC592CA2967100AC1932 /* StackedNotificationsView.swift in Sources */,
 				C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */,
-				C8D8D0F52CAD4C810010E3B8 /* BottomSheetViewController.swift in Sources */,
+				C8D8D0F52CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift in Sources */,
 				C831526A2CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift in Sources */,
-				C8D8D0F62CAD4C810010E3B8 /* BottomSheetViewControllerRepresentable.swift in Sources */,
+				C8D8D0F62CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

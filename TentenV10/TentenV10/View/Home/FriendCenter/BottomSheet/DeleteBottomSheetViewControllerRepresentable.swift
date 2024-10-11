@@ -1,15 +1,15 @@
 import SwiftUI
 import UIKit
 
-struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
+struct DeleteBottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
     
     @Binding var isPresented: Bool
     @Binding var friendToDelete: FriendRecord?
     
     class Coordinator: NSObject, UIViewControllerTransitioningDelegate {
-        var parent: BottomSheetViewControllerRepresentable
+        var parent: DeleteBottomSheetViewControllerRepresentable
         
-        init(parent: BottomSheetViewControllerRepresentable) {
+        init(parent: DeleteBottomSheetViewControllerRepresentable) {
             self.parent = parent
         }
         
@@ -23,7 +23,7 @@ struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
         viewController.view.backgroundColor = .clear
         
         if isPresented {
-            let bottomSheetVC = BottomSheetViewController()
+            let bottomSheetVC = DeleteBottomSheetViewController()
             bottomSheetVC.modalPresentationStyle = .overFullScreen
             bottomSheetVC.friendToDelete = friendToDelete
             bottomSheetVC.onDismiss = {
@@ -39,7 +39,7 @@ struct BottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         if isPresented {
-            let bottomSheetVC = BottomSheetViewController()
+            let bottomSheetVC = DeleteBottomSheetViewController()
             bottomSheetVC.modalPresentationStyle = .overFullScreen
             bottomSheetVC.friendToDelete = friendToDelete
             bottomSheetVC.onDismiss = {

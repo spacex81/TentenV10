@@ -7,8 +7,10 @@ struct ProfileView: View {
     // State for showing delete view as an overlay
     @State private var showBottomSheet = false
     
-//    let viewModel = HomeViewModel.shared
-    @ObservedObject var viewModel = HomeViewModel.shared
+    // MARK: Use this for preview
+    let viewModel = HomeViewModel.shared
+    // MARK: Use this for real app
+//    @ObservedObject var viewModel = HomeViewModel.shared
 
     var body: some View {
         ZStack {
@@ -27,6 +29,11 @@ struct ProfileView: View {
                             }
                         }
                         Spacer()
+                        
+                        // TODO: Add 'change profile picture'
+                        // Make this image view clickable
+                        // Show profile image update bottom sheet 
+                        
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()
@@ -100,7 +107,7 @@ struct ProfileView: View {
             .sheet(isPresented: $isAddFriendSheetPresented) {
                 AddFriendView()
             }
-            .background(BottomSheetViewControllerRepresentable(isPresented: $showBottomSheet, friendToDelete: $friendToDelete))
+            .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showBottomSheet, friendToDelete: $friendToDelete))
         }
     }
 }
