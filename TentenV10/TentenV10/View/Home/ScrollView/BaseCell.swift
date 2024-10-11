@@ -23,8 +23,8 @@ class BaseCell: UICollectionViewCell {
     
     var isPressing: Bool = false {
         didSet {
-            NSLog("LOG: BaseCell: previousIsPressing is \(previousIsPressing)")
-            NSLog("LOG: BaseCell: isPressing is \(isPressing)")
+//            NSLog("LOG: BaseCell: previousIsPressing is \(previousIsPressing)")
+//            NSLog("LOG: BaseCell: isPressing is \(isPressing)")
             if previousIsPressing != isPressing {
                 animateScale()
                 previousIsPressing = isPressing
@@ -45,7 +45,7 @@ class BaseCell: UICollectionViewCell {
     
     // Updated animateScale function
     func animateScale() {
-        NSLog("LOG: animateScale")
+//        NSLog("LOG: animateScale")
         
         // Cancel any ongoing animation
         propertyAnimator?.stopAnimation(true)
@@ -53,10 +53,10 @@ class BaseCell: UICollectionViewCell {
         let scaleTransform: CGAffineTransform
         if isPressing || isLocked || shrinkWhenListening {
             scaleTransform = CGAffineTransform(scaleX: 0.001, y: 0.001)
-            NSLog("LOG: Shrink")
+//            NSLog("LOG: Shrink")
         } else {
             scaleTransform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            NSLog("LOG: Scale")
+//            NSLog("LOG: Scale")
         }
         
         // Apply the scale transformation to the appropriate subview

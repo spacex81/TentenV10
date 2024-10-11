@@ -5,11 +5,12 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     @Binding var detailedFriends: [FriendRecord]
     @Binding var selectedFriend: FriendRecord?
     @Binding var isSheetPresented: Bool
-    @Binding var isPressing: Bool {
-        didSet {
-            NSLog("LOG: CollectionView-DataSource: isPressing is \(isPressing)")
-        }
-    }
+    @Binding var isPressing: Bool
+//    {
+//        didSet {
+//            NSLog("LOG: CollectionView-DataSource: isPressing is \(isPressing)")
+//        }
+//    }
     @Binding var isLocked: Bool
     private weak var collectionViewController: CustomCollectionViewController?
     private let repoManager = RepositoryManager.shared
@@ -86,12 +87,12 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
             
             longPressCell.onLongPressBegan = { [weak self] in
-                NSLog("LOG: onLongPressBegan")
+//                NSLog("LOG: onLongPressBegan")
                 self?.isPressing = true
                 self?.collectionViewController?.reloadData()
             }
             longPressCell.onLongPressEnded = { [weak self] in
-                NSLog("LOG: onLongPressEnded")
+//                NSLog("LOG: onLongPressEnded")
                 self?.isPressing = false
                 self?.collectionViewController?.reloadData()
             }
