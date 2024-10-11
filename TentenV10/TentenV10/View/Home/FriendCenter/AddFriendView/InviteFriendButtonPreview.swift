@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AddFriendButtonPreview: View {
+struct InviteFriendButtonPreview: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     
     var body: some View {
@@ -21,13 +21,13 @@ struct AddFriendButtonPreview: View {
 //                    .font(.largeTitle)
 //            }
             Spacer()
-            AddFriendButton()
+            InviteFriendButton()
             Spacer()
         }
     }
 }
 
 #Preview {
-    AddFriendButtonPreview()
+    InviteFriendButtonPreview()
         .preferredColorScheme(.dark)
 }

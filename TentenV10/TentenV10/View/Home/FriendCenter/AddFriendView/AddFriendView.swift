@@ -97,7 +97,7 @@ struct AddFriendView: View {
                 if isTextFieldFocused {
                     HStack {
                         Spacer()
-                        AddFriendButton()
+                        InviteFriendButton()
                         
                         Spacer()
                             .frame(width: 20)

@@ -31,8 +31,8 @@
 		C8144AC02C7B57520011385D /* PinButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ABF2C7B57520011385D /* PinButton.swift */; };
 		C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */; };
 		C8144AC62C7C22BB0011385D /* SpeechBubbleShapeUpward.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC52C7C22BB0011385D /* SpeechBubbleShapeUpward.swift */; };
-		C8144AC92C7C2DBE0011385D /* AddFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */; };
-		C8144ACB2C7C2E6D0011385D /* AddFriendButtonPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACA2C7C2E6D0011385D /* AddFriendButtonPreview.swift */; };
+		C8144AC92C7C2DBE0011385D /* InviteFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AC82C7C2DBE0011385D /* InviteFriendButton.swift */; };
+		C8144ACB2C7C2E6D0011385D /* InviteFriendButtonPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACA2C7C2E6D0011385D /* InviteFriendButtonPreview.swift */; };
 		C8144ACD2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACC2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift */; };
 		C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144ACE2C7C46710011385D /* HomeViewPreview.swift */; };
 		C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */; };
@@ -148,8 +148,8 @@
 		C8144ABF2C7B57520011385D /* PinButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinButton.swift; sourceTree = "<group>"; };
 		C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewPreview.swift; sourceTree = "<group>"; };
 		C8144AC52C7C22BB0011385D /* SpeechBubbleShapeUpward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleShapeUpward.swift; sourceTree = "<group>"; };
-		C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendButton.swift; sourceTree = "<group>"; };
-		C8144ACA2C7C2E6D0011385D /* AddFriendButtonPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendButtonPreview.swift; sourceTree = "<group>"; };
+		C8144AC82C7C2DBE0011385D /* InviteFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendButton.swift; sourceTree = "<group>"; };
+		C8144ACA2C7C2E6D0011385D /* InviteFriendButtonPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendButtonPreview.swift; sourceTree = "<group>"; };
 		C8144ACC2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleShapeDownward.swift; sourceTree = "<group>"; };
 		C8144ACE2C7C46710011385D /* HomeViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewPreview.swift; sourceTree = "<group>"; };
 		C8144AD02C7C49260011385D /* HoldToTalkBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldToTalkBubble.swift; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 				C8144AD22C7C50C40011385D /* HoldToReplyBubble.swift */,
 				C8144AD42C7C83E00011385D /* IsBusyBubble.swift */,
 				C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */,
-				C8144AC82C7C2DBE0011385D /* AddFriendButton.swift */,
+				C8144AC82C7C2DBE0011385D /* InviteFriendButton.swift */,
 				C81B48552C883B4500E1164B /* AddUsernameButton.swift */,
 				C81B48572C88553600E1164B /* AddProfilePictureButton.swift */,
 				C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */,
@@ -320,7 +320,7 @@
 			children = (
 				C812FF0D2C69D99F00BD9D9B /* AddFriendView.swift */,
 				C8144AC12C7B77570011385D /* AddFriendViewPreview.swift */,
-				C8144ACA2C7C2E6D0011385D /* AddFriendButtonPreview.swift */,
+				C8144ACA2C7C2E6D0011385D /* InviteFriendButtonPreview.swift */,
 			);
 			path = AddFriendView;
 			sourceTree = "<group>";
@@ -650,7 +650,7 @@
 			files = (
 				C81B484E2C87596400E1164B /* AddView.swift in Sources */,
 				C8BB1F042C86CA7200F176E6 /* SignInButtonView.swift in Sources */,
-				C8144ACB2C7C2E6D0011385D /* AddFriendButtonPreview.swift in Sources */,
+				C8144ACB2C7C2E6D0011385D /* InviteFriendButtonPreview.swift in Sources */,
 				C81B48522C88264F00E1164B /* OnboardingFlowView.swift in Sources */,
 				C812FF082C69D72D00BD9D9B /* RepositoryManager.swift in Sources */,
 				C812FF1A2C69F3C900BD9D9B /* AudioSessionManager.swift in Sources */,
@@ -700,7 +700,7 @@
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
 				C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */,
 				C8144AD32C7C50C40011385D /* HoldToReplyBubble.swift in Sources */,
-				C8144AC92C7C2DBE0011385D /* AddFriendButton.swift in Sources */,
+				C8144AC92C7C2DBE0011385D /* InviteFriendButton.swift in Sources */,
 				C8BB1F0B2C86DA0300F176E6 /* GoogleSignInManager.swift in Sources */,
 				C82185482CB7F29100934D42 /* FriendsUpdateQueue.swift in Sources */,
 				C815BC6F2C60849B004CB09E /* ContentView.swift in Sources */,

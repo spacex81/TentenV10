@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AddFriendButton: View {
+struct InviteFriendButton: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel = HomeViewModel.shared
     
@@ -17,8 +17,6 @@ struct AddFriendButton: View {
         Button(action: {
             impactFeedback.impactOccurred()
             viewModel.friendPin = viewModel.friendPin.lowercased()
-            // TODO: Instead of adding friend directly, we should send invitation
-//            viewModel.addFriend()
             viewModel.inviteFriend()
             dismiss()
         }) {
@@ -67,7 +65,7 @@ struct AddFriendButton: View {
 }
 
 #Preview {
-    AddFriendButton()
+    InviteFriendButton()
         .preferredColorScheme(.dark)
 }
 
