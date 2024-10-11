@@ -167,16 +167,13 @@ class HomeViewModel: ObservableObject {
             return
         }
         
-        selectedFriendIsBusy = selectedFriend.isBusy
-        
-//        // Find the selected friend in the detailedFriends array
-//        if let foundFriend = detailedFriends.first(where: { $0.id == selectedFriend.id }) {
-//            // Update selectedFriendIsBusy based on the found friend's isBusy status
-//            selectedFriendIsBusy = foundFriend.isBusy
-//        } else {
-//            // If the selected friend is not in the detailedFriends array, set isBusy to false
-//            selectedFriendIsBusy = false
-//        }
+        // TODO: Need add another condition
+        // if room.isActive
+        if selectedFriend.isBusy {
+            selectedFriendIsBusy = true
+        } else {
+            selectedFriendIsBusy = false
+        }
     }
 }
 
