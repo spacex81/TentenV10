@@ -1531,7 +1531,7 @@ extension RepositoryManager {
     }
 }
 
-// MARK: update timestamp on long press
+// MARK: update firebase on long press start/end
 extension RepositoryManager {
     func updateFirebaseWhenLongPressStart(friendId: String) {
         // Get current timestamp
@@ -1555,10 +1555,41 @@ extension RepositoryManager {
         // Get a reference to the room document
         let roomDocument = roomsCollection.document(roomId)
         
-        // Update the 'lastInteraction' field with the current timestamp
+        // Update the 'lastInteraction' and 'isActive' field with the current timestamp
         roomDocument.updateData([
             "lastInteraction": currentTimestamp,
             "isActive": true,
+        ]) { error in
+            if let error = error {
+                NSLog("LOG: Failed to update timestamp in Firebase: \(error.localizedDescription)")
+            } else {
+//                NSLog("LOG: Successfully updated timestamp in Firebase for roomId: \(roomId)")
+            }
+        }
+    }
+    
+    func updateFirebaseWhenLongPressEnd(friendId: String) {
+        // Get current user ID from 'userRecord'
+        guard let currentUserId = userRecord?.id else {
+            NSLog("LOG: currentUserId is not available when updating timestamp")
+            return
+        }
+        
+        // Just need to update timestamp value in firebase
+        // Memory and Local db update will be handled by room listener
+        
+        // Get room id
+        let roomId = RoomDto.generateRoomId(userId1: currentUserId, userId2: friendId)
+        
+        // Update 'lastInteraction' value in room document
+//        updateTimestampInFirebase(roomId: roomId, currentTimestamp: currentTimestamp)
+        
+        // Get a reference to the room document
+        let roomDocument = roomsCollection.document(roomId)
+        
+        // Update the 'isActive' field with the current timestamp
+        roomDocument.updateData([
+            "isActive": false,
         ]) { error in
             if let error = error {
                 NSLog("LOG: Failed to update timestamp in Firebase: \(error.localizedDescription)")
