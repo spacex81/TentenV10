@@ -93,6 +93,8 @@
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E49F692CA113B700E19E38 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8E49F682CA113B700E19E38 /* GRDB */; };
 		C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E49F6A2CA12C7300E19E38 /* SplashView.swift */; };
+		C8E700832CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */; };
+		C8E700852CB96AEA002600D5 /* ImageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E700842CB96AEA002600D5 /* ImageBottomSheetViewController.swift */; };
 		C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */; };
 		C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF712C709594002AEDE0 /* CustomCollectionViewController.swift */; };
 		C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */; };
@@ -202,6 +204,8 @@
 		C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E49F6A2CA12C7300E19E38 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		C8E700842CB96AEA002600D5 /* ImageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewRepresentable.swift; sourceTree = "<group>"; };
 		C8E9BF712C709594002AEDE0 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewContainer.swift; sourceTree = "<group>"; };
@@ -508,6 +512,8 @@
 			children = (
 				C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */,
 				C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */,
+				C8E700842CB96AEA002600D5 /* ImageBottomSheetViewController.swift */,
+				C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -683,10 +689,12 @@
 				C8144AC22C7B77570011385D /* AddFriendViewPreview.swift in Sources */,
 				C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */,
 				C819BE3E2CB5506B00642D48 /* InvitationView.swift in Sources */,
+				C8E700832CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift in Sources */,
 				C81B484C2C87584300E1164B /* ProfileImageView.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,
+				C8E700852CB96AEA002600D5 /* ImageBottomSheetViewController.swift in Sources */,
 				C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */,
 				C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */,
 				C819BE422CB5507D00642D48 /* StackedInvitationCard.swift in Sources */,

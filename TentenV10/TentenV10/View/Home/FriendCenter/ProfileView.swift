@@ -6,7 +6,8 @@ struct ProfileView: View {
     
     // State for showing delete view as an overlay
     @State private var showDeleteBottomSheet = false
-    
+    @State private var showImageBottomSheet = false
+
     // MARK: Use this for preview
     let viewModel = HomeViewModel.shared
     // MARK: Use this for real app
@@ -40,6 +41,11 @@ struct ProfileView: View {
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .shadow(radius: 10)
+                            .onTapGesture {
+                                withAnimation {
+                                    showImageBottomSheet = true
+                                }
+                            }
                     }
                     .padding(10)
 
@@ -108,6 +114,7 @@ struct ProfileView: View {
                 AddFriendView()
             }
             .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
+            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
         }
     }
 }
