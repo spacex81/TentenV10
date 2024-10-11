@@ -73,7 +73,6 @@ class LongPressCell: BaseCell {
         case .ended, .cancelled:
             onLongPressEnded?() // Trigger the long press ended callback
             
-            // TODO: Set isActive value in room document to false
             guard let friend = friend else {return}
             repoManager.updateFirebaseWhenLongPressEnd(friendId: friend.id)
         default:

@@ -520,7 +520,9 @@ extension RepositoryManager {
             if let document = document, document.exists {
                 Task {
                     do {
-                        let roomDto = try document.data(as: RoomDto.self)
+                        let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
+                        NSLog("LOG: Room document converted successfully to RoomDto in listenToRoom")
+                        print(roomDto)
                         let friendId = roomDto.getFriendId(currentUserId: userRecord.id)
                         
                         // Find the friend in detailedFriends
@@ -570,7 +572,44 @@ extension RepositoryManager {
         }
         roomsListeners[roomId] = roomListener
     }
-
+    
+    enum RoomDocumentConvertError: Error {
+        case missingField(String)
+        case invalidDataType(String)
+        case documentConversionFailed
+    }
+    
+    func convertRoomDocumentToRoomDto(document: DocumentSnapshot) throws -> RoomDto {
+        guard let data = document.data() else {
+            throw RoomDocumentConvertError.documentConversionFailed
+        }
+        
+        guard let userId1 = data["userId1"] as? String else {
+            throw RoomDocumentConvertError.missingField("userId1")
+        }
+        
+        guard let userId2 = data["userId2"] as? String else {
+            throw RoomDocumentConvertError.missingField("userId2")
+        }
+        
+        guard let timestamp = data["lastInteraction"] as? Timestamp else {
+            throw RoomDocumentConvertError.invalidDataType("lastInteraction")
+        }
+        
+        guard let nickname = data["nickname"] as? String else {
+            throw RoomDocumentConvertError.missingField("nickname")
+        }
+        
+        guard let isActive = data["isActive"] as? Int else {
+            throw RoomDocumentConvertError.invalidDataType("isActive")
+        }
+        
+        // Convert the Firestore Timestamp to a Date
+        let date = timestamp.dateValue()
+        
+        // Create and return a RoomDto instance using the original initializer
+        return RoomDto(id: document.documentID, userId1: userId1, userId2: userId2, lastInteraction: date, nickname: nickname, isActive: isActive)
+    }
     
     func listenToFriend(friendId: String) {
         let friendListener = usersCollection.document(friendId).addSnapshotListener { [weak self] document, error in
@@ -688,9 +727,11 @@ extension RepositoryManager {
                     
                     if roomDoc.exists {
                         // Room exists, update the lastInteraction timestamp
-                        var roomDto = try roomDoc.data(as: RoomDto.self)
-                        roomDto.lastInteraction = Timestamp(date: currentTimestamp)
-                        
+//                        var roomDto = try roomDoc.data(as: RoomDto.self)
+                        var roomDto = try self.convertRoomDocumentToRoomDto(document: roomDoc)
+                        NSLog("LOG: Room document converted successfully to RoomDto in addFriend")
+                        print(roomDto)
+
                         try roomDocRef.setData(from: roomDto)
                         listenToRoom(roomId: roomId)
                     } else {
@@ -1610,7 +1651,9 @@ extension RepositoryManager {
                     continuation.resume(returning: nil)
                 } else if let document = document, document.exists {
                     do {
-                        let roomDto = try document.data(as: RoomDto.self)
+                        let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
+                        NSLog("LOG: Room document converted successfully to RoomDto in fetchRoomFromFirebase")
+                        print(roomDto)
                         continuation.resume(returning: roomDto)
                     } catch {
                         NSLog("LOG: Failed to convert firestore document to roomDto: \(error.localizedDescription)")

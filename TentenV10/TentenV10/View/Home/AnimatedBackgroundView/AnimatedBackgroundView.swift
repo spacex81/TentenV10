@@ -106,8 +106,8 @@ class AnimatedBackgroundView: UIView {
             self.imageView.layer.cornerRadius = cornerRadius
             
             NSLog("LOG: Start wiggle animation")
-            NSLog("LOG: Wiggle-isPressing is \(isPressing)")
-            NSLog("LOG: Wiggle-isPublished is \(isPublished)")
+//            NSLog("LOG: Wiggle-isPressing is \(isPressing)")
+//            NSLog("LOG: Wiggle-isPublished is \(isPublished)")
             
             if isPressing && !isPublished {
                 
