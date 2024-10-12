@@ -211,7 +211,7 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             DispatchQueue.main.async {
                 self.repoManager.userRecord = newUserRecord
             }
-            // Also need to change the local db for the changed userRecord
+            // We will also change the local db for the changed userRecord
         }
         
         // TODO: Perform the Firebase upload logic here
@@ -220,6 +220,8 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         // Simulate upload completion
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             NSLog("LOG: Profile image uploaded successfully to Firebase")
+            
+            self.dismissBottomSheet()
         }
     }
     
