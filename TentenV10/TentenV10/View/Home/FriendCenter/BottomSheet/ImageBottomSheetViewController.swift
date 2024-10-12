@@ -12,7 +12,7 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
     
     private let contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .black
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         return view
@@ -142,26 +142,7 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         }
     }
     
-//    private func updateProfileImage() {
-//        // Check if the userRecord has profile image data, and update the image view accordingly
-//        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
-//            profileImageView?.image = profileImage
-//            NSLog("LOG: Profile image updated in ImageBottomSheet")
-//        } else {
-//            profileImageView?.image = nil // Remove image if no data is available
-//            contentView.backgroundColor = .systemGray  // Fallback color if no image
-//        }
-//    }
     private func updateProfileImage(imageData: Data) {
-        // Check if the userRecord has profile image data, and update the image view accordingly
-//        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
-//            profileImageView?.image = profileImage
-//            NSLog("LOG: Profile image updated in ImageBottomSheet")
-//        } else {
-//            profileImageView?.image = nil // Remove image if no data is available
-//            contentView.backgroundColor = .systemGray  // Fallback color if no image
-//        }
-        
         let profileImage = UIImage(data: imageData)
         profileImageView?.image = profileImage
     }
