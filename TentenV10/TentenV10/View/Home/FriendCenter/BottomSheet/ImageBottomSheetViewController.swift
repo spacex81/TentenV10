@@ -3,9 +3,7 @@ import UIKit
 final class ImageBottomSheetViewController: UIViewController {
     
     var onDismiss: (() -> Void)?
-
     let repoManager = RepositoryManager.shared
-    // TODO: use 'repoManager.userRecord' (type is 'UserRecord?') to set the background image of this bottom sheet
     
     private let contentView: UIView = {
         let view = UIView()
@@ -22,11 +20,13 @@ final class ImageBottomSheetViewController: UIViewController {
         return view
     }()
     
-    private let changeButton: UIButton = {
-        let button = UIButton(type: .system)
+    // Custom button with hue-rotating gradient background
+    private let changeButton: GradientButton = {
+        let button = GradientButton(type: .system)
         button.setTitle("사진 바꾸기", for: .normal)
-        button.setTitleColor(.red, for: .normal)
-        // Change this from 'BottomSheetViewController.self' to 'self'
+        button.setTitleColor(.white, for: .normal) // Set text color
+        button.layer.cornerRadius = 20
+        button.layer.masksToBounds = true
         button.addTarget(nil, action: #selector(changeImageAction), for: .touchUpInside)
         return button
     }()
@@ -34,17 +34,15 @@ final class ImageBottomSheetViewController: UIViewController {
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("취소", for: .normal)
-        // Change this from 'BottomSheetViewController.self' to 'self'
         button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("ImageSheetViewController-viewDidLoad")
-        
         setupViews()
         setupGesture()
+        changeButton.startHueRotation()  // Start hue rotation when view loads
     }
     
     private func setupViews() {
@@ -55,14 +53,11 @@ final class ImageBottomSheetViewController: UIViewController {
         
         // Get the profile image from the userRecord and set it as the background
         if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
-//            NSLog("LOG: ImageBottomSheet-setupViews: imageData available")
-            
             let imageView = UIImageView(image: profileImage)
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
-            contentView.insertSubview(imageView, at: 0) // Add image view at the back
+            contentView.insertSubview(imageView, at: 0)
 
-            // Use Auto Layout for imageView
             imageView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -71,23 +66,19 @@ final class ImageBottomSheetViewController: UIViewController {
                 imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
         } else {
-//            NSLog("LOG: ImageBottomSheet-setupViews: imageData not available")
             contentView.backgroundColor = .systemGray // Fallback color
         }
         
-        let height = view.frame.height * 1.0 // Adjust this as per the height you want
+        let height = view.frame.height * 1.0
         contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
-        
+
         // Create a vertical stack for buttons
         let buttonStack = UIStackView(arrangedSubviews: [changeButton, closeButton])
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 16
         
-        // Add stack view to contentView
         contentView.addSubview(buttonStack)
-        
-        // Set up constraints for the button stack
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -96,63 +87,82 @@ final class ImageBottomSheetViewController: UIViewController {
             buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8)
         ])
         
-        // Animate bottom sheet presentation
         UIView.animate(withDuration: 0.3) {
             self.contentView.frame.origin.y = self.view.frame.height - height
             self.dimmingView.alpha = 1
         }
     }
-
     
     private func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
         dimmingView.addGestureRecognizer(tapGesture)
-        
-//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-//        contentView.addGestureRecognizer(panGesture)
     }
     
-    
     @objc private func changeImageAction() {
-
-        
         self.dismissBottomSheet()
     }
     
     @objc private func dismissBottomSheet() {
-        // Animate only the bottom sheet's dismissal without affecting the ProfileView
         UIView.animate(withDuration: 0.3, animations: {
-            self.contentView.frame.origin.y = self.view.frame.height  // Move bottom sheet off screen
-            self.dimmingView.alpha = 0  // Fade out the dimming view
+            self.contentView.frame.origin.y = self.view.frame.height
+            self.dimmingView.alpha = 0
         }) { _ in
-            // Instead of dismissing the entire ProfileView, simply remove the bottom sheet's view
             self.contentView.removeFromSuperview()
             self.dimmingView.removeFromSuperview()
             self.onDismiss?()
+            self.changeButton.stopHueRotation()  // Stop the hue rotation when dismissed
+        }
+    }
+}
+
+// Custom UIButton with hue-rotating gradient background
+class GradientButton: UIButton {
+    private let gradientLayer = CAGradientLayer()
+    private var hue: CGFloat = 0.0
+    private var hueRotationTimer: Timer?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupGradientLayer()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGradientLayer()
+    }
+    
+    private func setupGradientLayer() {
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.colors = [
+            UIColor(hue: hue, saturation: 1, brightness: 1, alpha: 1).cgColor,
+            UIColor(hue: hue + 0.1, saturation: 1, brightness: 1, alpha: 1).cgColor
+        ]
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = bounds  // Ensure the gradient layer matches the button's bounds
+    }
+    
+    func startHueRotation() {
+        hueRotationTimer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
+            self.hue += 0.01
+            if self.hue > 1.0 { self.hue = 0.0 }
+            self.updateGradientColors()
         }
     }
     
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: contentView)
-        
-        switch gesture.state {
-        case .changed:
-            if translation.y > 0 { // Drag down only
-                contentView.frame.origin.y += translation.y
-                gesture.setTranslation(.zero, in: contentView)
-            }
-        case .ended:
-            let threshold: CGFloat = 1000
-            if contentView.frame.origin.y > view.frame.height - threshold {
-                dismissBottomSheet()
-            } else {
-                // Snap back to original position
-                UIView.animate(withDuration: 0.3) {
-                    self.contentView.frame.origin.y = self.view.frame.height * 0.6
-                }
-            }
-        default:
-            break
-        }
+    func stopHueRotation() {
+        hueRotationTimer?.invalidate()
+        hueRotationTimer = nil
+    }
+    
+    private func updateGradientColors() {
+        gradientLayer.colors = [
+            UIColor(hue: hue, saturation: 1, brightness: 1, alpha: 1).cgColor,
+            UIColor(hue: (hue + 0.1).truncatingRemainder(dividingBy: 1.0), saturation: 1, brightness: 1, alpha: 1).cgColor
+        ]
     }
 }
