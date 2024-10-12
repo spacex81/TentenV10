@@ -7,15 +7,30 @@ struct ProfileView: View {
     // State for showing delete view as an overlay
     @State private var showDeleteBottomSheet = false
     @State private var showImageBottomSheet = false
-
+    @State private var showSettingView = false
+    
     // MARK: Use this for preview
-//    let viewModel = HomeViewModel.shared
+    let viewModel = HomeViewModel.shared
     // MARK: Use this for real app
-    @ObservedObject var viewModel = HomeViewModel.shared
+//    @ObservedObject var viewModel = HomeViewModel.shared
 
     var body: some View {
         ZStack {
             VStack {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        showSettingView.toggle()
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Spacer().frame(width: 30)
+                }
+
                 if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
 
                     // User profile panel
@@ -109,7 +124,10 @@ struct ProfileView: View {
             .sheet(isPresented: $isAddFriendSheetPresented) {
                 AddFriendView()
             }
-            .sheet(isPresented: $showImageBottomSheet) {
+            .sheet(isPresented: $showSettingView) {
+                SettingView()
+            }
+            .fullScreenCover(isPresented: $showImageBottomSheet) {
                 ProfileImageView {
                     print("Whatever")
                 }

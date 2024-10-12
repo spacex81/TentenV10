@@ -14,16 +14,17 @@ struct AddView: View {
                 HStack {
                     Spacer().frame(width: 30)
                     
+                    PinButton(pin: viewModel.userRecord?.pin ?? "1234567")
+                    Spacer()
+                    
                     Button {
                         showSettingView.toggle()
                     } label: {
                         Image(systemName: "gearshape.fill")
-                            .font(.system(size: 30))
+                            .font(.system(size: 20))
                             .foregroundColor(.gray)
                     }
                     
-                    Spacer()
-                    PinButton(pin: viewModel.userRecord?.pin ?? "1234567")
                     Spacer().frame(width: 30)
                 }
                 Spacer()
