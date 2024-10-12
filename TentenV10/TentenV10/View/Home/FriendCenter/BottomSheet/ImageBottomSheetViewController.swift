@@ -24,11 +24,19 @@ final class ImageBottomSheetViewController: UIViewController {
     private let changeButton: GradientButton = {
         let button = GradientButton(type: .system)
         button.setTitle("사진 바꾸기", for: .normal)
-        button.setTitleColor(.white, for: .normal) // Set text color
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18) // Make the text bold
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)  // Make the text bold
         button.layer.cornerRadius = 24
         button.layer.masksToBounds = true
         button.addTarget(nil, action: #selector(changeImageAction), for: .touchUpInside)
+        
+        // Adding text shadow to changeButton
+        button.titleLabel?.layer.shadowColor = UIColor.black.cgColor
+        button.titleLabel?.layer.shadowOffset = CGSize(width: 1, height: 1)
+        button.titleLabel?.layer.shadowRadius = 3
+        button.titleLabel?.layer.shadowOpacity = 0.5
+        button.titleLabel?.layer.masksToBounds = false  // Allow shadow to go beyond label bounds
+        
         return button
     }()
 
@@ -94,8 +102,8 @@ final class ImageBottomSheetViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50), // Adjust for lower placement
-            buttonStack.heightAnchor.constraint(equalToConstant: 150), // adjust height
-            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.85) // adjust weight
+            buttonStack.heightAnchor.constraint(equalToConstant: 150), // Increased height for bigger buttons
+            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.85) // Slightly shorter width
         ])
         
         UIView.animate(withDuration: 0.3) {
@@ -110,9 +118,15 @@ final class ImageBottomSheetViewController: UIViewController {
     }
     
     @objc private func changeImageAction() {
-        self.dismissBottomSheet()
+        // Present ImagePicker to choose an image
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        
+        // Present the image picker
+        self.present(picker, animated: true, completion: nil)
     }
-    
+
     @objc private func dismissBottomSheet() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.frame.origin.y = self.view.frame.height
@@ -125,6 +139,58 @@ final class ImageBottomSheetViewController: UIViewController {
         }
     }
 }
+
+// Extension to handle image picker delegate methods
+extension ImageBottomSheetViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            // Log original image size
+            NSLog("LOG: Original image size: \(selectedImage.size.width)x\(selectedImage.size.height)")
+            
+            // Update the userRecord profile image with the resized image
+            if var userRecord = repoManager.userRecord {
+                
+                // Resize the image if necessary
+                var finalImage = selectedImage
+                if selectedImage.size.width > maxImageSize.width || selectedImage.size.height > maxImageSize.height {
+                    if let resizedImage = resizeImage(selectedImage, targetSize: maxImageSize) {
+                        finalImage = resizedImage
+                        // Log resized image size
+                        NSLog("LOG: Resized image size: \(finalImage.size.width)x\(finalImage.size.height)")
+                    } else {
+                        NSLog("LOG: Error resizing image")
+                        return
+                    }
+                } else {
+                    // If no resizing was needed, log that info
+                    NSLog("LOG: Image did not require resizing")
+                }
+                
+                // Set profileImageData with resized image
+                userRecord.profileImageData = finalImage.jpegData(compressionQuality: 0.8)
+                
+                // Update the repoManager's userRecord on the main thread
+                DispatchQueue.main.async {
+                    self.repoManager.userRecord = userRecord
+                }
+                
+                NSLog("LOG: ImageBottomSheetViewController-changeImageAction: Profile image updated")
+            }
+        }
+        picker.dismiss(animated: true) {
+            // TODO: Instead of dismissing the whole bottom sheet
+            // we need to dismiss only the image picker
+//            self.dismissBottomSheet()
+            picker.dismiss(animated: true, completion: nil)
+        }
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
 
 // Custom UIButton with hue-rotating gradient background
 class GradientButton: UIButton {
