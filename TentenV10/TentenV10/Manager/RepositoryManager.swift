@@ -675,7 +675,10 @@ extension RepositoryManager {
             if roomDto.isActive == 1 && self.currentSpeakerId == nil {
                 self.currentSpeakerId = friendId
             } else if roomDto.isActive == 0 && self.currentSpeakerId == friendId {
-                self.currentSpeakerId = nil
+//                self.currentSpeakerId = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.currentSpeakerId = nil
+                }
             }
 
             // Mark the task as completed

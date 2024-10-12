@@ -52,7 +52,11 @@ class HomeViewModel: ObservableObject {
     }
     //
     
-    @Published var selectedFriendIsBusy: Bool = false
+    @Published var selectedFriendIsBusy: Bool = false {
+        didSet {
+            NSLog("LOG: HomeViewModel-selectedFriendIsBusy: \(selectedFriendIsBusy)")
+        }
+    }
     @Published var currentState: UserState = .idle
     
     @Published var isPressing: Bool = false {
@@ -160,17 +164,20 @@ class HomeViewModel: ObservableObject {
     }
     
     private func updateSelectedFriendIsBusy() {
-//        NSLog("LOG: updateSelectedFriendIsBusy")
+        NSLog("LOG: updateSelectedFriendIsBusy")
         // Check if there's a selected friend
         guard let selectedFriend = selectedFriend else {
             selectedFriendIsBusy = false
             return
         }
         
-        // TODO: Need add another condition
-        // if room.isActive
-//        repoManager.currentSpeakerId == selectedFriend.id
+        NSLog("LOG: currentSpeakerId: \(repoManager.currentSpeakerId ?? "nil")")
+        NSLog("LOG: selectedFriendId: \(selectedFriend.id)")
+        NSLog("LOG: selectedFriendIsBusy: \(selectedFriend.isBusy)")
+        
         let currentSpeakerIsSelected = repoManager.currentSpeakerId == selectedFriend.id
+        // currentSpeakerIsMe
+        
         if selectedFriend.isBusy && !currentSpeakerIsSelected {
             selectedFriendIsBusy = true
         } else {
