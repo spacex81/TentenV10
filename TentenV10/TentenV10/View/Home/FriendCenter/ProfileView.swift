@@ -31,10 +31,6 @@ struct ProfileView: View {
                         }
                         Spacer()
                         
-                        // TODO: Add 'change profile picture'
-                        // Make this image view clickable
-                        // Show profile image update bottom sheet 
-                        
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()

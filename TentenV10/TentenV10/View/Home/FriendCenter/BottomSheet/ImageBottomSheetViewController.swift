@@ -3,9 +3,9 @@ import UIKit
 final class ImageBottomSheetViewController: UIViewController {
     
     var onDismiss: (() -> Void)?
-    var friendToDelete: FriendRecord?
-    
+
     let repoManager = RepositoryManager.shared
+    // TODO: use 'repoManager.userRecord' (type is 'UserRecord?') to set the background image of this bottom sheet
     
     private let contentView: UIView = {
         let view = UIView()
@@ -22,18 +22,18 @@ final class ImageBottomSheetViewController: UIViewController {
         return view
     }()
     
-    private let deleteButton: UIButton = {
+    private let changeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Delete Friend", for: .normal)
+        button.setTitle("사진 바꾸기", for: .normal)
         button.setTitleColor(.red, for: .normal)
         // Change this from 'BottomSheetViewController.self' to 'self'
-        button.addTarget(nil, action: #selector(deleteFriendAction), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(changeImageAction), for: .touchUpInside)
         return button
     }()
 
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Close", for: .normal)
+        button.setTitle("취소", for: .normal)
         // Change this from 'BottomSheetViewController.self' to 'self'
         button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
         return button
@@ -41,8 +41,7 @@ final class ImageBottomSheetViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("BottomSheetViewController-viewDidLoad")
-//        print(friendToDelete ?? "friendToDelete is nil")
+//        print("ImageSheetViewController-viewDidLoad")
         
         setupViews()
         setupGesture()
@@ -54,12 +53,33 @@ final class ImageBottomSheetViewController: UIViewController {
         
         dimmingView.frame = view.bounds
         
-//        let height = view.frame.height * 0.4 // 40% of screen height
-        let height = view.frame.height * 1.0 // 100% of screen height
+        // Get the profile image from the userRecord and set it as the background
+        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
+//            NSLog("LOG: ImageBottomSheet-setupViews: imageData available")
+            
+            let imageView = UIImageView(image: profileImage)
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            contentView.insertSubview(imageView, at: 0) // Add image view at the back
+
+            // Use Auto Layout for imageView
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            ])
+        } else {
+//            NSLog("LOG: ImageBottomSheet-setupViews: imageData not available")
+            contentView.backgroundColor = .systemGray // Fallback color
+        }
+        
+        let height = view.frame.height * 1.0 // Adjust this as per the height you want
         contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
         
-        // Create a horizontal stack for buttons
-        let buttonStack = UIStackView(arrangedSubviews: [deleteButton, closeButton])
+        // Create a vertical stack for buttons
+        let buttonStack = UIStackView(arrangedSubviews: [changeButton, closeButton])
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 16
@@ -72,7 +92,7 @@ final class ImageBottomSheetViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            buttonStack.heightAnchor.constraint(equalToConstant: 50),
+            buttonStack.heightAnchor.constraint(equalToConstant: 100),
             buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8)
         ])
         
@@ -82,6 +102,7 @@ final class ImageBottomSheetViewController: UIViewController {
             self.dimmingView.alpha = 1
         }
     }
+
     
     private func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
@@ -92,40 +113,10 @@ final class ImageBottomSheetViewController: UIViewController {
     }
     
     
-    @objc private func deleteFriendAction() {
-        // Create a UIAlertController for confirmation
-        let alertController = UIAlertController(
-            title: "Confirm Deletion",
-            message: "Are you sure you want to delete this friend?",
-            preferredStyle: .alert
-        )
+    @objc private func changeImageAction() {
+
         
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            if
-                let friendToDelete = self.friendToDelete,
-                let currentUser = self.repoManager.userRecord
-            {
-                // 1) Delete friend
-                self.repoManager.deleteFriend(friendId: friendToDelete.id)
-                
-                // 2) Delete current user from friend's friend list
-                self.repoManager.updateFriendListInFirebase(documentId: friendToDelete.id, friendId: currentUser.id, action: .remove)
-                
-            } else {
-                print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
-            }
-            self.dismissBottomSheet() // Close the bottom sheet after deleting
-        }
-        
-        // Add a "Cancel" action
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        // Add actions to the alert controller
-        alertController.addAction(deleteAction)
-        alertController.addAction(cancelAction)
-        
-        // Present the alert controller
-        present(alertController, animated: true, completion: nil)
+        self.dismissBottomSheet()
     }
     
     @objc private func dismissBottomSheet() {
