@@ -4,6 +4,7 @@ final class ImageBottomSheetViewController: UIViewController {
     
     var onDismiss: (() -> Void)?
     let repoManager = RepositoryManager.shared
+    private var profileImageView: UIImageView? // Image view for profile image
     
     private let contentView: UIView = {
         let view = UIView()
@@ -70,23 +71,22 @@ final class ImageBottomSheetViewController: UIViewController {
         
         dimmingView.frame = view.bounds
         
-        // Get the profile image from the userRecord and set it as the background
-        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
-            let imageView = UIImageView(image: profileImage)
-            imageView.contentMode = .scaleAspectFill
-            imageView.clipsToBounds = true
-            contentView.insertSubview(imageView, at: 0)
-
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-                imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-            ])
-        } else {
-            contentView.backgroundColor = .systemGray // Fallback color
-        }
+        // Create profile image view and add it to the contentView
+        let profileImageView = UIImageView()
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.clipsToBounds = true
+        contentView.insertSubview(profileImageView, at: 0)
+        self.profileImageView = profileImageView
+        
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            profileImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
+        updateProfileImage()  // Call this method to initially set the image
         
         let height = view.frame.height * 1.0
         contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
@@ -109,6 +109,17 @@ final class ImageBottomSheetViewController: UIViewController {
         UIView.animate(withDuration: 0.3) {
             self.contentView.frame.origin.y = self.view.frame.height - height
             self.dimmingView.alpha = 1
+        }
+    }
+    
+    private func updateProfileImage() {
+        // Check if the userRecord has profile image data, and update the image view accordingly
+        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
+            profileImageView?.image = profileImage
+            NSLog("LOG: Profile image updated in ImageBottomSheet")
+        } else {
+            profileImageView?.image = nil // Remove image if no data is available
+            contentView.backgroundColor = .systemGray  // Fallback color if no image
         }
     }
     
@@ -173,23 +184,24 @@ extension ImageBottomSheetViewController: UIImagePickerControllerDelegate, UINav
                 // Update the repoManager's userRecord on the main thread
                 DispatchQueue.main.async {
                     self.repoManager.userRecord = userRecord
+                    self.updateProfileImage()  // Refresh the image in the bottom sheet
                 }
                 
                 NSLog("LOG: ImageBottomSheetViewController-changeImageAction: Profile image updated")
             }
         }
-        picker.dismiss(animated: true) {
-            // TODO: Instead of dismissing the whole bottom sheet
-            // we need to dismiss only the image picker
-//            self.dismissBottomSheet()
-            picker.dismiss(animated: true, completion: nil)
-        }
+        // Dismiss only the image picker, not the bottom sheet
+        picker.dismiss(animated: true, completion: nil)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        // Dismiss only the image picker, not the bottom sheet
         picker.dismiss(animated: true, completion: nil)
     }
+    
+    
 }
+
 
 
 // Custom UIButton with hue-rotating gradient background
