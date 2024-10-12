@@ -181,6 +181,11 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
     }
     
     private func uploadProfileImageToFirebase() {
+        NSLog("LOG: ImageBottomSheetViewController-uploadProfileImageToFirebase")
+        NSLog("LOG: zoomScale: \(scrollView.zoomScale)")
+        NSLog("LOG: contentOffset.x: \(scrollView.contentOffset.x)")
+        NSLog("LOG: contentOffset.y: \(scrollView.contentOffset.y)")
+        
         guard var newUserRecord = repoManager.userRecord else {
             NSLog("LOG: ImageBottomSheetViewController-uploadProfileImageToFirebase: userRecord is not set")
             return
