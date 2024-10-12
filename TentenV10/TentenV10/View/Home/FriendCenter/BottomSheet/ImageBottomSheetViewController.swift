@@ -200,9 +200,18 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
     }
     
     private func uploadProfileImageToFirebase() {
-        guard let userRecord = repoManager.userRecord, let imageData = userRecord.profileImageData else {
-            NSLog("LOG: No profile image data found")
+        guard var newUserRecord = repoManager.userRecord else {
+            NSLog("LOG: ImageBottomSheetViewController-uploadProfileImageToFirebase: userRecord is not set")
             return
+        }
+        
+        if let imageData = profileImageView?.image?.pngData() {
+            newUserRecord.profileImageData = imageData
+            
+            DispatchQueue.main.async {
+                self.repoManager.userRecord = newUserRecord
+            }
+            // Also need to change the local db for the changed userRecord
         }
         
         // TODO: Perform the Firebase upload logic here
