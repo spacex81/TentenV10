@@ -79,13 +79,13 @@ struct AddProfilePictureButton: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                 
                 if viewModel.profileImageData == nil {
-                    Text("choose a picture")
+                    Text("사진 고르기")
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(20)
                 } else {
-                    Text("set as profile picture")
+                    Text("프로필 사진으로 설정")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.white)

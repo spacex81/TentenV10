@@ -109,8 +109,13 @@ struct ProfileView: View {
             .sheet(isPresented: $isAddFriendSheetPresented) {
                 AddFriendView()
             }
+            .sheet(isPresented: $showImageBottomSheet) {
+                ProfileImageView {
+                    print("Whatever")
+                }
+            }
             .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
-            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
+//            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
         }
     }
 }

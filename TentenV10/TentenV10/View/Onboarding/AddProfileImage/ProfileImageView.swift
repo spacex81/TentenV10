@@ -1,9 +1,3 @@
-/**
- Things to approve
- 1. when 'set profile image' is clicked, it should move right to the next page
- users should not wait until the image is stored in remote server
- */
-
 import SwiftUI
 
 struct ProfileImageView: View {
@@ -22,7 +16,6 @@ struct ProfileImageView: View {
 //        print("ProfileImageView-imageOffset: \(offset)")
         return offset
     }
-    
     
     var body: some View {
         ZStack {
