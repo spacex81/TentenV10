@@ -25,7 +25,8 @@ final class ImageBottomSheetViewController: UIViewController {
         let button = GradientButton(type: .system)
         button.setTitle("사진 바꾸기", for: .normal)
         button.setTitleColor(.white, for: .normal) // Set text color
-        button.layer.cornerRadius = 20
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18) // Make the text bold
+        button.layer.cornerRadius = 24
         button.layer.masksToBounds = true
         button.addTarget(nil, action: #selector(changeImageAction), for: .touchUpInside)
         return button
@@ -34,6 +35,16 @@ final class ImageBottomSheetViewController: UIViewController {
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("취소", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)  // Bold text for cancel button
+        
+        // Adding text shadow to closeButton
+        button.titleLabel?.layer.shadowColor = UIColor.black.cgColor
+        button.titleLabel?.layer.shadowOffset = CGSize(width: 1, height: 1)
+        button.titleLabel?.layer.shadowRadius = 3
+        button.titleLabel?.layer.shadowOpacity = 0.5
+        button.titleLabel?.layer.masksToBounds = false  // Allow shadow to go beyond label bounds
+        
         button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
         return button
     }()
@@ -82,9 +93,9 @@ final class ImageBottomSheetViewController: UIViewController {
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            buttonStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            buttonStack.heightAnchor.constraint(equalToConstant: 100),
-            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8)
+            buttonStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50), // Adjust for lower placement
+            buttonStack.heightAnchor.constraint(equalToConstant: 150), // adjust height
+            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.85) // adjust weight
         ])
         
         UIView.animate(withDuration: 0.3) {
