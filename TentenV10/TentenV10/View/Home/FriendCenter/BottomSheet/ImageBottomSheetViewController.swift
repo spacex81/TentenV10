@@ -1,6 +1,6 @@
 import UIKit
 
-final class ImageBottomSheetViewController: UIViewController {
+final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelegate {
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     
@@ -23,6 +23,16 @@ final class ImageBottomSheetViewController: UIViewController {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
         view.alpha = 0
         return view
+    }()
+    
+    // ScrollView to allow zooming and panning
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 5.0
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
     }()
     
     // Custom button with hue-rotating gradient background
@@ -75,19 +85,33 @@ final class ImageBottomSheetViewController: UIViewController {
         
         dimmingView.frame = view.bounds
         
-        // Create profile image view and add it to the contentView
+        // Add scrollView to the contentView
+        contentView.addSubview(scrollView)
+        scrollView.delegate = self  // Set the scroll view delegate to self
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
+        // Create profile image view and add it to the scrollView
         let profileImageView = UIImageView()
-        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.contentMode = .scaleAspectFit
         profileImageView.clipsToBounds = true
-        contentView.insertSubview(profileImageView, at: 0)
+        scrollView.addSubview(profileImageView)
         self.profileImageView = profileImageView
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            profileImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            profileImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            profileImageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            profileImageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            profileImageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            profileImageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            profileImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),  // Ensure image view matches scroll view width
+            profileImageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)  // Ensure image view matches scroll view height
         ])
         
         updateProfileImage()  // Call this method to initially set the image
@@ -174,6 +198,11 @@ final class ImageBottomSheetViewController: UIViewController {
             NSLog("LOG: Profile image uploaded successfully to Firebase")
         }
     }
+    
+    // UIScrollViewDelegate method to enable zooming
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return profileImageView
+    }
 }
 
 // MARK: image picker delegate methods
@@ -218,6 +247,3 @@ extension ImageBottomSheetViewController: UIImagePickerControllerDelegate, UINav
         picker.dismiss(animated: true, completion: nil)
     }
 }
-
-
-// Custom UIButton with hue-rotating gradient background
