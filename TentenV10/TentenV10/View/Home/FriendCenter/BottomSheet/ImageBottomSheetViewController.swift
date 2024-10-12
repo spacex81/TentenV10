@@ -114,7 +114,9 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             profileImageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)  // Ensure image view matches scroll view height
         ])
         
-        updateProfileImage()  // Call this method to initially set the image
+        if let imageData = repoManager.userRecord?.profileImageData {
+            updateProfileImage(imageData: imageData)  // Call this method to initially set the image
+        }
         
         let height = view.frame.height * 1.0
         contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
@@ -140,15 +142,28 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         }
     }
     
-    private func updateProfileImage() {
+//    private func updateProfileImage() {
+//        // Check if the userRecord has profile image data, and update the image view accordingly
+//        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
+//            profileImageView?.image = profileImage
+//            NSLog("LOG: Profile image updated in ImageBottomSheet")
+//        } else {
+//            profileImageView?.image = nil // Remove image if no data is available
+//            contentView.backgroundColor = .systemGray  // Fallback color if no image
+//        }
+//    }
+    private func updateProfileImage(imageData: Data) {
         // Check if the userRecord has profile image data, and update the image view accordingly
-        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
-            profileImageView?.image = profileImage
-            NSLog("LOG: Profile image updated in ImageBottomSheet")
-        } else {
-            profileImageView?.image = nil // Remove image if no data is available
-            contentView.backgroundColor = .systemGray  // Fallback color if no image
-        }
+//        if let imageData = repoManager.userRecord?.profileImageData, let profileImage = UIImage(data: imageData) {
+//            profileImageView?.image = profileImage
+//            NSLog("LOG: Profile image updated in ImageBottomSheet")
+//        } else {
+//            profileImageView?.image = nil // Remove image if no data is available
+//            contentView.backgroundColor = .systemGray  // Fallback color if no image
+//        }
+        
+        let profileImage = UIImage(data: imageData)
+        profileImageView?.image = profileImage
     }
     
     private func setupGesture() {
@@ -229,10 +244,9 @@ extension ImageBottomSheetViewController: UIImagePickerControllerDelegate, UINav
                 // Set profileImageData with resized image
                 userRecord.profileImageData = finalImage.jpegData(compressionQuality: 0.8)
                 
-                // Update the repoManager's userRecord on the main thread
-                DispatchQueue.main.async {
-                    self.repoManager.userRecord = userRecord
-                    self.updateProfileImage()  // Refresh the image in the bottom sheet
+                if let imageData = finalImage.jpegData(compressionQuality: 0.8) {
+                    // Update the repoManager's userRecord on the main thread
+                    self.updateProfileImage(imageData: imageData)  // Refresh the image in the bottom sheet
                     self.isImageSelected = true  // Mark that an image has been selected
                     self.changeButton.setTitle("프로필 사진으로 사용", for: .normal)  // Change button text
                 }
