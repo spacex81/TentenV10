@@ -6,8 +6,16 @@ struct ProfileView: View {
     
     // State for showing delete view as an overlay
     @State private var showDeleteBottomSheet = false
-    @State private var showImageBottomSheet = false
-    @State private var showSettingView = false
+    @State private var showImageBottomSheet = false {
+        didSet {
+            NSLog("LOG: ProfileView-showImageBottomSheet: \(showImageBottomSheet)")
+        }
+    }
+    @State private var showSettingView = false {
+        didSet {
+            NSLog("LOG: ProfileView-showSettingView: \(showSettingView)")
+        }
+    }
     
     // MARK: Use this for preview
     let viewModel = HomeViewModel.shared
@@ -17,6 +25,7 @@ struct ProfileView: View {
     var body: some View {
         ZStack {
             VStack {
+                
                 HStack {
                     Spacer()
                     
@@ -26,9 +35,10 @@ struct ProfileView: View {
                         Image(systemName: "gearshape.fill")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
+                            .zIndex(1)
                     }
                     
-                    Spacer().frame(width: 30)
+//                    Spacer().frame(width: 30)
                 }
 
                 if let userRecord = viewModel.userRecord, let imageData = userRecord.profileImageData, let uiImage = UIImage(data: imageData) {
@@ -46,12 +56,24 @@ struct ProfileView: View {
                         }
                         Spacer()
                         
+//                        Image(uiImage: uiImage)
+//                            .resizable()
+//                            .scaledToFill()
+//                            .frame(width: 100, height: 100)
+//                            .clipShape(Circle())
+//                            .shadow(radius: 10)
+//                            .onTapGesture {
+//                                withAnimation {
+//                                    showImageBottomSheet = true
+//                                }
+//                            }
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .shadow(radius: 10)
+                            .contentShape(Circle())  // Limit the tappable area to the circle
                             .onTapGesture {
                                 withAnimation {
                                     showImageBottomSheet = true
@@ -137,6 +159,7 @@ struct ProfileView: View {
         }
     }
 }
+
 
 #Preview {
     var dummyUserRecord: UserRecord {
