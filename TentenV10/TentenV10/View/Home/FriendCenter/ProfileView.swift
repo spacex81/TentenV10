@@ -56,24 +56,13 @@ struct ProfileView: View {
                         }
                         Spacer()
                         
-//                        Image(uiImage: uiImage)
-//                            .resizable()
-//                            .scaledToFill()
-//                            .frame(width: 100, height: 100)
-//                            .clipShape(Circle())
-//                            .shadow(radius: 10)
-//                            .onTapGesture {
-//                                withAnimation {
-//                                    showImageBottomSheet = true
-//                                }
-//                            }
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                             .shadow(radius: 10)
-                            .contentShape(Circle())  // Limit the tappable area to the circle
+                            .contentShape(Circle())
                             .onTapGesture {
                                 withAnimation {
                                     showImageBottomSheet = true
@@ -149,13 +138,13 @@ struct ProfileView: View {
             .sheet(isPresented: $showSettingView) {
                 SettingView()
             }
-            .fullScreenCover(isPresented: $showImageBottomSheet) {
-                ProfileImageView {
-                    print("Whatever")
-                }
-            }
+//            .fullScreenCover(isPresented: $showImageBottomSheet) {
+//                ProfileImageView {
+//                    print("Whatever")
+//                }
+//            }
             .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
-//            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
+            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
         }
     }
 }
