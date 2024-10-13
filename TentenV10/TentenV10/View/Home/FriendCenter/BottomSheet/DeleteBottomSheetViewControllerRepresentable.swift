@@ -3,7 +3,11 @@ import UIKit
 
 struct DeleteBottomSheetViewControllerRepresentable: UIViewControllerRepresentable {
     
-    @Binding var isPresented: Bool
+    @Binding var isPresented: Bool {
+        didSet {
+            NSLog("LOG: DeleteBottomSheetViewControllerRepresentable-isPresented: \(isPresented)")
+        }
+    }
     @Binding var friendToDelete: FriendRecord?
     
     class Coordinator: NSObject, UIViewControllerTransitioningDelegate {

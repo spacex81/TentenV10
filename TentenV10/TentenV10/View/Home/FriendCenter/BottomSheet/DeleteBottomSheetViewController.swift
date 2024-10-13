@@ -113,7 +113,9 @@ final class DeleteBottomSheetViewController: UIViewController {
             } else {
                 print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
             }
-            self.dismissBottomSheet() // Close the bottom sheet after deleting
+//            self.dismissBottomSheet() // Close the bottom sheet after deleting
+//            self.dismiss(animated: true, completion: nil)
+            self.onDismiss?()
         }
         
         // Add a "Cancel" action

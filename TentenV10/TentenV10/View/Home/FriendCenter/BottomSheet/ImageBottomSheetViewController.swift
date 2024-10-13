@@ -216,11 +216,10 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             }
         }
         
-        // TODO: Perform the Firebase upload logic here
         NSLog("LOG: Uploading profile image to Firebase...")
         
         // Simulate upload completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             NSLog("LOG: Profile image uploaded successfully to Firebase")
             
             self.dismissBottomSheet()

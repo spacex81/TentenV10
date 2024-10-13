@@ -5,7 +5,11 @@ struct ProfileView: View {
     @State private var friendToDelete: FriendRecord?
     
     // State for showing delete view as an overlay
-    @State private var showDeleteBottomSheet = false
+    @State private var showDeleteBottomSheet = false {
+        didSet {
+            NSLog("LOG: ProfileView-showDeleteBottomSheet: \(showDeleteBottomSheet)")
+        }
+    }
     @State private var showImageBottomSheet = false {
         didSet {
             NSLog("LOG: ProfileView-showImageBottomSheet: \(showImageBottomSheet)")
@@ -138,11 +142,6 @@ struct ProfileView: View {
             .sheet(isPresented: $showSettingView) {
                 SettingView()
             }
-//            .fullScreenCover(isPresented: $showImageBottomSheet) {
-//                ProfileImageView {
-//                    print("Whatever")
-//                }
-//            }
             .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
             .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
         }
