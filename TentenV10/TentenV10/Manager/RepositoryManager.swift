@@ -97,7 +97,7 @@ class RepositoryManager: ObservableObject {
     
     func syncFriendInfo() {
         Task {
-            NSLog("LOG: SplashView-syncFriendInfo")
+//            NSLog("LOG: SplashView-syncFriendInfo")
             // Ensure we have the user record and the list of friends
             guard var friendIds = userRecord?.friends else {
                 NSLog("LOG: No friends to sync.")
@@ -538,10 +538,10 @@ extension RepositoryManager {
             // Compare old friends list with the new one
             let oldFriends = Set(oldUserRecord?.friends ?? [])
             let newFriends = Set(newUserRecord.friends)
-            NSLog("LOG: oldFriends")
-            print(oldFriends)
-            NSLog("LOG: newFriends")
-            print(newFriends)
+//            NSLog("LOG: oldFriends")
+//            print(oldFriends)
+//            NSLog("LOG: newFriends")
+//            print(newFriends)
             
             // Find friends that were removed and added
             let removedFriends = oldFriends.subtracting(newFriends)

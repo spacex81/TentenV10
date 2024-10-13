@@ -105,7 +105,7 @@ class AnimatedBackgroundView: UIView {
             self.imageView.transform = CGAffineTransform(scaleX: scaleXFactor, y: scaleYFactor)
             self.imageView.layer.cornerRadius = cornerRadius
             
-            NSLog("LOG: Start wiggle animation")
+//            NSLog("LOG: Start wiggle animation")
             
             if isPressing && !isPublished {
                 // Check if wiggle animation is already running

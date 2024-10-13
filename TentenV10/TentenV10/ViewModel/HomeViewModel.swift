@@ -12,6 +12,9 @@ class HomeViewModel: ObservableObject {
     private let audioSessionManager = AudioSessionManager.shared
     private let backgroundTaskManager = BackgroundTaskManager.shared
     
+    weak var collectionViewController: CustomCollectionViewController?
+
+    
     // MARK: Used to manage LiveKit connect/disconnect whis isPressing value changes
     private var connectTask: Task<Void, Never>?
     

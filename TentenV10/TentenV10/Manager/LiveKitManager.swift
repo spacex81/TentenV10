@@ -7,10 +7,18 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     
     weak var repoManager: RepositoryManager?
     var notificationManager: NotificationManager?
+    weak var collectionViewController: CustomCollectionViewController?
     
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
-    @Published var isLocked: Bool = false 
+    @Published var isLocked: Bool = false  {
+        didSet {
+            NSLog("LOG: LiveKitManager-isLocked : \(isLocked ? "true" : "false")")
+            if !isLocked {
+                repoManager?.collectionViewController?.reloadData()
+            }
+        }
+    }
     @Published var isPressing: Bool = false {
         didSet {
             NSLog("LOG: LiveKitManager-isPressing : \(isPressing ? "true" : "false")")
