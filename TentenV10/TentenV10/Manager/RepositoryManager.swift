@@ -110,12 +110,14 @@ class RepositoryManager: ObservableObject {
             // Iterate over each friend ID
             for friendId in friendIds {
                 do {
-                    // Check if the friend has deleted the current user
+                    // MARK: Check if the friend has deleted the current user
                     let isDeleted = try await checkIfFriendDeletedYou(friendId: friendId, currentUserId: userRecord?.id ?? "")
                     if isDeleted {
                         // If the friend has deleted the user, add their ID to the list for removal
                         friendsToRemove.append(friendId)
                     }
+                    
+                    // MARK: Check if the friend updated their profile image
                 } catch {
                     NSLog("LOG: Error checking if friend deleted you for friendId \(friendId): \(error.localizedDescription)")
                 }

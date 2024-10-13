@@ -1,3 +1,190 @@
+//import UIKit
+//
+//final class DeleteBottomSheetViewController: UIViewController {
+//    
+//    var onDismiss: (() -> Void)?
+//    var friendToDelete: FriendRecord?
+//    
+//    let repoManager = RepositoryManager.shared
+//    
+//    // Content view with rounded corners and background color
+//    private let contentView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 20/255, alpha: 1) // Dark background
+//        view.layer.cornerRadius = 20
+//        view.layer.masksToBounds = true
+//        return view
+//    }()
+//    
+//    // Dimming view for background dimming effect
+//    private let dimmingView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = UIColor.black.withAlphaComponent(0.4) // Slight dimming
+//        return view
+//    }()
+//    
+//    // Gray bar at the top of the bottom sheet to indicate it's draggable
+//    private let dragIndicator: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+//        view.layer.cornerRadius = 3
+//        return view
+//    }()
+//    
+//    // Delete friend button with red text
+//    private let deleteButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setTitle("Delete Friend", for: .normal)
+//        button.setTitleColor(.red, for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+//        button.addTarget(nil, action: #selector(deleteFriendAction), for: .touchUpInside)
+//        return button
+//    }()
+//
+//    // Cancel button with gray text
+//    private let cancelButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setTitle("Cancel", for: .normal)
+//        button.setTitleColor(UIColor(white: 0.8, alpha: 1.0), for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+//        button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
+//        return button
+//    }()
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        setupViews()
+//        setupGesture()
+//    }
+//    
+//    private func setupViews() {
+//        view.addSubview(dimmingView)
+//        view.addSubview(contentView)
+//        
+//        dimmingView.frame = view.bounds
+//        
+//        let height = view.frame.height * 0.4 // Set the height to 40% of screen height
+//        contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
+//        
+//        // Add the drag indicator at the top of the content view
+//        contentView.addSubview(dragIndicator)
+//        dragIndicator.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            dragIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+//            dragIndicator.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+//            dragIndicator.widthAnchor.constraint(equalToConstant: 40),
+//            dragIndicator.heightAnchor.constraint(equalToConstant: 6)
+//        ])
+//        
+//        // Create a vertical stack for the delete and cancel buttons
+//        let buttonStack = UIStackView(arrangedSubviews: [deleteButton, cancelButton])
+//        buttonStack.axis = .vertical
+//        buttonStack.alignment = .fill
+//        buttonStack.distribution = .fillEqually
+//        buttonStack.spacing = 16
+//        
+//        // Add stack view to contentView
+//        contentView.addSubview(buttonStack)
+//        
+//        // Set up constraints for the button stack
+//        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+//            buttonStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+//            buttonStack.heightAnchor.constraint(equalToConstant: 100), // Adjust height based on buttons
+//            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9) // 90% width
+//        ])
+//        
+//        // Animate bottom sheet presentation
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.dimmingView.alpha = 1 // Fade in the dimming view
+//        })
+//        
+//        UIView.animate(withDuration: 0.3, delay: 0.1, options: [], animations: {
+//            self.contentView.frame.origin.y = self.view.frame.height - height
+//        }, completion: nil)
+//    }
+//    
+//    private func setupGesture() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
+//        dimmingView.addGestureRecognizer(tapGesture)
+//        
+//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+//        contentView.addGestureRecognizer(panGesture)
+//    }
+//    
+//    @objc private func deleteFriendAction() {
+//        // Create a UIAlertController for confirmation
+//        let alertController = UIAlertController(
+//            title: "친구 삭제",
+//            message: "정말로 친구를 삭제 하시겠습니까?",
+//            preferredStyle: .alert
+//        )
+//        
+//        let deleteAction = UIAlertAction(title: "친구 삭제", style: .destructive) { _ in
+//            if
+//                let friendToDelete = self.friendToDelete,
+//                let currentUser = self.repoManager.userRecord
+//            {
+//                // 1) Delete friend
+//                self.repoManager.deleteFriend(friendId: friendToDelete.id)
+//                
+//                // 2) Delete current user from friend's friend list
+//                self.repoManager.updateFriendListInFirebase(documentId: friendToDelete.id, friendId: currentUser.id, action: .remove)
+//            } else {
+//                print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
+//            }
+//            self.dismissBottomSheet() // Close the bottom sheet after deleting
+//        }
+//        
+//        // Add a "Cancel" action
+//        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+//        
+//        // Add actions to the alert controller
+//        alertController.addAction(deleteAction)
+//        alertController.addAction(cancelAction)
+//        
+//        // Present the alert controller
+//        present(alertController, animated: true, completion: nil)
+//    }
+//    
+//    @objc private func dismissBottomSheet() {
+//        // Animate only the bottom sheet's dismissal without affecting the ProfileView
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.contentView.frame.origin.y = self.view.frame.height  // Move bottom sheet off screen
+//            self.dimmingView.alpha = 0  // Fade out the dimming view
+//        }) { _ in
+//            self.contentView.removeFromSuperview()
+//            self.dimmingView.removeFromSuperview()
+//            self.onDismiss?()
+//        }
+//    }
+//    
+//    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+//        let translation = gesture.translation(in: contentView)
+//        
+//        switch gesture.state {
+//        case .changed:
+//            if translation.y > 0 { // Drag down only
+//                contentView.frame.origin.y += translation.y
+//                gesture.setTranslation(.zero, in: contentView)
+//            }
+//        case .ended:
+//            let threshold: CGFloat = 1000
+//            if contentView.frame.origin.y > view.frame.height - threshold {
+//                dismissBottomSheet()
+//            } else {
+//                // Snap back to original position
+//                UIView.animate(withDuration: 0.3) {
+//                    self.contentView.frame.origin.y = self.view.frame.height * 0.6
+//                }
+//            }
+//        default:
+//            break
+//        }
+//    }
+//}
+
 import UIKit
 
 final class DeleteBottomSheetViewController: UIViewController {
@@ -7,43 +194,53 @@ final class DeleteBottomSheetViewController: UIViewController {
     
     let repoManager = RepositoryManager.shared
     
+    // Content view with rounded corners and lighter gray background color
     private let contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray
-        view.layer.cornerRadius = 16
+        // Set the background color to a lighter gray
+        view.backgroundColor = UIColor(red: 45/255, green: 45/255, blue: 45/255, alpha: 1) // Lighter dark gray
+        view.layer.cornerRadius = 20
         view.layer.masksToBounds = true
         return view
     }()
     
+    // Dimming view for background dimming effect
     private let dimmingView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        view.alpha = 0
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4) // Slight dimming
         return view
     }()
     
+    // Gray bar at the top of the bottom sheet to indicate it's draggable
+    private let dragIndicator: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
+    // Delete friend button with red text
     private let deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Delete Friend", for: .normal)
         button.setTitleColor(.red, for: .normal)
-        // Change this from 'BottomSheetViewController.self' to 'self'
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.addTarget(nil, action: #selector(deleteFriendAction), for: .touchUpInside)
         return button
     }()
 
-    private let closeButton: UIButton = {
+    // Cancel button with gray text
+    private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Close", for: .normal)
-        // Change this from 'BottomSheetViewController.self' to 'self'
+        button.setTitle("Cancel", for: .normal)
+        button.setTitleColor(UIColor(white: 0.8, alpha: 1.0), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("BottomSheetViewController-viewDidLoad")
-//        print(friendToDelete ?? "friendToDelete is nil")
-        
         setupViews()
         setupGesture()
     }
@@ -54,12 +251,23 @@ final class DeleteBottomSheetViewController: UIViewController {
         
         dimmingView.frame = view.bounds
         
-        let height = view.frame.height * 0.4 // 40% of screen height
+        let height = view.frame.height * 0.4 // Set the height to 40% of screen height
         contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
         
-        // Create a horizontal stack for buttons
-        let buttonStack = UIStackView(arrangedSubviews: [deleteButton, closeButton])
+        // Add the drag indicator at the top of the content view
+        contentView.addSubview(dragIndicator)
+        dragIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dragIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            dragIndicator.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            dragIndicator.widthAnchor.constraint(equalToConstant: 40),
+            dragIndicator.heightAnchor.constraint(equalToConstant: 6)
+        ])
+        
+        // Create a vertical stack for the delete and cancel buttons
+        let buttonStack = UIStackView(arrangedSubviews: [deleteButton, cancelButton])
         buttonStack.axis = .vertical
+        buttonStack.alignment = .fill
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 16
         
@@ -71,15 +279,18 @@ final class DeleteBottomSheetViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             buttonStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            buttonStack.heightAnchor.constraint(equalToConstant: 50),
-            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8)
+            buttonStack.heightAnchor.constraint(equalToConstant: 100), // Adjust height based on buttons
+            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9) // 90% width
         ])
         
-        // Animate bottom sheet presentation
-        UIView.animate(withDuration: 0.3) {
+        // Animate bottom sheet presentation with dimming view fading in
+        UIView.animate(withDuration: 0.3, animations: {
+            self.dimmingView.alpha = 1 // Fade in the dimming view
+        })
+        
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: [], animations: {
             self.contentView.frame.origin.y = self.view.frame.height - height
-            self.dimmingView.alpha = 1
-        }
+        }, completion: nil)
     }
     
     private func setupGesture() {
@@ -90,16 +301,15 @@ final class DeleteBottomSheetViewController: UIViewController {
         contentView.addGestureRecognizer(panGesture)
     }
     
-    
     @objc private func deleteFriendAction() {
         // Create a UIAlertController for confirmation
         let alertController = UIAlertController(
-            title: "Confirm Deletion",
-            message: "Are you sure you want to delete this friend?",
+            title: "친구 삭제",
+            message: "정말로 친구를 삭제 하시겠습니까?",
             preferredStyle: .alert
         )
         
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+        let deleteAction = UIAlertAction(title: "친구 삭제", style: .destructive) { _ in
             if
                 let friendToDelete = self.friendToDelete,
                 let currentUser = self.repoManager.userRecord
@@ -109,17 +319,14 @@ final class DeleteBottomSheetViewController: UIViewController {
                 
                 // 2) Delete current user from friend's friend list
                 self.repoManager.updateFriendListInFirebase(documentId: friendToDelete.id, friendId: currentUser.id, action: .remove)
-                
             } else {
                 print("ERROR: friendToDelete is nil when trying to delete friend in bottom sheet view controller")
             }
-//            self.dismissBottomSheet() // Close the bottom sheet after deleting
-//            self.dismiss(animated: true, completion: nil)
-            self.onDismiss?()
+            self.dismissBottomSheet() // Close the bottom sheet after deleting
         }
         
         // Add a "Cancel" action
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
         // Add actions to the alert controller
         alertController.addAction(deleteAction)
@@ -135,7 +342,6 @@ final class DeleteBottomSheetViewController: UIViewController {
             self.contentView.frame.origin.y = self.view.frame.height  // Move bottom sheet off screen
             self.dimmingView.alpha = 0  // Fade out the dimming view
         }) { _ in
-            // Instead of dismissing the entire ProfileView, simply remove the bottom sheet's view
             self.contentView.removeFromSuperview()
             self.dimmingView.removeFromSuperview()
             self.onDismiss?()
