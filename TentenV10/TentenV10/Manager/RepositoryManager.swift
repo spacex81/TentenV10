@@ -54,8 +54,8 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-userRecord")
-            print(userRecord ?? "userRecord is nil")
+//            NSLog("LOG: RepositoryManager-userRecord")
+//            print(userRecord ?? "userRecord is nil")
             
             if let userRecord = self.userRecord {
                 // update deviceToken
@@ -215,10 +215,10 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: repoManager-detailedFriends")
-            print(detailedFriends)
+//            NSLog("LOG: repoManager-detailedFriends")
+//            print(detailedFriends)
             
-            NSLog("LOG: repoManager-detailedFriends from local db")
+//            NSLog("LOG: repoManager-detailedFriends from local db")
             let friendsFromDb = fetchAllFriendsFromDatabase()
             print(friendsFromDb)
             
@@ -240,7 +240,7 @@ class RepositoryManager: ObservableObject {
     // MARK: Listen to room
     var currentSpeakerId: String? {
         didSet {
-            NSLog("LOG: currentSpeakerId is \(currentSpeakerId ?? "nil")")
+//            NSLog("LOG: currentSpeakerId is \(currentSpeakerId ?? "nil")")
         }
     }
     //

@@ -13,7 +13,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     @Published var isPublished: Bool = false
     @Published var isLocked: Bool = false  {
         didSet {
-            NSLog("LOG: LiveKitManager-isLocked : \(isLocked ? "true" : "false")")
+//            NSLog("LOG: LiveKitManager-isLocked : \(isLocked ? "true" : "false")")
             if !isLocked {
                 repoManager?.collectionViewController?.reloadData()
             }

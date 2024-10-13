@@ -50,6 +50,7 @@ class LongPressCell: BaseCell {
         
         switch gesture.state {
         case .began:
+//            NSLog("LOG: didLongPressCell-began")
             onLongPressBegan?() // Trigger the long press began callback
             viewModel.progress = 0
             longPressGestureBeganPoint = locationInContentView
@@ -58,12 +59,13 @@ class LongPressCell: BaseCell {
             guard let friend = friend else {return}
             repoManager.updateFirebaseWhenLongPressStart(friendId: friend.id)
         case .changed:
+//            NSLog("LOG: didLongPressCell-changed")
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
             let lockProgress = Float(verticalDistance / lockDistance)
-            if lockProgress >= 1 {
+            if lockProgress >= 1 && viewModel.isPublished {
                 viewModel.isLocked = true
                 if !hasGivenFeedback {
-                    NSLog("LOG: impactOccurred")
+//                    NSLog("LOG: impactOccurred")
                     feedback.impactOccurred()
                     hasGivenFeedback = true // Set the flag to true to prevent further feedback
                 }
@@ -71,6 +73,7 @@ class LongPressCell: BaseCell {
                 viewModel.progress = lockProgress
             }
         case .ended, .cancelled:
+//            NSLog("LOG: didLongPressCell-ended or cancelled")
             onLongPressEnded?() // Trigger the long press ended callback
             
             guard let friend = friend else {return}

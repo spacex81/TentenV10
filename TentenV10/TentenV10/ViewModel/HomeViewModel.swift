@@ -57,7 +57,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var selectedFriendIsBusy: Bool = false {
         didSet {
-            NSLog("LOG: HomeViewModel-selectedFriendIsBusy: \(selectedFriendIsBusy)")
+//            NSLog("LOG: HomeViewModel-selectedFriendIsBusy: \(selectedFriendIsBusy)")
         }
     }
     @Published var currentState: UserState = .idle
@@ -93,7 +93,11 @@ class HomeViewModel: ObservableObject {
     
     @Published var isConnected: Bool = false
     @Published var isPublished: Bool = false
-    @Published var isLocked: Bool = false
+    @Published var isLocked: Bool = false {
+        didSet {
+//            NSLog("LOG: HomeViewModel-isLocked: \(isLocked)")
+        }
+    }
     @Published var progress: Float = 0.0
     
     @Published var friendPin: String = ""
@@ -167,16 +171,16 @@ class HomeViewModel: ObservableObject {
     }
     
     private func updateSelectedFriendIsBusy() {
-        NSLog("LOG: updateSelectedFriendIsBusy")
+//        NSLog("LOG: updateSelectedFriendIsBusy")
         // Check if there's a selected friend
         guard let selectedFriend = selectedFriend else {
             selectedFriendIsBusy = false
             return
         }
         
-        NSLog("LOG: currentSpeakerId: \(repoManager.currentSpeakerId ?? "nil")")
-        NSLog("LOG: selectedFriendId: \(selectedFriend.id)")
-        NSLog("LOG: selectedFriendIsBusy: \(selectedFriend.isBusy)")
+//        NSLog("LOG: currentSpeakerId: \(repoManager.currentSpeakerId ?? "nil")")
+//        NSLog("LOG: selectedFriendId: \(selectedFriend.id)")
+//        NSLog("LOG: selectedFriendIsBusy: \(selectedFriend.isBusy)")
         
         let currentSpeakerIsSelected = repoManager.currentSpeakerId == selectedFriend.id
         // currentSpeakerIsMe
