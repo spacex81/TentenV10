@@ -7,17 +7,24 @@ struct ProfileView: View {
     // State for showing delete view as an overlay
     @State private var showDeleteBottomSheet = false {
         didSet {
-            NSLog("LOG: ProfileView-showDeleteBottomSheet: \(showDeleteBottomSheet)")
+//            NSLog("LOG: ProfileView-showDeleteBottomSheet: \(showDeleteBottomSheet)")
         }
     }
     @State private var showImageBottomSheet = false {
         didSet {
-            NSLog("LOG: ProfileView-showImageBottomSheet: \(showImageBottomSheet)")
+//            NSLog("LOG: ProfileView-showImageBottomSheet: \(showImageBottomSheet)")
         }
     }
     @State private var showSettingView = false {
         didSet {
-            NSLog("LOG: ProfileView-showSettingView: \(showSettingView)")
+//            NSLog("LOG: ProfileView-showSettingView: \(showSettingView)")
+        }
+    }
+    
+    // MARK: bottom sheet that edit username
+    @State private var showUsernameView = false {
+        didSet {
+            NSLog("LOG: ProfileView-showUsernameView: \(showUsernameView)")
         }
     }
     
@@ -50,10 +57,16 @@ struct ProfileView: View {
                     // User profile panel
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(userRecord.username)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .padding(.bottom, 1)
+                            Button {
+                                showUsernameView = true
+                            } label: {
+                                Text(userRecord.username)
+                                    .font(.largeTitle)
+                                    .foregroundColor(.white)
+                                    .fontWeight(.bold)
+                                    .padding(.bottom, 1)
+                            }
+                            
                             if let userPin = viewModel.userRecord?.pin {
                                 PinButton(pin: userPin)
                             }
@@ -111,6 +124,7 @@ struct ProfileView: View {
                                                 .clipShape(Circle())
                                                 .shadow(radius: 5)
                                         }
+                                        
                                         Text(friend.username)
                                             .font(.headline)
                                             .padding(.leading, 10)
@@ -158,6 +172,11 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $showSettingView) {
             SettingView()
+        }
+        .sheet(isPresented: $showUsernameView) {
+            UsernameView {
+                NSLog("Whatever")
+            }
         }
         .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
         .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
