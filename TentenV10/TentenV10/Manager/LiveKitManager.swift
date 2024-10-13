@@ -224,11 +224,11 @@ extension LiveKitManager {
 //            print("Received 'readyToTalk' message. Setting isPublished to true.")
 //            print("LOG: LiveKit remote audio is published")
             
-            if let repoManager = self.repoManager, notificationManager == nil {
-                notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
-            }
-    
-            notificationManager?.sendRemoteNotification(type: "connect")
+//            if let repoManager = self.repoManager, notificationManager == nil {
+//                notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
+//            }
+//    
+//            notificationManager?.sendRemoteNotification(type: "connect")
             
             DispatchQueue.main.async {
                 self.isPublished = true
@@ -238,6 +238,22 @@ extension LiveKitManager {
 
         } else {
             print("Received data: \(message). Ignored.")
+        }
+    }
+    
+    func room(_ room: Room, participantDidConnect participant: RemoteParticipant) {
+        NSLog("LOG: LiveKitManager-participantDidConnect-RemoteParticipant")
+        if let repoManager = self.repoManager, notificationManager == nil {
+            notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
+        }
+
+        if isPublished {
+            notificationManager?.sendRemoteNotification(type: "connect")
+        } else {
+            // MARK: if isPublished is false than wait a little bit before sending notification
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.notificationManager?.sendRemoteNotification(type: "connect")
+            }
         }
     }
     
@@ -270,15 +286,7 @@ extension LiveKitManager {
         }
     }
     
-//    func room(_ room: Room, participant: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
-//        // TODO:
-//        if let repoManager = self.repoManager, notificationManager == nil {
-//            notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
-//        }
-//        
-//        notificationManager?.sendRemoteNotification(type: "connect")
-//    }
-//    
+
     func room(_ room: Room, participant: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
         notificationManager?.sendRemoteNotification(type: "disconnect")
     }
