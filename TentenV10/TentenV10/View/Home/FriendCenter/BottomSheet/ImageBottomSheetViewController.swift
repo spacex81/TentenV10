@@ -181,23 +181,19 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
     }
     
     private func uploadProfileImageToFirebase() {
-        NSLog("LOG: ImageBottomSheetViewController-uploadProfileImageToFirebase")
-        NSLog("LOG: zoomScale: \(scrollView.zoomScale)")
-        NSLog("LOG: contentOffset.x: \(scrollView.contentOffset.x)")
-        NSLog("LOG: contentOffset.y: \(scrollView.contentOffset.y)")
-        
         guard var newUserRecord = repoManager.userRecord else {
             NSLog("LOG: ImageBottomSheetViewController-uploadProfileImageToFirebase: userRecord is not set")
             return
         }
         
-        if let imageData = profileImageView?.image?.pngData() {
+        // Capture the visible portion of the image
+        if let visibleImage = captureVisibleImage(), let imageData = visibleImage.pngData() {
             newUserRecord.profileImageData = imageData
             
             DispatchQueue.main.async {
                 self.repoManager.userRecord = newUserRecord
             }
-            // We will also change the local db for the changed userRecord
+            // Also update the local database for the new userRecord
         }
         
         // TODO: Perform the Firebase upload logic here
@@ -210,6 +206,52 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             self.dismissBottomSheet()
         }
     }
+
+    private func captureVisibleImage() -> UIImage? {
+        // Make sure there is an image to work with
+        guard let image = profileImageView?.image else {
+            return nil
+        }
+        
+        // Get the size of the image in the image view's coordinate system
+        let imageSize = image.size
+        let imageViewSize = profileImageView?.bounds.size ?? CGSize.zero
+        
+        // Calculate the ratio between the image size and the imageView size
+        let widthScale = imageSize.width / imageViewSize.width
+        let heightScale = imageSize.height / imageViewSize.height
+
+        // Get the visible rect from the scroll view
+        let visibleRect = CGRect(x: scrollView.contentOffset.x,
+                                 y: scrollView.contentOffset.y,
+                                 width: scrollView.bounds.width,
+                                 height: scrollView.bounds.height)
+
+        // Convert the visible rect to the image's coordinate system, accounting for zoom scale
+        let imageRect = CGRect(
+            x: visibleRect.origin.x * widthScale / scrollView.zoomScale,
+            y: visibleRect.origin.y * heightScale / scrollView.zoomScale,
+            width: visibleRect.width * widthScale / scrollView.zoomScale,
+            height: visibleRect.height * heightScale / scrollView.zoomScale
+        )
+        
+        // Ensure the imageRect is within the image bounds
+        let cropRect = CGRect(
+            x: max(0, imageRect.origin.x),
+            y: max(0, imageRect.origin.y),
+            width: min(imageSize.width, imageRect.width),
+            height: min(imageSize.height, imageRect.height)
+        )
+
+        // Render the visible portion of the image to a new UIImage
+        guard let cgImage = image.cgImage?.cropping(to: cropRect) else {
+            return nil
+        }
+        let croppedImage = UIImage(cgImage: cgImage)
+        
+        return croppedImage
+    }
+
     
     // UIScrollViewDelegate method to enable zooming
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
