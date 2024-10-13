@@ -106,43 +106,47 @@ class AnimatedBackgroundView: UIView {
             self.imageView.layer.cornerRadius = cornerRadius
             
             NSLog("LOG: Start wiggle animation")
-//            NSLog("LOG: Wiggle-isPressing is \(isPressing)")
-//            NSLog("LOG: Wiggle-isPublished is \(isPublished)")
             
             if isPressing && !isPublished {
-                
-                // Create and add the blur effect view if not already added
-                if self.blurEffectView.superview == nil {
-                    let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-                    self.blurEffectView.effect = blurEffect
-                    self.blurEffectView.frame = self.imageView.bounds
-                    self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    self.imageView.addSubview(self.blurEffectView)
+                // Check if wiggle animation is already running
+                if self.imageView.layer.animation(forKey: "wiggle") == nil {
+                    
+                    // Create and add the blur effect view if not already added
+                    if self.blurEffectView.superview == nil {
+                        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+                        self.blurEffectView.effect = blurEffect
+                        self.blurEffectView.frame = self.imageView.bounds
+                        self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                        self.imageView.addSubview(self.blurEffectView)
+                    }
+                    
+                    // Add wiggle animation
+                    let wiggleRotationAngle: CGFloat = .pi / 50 // Degrees
+                    let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+                    animation.values = [-wiggleRotationAngle, wiggleRotationAngle, -wiggleRotationAngle] // Left and right rotations
+                    animation.keyTimes = [0, 0.5, 1] // Set the timing for each keyframe
+                    animation.duration = 0.3 // Duration of the wiggle animation
+                    animation.repeatCount = Float.infinity // Repeat indefinitely
+                    self.imageView.layer.add(animation, forKey: "wiggle")
+                    
+                    // Trigger continuous haptic feedback
+                    self.startHapticFeedback()
                 }
-                
-                // Add wiggle animation
-                let wiggleRotationAngle: CGFloat = .pi / 50 // Degrees
-                let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
-                animation.values = [-wiggleRotationAngle, wiggleRotationAngle, -wiggleRotationAngle] // Left and right rotations
-                animation.keyTimes = [0, 0.5, 1] // Set the timing for each keyframe
-                animation.duration = 0.3 // Duration of the wiggle animation
-                animation.repeatCount = Float.infinity // Repeat indefinitely
-                self.imageView.layer.add(animation, forKey: "wiggle")
-
-                // Trigger continuous haptic feedback
-                self.startHapticFeedback()
             } else {
                 // Remove the blur effect view
                 self.blurEffectView.removeFromSuperview()
                 
-                // Stop the wiggle animation
-                self.imageView.layer.removeAnimation(forKey: "wiggle")
+                // Stop the wiggle animation if it's running
+                if self.imageView.layer.animation(forKey: "wiggle") != nil {
+                    self.imageView.layer.removeAnimation(forKey: "wiggle")
+                }
                 
                 // Stop continuous haptic feedback
                 self.stopHapticFeedback()
             }
         }
     }
+
 
     private func startHapticFeedback() {
         feedbackTimer?.invalidate() // Invalidate any existing timer
