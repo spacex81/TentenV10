@@ -174,7 +174,11 @@ struct ProfileView: View {
             SettingView()
         }
         .sheet(isPresented: $showUsernameView) {
-            UsernameView {
+            UsernameView(onDismiss: {
+                // This is the onDismiss closure for when the UsernameView is dismissed
+                showUsernameView = false
+                NSLog("LOG: UsernameView dismissed")
+            }) {
                 NSLog("Whatever")
             }
         }

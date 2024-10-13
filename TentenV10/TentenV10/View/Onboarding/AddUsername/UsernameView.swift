@@ -3,7 +3,8 @@ import SwiftUI
 struct UsernameView: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     @State private var isTextFieldFocused = true // Automatically focus when the view appears
-
+    
+    var onDismiss: (() -> Void)?
     var onNext: () -> Void // The closure to call when the "Next" button is pressed
     
 
@@ -24,6 +25,7 @@ struct UsernameView: View {
                 AddUsernameButton(onComplete: {
                     isTextFieldFocused = false
                     onNext() // Move to next onboarding page
+                    onDismiss?()
                 })
                 
                 Spacer()
@@ -39,7 +41,7 @@ struct UsernameView: View {
 }
 
 #Preview {
-    @State var username: String = "TestUser"
+//    @State var username: String = "TestUser"
 
     return UsernameView(onNext: {
         print("Next button pressed")
