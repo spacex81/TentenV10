@@ -190,10 +190,30 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         if let visibleImage = captureVisibleImage(), let imageData = visibleImage.pngData() {
             newUserRecord.profileImageData = imageData
             
+            // Update UserRecord in memory
             DispatchQueue.main.async {
                 self.repoManager.userRecord = newUserRecord
             }
-            // Also update the local database for the new userRecord
+            
+            // Update UserRecord in local db
+            repoManager.createUserInDatabase(user: newUserRecord)
+
+            Task {
+                do {
+                    // Store profile image on Firebase storage and get the image URL
+                    let profileImagePath = try await repoManager.saveProfileImageInFirebase(id: newUserRecord.id, profileImageData: newUserRecord.profileImageData!)
+                    
+                    // Store profile image path and imageOffset to Firebase Firestore
+                    let fieldsToUpdate: [String: Any] = [
+                        "profileImagePath": profileImagePath
+                    ]
+                    repoManager.updateUserField(userId: newUserRecord.id, fieldsToUpdate: fieldsToUpdate)
+                    
+                    NSLog("LOG: Profile image path successfully updated in Firestore")
+                } catch {
+                    NSLog("LOG: Error storing new profile image: \(error.localizedDescription)")
+                }
+            }
         }
         
         // TODO: Perform the Firebase upload logic here
