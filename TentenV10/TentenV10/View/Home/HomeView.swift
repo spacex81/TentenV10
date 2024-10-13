@@ -133,7 +133,7 @@ struct HomeView: View {
                 } else if !viewModel.isLocked && !ringAnimationState {
                     // Circle 2
                     Circle()
-//                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
+                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
                         .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                         .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
                         .opacity(1.0)
