@@ -36,7 +36,7 @@ final class DeleteBottomSheetViewController: UIViewController {
     // Delete friend button with red text
     private let deleteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Delete Friend", for: .normal)
+        button.setTitle("친구 삭제", for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.addTarget(nil, action: #selector(deleteFriendAction), for: .touchUpInside)
@@ -46,7 +46,7 @@ final class DeleteBottomSheetViewController: UIViewController {
     // Cancel button with gray text
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle("취소", for: .normal)
         button.setTitleColor(UIColor(white: 0.8, alpha: 1.0), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
