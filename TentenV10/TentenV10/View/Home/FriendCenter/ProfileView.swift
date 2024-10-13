@@ -136,15 +136,31 @@ struct ProfileView: View {
                 }
             }
             .padding(30)
-            .sheet(isPresented: $isAddFriendSheetPresented) {
-                AddFriendView()
+
+            
+            // Separate dimming view for the bottom sheet
+            if showDeleteBottomSheet || showImageBottomSheet {
+                Color.black.opacity(0.4)
+                    .edgesIgnoringSafeArea(.all)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.3), value: showDeleteBottomSheet || showImageBottomSheet)
+                    .onTapGesture {
+                        if showDeleteBottomSheet {
+                            showDeleteBottomSheet = false
+                        } else if showImageBottomSheet {
+                            showImageBottomSheet = false
+                        }
+                    }
             }
-            .sheet(isPresented: $showSettingView) {
-                SettingView()
-            }
-            .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
-            .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
         }
+        .sheet(isPresented: $isAddFriendSheetPresented) {
+            AddFriendView()
+        }
+        .sheet(isPresented: $showSettingView) {
+            SettingView()
+        }
+        .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
+        .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
     }
 }
 
