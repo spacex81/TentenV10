@@ -8,13 +8,24 @@ import UserNotifications
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        NSLog("LOG: AppDelegate-didFinishLaunchingWithOptions")
 
         FirebaseApp.configure()
         
 
         
         UNUserNotificationCenter.current().delegate = self
+        
         return true
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        let repoManager = RepositoryManager.shared
+        if let userId = repoManager.userRecord?.id {
+            repoManager.updateUserField(userId: userId, fieldsToUpdate: ["status": "suspended"])
+        }
+
+        sleep(3)
     }
 }
 
