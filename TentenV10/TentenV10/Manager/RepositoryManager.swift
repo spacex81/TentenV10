@@ -58,7 +58,7 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-//            NSLog("LOG: RepositoryManager-userRecord")
+            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
 //            print(userRecord ?? "userRecord is nil")
             
             if let userRecord = self.userRecord {
@@ -345,6 +345,20 @@ extension RepositoryManager {
                     // Add new fields
                     t.column("status", .text).notNull().defaults(to: "foreground")
                     t.column("lastActive", .datetime)
+                }
+                
+                // Create the friends table with 'lastInteraction' column and new 'isAccepted' column
+                try db.create(table: "friends") { t in
+                    t.column("id", .text).primaryKey()
+                    t.column("email", .text).notNull()
+                    t.column("username", .text).notNull()
+                    t.column("pin", .text).notNull()
+                    t.column("profileImageData", .blob)
+                    t.column("deviceToken", .text)
+                    t.column("userId", .text).notNull().references("users", onDelete: .cascade)
+                    t.column("isBusy", .boolean).notNull().defaults(to: false)
+                    t.column("lastInteraction", .datetime)
+                    t.column("isAccepted", .boolean).notNull().defaults(to: false) // New column
                 }
             }
 
@@ -1140,6 +1154,8 @@ extension RepositoryManager {
 // MARK: Local Database: Friend CRUD
 extension RepositoryManager {
     func createFriendInDatabase(friend: FriendRecord) {
+        NSLog("LOG: RepositoryManager-createFriendInDatabase: friend")
+        print(friend)
         do {
             _ = try dbPool.write { db in
                 try friend.save(db)

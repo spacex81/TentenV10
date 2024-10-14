@@ -335,6 +335,7 @@ extension HomeViewModel {
 
         case .active:
              NSLog("LOG: App is active and in the foreground")
+            repoManager.userRecord?.status = "foreground"
             backgroundTaskManager.stopAudioTask()
 
         case .inactive:
@@ -342,6 +343,7 @@ extension HomeViewModel {
 
         case .background:
             NSLog("LOG: App is in the background")
+            repoManager.userRecord?.status = "background"
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
 
