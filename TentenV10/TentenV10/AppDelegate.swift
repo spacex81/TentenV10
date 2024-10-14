@@ -16,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         return true
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        NSLog("LOG: App is about to terminate")
+    }
 }
 
 // MARK: - Push Notification Delegate
