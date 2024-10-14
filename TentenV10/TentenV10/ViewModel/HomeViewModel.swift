@@ -336,7 +336,7 @@ extension HomeViewModel {
         case .active:
              NSLog("LOG: App is active and in the foreground")
             backgroundTaskManager.stopAudioTask()
-            updateStatus(to: "foreground")
+            repoManager.updateStatus(to: "foreground")
 
         case .inactive:
             NSLog("LOG: App is inactive")
@@ -346,7 +346,7 @@ extension HomeViewModel {
             repoManager.userRecord?.status = "background"
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
-            updateStatus(to: "background")
+            repoManager.updateStatus(to: "background")
 
 
         @unknown default:
@@ -354,31 +354,31 @@ extension HomeViewModel {
         }
     }
     
-    func updateStatus(to status: String) {
-        guard var newUserRecord = repoManager.userRecord else {
-            NSLog("LOG: No user record found to update status")
-            return
-        }
-
-        let userId = newUserRecord.id
-        let currentTime = Date()
-        
-        newUserRecord.status = status
-        
-        // Update memory
-        DispatchQueue.main.async {
-            self.repoManager.userRecord = newUserRecord
-        }
-        
-        // Update local db
-        repoManager.createUserInDatabase(user: newUserRecord)
-        
-        // Update remote Firebase
-        repoManager.updateUserField(userId: userId, fieldsToUpdate: [
-            "status": status,
-            "lastActive": currentTime
-        ])
-        
-        NSLog("LOG: User status updated to \(status)")
-    }
+//    func updateStatus(to status: String) {
+//        guard var newUserRecord = repoManager.userRecord else {
+//            NSLog("LOG: No user record found to update status")
+//            return
+//        }
+//
+//        let userId = newUserRecord.id
+//        let currentTime = Date()
+//        
+//        newUserRecord.status = status
+//        
+//        // Update memory
+//        DispatchQueue.main.async {
+//            self.repoManager.userRecord = newUserRecord
+//        }
+//        
+//        // Update local db
+//        repoManager.createUserInDatabase(user: newUserRecord)
+//        
+//        // Update remote Firebase
+//        repoManager.updateUserField(userId: userId, fieldsToUpdate: [
+//            "status": status,
+//            "lastActive": currentTime
+//        ])
+//        
+//        NSLog("LOG: User status updated to \(status)")
+//    }
 }

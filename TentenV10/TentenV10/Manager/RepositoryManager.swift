@@ -83,6 +83,7 @@ class RepositoryManager: ObservableObject {
                 
                 syncFriendInfo()
                 syncDetailedFriends(friendIds: userRecord.friends)
+                updateStatusWhenAppLaunch()
                 
                 // update room name
                 if let senderToken = userRecord.deviceToken,
@@ -98,6 +99,48 @@ class RepositoryManager: ObservableObject {
             }
         }
     }
+    
+    func updateStatusWhenAppLaunch() {
+        // Check if app is in the foreground
+        if UIApplication.shared.applicationState == .active {
+            // Check if userRecord.status is not 'foreground'
+            if userRecord?.status != "foreground" {
+                NSLog("LOG: User status is not 'foreground', updating status")
+                // Update the status to 'foreground'
+                updateStatus(to: "foreground")
+            }
+        }
+    }
+    
+    func updateStatus(to status: String) {
+        guard var newUserRecord = userRecord else {
+            NSLog("LOG: No user record found to update status")
+            return
+        }
+
+        let userId = newUserRecord.id
+        let currentTime = Date()
+        
+        newUserRecord.status = status
+        
+        // Update memory
+        DispatchQueue.main.async {
+            self.userRecord = newUserRecord
+        }
+        
+        // Update local db
+        createUserInDatabase(user: newUserRecord)
+        
+        // Update remote Firebase
+        updateUserField(userId: userId, fieldsToUpdate: [
+            "status": status,
+            "lastActive": currentTime
+        ])
+        
+        NSLog("LOG: User status updated to \(status)")
+    }
+
+
     
     func syncFriendInfo() {
         Task {
