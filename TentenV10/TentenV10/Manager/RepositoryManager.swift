@@ -413,7 +413,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-        NSLog("LOG: RepositoryManager-listenToUser")
+//        NSLog("LOG: RepositoryManager-listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -533,7 +533,7 @@ extension RepositoryManager {
     
     private func handleUpdateFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
         FriendsUpdateTaskQueue.shared.addTask {
-            NSLog("LOG: handleUpdateFriends")
+//            NSLog("LOG: handleUpdateFriends")
             
             // Compare old friends list with the new one
             let oldFriends = Set(oldUserRecord?.friends ?? [])

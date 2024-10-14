@@ -117,8 +117,7 @@ extension LiveKitManager {
     }
     
     func publishAudio() async {
-//        NSLog("LOG: LiveKitManager-publishAudio")
-        NSLog("LOG: LiveKitManager-publishAudio: start")
+//        NSLog("LOG: LiveKitManager-publishAudio: start")
         
         // Check if the task has been canceled before starting
         do {
@@ -137,9 +136,9 @@ extension LiveKitManager {
             // Check if the task has been canceled before enabling the microphone
             try Task.checkCancellation()
             
-            NSLog("LOG: LiveKitManager-publishAudio-setMicrophone: start")
+//            NSLog("LOG: LiveKitManager-publishAudio-setMicrophone: start")
             try await room.localParticipant.setMicrophone(enabled: true)
-            NSLog("LOG: LiveKitManager-publishAudio-setMicrophone: finish")
+//            NSLog("LOG: LiveKitManager-publishAudio-setMicrophone: finish")
         } catch {
             if Task.isCancelled {
                 NSLog("LOG: Microphone enabling canceled due to task cancellation.")
@@ -147,7 +146,7 @@ extension LiveKitManager {
                 NSLog("Failed to enable microphone for LiveKit Room: \(error)")
             }
         }
-        NSLog("LOG: LiveKitManager-publishAudio: finish")
+//        NSLog("LOG: LiveKitManager-publishAudio: finish")
     }
     
     func unpublishAudio() async {
@@ -242,7 +241,7 @@ extension LiveKitManager {
     }
     
     func room(_ room: Room, participantDidConnect participant: RemoteParticipant) {
-        NSLog("LOG: LiveKitManager-participantDidConnect-RemoteParticipant")
+//        NSLog("LOG: LiveKitManager-participantDidConnect-RemoteParticipant")
         if let repoManager = self.repoManager, notificationManager == nil {
             notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
         }

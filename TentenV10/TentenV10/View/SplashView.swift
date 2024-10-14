@@ -16,7 +16,7 @@ struct SplashView: View {
             Image("app_logo")
         }
         .onAppear {
-            NSLog("LOG: SplashView-onAppear")
+//            NSLog("LOG: SplashView-onAppear")
             
             // Show splash screen for 1 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
