@@ -1,4 +1,3 @@
-// UserDto with Firestore
 import Foundation
 import FirebaseFirestore
 
@@ -17,8 +16,12 @@ struct UserDto: Codable {
     var socialLoginId: String
     var socialLoginType: String
     var imageOffset: Float = 0.0
-    var receivedInvitations: [String] = []  // New field
-    var sentInvitations: [String] = []      // New field
+    var receivedInvitations: [String] = []
+    var sentInvitations: [String] = []
+
+    // New fields
+    var status: String = "foreground"
+    var lastActive: Date? = Date()
 
     init(id: String? = nil, email: String, username: String, password: String, pin: String, hasIncomingCallRequest: Bool = false, profileImagePath: String? = nil, deviceToken: String? = nil, friends: [String] = [], roomName: String = "testRoom", isBusy: Bool = false, socialLoginId: String, socialLoginType: String, imageOffset: Float = 0.0, receivedInvitations: [String] = [], sentInvitations: [String] = []) {
         self.id = id
@@ -37,5 +40,7 @@ struct UserDto: Codable {
         self.imageOffset = imageOffset
         self.receivedInvitations = receivedInvitations
         self.sentInvitations = sentInvitations
+        self.status = "foreground"  // Default status
+        self.lastActive = Date()    // Current date by default
     }
 }

@@ -177,16 +177,7 @@ struct HomeView: View {
             ProfileView()
         }
         .onAppear {
-//            NSLog("LOG: HomeView")
-            Task {
-                // Checking microphone permission
-//                let isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
-//                print("Microphone Permission Granted: \(isMicPermissionGranted)")
-
-                // Checking notification permission
-//                let isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
-//                print("Notification Permission Granted: \(isNotificationPermissionGranted)")
-            }
+            NSLog("LOG: HomeView-onAppear")
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)

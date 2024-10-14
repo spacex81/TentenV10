@@ -110,6 +110,7 @@ extension AudioSessionManager {
     }
     
     func playTestAudio() {
+        NSLog("LOG: AudioSessionManager-playTestAudio()")
         if let player = audioPlayer, player.prepareToPlay() {
             NSLog("LOG: Start playing test audio")
             player.play()

@@ -48,7 +48,8 @@ class BackgroundTaskManager: ObservableObject {
 // MARK: test audio background task
 extension BackgroundTaskManager {
     func startAudioTask() {
-        NSLog("LOG: Starting background audio task")
+//        NSLog("LOG: Starting background audio task")
+        NSLog("LOG: BackgroundTaskManager-startAudioTask")
         endAudioTask()
         
         audioTaskId = UIApplication.shared.beginBackgroundTask(withName: "AudioTask") {
@@ -81,6 +82,8 @@ extension BackgroundTaskManager {
     }
     
     func handleAudioTask() {
+        NSLog("LOG: BackgroundTaskManager-handleAudioTask: start")
+        
         audioSessionManager.playTestAudio()
         
         for i in 1...30 {
@@ -98,6 +101,7 @@ extension BackgroundTaskManager {
         if isBackgroundAudioTaskRunning {
             startAudioTask()
         }
+        NSLog("LOG: BackgroundTaskManager-handleAudioTask: end")
     }
 
 }

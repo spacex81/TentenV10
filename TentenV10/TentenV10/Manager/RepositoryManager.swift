@@ -30,7 +30,11 @@ class RepositoryManager: ObservableObject {
 //            print(friendsListeners)
         }
     }
-    private var userListener: ListenerRegistration?
+    private var userListener: ListenerRegistration? {
+        didSet {
+//            NSLog("LOG: RepositoryManager-userListener: \(String(describing: userListener))")
+        }
+    }
     
     private var previousState: UserState = .idle
     
@@ -157,7 +161,7 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-//            NSLog("LOG: RepositoryManager-selectedFriend")
+            NSLog("LOG: RepositoryManager-selectedFriend")
             Task {
 //                NSLog("LOG: reloadData() is run when selectedFriend has changed")
                 await self.collectionViewController?.reloadData()
@@ -255,6 +259,8 @@ class RepositoryManager: ObservableObject {
         liveKitManager.repoManager = self
     }
     
+    private var printTimer: Timer?
+    
     deinit {
         stopListeningToAuthChanges()
     }
@@ -306,24 +312,18 @@ class RepositoryManager: ObservableObject {
 extension RepositoryManager {
     private func setupDatabase() {
         do {
-            // Use the App Group container for the database
             guard let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.GHJU9V8GHS.tech.komaki.TentenV10") else {
                 NSLog("LOG: Could not find app group container.")
                 return
             }
             
-            // Set the path for the shared database
             let databaseURL = appGroupURL.appendingPathComponent("db.sqlite")
-            
-            // Use DatabasePool for concurrent access between app and extension
             dbPool = try DatabasePool(path: databaseURL.path)
             
-            // Register migrations
             var migrator = DatabaseMigrator()
 
             // v1: Initial database setup
             migrator.registerMigration("v1") { db in
-                // Create the users table
                 try db.create(table: "users") { t in
                     t.column("id", .text).primaryKey()
                     t.column("email", .text).notNull()
@@ -341,20 +341,10 @@ extension RepositoryManager {
                     t.column("socialLoginId", .text).notNull()
                     t.column("socialLoginType", .text).notNull()
                     t.column("imageOffset", .double).notNull().defaults(to: 0.0)
-                }
-
-                // Create the friends table with 'lastInteraction' column and new 'isAccepted' column
-                try db.create(table: "friends") { t in
-                    t.column("id", .text).primaryKey()
-                    t.column("email", .text).notNull()
-                    t.column("username", .text).notNull()
-                    t.column("pin", .text).notNull()
-                    t.column("profileImageData", .blob)
-                    t.column("deviceToken", .text)
-                    t.column("userId", .text).notNull().references("users", onDelete: .cascade)
-                    t.column("isBusy", .boolean).notNull().defaults(to: false)
-                    t.column("lastInteraction", .datetime)
-                    t.column("isAccepted", .boolean).notNull().defaults(to: false) // New column
+                    
+                    // Add new fields
+                    t.column("status", .text).notNull().defaults(to: "foreground")
+                    t.column("lastActive", .datetime)
                 }
             }
 
