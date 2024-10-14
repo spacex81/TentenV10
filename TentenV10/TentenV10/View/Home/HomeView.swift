@@ -132,12 +132,13 @@ struct HomeView: View {
                         .frame(width: strokeSize * 0.7, height: strokeSize * 0.7)
                 } else if !viewModel.isLocked && !ringAnimationState {
                     // Circle 2
-                    Circle()
-                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
-                        .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
-                        .opacity(1.0)
-                        .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
+//                    Circle()
+//                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
+//                        .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+//                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
+//                        .opacity(1.0)
+//                        .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
+                    MainRingView(strokeSize: strokeSize)
                 } else {
                     // Cancel Button
                     Button(action: {
