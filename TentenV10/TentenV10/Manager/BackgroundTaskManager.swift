@@ -82,7 +82,7 @@ extension BackgroundTaskManager {
     }
     
     func handleAudioTask() {
-        NSLog("LOG: BackgroundTaskManager-handleAudioTask: start")
+//        NSLog("LOG: BackgroundTaskManager-handleAudioTask: start")
         
         audioSessionManager.playTestAudio()
         
@@ -101,7 +101,7 @@ extension BackgroundTaskManager {
         if isBackgroundAudioTaskRunning {
             startAudioTask()
         }
-        NSLog("LOG: BackgroundTaskManager-handleAudioTask: end")
+//        NSLog("LOG: BackgroundTaskManager-handleAudioTask: end")
     }
 
 }

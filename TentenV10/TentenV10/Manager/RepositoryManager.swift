@@ -1929,17 +1929,19 @@ extension RepositoryManager {
     
     // MARK: General update function without completion handler
     func updateFieldInFirestore(collection: String, documentId: String, fieldsToUpdate: [String: Any]) {
+        NSLog("LOG: updateFieldInFirestore")
         db.collection(collection).document(documentId).updateData(fieldsToUpdate) { error in
             if let error = error {
                 NSLog("LOG: Error updating document in Firestore: \(error.localizedDescription)")
             } else {
-//                NSLog("LOG: Document successfully updated in Firestore")
+                NSLog("LOG: Document successfully updated in Firestore")
             }
         }
     }
     
     // MARK: Update function for 'users' collection
     func updateUserField(userId: String, fieldsToUpdate: [String: Any]) {
+        NSLog("LOG: updateUserField")
         updateFieldInFirestore(collection: "users", documentId: userId, fieldsToUpdate: fieldsToUpdate)
     }
 
