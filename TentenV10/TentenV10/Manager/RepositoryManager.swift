@@ -137,7 +137,7 @@ class RepositoryManager: ObservableObject {
             "lastActive": currentTime
         ])
         
-        NSLog("LOG: User status updated to \(status)")
+//        NSLog("LOG: User status updated to \(status)")
     }
     
     func syncFriendInfo() {
