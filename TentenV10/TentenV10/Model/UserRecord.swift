@@ -20,7 +20,7 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var sentInvitations: [String] = []
     
     // New fields
-    var status: String = "foreground"  // Default to foreground
+    var status: String = "background"  // Default to foreground
     var lastActive: Date? = Date()     // Current date by default
 
     static var databaseTableName: String = "users"

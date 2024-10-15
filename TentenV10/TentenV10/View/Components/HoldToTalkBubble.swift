@@ -2,6 +2,8 @@ import SwiftUI
 
 struct HoldToTalkBubble: View {
     @State private var verticalOffset: CGFloat = 0
+    
+    @ObservedObject var viewModel = HomeViewModel.shared
 
     var body: some View {
         VStack {
@@ -9,7 +11,8 @@ struct HoldToTalkBubble: View {
             
             // Container view for both text and speech bubble
             VStack {
-                Text("눌러서 말하기")
+//                Text("눌러서 말하기")
+                Text(viewModel.selectedFriend?.status == "foreground" ? "👀 여기 있어요" : "눌러서 말하기")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.black)

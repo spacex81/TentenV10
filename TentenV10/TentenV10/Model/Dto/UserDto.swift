@@ -20,7 +20,7 @@ struct UserDto: Codable {
     var sentInvitations: [String] = []
 
     // New fields
-    var status: String = "foreground"
+    var status: String = "background"
     var lastActive: Date? = Date()
 
     init(id: String? = nil, email: String, username: String, password: String, pin: String, hasIncomingCallRequest: Bool = false, profileImagePath: String? = nil, deviceToken: String? = nil, friends: [String] = [], roomName: String = "testRoom", isBusy: Bool = false, socialLoginId: String, socialLoginType: String, imageOffset: Float = 0.0, receivedInvitations: [String] = [], sentInvitations: [String] = []) {

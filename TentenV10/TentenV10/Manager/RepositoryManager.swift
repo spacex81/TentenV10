@@ -384,7 +384,7 @@ extension RepositoryManager {
                     t.column("imageOffset", .double).notNull().defaults(to: 0.0)
                     
                     // Add new fields
-                    t.column("status", .text).notNull().defaults(to: "foreground")
+                    t.column("status", .text).notNull().defaults(to: "background")
                     t.column("lastActive", .datetime)
                 }
                 
@@ -406,7 +406,7 @@ extension RepositoryManager {
             // v2: Add 'status' column to 'friends' table
             migrator.registerMigration("v2_add_status_to_friends") { db in
                 try db.alter(table: "friends") { t in
-                    t.add(column: "status", .text).notNull().defaults(to: "foreground")
+                    t.add(column: "status", .text).notNull().defaults(to: "background")
                 }
             }
 

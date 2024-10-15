@@ -55,6 +55,10 @@ class HomeViewModel: ObservableObject {
     }
     //
     
+    // MARK: Status
+    @Published var status: String = "background"
+    //
+    
     @Published var selectedFriendIsBusy: Bool = false {
         didSet {
 //            NSLog("LOG: HomeViewModel-selectedFriendIsBusy: \(selectedFriendIsBusy)")
