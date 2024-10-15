@@ -377,7 +377,7 @@ extension AuthViewModel {
             let userDto = try await repoManager.fetchUserFromFirebase(field: "email", value: email)
 
             // Error Case 4: Password mismatch
-            if let userDto = userDto, userDto.password != password {
+            if let userDto = userDto, userDto.password != password, userDto.socialLoginType == "email" {
                 errorMsg = "이메일이 이미 사용 중 이거나, 비밀번호가 올바르지 않습니다."
                 stopLoading(for: .email)
                 return true
