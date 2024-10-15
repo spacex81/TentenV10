@@ -237,6 +237,8 @@ extension AuthViewModel {
         }
     }
     
+    
+    
     func appleSignOut() {
         DispatchQueue.main.async {
             self.email = ""
@@ -247,6 +249,11 @@ extension AuthViewModel {
     
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error or cancellation and stop the loading spinner
+        DispatchQueue.main.async {
+            self.isLoading[.apple] = false // Reset loading state on error or cancellation
+        }
+        
         print("Apple Sign In failed: \(error.localizedDescription)")
     }
     
