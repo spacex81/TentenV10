@@ -79,7 +79,7 @@ struct MainRingView: View {
                 .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                 .rotationEffect(.degrees(-75))  // Shift the empty part to upper-right
                 .opacity(1.0)
-                .frame(width: strokeSize, height: strokeSize)
+                .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
             
             // Green circle that appears/disappears with animation
             Circle()
