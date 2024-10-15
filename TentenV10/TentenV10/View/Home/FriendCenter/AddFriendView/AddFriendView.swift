@@ -14,7 +14,8 @@ struct AddFriendView: View {
                         viewModel.friendPin = ""
                         UIApplication.shared.endEditing()
                     }) {
-                        Text("Cancel")
+//                        Text("Cancel")
+                        Text("취소")
                             .font(.callout)
                             .fontWeight(.bold)
                             .foregroundColor(Color(UIColor(white: 0.6, alpha: 1.0)))
@@ -30,12 +31,14 @@ struct AddFriendView: View {
             
             VStack {
                 VStack {
-                    Text("add by #pin")
+//                    Text("add by #pin")
+                    Text("pin 번호로 친구 추가")
                         .font(.title2)
                         .fontWeight(.bold)
                         .animation(.spring(response: 0.5, dampingFraction: 0.4, blendDuration: 0.1), value: isTextFieldFocused) // Bouncy effect
 
-                    Text(isTextFieldFocused ? "enter your friend's pin" : "ask your friend for their pin")
+//                    Text(isTextFieldFocused ? "enter your friend's pin" : "ask your friend for their pin")
+                    Text(isTextFieldFocused ? "친구의 pin 번호를 입력해주세요" : "친구에게 pin 번호를 물어보세요")
                         .font(.title3)
                         .foregroundColor(Color(UIColor(white: 0.5, alpha: 1.0)))
                         .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.1), value: isTextFieldFocused) // Bouncy effect
@@ -78,7 +81,8 @@ struct AddFriendView: View {
                             viewModel.friendPin = clipboardContent
                         }
                     }) {
-                        Text("Paste from clipboard")
+//                        Text("Paste from clipboard")
+                        Text("복사 붙여넣기")
                             .font(.headline)
                             .foregroundColor(.white)
                             .padding()
