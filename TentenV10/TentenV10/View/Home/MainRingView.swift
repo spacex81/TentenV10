@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MainRingView: View {
     let strokeSize: CGFloat
+    @ObservedObject var viewModel = HomeViewModel.shared
+
     
     // RGB color for the green circle
     let greenColor = Color(red: 170 / 255, green: 251 / 255, blue: 105 / 255)
@@ -18,18 +20,20 @@ struct MainRingView: View {
                 .opacity(1.0)
                 .frame(width: strokeSize, height: strokeSize)
             
-            Circle()
-                .fill(greenColor)
-                .frame(width: strokeSize * 0.15, height: strokeSize * 0.15)  // Size of the green circle
-                .offset(x: strokeSize * 0.26, y: -strokeSize * 0.41)  // Position the circle at the gap
-                .shadow(color: greenColor.opacity(0.8), radius: 10, x: 0, y: 0)  // Glow effect
-                .scaleEffect(isAnimating ? 1.01 : 0.99)  // Animate scale (vibration effect)
-                .onAppear {
-                    // Add animation to scale effect only
-                    withAnimation(Animation.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) {
-                        isAnimating = true
+            if viewModel.selectedFriend?.status == "foreground" || viewModel.selectedFriend?.status == "background" {
+                Circle()
+                    .fill(greenColor)
+                    .frame(width: strokeSize * 0.15, height: strokeSize * 0.15)  // Size of the green circle
+                    .offset(x: strokeSize * 0.26, y: -strokeSize * 0.41)  // Position the circle at the gap
+                    .shadow(color: greenColor.opacity(0.8), radius: 10, x: 0, y: 0)  // Glow effect
+                    .scaleEffect(isAnimating ? 1.01 : 0.99)  // Animate scale (vibration effect)
+                    .onAppear {
+                        // Add animation to scale effect only
+                        withAnimation(Animation.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) {
+                            isAnimating = true
+                        }
                     }
-                }
+            }
         }
     }
 }

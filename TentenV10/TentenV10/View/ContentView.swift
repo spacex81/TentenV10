@@ -58,6 +58,7 @@ struct ContentView: View {
             .animation(.easeInOut, value: authViewModel.showEmailView) // Animate transitions
         }
         .onAppear {
+//            NSLog("LOG: ContentView-onAppear")
             // Check permissions when the view appears
             checkPermissions()
         }

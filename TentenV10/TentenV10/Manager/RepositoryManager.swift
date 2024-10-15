@@ -401,7 +401,14 @@ extension RepositoryManager {
                     t.column("userId", .text).notNull().references("users", onDelete: .cascade)
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("lastInteraction", .datetime)
-                    t.column("isAccepted", .boolean).notNull().defaults(to: false) // New column
+                    t.column("isAccepted", .boolean).notNull().defaults(to: false)
+                }
+            }
+
+            // v2: Add 'status' column to 'friends' table
+            migrator.registerMigration("v2_add_status_to_friends") { db in
+                try db.alter(table: "friends") { t in
+                    t.add(column: "status", .text).notNull().defaults(to: "foreground")
                 }
             }
 
@@ -644,6 +651,7 @@ extension RepositoryManager {
                     do {
                         let friendDto = try document.data(as: UserDto.self)
                         let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
+                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
                         
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {

@@ -70,14 +70,17 @@ class HomeViewModel: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-//            NSLog("LOG: HomeViewModel-selectedFriend: ")
-//            if let selectedFriend = selectedFriend {
-//                print(selectedFriend)
-//            }
+            NSLog("LOG: HomeViewModel-selectedFriend: ")
+            if let selectedFriend = selectedFriend {
+                print(selectedFriend)
+            } else {
+                NSLog("LOG: selectedFriend is nil")
+            }
             
             updateSelectedFriendIsBusy()
         }
     }
+    
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
 //            NSLog("LOG: HomeViewModel-detailedFriends: ")
@@ -353,32 +356,4 @@ extension HomeViewModel {
             break
         }
     }
-    
-//    func updateStatus(to status: String) {
-//        guard var newUserRecord = repoManager.userRecord else {
-//            NSLog("LOG: No user record found to update status")
-//            return
-//        }
-//
-//        let userId = newUserRecord.id
-//        let currentTime = Date()
-//        
-//        newUserRecord.status = status
-//        
-//        // Update memory
-//        DispatchQueue.main.async {
-//            self.repoManager.userRecord = newUserRecord
-//        }
-//        
-//        // Update local db
-//        repoManager.createUserInDatabase(user: newUserRecord)
-//        
-//        // Update remote Firebase
-//        repoManager.updateUserField(userId: userId, fieldsToUpdate: [
-//            "status": status,
-//            "lastActive": currentTime
-//        ])
-//        
-//        NSLog("LOG: User status updated to \(status)")
-//    }
 }

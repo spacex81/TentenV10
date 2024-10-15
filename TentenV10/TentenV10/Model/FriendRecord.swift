@@ -11,13 +11,14 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable, Ide
     var userId: String // Foreign key to UserRecord
     var isBusy: Bool = false
     var lastInteraction: Date?
-    var isAccepted: Bool = false // New property with a default value of false
+    var isAccepted: Bool = false
+    var status: String = "foreground" // New status field with default value
 
     // Define the primary key for the table
     static var databaseTableName: String = "friends"
 
     enum Columns: String, ColumnExpression {
-        case id, email, username, pin, profileImageData, deviceToken, userId, isBusy, lastInteraction, isAccepted
+        case id, email, username, pin, profileImageData, deviceToken, userId, isBusy, lastInteraction, isAccepted, status
     }
 
     // Define how to encode to and decode from the database
@@ -31,7 +32,8 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable, Ide
         container[Columns.userId] = userId
         container[Columns.isBusy] = isBusy
         container[Columns.lastInteraction] = lastInteraction
-        container[Columns.isAccepted] = isAccepted // Encode the new property
+        container[Columns.isAccepted] = isAccepted
+        container[Columns.status] = status // Encode the new status field
     }
 }
 
@@ -47,7 +49,8 @@ extension FriendRecord {
             userId: "",
             isBusy: false,
             lastInteraction: nil,
-            isAccepted: false // Default value for the new property
+            isAccepted: false,
+            status: "foreground" // Default value for the new property
         )
     }
 }
