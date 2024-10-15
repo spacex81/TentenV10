@@ -13,7 +13,7 @@ const TOKEN_KEY_FILE_NAME = "./AuthKey_96YT8389V6.p8";
 
 
 // Define the notification types
-type NotificationType = 'connect' | 'disconnect' | 'poke';
+type NotificationType = 'connect' | 'disconnect' | 'poke' | 'wakeup';
 
 // Notification configuration based on type
 const NOTIFICATION_CONFIG: Record<NotificationType, { title: string; body: string }> = {
@@ -29,6 +29,10 @@ const NOTIFICATION_CONFIG: Record<NotificationType, { title: string; body: strin
         title: 'Username',
         body: '👋 안녕!',
     },
+    wakeup: {
+        title: 'Username',
+        body: '🥱 일어나!',
+    }
     // Add more types here in the future
 };
 

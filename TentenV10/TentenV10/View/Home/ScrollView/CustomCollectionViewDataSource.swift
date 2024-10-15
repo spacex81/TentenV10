@@ -15,6 +15,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     private weak var collectionViewController: CustomCollectionViewController?
     private let repoManager = RepositoryManager.shared
     private let liveKitManager = LiveKitManager.shared
+    private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
 
     init(
         detailedFriends: Binding<[FriendRecord]>,
@@ -88,6 +89,9 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             
             longPressCell.onLongPressBegan = { [weak self] in
 //                NSLog("LOG: onLongPressBegan")
+                if self?.selectedFriend?.status == "suspended" {
+                    self?.notificationManager.sendRemoteNotification(type: "wakeup")
+                }
                 self?.isPressing = true
                 self?.collectionViewController?.reloadData()
             }
