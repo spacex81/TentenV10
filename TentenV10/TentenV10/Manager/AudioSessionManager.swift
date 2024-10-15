@@ -8,6 +8,15 @@ import WebRTC
 class AudioSessionManager: ObservableObject {
     static let shared = AudioSessionManager()
     
+    let repoManager = RepositoryManager.shared
+    let liveKitManager = LiveKitManager.shared
+    
+    var isPlayingTestAudio: Bool = false {
+        didSet {
+//            NSLog("LOG: AudioSessionManager-isPlayingTestAudio: \(isPlayingTestAudio)")
+        }
+    }
+    
     var audioPlayer: AVAudioPlayer?
     
     init() {
@@ -57,8 +66,27 @@ extension AudioSessionManager {
         }
     }
     
+    func getAudioSessionType() -> String {
+        NSLog("LOG: AudioSessionManager-setupAudioSessionByCase")
+        NSLog("LOG: AudioSessionManager-setupAudioSessionByCase: isConnected: \(liveKitManager.isConnected)")
+        
+        if repoManager.userRecord?.status == "foreground" {
+            return "foreground"
+        } else {
+            if liveKitManager.isConnected {
+                return "backgroundLiveKit"
+            } else {
+                return "backgroundIdle"
+            }
+        }
+    }
+
+    
     @objc private func handleAudioRouteChange(_ notification: Notification) {
         NSLog("LOG: AudioSessionManager-handleAudioRouteChange")
+        
+        let sessionType = getAudioSessionType()
+        NSLog("LOG: sessionType: \(sessionType)")
         
         guard let userInfo = notification.userInfo,
               let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
@@ -69,13 +97,27 @@ extension AudioSessionManager {
         switch reason {
         case .newDeviceAvailable, .oldDeviceUnavailable, .categoryChange:
 //            NSLog("LOG: Route Change -  Category Change")
+            
             let audioSession = AVAudioSession.sharedInstance()
+//            NSLog("LOG: AudioSession mode: \(audioSession.mode.rawValue)")
+            
             if audioSession.mode == .voiceChat {
+//                NSLog("LOG: AudioSession mode is .voiceChat")
                 do {
-                    try audioSession.setMode(.videoChat)
-                    try audioSession.setCategory(audioSession.category, options: [.mixWithOthers])
+                    if sessionType == "backgroundLiveKit" || sessionType == "foreground" {
+                        try audioSession.setMode(.videoChat)
+                        try audioSession.setCategory(audioSession.category, options: [.mixWithOthers])
+                    } else if sessionType == "backgroundIdle" {
+                        // audioSession setup for background silent audio
+                    } else {
+                        // unknown sessionType
+                    }
+                    
+//                    setupAudioSessionByCase()
 
-                    let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
+                    
+                    
+//                    let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
 
 //                    NSLog("LOG: Succeed to change audio session mode from .voiceChat to .videoChat")
 //                    NSLog("LOG: configuring audio session category: \(audioSession.category), mode: \(audioSession.mode), options: [\(optionsString)])")
@@ -115,6 +157,7 @@ extension AudioSessionManager {
         NSLog("LOG: AudioSessionManager-playTestAudio()")
         if let player = audioPlayer, player.prepareToPlay() {
             NSLog("LOG: Start playing test audio")
+            isPlayingTestAudio = true
             player.play()
         } else {
             NSLog("LOG: Failed to prepare audio player for playing")
@@ -123,6 +166,7 @@ extension AudioSessionManager {
 
     func stopTestAudio() {
 //        NSLog("LOG: Stop playing test audio")
+        isPlayingTestAudio = false
         audioPlayer?.stop()
     }
 }

@@ -9,8 +9,16 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     var notificationManager: NotificationManager?
     weak var collectionViewController: CustomCollectionViewController?
     
-    @Published var isConnected: Bool = false
-    @Published var isPublished: Bool = false
+    @Published var isConnected: Bool = false {
+        didSet {
+            NSLog("LOG: LiveKitManager-isConnected: \(isConnected)")
+        }
+    }
+    @Published var isPublished: Bool = false {
+        didSet {
+            NSLog("LOG: LiveKitManager-isPublished: \(isPublished)")
+        }
+    }
     @Published var isLocked: Bool = false  {
         didSet {
 //            NSLog("LOG: LiveKitManager-isLocked : \(isLocked ? "true" : "false")")

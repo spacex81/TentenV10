@@ -265,7 +265,7 @@ class RepositoryManager: ObservableObject {
             
 //            NSLog("LOG: repoManager-detailedFriends from local db")
             let friendsFromDb = fetchAllFriendsFromDatabase()
-            print(friendsFromDb)
+//            print(friendsFromDb)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -981,9 +981,9 @@ extension RepositoryManager {
                     // NSLog("LOG: friend is already added-FriendRecord")
                 }
             } else {
-                NSLog("LOG: friend is already added-FriendID")
-                NSLog("LOG: newUserRecord")
-                print(newUserRecord)
+//                NSLog("LOG: friend is already added-FriendID")
+//                NSLog("LOG: newUserRecord")
+//                print(newUserRecord)
             }
 
         } catch {
@@ -1013,8 +1013,8 @@ extension RepositoryManager {
         eraseFriendFromDatabase(friendId: friendId)
 //        NSLog("LOG: Successfully removed friend from local database")
         let currentFriends = fetchAllFriendsFromDatabase()
-        NSLog("LOG: currentFriends")
-        print(currentFriends)
+//        NSLog("LOG: currentFriends")
+//        print(currentFriends)
         
         // 3) Remove friend id in UserRecord.friends
         updateCurrentUserFriends(friendId: friendId)
@@ -1098,8 +1098,8 @@ extension RepositoryManager {
             // Update the user record in the database
             createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord
             let userFromDb = readUserFromDatabase(id: updatedUser.id)
-            NSLog("LOG: userFromDb")
-            print(userFromDb ?? "userFromDb is nil")
+//            NSLog("LOG: userFromDb")
+//            print(userFromDb ?? "userFromDb is nil")
             
 //            let userRecordsFromDb = readAllUsersFromDatabase()
 //            NSLog("LOG: userRecordsFromDb")
