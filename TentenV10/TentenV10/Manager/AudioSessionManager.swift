@@ -112,11 +112,10 @@ extension AudioSessionManager {
                     if sessionType == "backgroundLiveKit" || sessionType == "foreground" {
                         // Set the mode and category for LiveKit or real-time communication
                         try audioSession.setMode(.videoChat)
-                        try audioSession.setCategory(audioSession.category, options: [.mixWithOthers, .allowBluetooth, .allowBluetoothA2DP])
+                        try audioSession.setCategory(audioSession.category, options: [.mixWithOthers, .allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
                     } else if sessionType == "backgroundIdle" {
                         // Set a more passive audio session for background silent audio
                         try audioSession.setMode(.default)
-//                        try audioSession.setCategory(.playback, options: [.mixWithOthers, .allowBluetoothA2DP, .allowBluetooth, .defaultToSpeaker])
                         try audioSession.setCategory(.playback, options: [.mixWithOthers, .allowBluetoothA2DP, .allowBluetooth])
                     }
                     
