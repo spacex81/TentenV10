@@ -650,6 +650,7 @@ extension RepositoryManager {
                         let friendDto = try document.data(as: UserDto.self)
                         let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
                         NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
+                        print(newFriendRecord)
                         
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {
@@ -1203,8 +1204,8 @@ extension RepositoryManager {
 // MARK: Local Database: Friend CRUD
 extension RepositoryManager {
     func createFriendInDatabase(friend: FriendRecord) {
-        NSLog("LOG: RepositoryManager-createFriendInDatabase: friend")
-        print(friend)
+//        NSLog("LOG: RepositoryManager-createFriendInDatabase: friend")
+//        print(friend)
         do {
             _ = try dbPool.write { db in
                 try friend.save(db)
@@ -1742,7 +1743,8 @@ extension RepositoryManager {
             socialLoginType: userDto.socialLoginType,
             imageOffset: userDto.imageOffset,
             receivedInvitations: userDto.receivedInvitations,
-            sentInvitations: userDto.sentInvitations
+            sentInvitations: userDto.sentInvitations,
+            status: userDto.status
         )
         
         return userRecord
@@ -1784,7 +1786,8 @@ extension RepositoryManager {
             deviceToken: userDto.deviceToken,
             userId: userId,
             isBusy: userDto.isBusy,
-            lastInteraction: roomDto?.lastInteraction.dateValue()
+            lastInteraction: roomDto?.lastInteraction.dateValue(),
+            status: userDto.status
         )
         
         return friendRecord
