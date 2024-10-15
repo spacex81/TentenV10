@@ -97,6 +97,8 @@ class LongPressCell: BaseCell {
     }
     
     private func endLongPressDueToTimeout() {
+        // TODO: Check if friend is suspended
+        
         // Simulate the end of the long press if 15 seconds passed
         onLongPressEnded?() // Trigger the long press ended callback
         guard let friend = friend else { return }

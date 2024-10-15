@@ -58,7 +58,7 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
+//            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
 //            print(userRecord ?? "userRecord is nil")
             
             if let userRecord = self.userRecord {
@@ -105,7 +105,7 @@ class RepositoryManager: ObservableObject {
         if UIApplication.shared.applicationState != .background {
             // Check if userRecord.status is not 'foreground'
             if userRecord?.status != "foreground" {
-                NSLog("LOG: User status is not 'foreground', updating status")
+//                NSLog("LOG: User status is not 'foreground', updating status")
                 // Update the status to 'foreground'
                 updateStatus(to: "foreground")
             }
@@ -202,7 +202,7 @@ class RepositoryManager: ObservableObject {
     
     @Published var selectedFriend: FriendRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-selectedFriend")
+//            NSLog("LOG: RepositoryManager-selectedFriend")
             Task {
 //                NSLog("LOG: reloadData() is run when selectedFriend has changed")
                 await self.collectionViewController?.reloadData()
@@ -649,8 +649,8 @@ extension RepositoryManager {
                     do {
                         let friendDto = try document.data(as: UserDto.self)
                         let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
-                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
-                        print(newFriendRecord)
+//                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
+//                        print(newFriendRecord)
                         
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {
@@ -1981,19 +1981,19 @@ extension RepositoryManager {
     
     // MARK: General update function without completion handler
     func updateFieldInFirestore(collection: String, documentId: String, fieldsToUpdate: [String: Any]) {
-        NSLog("LOG: updateFieldInFirestore")
+//        NSLog("LOG: updateFieldInFirestore")
         db.collection(collection).document(documentId).updateData(fieldsToUpdate) { error in
             if let error = error {
                 NSLog("LOG: Error updating document in Firestore: \(error.localizedDescription)")
             } else {
-                NSLog("LOG: Document successfully updated in Firestore")
+//                NSLog("LOG: Document successfully updated in Firestore")
             }
         }
     }
     
     // MARK: Update function for 'users' collection
     func updateUserField(userId: String, fieldsToUpdate: [String: Any]) {
-        NSLog("LOG: updateUserField")
+//        NSLog("LOG: updateUserField")
         updateFieldInFirestore(collection: "users", documentId: userId, fieldsToUpdate: fieldsToUpdate)
     }
 
