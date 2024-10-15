@@ -11,7 +11,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     
     @Published var isConnected: Bool = false {
         didSet {
-            NSLog("LOG: LiveKitManager-isConnected: \(isConnected)")
+//            NSLog("LOG: LiveKitManager-isConnected: \(isConnected)")
         }
     }
     @Published var isPublished: Bool = false {
