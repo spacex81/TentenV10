@@ -21,8 +21,15 @@ class LongPressCell: BaseCell {
     private let lockDistance: CGFloat = 50
     private var longPressGestureBeganPoint = CGPoint.zero
     
+    // MARK: Haptic
     private let feedback = UIImpactFeedbackGenerator(style: .medium)
     private var hasGivenFeedback = false
+    //
+    
+    // MARK: Time limit
+    private var timer: Timer? // Timer for limiting long press duration
+    private let longPressDurationLimit: TimeInterval = 10
+    //
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,6 +65,12 @@ class LongPressCell: BaseCell {
             
             guard let friend = friend else {return}
             repoManager.updateFirebaseWhenLongPressStart(friendId: friend.id)
+            
+            // Start a timer to automatically end the long press after 15 seconds
+            timer?.invalidate() // Invalidate any existing timer
+            timer = Timer.scheduledTimer(withTimeInterval: longPressDurationLimit, repeats: false) { [weak self] _ in
+                self?.endLongPressDueToTimeout()
+            }
         case .changed:
 //            NSLog("LOG: didLongPressCell-changed")
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
@@ -81,6 +94,16 @@ class LongPressCell: BaseCell {
         default:
             break
         }
+    }
+    
+    private func endLongPressDueToTimeout() {
+        // Simulate the end of the long press if 15 seconds passed
+        onLongPressEnded?() // Trigger the long press ended callback
+        guard let friend = friend else { return }
+        repoManager.updateFirebaseWhenLongPressEnd(friendId: friend.id)
+        
+        // Invalidate the timer as it's no longer needed
+        timer?.invalidate()
     }
 
     func configure(with friend: FriendRecord) {
