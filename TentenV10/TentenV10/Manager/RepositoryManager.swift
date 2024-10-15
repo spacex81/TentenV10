@@ -102,7 +102,7 @@ class RepositoryManager: ObservableObject {
     
     func updateStatusWhenAppLaunch() {
         // Check if app is in the foreground
-        if UIApplication.shared.applicationState == .active {
+        if UIApplication.shared.applicationState != .background {
             // Check if userRecord.status is not 'foreground'
             if userRecord?.status != "foreground" {
                 NSLog("LOG: User status is not 'foreground', updating status")
@@ -139,8 +139,6 @@ class RepositoryManager: ObservableObject {
         
         NSLog("LOG: User status updated to \(status)")
     }
-
-
     
     func syncFriendInfo() {
         Task {

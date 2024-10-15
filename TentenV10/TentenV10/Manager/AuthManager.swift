@@ -1,5 +1,6 @@
 import Foundation
 import FirebaseAuth
+import FirebaseFirestore
 import UserNotifications
 import AVFoundation
 
@@ -16,7 +17,16 @@ class AuthManager: ObservableObject {
         }
     }
 
-    @Published var currentUser: User?
+    @Published var currentUser: User? {
+        didSet {
+            if let currentUserId = currentUser?.uid {
+                if UIApplication.shared.applicationState != .background {
+                    let db = Firestore.firestore()
+                    db.collection("users").document(currentUserId).updateData(["status":"foreground"])
+                }
+            }
+        }
+    }
     
     let generateFirebaseTokenUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/generateFirebaseToken"
     

@@ -178,9 +178,6 @@ struct HomeView: View {
         }
         .onAppear {
             NSLog("LOG: HomeView-onAppear")
-            if repoManager.userRecord?.status != "foreground" {
-                repoManager.updateStatus(to: "foreground")
-            }
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)
