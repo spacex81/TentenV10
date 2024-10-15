@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 enum OnboardingStep {
@@ -52,9 +53,14 @@ struct OnboardingFlowView: View {
                 ))
                 
             case .profileImage:
-                ProfileImageView() {
-                    viewModel.onboardingStep = .addFriend // Move to AddView
-                }
+                ProfileImageView(
+                    onNext: {
+                        viewModel.onboardingStep = .addFriend // Move to AddView
+                    },
+                    onBack: {
+                        viewModel.onboardingStep = .username // Go back to UsernameView
+                    }
+                )
                 .transition(.asymmetric(
                     insertion: .move(edge: .trailing),   // Appears from the right
                     removal: .move(edge: .leading)      // Disappears to the left
@@ -62,10 +68,14 @@ struct OnboardingFlowView: View {
                 
             case .addFriend:
                 ZStack {
-                    AddView {
-//                        viewModel.onboardingStep = .home
-                        viewModel.isOnboardingComplete = true
-                    }
+                    AddView(
+                        onNext: {
+                            viewModel.isOnboardingComplete = true // Onboarding complete, move to Home
+                        },
+                        onBack: {
+                            viewModel.onboardingStep = .profileImage // Go back to ProfileImageView
+                        }
+                    )
                     
                     if viewModel.showPopup {
                         InvitationView()
@@ -77,7 +87,6 @@ struct OnboardingFlowView: View {
                 ))
                 
             case .home:
-//                HomeView()
                 ZStack {
                     HomeView()
                     
@@ -92,12 +101,6 @@ struct OnboardingFlowView: View {
             }
         }
         .animation(.easeInOut, value: viewModel.onboardingStep)
-//        .onAppear {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-//                viewModel.generateInvitations()
-//                viewModel.showPopup = true
-//            })
-//        }
     }
 }
 

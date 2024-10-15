@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct AddView: View {
@@ -6,10 +7,23 @@ struct AddView: View {
     @State private var showSettingView = false
 
     var onNext: () -> Void
+    var onBack: () -> Void // Add closure to handle the back button action
     
     var body: some View {
         ZStack {
             VStack {
+                HStack {
+                    // Go Back Button
+                    Button(action: {
+                        onBack() // Handle the back action
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                            .padding(20)
+                    }
+                    Spacer()
+                }
                 Spacer().frame(height: 30)
                 HStack {
                     Spacer().frame(width: 30)
@@ -76,16 +90,15 @@ struct AddView: View {
                 onNext()
             }
         }
-        .onAppear {
-//            NSLog("LOG: AddView")
-        }
     }
 }
 
 
 #Preview {
-    AddView {
-        print("D")
-    }
+    AddView(onNext: {
+        print("Next button pressed")
+    }, onBack: {
+        print("Go back pressed")
+    })
     .preferredColorScheme(.dark)
 }
