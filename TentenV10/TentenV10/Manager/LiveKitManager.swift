@@ -53,8 +53,8 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 
 extension LiveKitManager {
     func connect(roomName: String) async {
-//        NSLog("LOG: LiveKitManager-connect")
-//        NSLog("LOG: roomName: \(roomName)")
+        NSLog("LOG: LiveKitManager-connect")
+        NSLog("LOG: roomName: \(roomName)")
         
         guard let room = self.room else {
             print("Room is not set")

@@ -26,7 +26,6 @@ struct SplashView: View {
             }
             
             
-//            syncFriendInfo()
         }
         .fullScreenCover(isPresented: $isActive) {
             // Navigate to ContentView after the splash screen

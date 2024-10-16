@@ -178,6 +178,11 @@ struct HomeView: View {
         }
         .onAppear {
             NSLog("LOG: HomeView-onAppear")
+            
+            // MARK: There are some cases when 'isBusy' value in firebase stays to true
+            // leading no one able to call the user
+            repoManager.syncIsBusy()
+
         }
         .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
             viewModel.handleScenePhaseChange(to: newScenePhase)

@@ -344,6 +344,11 @@ extension HomeViewModel {
              NSLog("LOG: App is active and in the foreground")
             backgroundTaskManager.stopAudioTask()
             repoManager.updateStatus(to: "foreground")
+            
+            // MARK: There are some cases when 'isBusy' value in firebase stays to true
+            // leading no one able to call the user
+            repoManager.syncIsBusy()
+
 
         case .inactive:
             NSLog("LOG: App is inactive")

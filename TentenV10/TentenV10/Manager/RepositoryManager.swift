@@ -200,6 +200,36 @@ class RepositoryManager: ObservableObject {
         }
     }
     
+    func syncIsBusy() {
+//        NSLog("LOG: RepositoryManager-syncIsBusy")
+        
+        if var userRecord = userRecord {
+//            NSLog("LOG: isBusy: \(userRecord.isBusy)")
+//            NSLog("LOG: currentState: \(currentState)")
+            
+            Task {
+                do {
+                    let userDto = try await self.fetchUserFromFirebase(userId: userRecord.id)
+                    if userDto.isBusy && currentState == .idle {
+                        userRecord.isBusy = false
+                        let newUserRecord = userRecord
+                        
+                        DispatchQueue.main.async {
+                            self.userRecord = newUserRecord
+                        }
+                        
+                        createUserInDatabase(user: newUserRecord)
+                        updateUserField(userId: userRecord.id, fieldsToUpdate: ["isBusy": false])
+                    }
+                } catch {
+                    NSLog("LOG: RepositoryManager-syncIsBusy: Failed to fetch userDto from firebase")
+                }
+            }
+        } else {
+            NSLog("LOG: userRecord is nil")
+        }
+    }
+    
     @Published var selectedFriend: FriendRecord? {
         didSet {
 //            NSLog("LOG: RepositoryManager-selectedFriend")
