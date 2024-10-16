@@ -28,7 +28,8 @@ class LongPressCell: BaseCell {
     
     // MARK: Time limit
     private var timer: Timer? // Timer for limiting long press duration
-    private let longPressDurationLimit: TimeInterval = 60
+    private let longPressDurationLimit: TimeInterval = 10
+//    private let longPressDurationLimit: TimeInterval = 60
     //
 
     override init(frame: CGRect) {
