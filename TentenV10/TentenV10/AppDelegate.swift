@@ -19,7 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
+        let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
         let repoManager = RepositoryManager.shared
+        
+        // TODO: Send local notification title: "앱을 종료합니다.", body: "친구들의 목소리를 들을 수 없어요"
+        notificationManager.sendLocalNotification(
+            title: "앱을 종료합니다.",
+            body: "친구들의 목소리를 들을 수 없어요"
+        )
+        
         if let userId = repoManager.userRecord?.id {
             repoManager.updateUserField(userId: userId, fieldsToUpdate: ["status": "suspended"])
         }

@@ -1,4 +1,5 @@
 import Foundation
+import UserNotifications
 
 class NotificationManager {
     static private var _shared: NotificationManager?
@@ -57,6 +58,29 @@ class NotificationManager {
                 }
             } catch {
                 NSLog("LOG: Error when serializing the json body when sending poke")
+            }
+        }
+    }
+    
+}
+
+extension NotificationManager {
+    func sendLocalNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = UNNotificationSound.default
+
+        // Create a trigger to send the notification immediately
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+
+        // Create a request to add the notification
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        // Add the notification request to UNUserNotificationCenter
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                NSLog("LOG: Failed to send local notification: \(error)")
             }
         }
     }
