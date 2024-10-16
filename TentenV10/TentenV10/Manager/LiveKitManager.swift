@@ -14,6 +14,11 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 //            NSLog("LOG: LiveKitManager-isConnected: \(isConnected)")
         }
     }
+    @Published var isConnected2: Bool = false {
+        didSet {
+//            NSLog("LOG: LiveKitManager-isConnected: \(isConnected)")
+        }
+    }
     @Published var isPublished: Bool = false {
         didSet {
             NSLog("LOG: LiveKitManager-isPublished: \(isPublished)")
@@ -93,6 +98,7 @@ extension LiveKitManager {
             try await room.connect(url: livekitUrl, token: livekitToken)
             DispatchQueue.main.async {
                 self.isConnected = true
+                self.isConnected2 = true
             }
 //            NSLog("LOG: LiveKit Connected")
         } catch {
@@ -275,6 +281,7 @@ extension LiveKitManager {
     func room(_ room: Room, participant: RemoteParticipant, didUnsubscribeTrack publication: RemoteTrackPublication) {
         // Send notification when the friend stops speaking
 //        self.repoManager?.sendLocalNotification(type: "endSpeaking")
+        isConnected2 = false
         NSLog("LOG: Remote participant stopped talking")
     }
     
@@ -295,6 +302,7 @@ extension LiveKitManager {
     
 
     func room(_ room: Room, participant: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
+//        NSLog("LOG: LiveKitManager-room-didUnpublishTrack")
         notificationManager?.sendRemoteNotification(type: "disconnect")
     }
     

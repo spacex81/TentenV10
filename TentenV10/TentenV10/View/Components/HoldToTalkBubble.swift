@@ -92,7 +92,7 @@ struct HoldToTalkBubble: View {
     }
     
     private func updateTextTransition() {
-        print("Updating text transition")
+        print("LOG: Updating text transition")
         withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
             if viewModel.selectedFriend?.status == "foreground" {
 //                print("Switching to 👀 여기 있어요")

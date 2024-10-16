@@ -1,4 +1,5 @@
 import Foundation
+import AVFAudio
 import UIKit
 
 class BackgroundTaskManager: ObservableObject {
@@ -12,38 +13,6 @@ class BackgroundTaskManager: ObservableObject {
     
     var isBackgroundAudioTaskRunning = false
 }
-
-//// MARK: LiveKit background task
-//extension BackgroundTaskManager {
-//    func startLiveKitTask() {
-//        liveKitTaskId = UIApplication.shared.beginBackgroundTask(withName: "LiveKitTask") {
-//            self.endLiveKitTask()
-//        }
-//
-//        guard liveKitTaskId != .invalid else {
-//            print("Failed to start LiveKit background task!")
-//            return
-//        }
-//
-//        DispatchQueue.global(qos: .background).async {
-//            self.handleLiveKitTask()
-//        }
-//    }
-//    
-//    private func endLiveKitTask() {
-//        NSLog("LOG: LiveKit background task ended")
-//        if liveKitTaskId != .invalid {
-//            UIApplication.shared.endBackgroundTask(liveKitTaskId)
-//            liveKitTaskId = .invalid
-//        }
-//    }
-//
-//    private func handleLiveKitTask() {
-//        Task {
-////            await liveKitManager.connect()
-//        }
-//    }
-//}
 
 // MARK: test audio background task
 extension BackgroundTaskManager {
@@ -86,12 +55,13 @@ extension BackgroundTaskManager {
         
         audioSessionManager.playTestAudio()
         
-        for i in 1...30 {
+//        for i in 1...30 {
+        for i in 1...5 {
             if !isBackgroundAudioTaskRunning {
                 break
             }
             if let player = audioSessionManager.audioPlayer, player.isPlaying {
-//                NSLog("LOG: Playing silent audio(\(i))...")
+                NSLog("LOG: Playing silent audio(\(i))...")
             }
             sleep(1)
         }
