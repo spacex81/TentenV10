@@ -3,6 +3,8 @@ import UIKit
 class LongPressCell: BaseCell {
     static let reuseIdentifier = "LongPressCell"
     var friend: FriendRecord?
+    
+    let liveKitManager = LiveKitManager.shared
 
     var onLongPressBegan: (() -> Void)? // Closure to handle long press beginning
     var onLongPressEnded: (() -> Void)? // Closure to handle long press ending
@@ -70,7 +72,12 @@ class LongPressCell: BaseCell {
             // Start a timer to automatically end the long press after 15 seconds
             timer?.invalidate() // Invalidate any existing timer
             timer = Timer.scheduledTimer(withTimeInterval: longPressDurationLimit, repeats: false) { [weak self] _ in
-                self?.endLongPressDueToTimeout()
+                if let isConnected2 = self?.liveKitManager.isConnected2 {
+                } else {
+                    // Only run this function if livekit is not connected
+                    self?.endLongPressDueToTimeout()
+                }
+
             }
         case .changed:
 //            NSLog("LOG: didLongPressCell-changed")
@@ -98,7 +105,7 @@ class LongPressCell: BaseCell {
     }
     
     private func endLongPressDueToTimeout() {
-        // TODO: Check if friend is suspended
+        // Need to check if friend is suspended
         
         // Simulate the end of the long press if 15 seconds passed
         onLongPressEnded?() // Trigger the long press ended callback
