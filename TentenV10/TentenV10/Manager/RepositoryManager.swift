@@ -1166,6 +1166,42 @@ extension RepositoryManager {
     }
 }
 
+extension RepositoryManager {
+    func deleteCurrentUser() async {
+        guard let user = userRecord else {
+            NSLog("LOG: No user record found to delete")
+            return
+        }
+
+        // 1. Remove from local database
+        deleteUserFromDatabase(user: user)
+
+        // 2. Remove from Firebase Firestore
+        deleteUserFromFirebase(user: user)
+
+        // 3. Remove user from Firebase Authentication
+        await deleteUserFromAuth()
+
+        // 4. Clean up related data
+        cleanUpUserData()
+
+        DispatchQueue.main.async {
+            // Reset any state in your view models or repository
+            HomeViewModel.shared.username = ""
+            HomeViewModel.shared.profileImageData = nil
+            HomeViewModel.shared.imageOffset = 0.0
+            self.userRecord = nil
+            self.detailedFriends = []
+            self.selectedFriend = nil
+            self.removeAllListeners()
+            self.eraseAllUsers()
+            self.eraseAllFriendsFromDatabase()
+        }
+
+        NSLog("LOG: User account and related data deleted successfully")
+    }
+}
+
 
 // MARK: Local Database: User CRUD
 extension RepositoryManager {
@@ -1177,6 +1213,17 @@ extension RepositoryManager {
             //            NSLog("LOG: Successfully added new user record")
         } catch {
             print("Failed to save user: \(error)")
+        }
+    }
+    
+    func deleteUserFromDatabase(user: UserRecord) {
+        do {
+            _ = try dbPool.write { db in
+                try user.delete(db)
+            }
+            NSLog("LOG: User successfully deleted from local database")
+        } catch {
+            NSLog("LOG: Failed to delete user from local database: \(error)")
         }
     }
     
@@ -1316,6 +1363,22 @@ extension RepositoryManager {
             }
         } catch let error {
             NSLog("LOG: Error encoding user: \(error)")
+        }
+    }
+    
+    func deleteUserFromFirebase(user: UserRecord) {
+//        guard let userId = user.id else {
+//            NSLog("LOG: User ID not found, cannot delete from Firebase")
+//            return
+//        }
+        let userId = user.id
+        
+        usersCollection.document(userId).delete { error in
+            if let error = error {
+                NSLog("LOG: Failed to delete user from Firestore: \(error)")
+            } else {
+                NSLog("LOG: User successfully deleted from Firestore")
+            }
         }
     }
     
@@ -1650,6 +1713,28 @@ extension RepositoryManager {
         }
         
         return downloadURL
+    }
+}
+
+extension RepositoryManager {
+    func cleanUpUserData() {
+        // Erase all user-related data here (friends, messages, etc.)
+        eraseAllFriendsFromDatabase()
+        eraseAllUsers()
+        removeAllListeners()
+        NSLog("LOG: User-related data cleaned up")
+    }
+}
+
+extension RepositoryManager {
+    func deleteUserFromAuth() async {
+        do {
+            let currentUser = Auth.auth().currentUser
+            try await currentUser?.delete()
+            NSLog("LOG: User successfully deleted from Firebase Authentication")
+        } catch {
+            NSLog("LOG: Failed to delete user from Firebase Authentication: \(error.localizedDescription)")
+        }
     }
 }
 

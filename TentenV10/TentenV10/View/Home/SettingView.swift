@@ -105,9 +105,7 @@ struct SettingView: View {
 
     // Function to handle account deletion
     private func deleteAccount() {
-        // Add logic to delete the user's account
-        // Example: authViewModel.deleteAccount() or a similar function.
-        print("Account deletion initiated.")
+        authViewModel.deleteAccount()
     }
 }
 

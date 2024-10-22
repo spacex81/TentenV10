@@ -459,3 +459,11 @@ extension AuthViewModel {
 //        }
     }
 }
+
+extension AuthViewModel {
+    func deleteAccount() {
+        Task {
+            await repoManager.deleteCurrentUser()
+        }
+    }
+}
