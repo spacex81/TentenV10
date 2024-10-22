@@ -1179,13 +1179,16 @@ extension RepositoryManager {
         // 2. Remove from Firebase Firestore
         deleteUserFromFirebase(user: user)
         
-        // 3. Also need to add remove rooms
+        // 3. Remove current user from each friend's Firebase user document's 'friends' field
+        await removeCurrentUserFromFriendsList()
+        
+        // 4. Also need to add remove rooms
         await removeRoomsForCurrentUser()
         
-        // 4. Remove user from Firebase Authentication
+        // 5. Remove user from Firebase Authentication
         await deleteUserFromAuth()
 
-        // 5. Clean up related data
+        // 6. Clean up related data
         cleanUpUserData()
 
         DispatchQueue.main.async {
@@ -1202,6 +1205,21 @@ extension RepositoryManager {
         }
 
         NSLog("LOG: User account and related data deleted successfully")
+    }
+    
+    private func removeCurrentUserFromFriendsList() async {
+        guard let currentUserId = userRecord?.id else {
+            NSLog("LOG: No current user found to remove from friends list")
+            return
+        }
+
+        // Iterate over all friends of the current user
+        for friendId in userRecord?.friends ?? [] {
+            // Use the updateFriendListInFirebase function to remove the current user from each friend's friends list
+            updateFriendListInFirebase(documentId: friendId, friendId: currentUserId, action: .remove)
+        }
+
+        NSLog("LOG: Successfully removed current user from all friends' lists.")
     }
 }
 
