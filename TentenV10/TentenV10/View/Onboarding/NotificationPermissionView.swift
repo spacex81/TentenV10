@@ -75,9 +75,15 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
+            // MARK: Title
             Text("알림을 설정에서 켜주세요")
                 .font(.title)
-                .padding()
+                .fontWeight(.bold)
+                .padding(.bottom, 5)
+            
+            // MARK: Subtext
+            Text("알림 허용 없이는 앱 경험이 끔찍해져요...😭")
+
             Button(action: openSettings) {
                 Text("설정으로 가기")
                     .font(.headline)
