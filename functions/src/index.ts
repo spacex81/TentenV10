@@ -5,6 +5,7 @@ import * as path from 'path';
 import { handleRegularNotification } from './handleRegularNotification';
 import { handleLivekitToken } from './handleLivekitToken';
 import { generateFirebaseToken } from './generateFirebaseToken';
+import { deleteUserByUID } from './deleteUserByUID';
 
 import * as admin from 'firebase-admin';
 
@@ -21,3 +22,4 @@ setGlobalOptions({ region: 'asia-northeast3' })
 exports.handleLivekitToken = handleLivekitToken;
 exports.handleRegularNotification = handleRegularNotification;
 exports.generateFirebaseToken = generateFirebaseToken;
+exports.deleteUserByUID = deleteUserByUID;

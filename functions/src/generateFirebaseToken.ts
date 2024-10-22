@@ -1,29 +1,3 @@
-// import * as functions from 'firebase-functions';
-// import * as admin from 'firebase-admin';
-
-// export const generateFirebaseToken = functions.region('asia-northeast3')
-//     .https.onRequest(async (req, res) => {
-//         const { socialLoginId, socialLoginType } = req.body;
-
-//         if (!socialLoginId || !socialLoginType) {
-//             res.status(400).send('Both socialLoginId and socialLoginType are required');
-//             return;
-//         }
-
-//         try {
-//             const uid = `${socialLoginType}_${socialLoginId}`;
-            
-//             const customToken = await admin.auth().createCustomToken(uid);
-
-//             res.status(200).json({
-//                 firebaseToken: customToken
-//             });
-//         } catch (error) {
-//             console.error('Error creating custom token:', error);
-//             res.status(500).send('Error creating custom token');
-//         }
-//     });
-
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { v4 as uuidv4 } from 'uuid'; // Import UUID generator

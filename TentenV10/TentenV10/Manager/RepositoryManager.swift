@@ -10,6 +10,8 @@ class RepositoryManager: ObservableObject {
     private let liveKitManager = LiveKitManager.shared
     weak var collectionViewController: CustomCollectionViewController?
     
+    let deleteUserByUIDUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/deleteUserByUID"
+    
     // Local Database
 //    private var dbQueue: DatabaseQueue!
     private var dbPool: DatabasePool!
@@ -102,12 +104,14 @@ class RepositoryManager: ObservableObject {
     
     func updateStatusWhenAppLaunch() {
         // Check if app is in the foreground
-        if UIApplication.shared.applicationState != .background {
-            // Check if userRecord.status is not 'foreground'
-            if userRecord?.status != "foreground" {
-//                NSLog("LOG: User status is not 'foreground', updating status")
-                // Update the status to 'foreground'
-                updateStatus(to: "foreground")
+        DispatchQueue.main.async {
+            if UIApplication.shared.applicationState != .background {
+                // Check if userRecord.status is not 'foreground'
+                if self.userRecord?.status != "foreground" {
+    //                NSLog("LOG: User status is not 'foreground', updating status")
+                    // Update the status to 'foreground'
+                    self.updateStatus(to: "foreground")
+                }
             }
         }
     }
@@ -730,9 +734,10 @@ extension RepositoryManager {
             if let document = document, document.exists {
                 Task {
                     do {
+                        NSLog("LOG: listenToRoom-Update room document from room listener")
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-//                        NSLog("LOG: Updated RoomDto")
-//                        print(roomDto)
+                        NSLog("LOG: Updated RoomDto")
+                        print(roomDto)
                         
                         self.updateCurrentSpeaker(roomDto: roomDto, currentUserId: currentUserId)
                         await self.updateLastInteraction(roomDto: roomDto, currentUserId: currentUserId)
@@ -1172,6 +1177,7 @@ extension RepositoryManager {
             NSLog("LOG: No user record found to delete")
             return
         }
+        let uid = user.id
 
         // 1. Remove from local database
         deleteUserFromDatabase(user: user)
@@ -1186,7 +1192,7 @@ extension RepositoryManager {
         await removeRoomsForCurrentUser()
         
         // 5. Remove user from Firebase Authentication
-        await deleteUserFromAuth()
+        _ = await deleteUserFromFirebaseAuth(uid: uid)
 
         // 6. Clean up related data
         cleanUpUserData()
@@ -1803,13 +1809,37 @@ extension RepositoryManager {
 }
 
 extension RepositoryManager {
-    func deleteUserFromAuth() async {
+    func deleteUserFromFirebaseAuth(uid: String) async -> Bool {
+        guard let url = URL(string: deleteUserByUIDUrl) else {
+            NSLog("Failed to create URL")
+            return false
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let jsonBody: [String: Any] = ["uid": uid]
+
         do {
-            let currentUser = Auth.auth().currentUser
-            try await currentUser?.delete()
-            NSLog("LOG: User successfully deleted from Firebase Authentication")
+            // Prepare the JSON body with the UID
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
+            request.httpBody = jsonData
+
+            // Send the request to the Firebase Function
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Check for a valid response
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                NSLog("LOG: User successfully deleted from Firebase Authentication via function")
+                return true
+            } else {
+                NSLog("LOG: Failed to delete user via function with response code: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+                return false
+            }
         } catch {
-            NSLog("LOG: Failed to delete user from Firebase Authentication: \(error.localizedDescription)")
+            NSLog("LOG: Failed to delete user via function: \(error.localizedDescription)")
+            return false
         }
     }
 }
