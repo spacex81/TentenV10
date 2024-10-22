@@ -33,7 +33,12 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     
     @Published var isLoading: [SocialLoginType: Bool] = [:]
     
-    @Published var showEmailView: Bool = false 
+    @Published var showEmailView: Bool = false
+    
+    // MARK: Permission status
+    @Published var isNotificationPermissionGranted = true
+    @Published var isMicPermissionGranted = true
+    //
     
     override init() {
         super.init()
@@ -435,5 +440,22 @@ extension AuthViewModel {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.isLoading[loginType] = false
         }
+    }
+}
+
+extension AuthViewModel {
+    func checkPermissions() async {
+        NSLog("LOG: AuthViewModel-checkPermissions")
+//        Task {
+            // Check if notification permission is granted
+            isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
+
+            // Check if microphone permission is granted
+            isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
+
+            // Log the permission statuses
+            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
+            print("Microphone Permission Granted: \(isMicPermissionGranted)")
+//        }
     }
 }

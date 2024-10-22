@@ -5,16 +5,13 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel.shared
     @ObservedObject var authViewModel = AuthViewModel.shared
 
-    @State private var isNotificationPermissionGranted = true
-    @State private var isMicPermissionGranted = true
-
     var body: some View {
         NavigationStack {
             ZStack {
                 // Main app navigation flow
                 if viewModel.isUserLoggedIn {
                     // Check permissions when the user is logged in
-                    if isNotificationPermissionGranted && isMicPermissionGranted {
+                    if authViewModel.isNotificationPermissionGranted && authViewModel.isMicPermissionGranted {
                         // Show Home or Onboarding Flow based on the onboarding status
                         if viewModel.isOnboardingComplete {
                             ZStack {
@@ -29,13 +26,19 @@ struct ContentView: View {
                         }
                     } else {
                         // Show respective permission view if the permissions are not granted
-                        if !isNotificationPermissionGranted {
+                        if !authViewModel.isNotificationPermissionGranted {
                             NotificationPermissionView {
-                                checkPermissions() // Recheck permissions after requesting
+                                Task {
+                                    
+                                    await authViewModel.checkPermissions() // Recheck permissions after requesting
+                                }
                             }
-                        } else if !isMicPermissionGranted {
+                        } else if !authViewModel.isMicPermissionGranted {
                             MicPermissionView {
-                                checkPermissions() // Recheck permissions after requesting
+                                Task {
+                                    
+                                    await authViewModel.checkPermissions() // Recheck permissions after requesting
+                                }
                             }
                         }
                     }
@@ -58,24 +61,12 @@ struct ContentView: View {
             .animation(.easeInOut, value: authViewModel.showEmailView) // Animate transitions
         }
         .onAppear {
-//            NSLog("LOG: ContentView-onAppear")
+            NSLog("LOG: ContentView-onAppear")
             // Check permissions when the view appears
-            checkPermissions()
+            Task {
+                await authViewModel.checkPermissions()
+            }
         }
         .environmentObject(viewModel)
-    }
-
-    private func checkPermissions() {
-        Task {
-            // Check if notification permission is granted
-            isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
-
-            // Check if microphone permission is granted
-            isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
-
-            // Log the permission statuses
-//            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
-//            print("Microphone Permission Granted: \(isMicPermissionGranted)")
-        }
     }
 }
