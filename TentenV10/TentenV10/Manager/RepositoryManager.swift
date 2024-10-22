@@ -1173,6 +1173,7 @@ extension RepositoryManager {
 
 extension RepositoryManager {
     func deleteCurrentUser() async {
+        // TODO:
         guard let user = userRecord else {
             NSLog("LOG: No user record found to delete")
             return
@@ -1182,8 +1183,6 @@ extension RepositoryManager {
         // 1. Remove from local database
         deleteUserFromDatabase(user: user)
 
-        // 2. Remove from Firebase Firestore
-        deleteUserFromFirebase(user: user)
         
         // 3. Remove current user from each friend's Firebase user document's 'friends' field
         await removeCurrentUserFromFriendsList()
@@ -1192,11 +1191,15 @@ extension RepositoryManager {
         await removeRoomsForCurrentUser()
         
         // 5. Remove user from Firebase Authentication
-        _ = await deleteUserFromFirebaseAuth(uid: uid)
+        _ = await deleteUserFromFirebaseAuthAndCleanupFriends(uid: uid)
         
+
         // 6. Remove profile image data from Firebase Storage
         await deleteProfileImageFromFirebaseStorage(uid: uid)
 
+        // 2. Remove from Firebase Firestore
+        deleteUserFromFirebase(user: user)
+        
         // 7. Clean up related data
         cleanUpUserData()
 
@@ -1205,12 +1208,14 @@ extension RepositoryManager {
             HomeViewModel.shared.username = ""
             HomeViewModel.shared.profileImageData = nil
             HomeViewModel.shared.imageOffset = 0.0
+            ContentViewModel.shared.isUserLoggedIn = false
             self.userRecord = nil
             self.detailedFriends = []
             self.selectedFriend = nil
             self.removeAllListeners()
             self.eraseAllUsers()
             self.eraseAllFriendsFromDatabase()
+            
         }
 
         NSLog("LOG: User account and related data deleted successfully")
@@ -1397,6 +1402,7 @@ extension RepositoryManager {
     }
     
     func deleteUserFromFirebase(user: UserRecord) {
+        NSLog("RepositoryManager-deleteUserFromFirebase")
 //        guard let userId = user.id else {
 //            NSLog("LOG: User ID not found, cannot delete from Firebase")
 //            return
@@ -1833,7 +1839,9 @@ extension RepositoryManager {
 }
 
 extension RepositoryManager {
-    func deleteUserFromFirebaseAuth(uid: String) async -> Bool {
+    func deleteUserFromFirebaseAuthAndCleanupFriends(uid: String) async -> Bool {
+        NSLog("LOG: deleteUserFromFirebaseAuthAndCleanupFriends")
+        
         guard let url = URL(string: deleteUserByUIDUrl) else {
             NSLog("Failed to create URL")
             return false
@@ -1858,7 +1866,8 @@ extension RepositoryManager {
                 NSLog("LOG: User successfully deleted from Firebase Authentication via function")
                 return true
             } else {
-                NSLog("LOG: Failed to delete user via function with response code: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+                let responseBody = String(data: data, encoding: .utf8) ?? "No response body"
+                NSLog("LOG: Failed to delete user via function with response code: \((response as? HTTPURLResponse)?.statusCode ?? 0) and response body: \(responseBody)")
                 return false
             }
         } catch {

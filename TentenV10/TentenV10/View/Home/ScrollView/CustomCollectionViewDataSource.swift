@@ -44,6 +44,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
 //        NSLog("LOG: detailedFriends count: \(detailedFriends.count)")
         
         let friend = detailedFriends[indexPath.item]
+        
 //        if selectedFriend != nil {
 //            NSLog("LOG: selectedFriend")
 //            print(selectedFriend ?? "not selected yet")
