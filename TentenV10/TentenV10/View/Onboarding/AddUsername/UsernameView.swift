@@ -15,6 +15,7 @@ struct UsernameView: View {
                 Text("이름을 정해주세요")
                     .font(.title)
                     .fontWeight(.bold)
+                    .padding(.bottom, 5)
                 
                 // MARK: Subtext
                 Text("친구들에게 보여질 이름이에요")
