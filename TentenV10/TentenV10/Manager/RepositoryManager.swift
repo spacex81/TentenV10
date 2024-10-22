@@ -294,7 +294,7 @@ class RepositoryManager: ObservableObject {
 //            print(detailedFriends)
             
 //            NSLog("LOG: repoManager-detailedFriends from local db")
-            let friendsFromDb = fetchAllFriendsFromDatabase()
+//            let friendsFromDb = fetchAllFriendsFromDatabase()
 //            print(friendsFromDb)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
@@ -495,7 +495,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-//        NSLog("LOG: RepositoryManager-listenToUser")
+        NSLog("LOG: RepositoryManager-listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -517,8 +517,8 @@ extension RepositoryManager {
                          
                          let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
-//                         NSLog("LOG: listenToUser-updatedUserRecord")
-//                         print(updatedUserRecord)
+                         NSLog("LOG: listenToUser-updatedUserRecord")
+                         print(updatedUserRecord)
                          
                          let invitations = updatedUserRecord.receivedInvitations
                          self.handleReceivedInvitations(friendIds: invitations)
@@ -590,6 +590,7 @@ extension RepositoryManager {
         
         // Check if the local database already has a FriendRecord corresponding to the friendId
         let localFriendRecords = fetchFriendsByUserIdFromDatabase(userId: friendId)
+        NSLog("LOG: fetchFriendsByUserIdFromDatabase finished")
         if let localFriend = localFriendRecords.first {
             // If a FriendRecord exists locally, use it to create and return an Invitation
             return Invitation(id: localFriend.id, username: localFriend.username, profileImageData: localFriend.profileImageData ?? Data())
@@ -679,8 +680,8 @@ extension RepositoryManager {
                     do {
                         let friendDto = try document.data(as: UserDto.self)
                         let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
-//                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
-//                        print(newFriendRecord)
+                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
+                        print(newFriendRecord)
                         
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {
@@ -1042,7 +1043,7 @@ extension RepositoryManager {
         // 2) Delete friend from local database
         eraseFriendFromDatabase(friendId: friendId)
 //        NSLog("LOG: Successfully removed friend from local database")
-        let currentFriends = fetchAllFriendsFromDatabase()
+//        let currentFriends = fetchAllFriendsFromDatabase()
 //        NSLog("LOG: currentFriends")
 //        print(currentFriends)
         
@@ -1127,7 +1128,7 @@ extension RepositoryManager {
 
             // Update the user record in the database
             createUserInDatabase(user: updatedUser) // Re-save the updated UserRecord
-            let userFromDb = readUserFromDatabase(id: updatedUser.id)
+//            let userFromDb = readUserFromDatabase(id: updatedUser.id)
 //            NSLog("LOG: userFromDb")
 //            print(userFromDb ?? "userFromDb is nil")
             

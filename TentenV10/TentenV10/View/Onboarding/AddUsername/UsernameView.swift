@@ -10,6 +10,17 @@ struct UsernameView: View {
 
     var body: some View {
         VStack {
+            VStack {
+                // MARK: Title
+                Text("이름을 정해주세요")
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                // MARK: Subtext
+                Text("친구들에게 보여질 이름이에요")
+            }
+            .padding(.bottom, 50)
+
             HStack {
                 FocusTextField(text: $viewModel.username, isFocused: $isTextFieldFocused)
                     .frame(height: 40)
