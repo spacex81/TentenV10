@@ -1178,11 +1178,14 @@ extension RepositoryManager {
 
         // 2. Remove from Firebase Firestore
         deleteUserFromFirebase(user: user)
-
-        // 3. Remove user from Firebase Authentication
+        
+        // 3. Also need to add remove rooms
+        await removeRoomsForCurrentUser()
+        
+        // 4. Remove user from Firebase Authentication
         await deleteUserFromAuth()
 
-        // 4. Clean up related data
+        // 5. Clean up related data
         cleanUpUserData()
 
         DispatchQueue.main.async {
@@ -1678,6 +1681,61 @@ extension RepositoryManager {
     }
 
 }
+
+// MARK: Firebase: Room document
+extension RepositoryManager {
+    
+    // Function to remove all room documents associated with the current user
+    func removeRoomsForCurrentUser() async {
+        guard let currentUserId = userRecord?.id else {
+            NSLog("LOG: No current user found to delete rooms")
+            return
+        }
+
+        do {
+            // Fetch all room documents where the user is either userId1 or userId2
+            let roomsQuery1 = db.collection("rooms").whereField("userId1", isEqualTo: currentUserId)
+            let roomsQuery2 = db.collection("rooms").whereField("userId2", isEqualTo: currentUserId)
+
+            // Fetch and delete room documents where the current user is userId1
+            let roomDocs1 = try await roomsQuery1.getDocuments()
+            for document in roomDocs1.documents {
+                let roomId = document.documentID
+                try await deleteRoomDocument(roomId: roomId)
+            }
+
+            // Fetch and delete room documents where the current user is userId2
+            let roomDocs2 = try await roomsQuery2.getDocuments()
+            for document in roomDocs2.documents {
+                let roomId = document.documentID
+                try await deleteRoomDocument(roomId: roomId)
+            }
+            
+            NSLog("LOG: Successfully deleted all rooms associated with current user.")
+        } catch {
+            NSLog("LOG: Failed to delete rooms associated with current user: \(error.localizedDescription)")
+        }
+    }
+
+    // Helper function to delete a specific room document and clean up listeners
+    private func deleteRoomDocument(roomId: String) async throws {
+        let roomDocRef = db.collection("rooms").document(roomId)
+        
+        // Remove Firestore document
+        try await roomDocRef.delete()
+        NSLog("LOG: Room document \(roomId) deleted from Firestore.")
+        
+        // Optionally remove any listeners or related room data from local database
+        stopListeningToRoom(roomId: roomId) // Assuming you have a function to stop listeners
+    }
+    
+    // Placeholder function to stop listening to room
+    private func stopListeningToRoom(roomId: String) {
+        // Your logic to stop listeners for the room
+        NSLog("LOG: Stopped listening to room \(roomId)")
+    }
+}
+
 
 
 
