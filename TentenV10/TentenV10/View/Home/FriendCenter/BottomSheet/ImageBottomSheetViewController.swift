@@ -201,7 +201,7 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             Task {
                 do {
                     // Store profile image on Firebase storage and get the image URL
-                    let profileImagePath = try await repoManager.saveProfileImageInFirebase(id: newUserRecord.id, profileImageData: newUserRecord.profileImageData!)
+                    let profileImagePath = try await repoManager.saveProfileImageInFirebaseStorage(id: newUserRecord.id, profileImageData: newUserRecord.profileImageData!)
                     
                     // Store profile image path and imageOffset to Firebase Firestore
                     let fieldsToUpdate: [String: Any] = [

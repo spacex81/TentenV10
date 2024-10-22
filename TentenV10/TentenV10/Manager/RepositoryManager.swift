@@ -1193,8 +1193,11 @@ extension RepositoryManager {
         
         // 5. Remove user from Firebase Authentication
         _ = await deleteUserFromFirebaseAuth(uid: uid)
+        
+        // 6. Remove profile image data from Firebase Storage
+        await deleteProfileImageFromFirebaseStorage(uid: uid)
 
-        // 6. Clean up related data
+        // 7. Clean up related data
         cleanUpUserData()
 
         DispatchQueue.main.async {
@@ -1765,7 +1768,7 @@ extension RepositoryManager {
 
 // MARK: Firebase: Storage
 extension RepositoryManager {
-    func saveProfileImageInFirebase(id: String, profileImageData: Data) async throws -> String {
+    func saveProfileImageInFirebaseStorage(id: String, profileImageData: Data) async throws -> String {
         let storageRef = storage.reference().child("profile_images").child("\(id).jpg")
         
         // Upload the image data
@@ -1795,6 +1798,27 @@ extension RepositoryManager {
         }
         
         return downloadURL
+    }
+    
+    func deleteProfileImageFromFirebaseStorage(uid: String) async {
+        // Use the UID to construct the path: "profile_images/<UID>.jpg"
+        let storageRef = storage.reference().child("profile_images").child("\(uid).jpg")
+        
+        do {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                storageRef.delete { error in
+                    if let error = error {
+                        NSLog("LOG: Failed to delete profile image from Firebase Storage: \(error)")
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: ())
+                        NSLog("LOG: Profile image deleted successfully from Firebase Storage.")
+                    }
+                }
+            }
+        } catch {
+            NSLog("LOG: Failed to delete profile image: \(error.localizedDescription)")
+        }
     }
 }
 
