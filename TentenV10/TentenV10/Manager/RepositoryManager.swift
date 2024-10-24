@@ -60,8 +60,8 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-//            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
-//            print(userRecord ?? "userRecord is nil")
+            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
+            print(userRecord ?? "userRecord is nil")
             
             if let userRecord = self.userRecord {
                 // update deviceToken
@@ -416,13 +416,12 @@ extension RepositoryManager {
                     t.column("socialLoginId", .text).notNull()
                     t.column("socialLoginType", .text).notNull()
                     t.column("imageOffset", .double).notNull().defaults(to: 0.0)
-                    
-                    // Add new fields
                     t.column("status", .text).notNull().defaults(to: "background")
                     t.column("lastActive", .datetime)
+                    t.column("refusedPushNotification", .boolean).notNull().defaults(to: false)  // New column
                 }
-                
-                // Create the friends table with 'lastInteraction' column and new 'isAccepted' column
+
+                // Create the friends table
                 try db.create(table: "friends") { t in
                     t.column("id", .text).primaryKey()
                     t.column("email", .text).notNull()
@@ -1999,6 +1998,7 @@ extension RepositoryManager {
             imageOffset: userDto.imageOffset,
             receivedInvitations: userDto.receivedInvitations,
             sentInvitations: userDto.sentInvitations,
+            refusedPushNotification: userDto.refusedPushNotification,
             status: userDto.status
         )
         

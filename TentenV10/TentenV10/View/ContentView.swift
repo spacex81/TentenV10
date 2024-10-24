@@ -4,6 +4,8 @@ import FirebaseAuth
 struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel.shared
     @ObservedObject var authViewModel = AuthViewModel.shared
+    
+    let repoManager = RepositoryManager.shared
 
     var body: some View {
         NavigationStack {
@@ -11,7 +13,8 @@ struct ContentView: View {
                 // Main app navigation flow
                 if viewModel.isUserLoggedIn {
                     // Check permissions when the user is logged in
-                    if authViewModel.isNotificationPermissionGranted && authViewModel.isMicPermissionGranted {
+                    if (authViewModel.isNotificationPermissionGranted || (repoManager.userRecord?.refusedPushNotification ?? false))
+                            && authViewModel.isMicPermissionGranted {
                         // Show Home or Onboarding Flow based on the onboarding status
                         if viewModel.isOnboardingComplete {
                             ZStack {
@@ -25,8 +28,7 @@ struct ContentView: View {
                             OnboardingFlowView()
                         }
                     } else {
-                        // Show respective permission view if the permissions are not granted
-                        if !authViewModel.isNotificationPermissionGranted {
+                        if !authViewModel.isNotificationPermissionGranted && !(repoManager.userRecord?.refusedPushNotification ?? true) {
                             NotificationPermissionView {
                                 Task {
                                     await authViewModel.checkPermissions() // Recheck permissions after requesting

@@ -18,9 +18,7 @@ struct UserDto: Codable {
     var imageOffset: Float = 0.0
     var receivedInvitations: [String] = []
     var sentInvitations: [String] = []
-    // TODO: Add a new field called 'refusedPushNotification' of default value of false
-
-    // New fields
+    var refusedPushNotification: Bool = false  // New field added
     var status: String = "background"
     var lastActive: Date? = Date()
 
@@ -41,6 +39,7 @@ struct UserDto: Codable {
         self.imageOffset = imageOffset
         self.receivedInvitations = receivedInvitations
         self.sentInvitations = sentInvitations
+        self.refusedPushNotification = false  // New field default value
         self.status = "foreground"  // Default status
         self.lastActive = Date()    // Current date by default
     }

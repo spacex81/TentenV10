@@ -4,6 +4,7 @@ import UserNotifications
 struct NotificationPermissionView: View {
     @State private var showSettingsView = false
     @Environment(\.scenePhase) var scenePhase // Observe the scene phase
+    let repoManager = RepositoryManager.shared
     
     var onNext: () -> Void
     
@@ -61,8 +62,17 @@ struct NotificationPermissionView: View {
                 onNext()
             } else {
                 print("Notification permission denied.")
-                DispatchQueue.main.async {
-                    showSettingsView = true
+//                repoManager.userRecord?.refusedPushNotification = true
+                
+                if var updatedUserRecord = repoManager.userRecord {
+                    updatedUserRecord.refusedPushNotification = true
+                    
+                    DispatchQueue.main.async {
+                        self.repoManager.userRecord = updatedUserRecord
+                    }
+                    
+                    repoManager.createUserInDatabase(user: updatedUserRecord)
+                    repoManager.updateUserField(userId: updatedUserRecord.id, fieldsToUpdate: ["refusedPushNotification": true])
                 }
             }
         }

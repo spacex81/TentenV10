@@ -18,16 +18,14 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
     var imageOffset: Float = 0.0
     var receivedInvitations: [String] = []
     var sentInvitations: [String] = []
-    // TODO: Add a new field called 'refusedPushNotification' of default value of false
-    
-    // New fields
+    var refusedPushNotification: Bool = false  // New field added
     var status: String = "background"  // Default to foreground
     var lastActive: Date? = Date()     // Current date by default
 
     static var databaseTableName: String = "users"
 
     enum Columns: String, ColumnExpression {
-        case id, email, username, password, pin, hasIncomingCallRequest, profileImageData, deviceToken, friends, roomName, isBusy, socialLoginId, socialLoginType, imageOffset, receivedInvitations, sentInvitations, status, lastActive
+        case id, email, username, password, pin, hasIncomingCallRequest, profileImageData, deviceToken, friends, roomName, isBusy, socialLoginId, socialLoginType, imageOffset, receivedInvitations, sentInvitations, refusedPushNotification, status, lastActive
     }
 
     func encode(to container: inout PersistenceContainer) {
@@ -53,7 +51,7 @@ struct UserRecord: Codable, FetchableRecord, PersistableRecord, Equatable {
         if let sentData = try? JSONEncoder().encode(sentInvitations) {
             container[Columns.sentInvitations] = String(data: sentData, encoding: .utf8)
         }
-        // Encode new fields
+        container[Columns.refusedPushNotification] = refusedPushNotification  // Encode new field
         container[Columns.status] = status
         container[Columns.lastActive] = lastActive
     }
