@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import FirebaseAuth
 import Combine
+import AVFoundation
 
 class HomeViewModel: ObservableObject {
     static let shared = HomeViewModel()
@@ -349,7 +350,6 @@ extension HomeViewModel {
             // leading no one able to call the user
             repoManager.syncIsBusy()
 
-
         case .inactive:
             NSLog("LOG: App is inactive")
 
@@ -359,8 +359,7 @@ extension HomeViewModel {
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
             repoManager.updateStatus(to: "background")
-
-
+            
         @unknown default:
             break
         }

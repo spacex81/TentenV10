@@ -76,7 +76,7 @@ extension AudioSessionManager {
 //                    try audioSession.setCategory(audioSession.category, options: [.mixWithOthers])
                     try audioSession.setCategory(audioSession.category, options: [.mixWithOthers, .allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker])
 
-                    let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
+//                    let optionsString = printAudioSessionOptions(options: audioSession.categoryOptions)
 
 //                    NSLog("LOG: Succeed to change audio session mode from .voiceChat to .videoChat")
 //                    NSLog("LOG: configuring audio session category: \(audioSession.category), mode: \(audioSession.mode), options: [\(optionsString)])")

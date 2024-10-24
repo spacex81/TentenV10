@@ -29,7 +29,6 @@ struct ContentView: View {
                         if !authViewModel.isNotificationPermissionGranted {
                             NotificationPermissionView {
                                 Task {
-                                    
                                     await authViewModel.checkPermissions() // Recheck permissions after requesting
                                 }
                             }

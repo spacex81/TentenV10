@@ -55,8 +55,8 @@ extension BackgroundTaskManager {
         
         audioSessionManager.playTestAudio()
         
-        for i in 1...30 {
-//        for i in 1...5 {
+//        for i in 1...30 {
+        for i in 1...5 {
             if !isBackgroundAudioTaskRunning {
                 break
             }

@@ -18,6 +18,7 @@ struct UserDto: Codable {
     var imageOffset: Float = 0.0
     var receivedInvitations: [String] = []
     var sentInvitations: [String] = []
+    // TODO: Add a new field called 'refusedPushNotification' of default value of false
 
     // New fields
     var status: String = "background"
