@@ -30,6 +30,7 @@ class AuthViewModel: NSObject, ObservableObject, ASAuthorizationControllerDelega
     
     @Published var socialLoginId: String = ""
     @Published var socialLoginType: String = ""
+    @Published var username: String = "default"
     
     @Published var isLoading: [SocialLoginType: Bool] = [:]
     
@@ -144,7 +145,14 @@ extension AuthViewModel {
                 let user = try await authManager.signIn(withCustomToken: firebaseToken)
                 let id = user.uid
 
-                let username = "default"
+                // Skip username onboarding step if username is already set
+//                if username != "default" {
+//                }
+                
+                if socialLoginType == "apple" {
+                    authManager.onboardingStep = .profileImage
+                }
+                
                 let pin = generatePin()
                 
                 let newUserRecord = UserRecord(id: id, email: email, username: username, password: password, pin: pin, deviceToken: deviceToken, socialLoginId: socialLoginId, socialLoginType: socialLoginType)
@@ -230,10 +238,17 @@ extension AuthViewModel {
             let userID = appleIDCredential.user
             let email = appleIDCredential.email
             
+            // Full name (optional, only on first sign-in)
+            let fullName = appleIDCredential.fullName
+            NSLog("LOG: AuthViewModel-authorizationController: email: \(String(describing: email))")
+            NSLog("LOG: AuthViewModel-authorizationController: fullName: \(String(describing: fullName))")
+
+            
             DispatchQueue.main.async {
                 self.socialLoginId = userID
                 self.socialLoginType = "apple"
                 self.email = email ?? ""
+                self.username = fullName?.familyName ?? "default"
                 
                 self.authenticate(for: .apple)
             }

@@ -117,6 +117,7 @@ struct MicPermissionView: View {
 //        }
 //    }
 //}
+
 struct SettingsView2: View {
     var onSettingsReturn: () -> Void
 

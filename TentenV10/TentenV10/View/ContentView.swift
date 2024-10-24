@@ -13,7 +13,7 @@ struct ContentView: View {
                 // Main app navigation flow
                 if viewModel.isUserLoggedIn {
                     // Check permissions when the user is logged in
-                    if (authViewModel.isNotificationPermissionGranted || (repoManager.userRecord?.refusedPushNotification ?? false))
+                    if (authViewModel.isNotificationPermissionGranted || (repoManager.userRecord?.refusedPushNotification ?? true))
                             && authViewModel.isMicPermissionGranted {
                         // Show Home or Onboarding Flow based on the onboarding status
                         if viewModel.isOnboardingComplete {
