@@ -93,6 +93,9 @@
 		C8D8D0F52CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */; };
 		C8D8D0F62CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */; };
 		C8E1AF042CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1AF032CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift */; };
+		C8E1AF062CCF7DDD002C7AA3 /* StrokeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1AF052CCF7DDD002C7AA3 /* StrokeText.swift */; };
+		C8E1AF082CCF7E19002C7AA3 /* StrokeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1AF072CCF7E19002C7AA3 /* StrokeTextView.swift */; };
+		C8E1AF0A2CCF8264002C7AA3 /* InvitationsCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1AF092CCF8264002C7AA3 /* InvitationsCenter.swift */; };
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E49F692CA113B700E19E38 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8E49F682CA113B700E19E38 /* GRDB */; };
 		C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E49F6A2CA12C7300E19E38 /* SplashView.swift */; };
@@ -208,6 +211,9 @@
 		C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8E1AF032CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentInvitationsTaskQueue.swift; sourceTree = "<group>"; };
+		C8E1AF052CCF7DDD002C7AA3 /* StrokeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeText.swift; sourceTree = "<group>"; };
+		C8E1AF072CCF7E19002C7AA3 /* StrokeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeTextView.swift; sourceTree = "<group>"; };
+		C8E1AF092CCF8264002C7AA3 /* InvitationsCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationsCenter.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E49F6A2CA12C7300E19E38 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
@@ -314,6 +320,8 @@
 				C81B48552C883B4500E1164B /* AddUsernameButton.swift */,
 				C81B48572C88553600E1164B /* AddProfilePictureButton.swift */,
 				C8AF0B292CA53B82003F3D2E /* PermissionButton.swift */,
+				C8E1AF052CCF7DDD002C7AA3 /* StrokeText.swift */,
+				C8E1AF072CCF7E19002C7AA3 /* StrokeTextView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -497,6 +505,7 @@
 				C8D8D0F22CAD4C640010E3B8 /* BottomSheet */,
 				C8144AB82C7B48DD0011385D /* ProfileView.swift */,
 				C8144AC72C7C2D9C0011385D /* AddFriendView */,
+				C8E1AF092CCF8264002C7AA3 /* InvitationsCenter.swift */,
 			);
 			path = FriendCenter;
 			sourceTree = "<group>";
@@ -692,6 +701,7 @@
 				C812FF162C69F30800BD9D9B /* LiveKitManager.swift in Sources */,
 				C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */,
 				C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */,
+				C8E1AF0A2CCF8264002C7AA3 /* InvitationsCenter.swift in Sources */,
 				C8144AD52C7C83E00011385D /* IsBusyBubble.swift in Sources */,
 				C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */,
 				C812FF0A2C69D96200BD9D9B /* HomeView.swift in Sources */,
@@ -709,6 +719,7 @@
 				C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */,
 				C819BE422CB5507D00642D48 /* StackedInvitationCard.swift in Sources */,
 				C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */,
+				C8E1AF062CCF7DDD002C7AA3 /* StrokeText.swift in Sources */,
 				C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */,
 				C85489822C7A05EB006878E0 /* LockView.swift in Sources */,
 				C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */,
@@ -728,6 +739,7 @@
 				C8FC31F22CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift in Sources */,
 				C8144AD12C7C49260011385D /* HoldToTalkBubble.swift in Sources */,
 				C812FF102C69DA1F00BD9D9B /* HomeViewModel.swift in Sources */,
+				C8E1AF082CCF7E19002C7AA3 /* StrokeTextView.swift in Sources */,
 				C8144AB72C7B339B0011385D /* ShimmeringView.swift in Sources */,
 				C8144AD32C7C50C40011385D /* HoldToReplyBubble.swift in Sources */,
 				C8144AC92C7C2DBE0011385D /* InviteFriendButton.swift in Sources */,

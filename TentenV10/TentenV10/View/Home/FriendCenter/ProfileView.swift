@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var isAddFriendSheetPresented: Bool = false
+    @State private var isInvitationsSheetPresented: Bool = false
     @State private var friendToDelete: FriendRecord?
     
     // State for showing delete view as an overlay
@@ -32,6 +33,7 @@ struct ProfileView: View {
 //    let viewModel = HomeViewModel.shared
     // MARK: Use this for real app
     @ObservedObject var viewModel = HomeViewModel.shared
+    @ObservedObject var contentViewModel = ContentViewModel.shared
 
     var body: some View {
         ZStack {
@@ -109,6 +111,30 @@ struct ProfileView: View {
                         .cornerRadius(20)
                         .frame(maxWidth: .infinity)
                     }
+                    
+                    if !contentViewModel.sentInvitations.isEmpty {
+                        Button {
+                            isInvitationsSheetPresented = true
+                        } label: {
+                            HStack {
+                                Text("\(contentViewModel.sentInvitations.count)")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .frame(width: 50, height:50)
+                                    .foregroundColor(.white)
+                                    .background(Color(UIColor(white: 0.3, alpha: 1.0)))
+                                    .cornerRadius(20)
+                                
+                                Text("보낸 초대장")
+                                    .tint(.white)
+                                    .fontWeight(.bold)
+                                Spacer()
+                            }
+//                            .cornerRadius(20)
+                            .frame(maxWidth: .infinity)
+                        }
+                        .padding(.top, 10)
+                    }
 
                     // Friends List with Three-dot Button
                     ScrollView {
@@ -182,6 +208,9 @@ struct ProfileView: View {
             }) {
                 NSLog("Whatever")
             }
+        }
+        .sheet(isPresented: $isInvitationsSheetPresented) {
+            InvitationsCenter()
         }
         .background(DeleteBottomSheetViewControllerRepresentable(isPresented: $showDeleteBottomSheet, friendToDelete: $friendToDelete))
         .background(ImageBottomSheetViewControllerRepresentable(isPresented: $showImageBottomSheet))
