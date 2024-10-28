@@ -22,7 +22,6 @@ struct InvitationsCenter: View {
                                     .scaledToFill()
                                     .frame(width: 50, height: 50)
                                     .clipShape(Circle())
-//                                    .shadow(radius: 5)
                             } else {
                                 Circle()
                                     .fill(Color.gray.opacity(0.3))
@@ -40,7 +39,6 @@ struct InvitationsCenter: View {
                         .padding()
                         .background(Color(UIColor.systemGray6))
                         .cornerRadius(12)
-                        .shadow(radius: 2)
                     }
                 }
                 .padding(.horizontal)

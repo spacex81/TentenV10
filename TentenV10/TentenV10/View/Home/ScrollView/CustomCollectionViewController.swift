@@ -117,10 +117,17 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
 //        NSLog("LOG: updatedDetailedFriends")
         var updatedFriends = [FriendRecord.empty] // Add empty at the beginning
         
-        // Iterate over the input friends array
+//        // Iterate over the input friends array
+//        for friend in friends {
+//            // Check if the friend is already in the updatedFriends array
+//            if !updatedFriends.contains(where: { $0.id == friend.id }) {
+//                updatedFriends.append(friend)
+//            }
+//        }
+        // Filter out friends whose 'isAccepted' value is false
         for friend in friends {
-            // Check if the friend is already in the updatedFriends array
-            if !updatedFriends.contains(where: { $0.id == friend.id }) {
+            // Only add friends with 'isAccepted' == true and ensure no duplicates
+            if friend.isAccepted && !updatedFriends.contains(where: { $0.id == friend.id }) {
                 updatedFriends.append(friend)
             }
         }

@@ -45,6 +45,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
         
         let friend = detailedFriends[indexPath.item]
         
+        
 //        if selectedFriend != nil {
 //            NSLog("LOG: selectedFriend")
 //            print(selectedFriend ?? "not selected yet")

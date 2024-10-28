@@ -294,12 +294,12 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-//            NSLog("LOG: repoManager-detailedFriends")
-//            print(detailedFriends)
+            NSLog("LOG: repoManager-detailedFriends")
+            print(detailedFriends)
             
-//            NSLog("LOG: repoManager-detailedFriends from local db")
-//            let friendsFromDb = fetchAllFriendsFromDatabase()
-//            print(friendsFromDb)
+            NSLog("LOG: repoManager-detailedFriends from local db")
+            let friendsFromDb = fetchAllFriendsFromDatabase()
+            print(friendsFromDb)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -552,6 +552,17 @@ extension RepositoryManager {
      }
     
     private func handleSentInvitations(friendIds: [String]) {
+//        // Fetch friends from the local database with 'isAccepted' == false
+//        let pendingFriends = fetchFriendsByFieldFromDatabase(field: "isAccepted", value: false)
+//        
+//        // Remove friends declined current user's invite among pending friend invites
+//        for friend in pendingFriends {
+//            if !friendIds.contains(friend.id) {
+//                eraseFriendFromDatabase(friendId: friend.id)
+//                NSLog("LOG: Removed declined friend with ID \(friend.id) from local database")
+//            }
+//        }
+        
         NSLog("LOG: RepositoryManager-handleSentInvitations")
         if friendIds.isEmpty {
             print("LOG: friendIds is empty")
@@ -1384,6 +1395,18 @@ extension RepositoryManager {
             }
             return friends
         } catch {
+            return []
+        }
+    }
+    
+    func fetchFriendsByFieldFromDatabase(field: String, value: DatabaseValueConvertible) -> [FriendRecord] {
+        do {
+            let friends = try dbPool.read { db in
+                try FriendRecord.filter(Column(field) == value).fetchAll(db)
+            }
+            return friends
+        } catch {
+            NSLog("LOG: Failed to fetch friends by field \(field): \(error.localizedDescription)")
             return []
         }
     }
