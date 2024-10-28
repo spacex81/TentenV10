@@ -66,6 +66,7 @@ class NotificationManager {
 
 extension NotificationManager {
     func sendLocalNotification(title: String, body: String) {
+        NSLog("LOG: NotificationManager-sendLocalNotification")
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body

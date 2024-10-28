@@ -62,6 +62,7 @@ struct HomeView: View {
                                 .padding(.leading, 10) // Adjust the spacing between the emoji and the text
                                 .padding(.top, 10)
                                 .transition(.opacity)
+                                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 2, y: 2)
                         }
                    }
                 }
@@ -70,22 +71,6 @@ struct HomeView: View {
             ZStack {
                 // Speech bubble
                 if !viewModel.isPressing && !viewModel.isLocked {
-                    //                    if !viewModel.isConnected {
-                    //                        if viewModel.selectedFriendIsBusy {
-                    //                            IsBusyBubble()
-                    //                                .frame(height: 200)
-                    //                                .offset(y: -110)
-                    //                        } else {
-                    //                            HoldToTalkBubble()
-                    //                               .frame(height: 200)
-                    //                               .offset(y: -110)
-                    //                        }
-                    //
-                    //                    } else {
-                    //                        HoldToReplyBubble()
-                    //                            .frame(height: 200)
-                    //                            .offset(y: -110)
-                    //                    }
                     if viewModel.currentState == .isListening {
                         HoldToReplyBubble()
                             .frame(height: 200)

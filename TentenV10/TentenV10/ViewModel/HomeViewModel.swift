@@ -12,6 +12,7 @@ class HomeViewModel: ObservableObject {
     private let liveKitManager = LiveKitManager.shared
     private let audioSessionManager = AudioSessionManager.shared
     private let backgroundTaskManager = BackgroundTaskManager.shared
+    private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
     
     weak var collectionViewController: CustomCollectionViewController?
 
