@@ -3,8 +3,11 @@ import SwiftUI
 
 struct AddView: View {
     @ObservedObject var viewModel = HomeViewModel.shared
+    @ObservedObject var contentViewModel = ContentViewModel.shared
+    
     @State private var showAddFriendView = false
     @State private var showSettingView = false
+    
 
     var onNext: () -> Void
     var onBack: () -> Void // Add closure to handle the back button action
@@ -45,18 +48,31 @@ struct AddView: View {
             }
             VStack {
                 VStack {
-                    Text("이 앱을 사용 하기위해선")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text("적어도 1명의 친구를")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text("추가해야 해요")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.bottom, 10)
-                    Text("여러분에게 소중한 친구를 추가해 보세요")
-                    Text("언제나 대화 할 수 있어요🤗")
+                    if !contentViewModel.sentInvitations.isEmpty {
+                        // Display names for each user in the invitation
+                        Text("\(contentViewModel.sentInvitations.map { "\($0.username)님" }.joined(separator: " & "))에게 초대장을 보냈어요")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .multilineTextAlignment(.center) // Center align text if names are long
+                        
+                        Text("조금만 기다려주세요")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 10)
+                    } else {
+                        Text("이 앱을 사용 하기위해선")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text("적어도 1명의 친구를")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Text("추가해야 해요")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 10)
+                        Text("여러분에게 소중한 친구를 추가해 보세요")
+                        Text("언제나 대화 할 수 있어요🤗")
+                    }
                 }
                 .padding(.bottom, 50)
                 

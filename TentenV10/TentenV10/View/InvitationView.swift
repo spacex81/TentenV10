@@ -17,7 +17,7 @@ struct InvitationView: View {
             .transition(.opacity)
             .animation(.easeInOut, value: viewModel.showPopup)
         
-        let transitionType: AnyTransition = (viewModel.previousInvitationCount == 2 && viewModel.receivedInvitations.count == 1) ? .identity : .scale
+        let transitionType: AnyTransition = (viewModel.previousReceivedInvitationCount == 2 && viewModel.receivedInvitations.count == 1) ? .identity : .scale
         
         if viewModel.receivedInvitations.count == 1 {
             InvitationCard(showPopup: $viewModel.showPopup, invitation: viewModel.receivedInvitations.last!)

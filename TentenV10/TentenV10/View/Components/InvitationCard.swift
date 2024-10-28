@@ -103,7 +103,7 @@ struct InvitationCard: View {
         let friendId = invitation.id
         
         if !viewModel.receivedInvitations.isEmpty {
-            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
+            viewModel.previousReceivedInvitationCount = viewModel.receivedInvitations.count
             removeInvitationInMemory()
 
             // Prepare updates for the current user
@@ -150,7 +150,7 @@ struct InvitationCard: View {
         NSLog("LOG: decline()")
         
         if !viewModel.receivedInvitations.isEmpty {
-            viewModel.previousInvitationCount = viewModel.receivedInvitations.count
+            viewModel.previousReceivedInvitationCount = viewModel.receivedInvitations.count
             removeInvitationInMemory()
             removeInvitationInFirebase()
             

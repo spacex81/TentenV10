@@ -432,7 +432,7 @@ extension RepositoryManager {
                     t.column("userId", .text).notNull().references("users", onDelete: .cascade)
                     t.column("isBusy", .boolean).notNull().defaults(to: false)
                     t.column("lastInteraction", .datetime)
-                    t.column("isAccepted", .boolean).notNull().defaults(to: false)
+                    t.column("isAccepted", .boolean).notNull().defaults(to: true)
                 }
             }
 
@@ -523,8 +523,12 @@ extension RepositoryManager {
                          NSLog("LOG: listenToUser-updatedUserRecord")
                          print(updatedUserRecord)
                          
-                         let invitations = updatedUserRecord.receivedInvitations
-                         self.handleReceivedInvitations(friendIds: invitations)
+                         
+                         let sentInvitations = updatedUserRecord.sentInvitations
+                         self.handleSentInvitations(friendIds: sentInvitations)
+                         
+                         let receivedInvitations = updatedUserRecord.receivedInvitations
+                         self.handleReceivedInvitations(friendIds: receivedInvitations)
                          
                          self.handleUpdateFriends(oldUserRecord: self.userRecord, newUserRecord: updatedUserRecord)
                          
@@ -547,6 +551,39 @@ extension RepositoryManager {
          }
      }
     
+    private func handleSentInvitations(friendIds: [String]) {
+        let contentViewModel = ContentViewModel.shared
+
+        SentInvitationsTaskQueue.shared.addTask {
+            if friendIds.count > 0 {
+                DispatchQueue.main.async {
+                    Task {
+                        var sentInvitations: [Invitation] = []
+                        for id in friendIds {
+                            do {
+                                let invitation = try await self.processFriendInvitation(friendId: id, type: "sent")
+                                sentInvitations.append(invitation)
+                            } catch {
+                                NSLog("LOG: Error processing sent invitation for id \(id): \(error.localizedDescription)")
+                            }
+                        }
+                        
+                        NSLog("LOG: Updating sentInvitations in listenToUser")
+                        print(sentInvitations)
+                        contentViewModel.sentInvitations = sentInvitations
+
+                        // Mark the task as completed
+                        SentInvitationsTaskQueue.shared.taskCompleted()
+                    }
+                }
+            } else {
+                // Directly mark as completed if there are no friend IDs
+                SentInvitationsTaskQueue.shared.taskCompleted()
+            }
+        }
+    }
+
+    
     private func handleReceivedInvitations(friendIds: [String]) {
 //        NSLog("LOG: handleReceivedInvitations")
         let contentViewModel = ContentViewModel.shared
@@ -557,20 +594,20 @@ extension RepositoryManager {
             if friendIds.count > 0 {
                 DispatchQueue.main.async {
                     Task {
-                        var invitations: [Invitation] = []
+                        var receivedInvitations: [Invitation] = []
                         for id in friendIds {
                             do {
-                                let invitation = try await self.processFriendInvitation(friendId: id)
-                                invitations.append(invitation)
+                                let invitation = try await self.processFriendInvitation(friendId: id, type: "received")
+                                receivedInvitations.append(invitation)
                             } catch {
                                 NSLog("LOG: Error processing friend invitation for id \(id): \(error.localizedDescription)")
                             }
                         }
                         
                         NSLog("LOG: Updating receivedInvitations in listenToUser")
-                        print(invitations)
-                        contentViewModel.receivedInvitations = invitations
-                        contentViewModel.previousInvitationCount = friendIds.count
+                        print(receivedInvitations)
+                        contentViewModel.receivedInvitations = receivedInvitations
+                        contentViewModel.previousReceivedInvitationCount = friendIds.count
                         contentViewModel.showPopup = true
 
                         // Mark the task as completed
@@ -587,7 +624,7 @@ extension RepositoryManager {
         }
     }
     
-    private func processFriendInvitation(friendId: String) async throws -> Invitation {
+    private func processFriendInvitation(friendId: String, type: String) async throws -> Invitation {
         NSLog("LOG: processFriendInvitation")
         // MARK: In order to persist invitation cards eventhough user suspends our app, we need to store the FriendRecord that corresponds to friendId
         
@@ -600,7 +637,11 @@ extension RepositoryManager {
         } else {
             // If not, fetch the FriendRecord from Firebase
             do {
-                let fetchedFriend = try await fetchFriendFromFirebase(friendId: friendId)
+                var fetchedFriend = try await fetchFriendFromFirebase(friendId: friendId)
+                if type == "sent" {
+                    fetchedFriend.isAccepted = false
+                }
+                
                 // Store the fetched FriendRecord in the local database
                 createFriendInDatabase(friend: fetchedFriend)
                 // Use the fetched FriendRecord to create and return an Invitation
@@ -1172,7 +1213,6 @@ extension RepositoryManager {
 
 extension RepositoryManager {
     func deleteCurrentUser() async {
-        // TODO:
         guard let user = userRecord else {
             NSLog("LOG: No user record found to delete")
             return

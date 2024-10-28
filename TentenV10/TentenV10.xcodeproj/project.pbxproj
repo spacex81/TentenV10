@@ -92,6 +92,7 @@
 		C8D8550B2CBCB0D500A45249 /* MainRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8550A2CBCB0D500A45249 /* MainRingView.swift */; };
 		C8D8D0F52CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */; };
 		C8D8D0F62CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */; };
+		C8E1AF042CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1AF032CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift */; };
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E49F692CA113B700E19E38 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8E49F682CA113B700E19E38 /* GRDB */; };
 		C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E49F6A2CA12C7300E19E38 /* SplashView.swift */; };
@@ -206,6 +207,7 @@
 		C8D8550A2CBCB0D500A45249 /* MainRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRingView.swift; sourceTree = "<group>"; };
 		C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		C8E1AF032CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentInvitationsTaskQueue.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E49F6A2CA12C7300E19E38 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
@@ -448,6 +450,7 @@
 			isa = PBXGroup;
 			children = (
 				C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */,
+				C8E1AF032CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift */,
 				C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */,
 				C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */,
 			);
@@ -700,6 +703,7 @@
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,
+				C8E1AF042CCF6751002C7AA3 /* SentInvitationsTaskQueue.swift in Sources */,
 				C8E700852CB96AEA002600D5 /* ImageBottomSheetViewController.swift in Sources */,
 				C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */,
 				C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */,

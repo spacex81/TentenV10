@@ -11,7 +11,7 @@ struct FriendRecord: Codable, FetchableRecord, PersistableRecord, Equatable, Ide
     var userId: String // Foreign key to UserRecord
     var isBusy: Bool = false
     var lastInteraction: Date?
-    var isAccepted: Bool = false
+    var isAccepted: Bool = true
     var status: String = "foreground" // New status field with default value
 
     // Define the primary key for the table
@@ -49,7 +49,7 @@ extension FriendRecord {
             userId: "",
             isBusy: false,
             lastInteraction: nil,
-            isAccepted: false,
+            isAccepted: true,
             status: "foreground" // Default value for the new property
         )
     }

@@ -31,13 +31,19 @@ class ContentViewModel: ObservableObject {
 //            NSLog("LOG: showPopup is \(showPopup)")
         }
     }
+    @Published var sentInvitations: [Invitation] = [] {
+        didSet {
+            NSLog("LOG: sentInvitations")
+            print(sentInvitations)
+        }
+    }
     @Published var receivedInvitations: [Invitation] = [] {
         didSet {
             NSLog("LOG: receivedInvitations")
             print(receivedInvitations)
         }
     }
-    @Published var previousInvitationCount: Int = 0
+    @Published var previousReceivedInvitationCount: Int = 0
     //
     
     private var cancellables = Set<AnyCancellable>()
