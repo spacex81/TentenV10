@@ -13,7 +13,7 @@ class AuthManager: ObservableObject {
     @Published var previousOnboardingStep: OnboardingStep = .username
     @Published var onboardingStep: OnboardingStep = .username {
         didSet {
-            NSLog("LOG: AuthManager-onboardingStep: \(onboardingStep)")
+//            NSLog("LOG: AuthManager-onboardingStep: \(onboardingStep)")
         }
     }
 

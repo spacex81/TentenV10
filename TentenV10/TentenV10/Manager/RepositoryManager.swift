@@ -60,8 +60,8 @@ class RepositoryManager: ObservableObject {
     
     @Published var userRecord: UserRecord? {
         didSet {
-            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
-            print(userRecord ?? "userRecord is nil")
+//            NSLog("LOG: RepositoryManager-userRecord.status: \(userRecord?.status ?? "nil")")
+//            print(userRecord ?? "userRecord is nil")
             
             if let userRecord = self.userRecord {
                 // update deviceToken
@@ -199,7 +199,7 @@ class RepositoryManager: ObservableObject {
                 // Remove from the local database
                 eraseFriendFromDatabase(friendId: friend.id)
                 
-                NSLog("LOG: Removed friend with ID \(friend.id) from detailedFriends and local database")
+//                NSLog("LOG: Removed friend with ID \(friend.id) from detailedFriends and local database")
             }
         }
     }
@@ -498,7 +498,7 @@ extension RepositoryManager {
     }
     
     func listenToUser(userRecord: UserRecord) {
-        NSLog("LOG: RepositoryManager-listenToUser")
+//        NSLog("LOG: RepositoryManager-listenToUser")
          let userId = userRecord.id
          userListener = usersCollection.document(userId).addSnapshotListener {
              [weak self] document, error in
@@ -552,6 +552,13 @@ extension RepositoryManager {
      }
     
     private func handleSentInvitations(friendIds: [String]) {
+        NSLog("LOG: RepositoryManager-handleSentInvitations")
+        if friendIds.isEmpty {
+            print("LOG: friendIds is empty")
+        } else {
+            print(friendIds)
+        }
+        
         let contentViewModel = ContentViewModel.shared
 
         SentInvitationsTaskQueue.shared.addTask {
@@ -568,7 +575,7 @@ extension RepositoryManager {
                             }
                         }
                         
-                        NSLog("LOG: Updating sentInvitations in listenToUser")
+//                        NSLog("LOG: Updating sentInvitations in listenToUser")
                         print(sentInvitations)
                         contentViewModel.sentInvitations = sentInvitations
 
@@ -578,6 +585,11 @@ extension RepositoryManager {
                 }
             } else {
                 // Directly mark as completed if there are no friend IDs
+                DispatchQueue.main.async {
+                    contentViewModel.sentInvitations = []
+                    // MARK: Maybe need to remove friend records in local database
+                }
+                
                 SentInvitationsTaskQueue.shared.taskCompleted()
             }
         }
@@ -625,12 +637,12 @@ extension RepositoryManager {
     }
     
     private func processFriendInvitation(friendId: String, type: String) async throws -> Invitation {
-        NSLog("LOG: processFriendInvitation")
+//        NSLog("LOG: processFriendInvitation")
         // MARK: In order to persist invitation cards eventhough user suspends our app, we need to store the FriendRecord that corresponds to friendId
         
         // Check if the local database already has a FriendRecord corresponding to the friendId
         let localFriendRecords = fetchFriendsByUserIdFromDatabase(userId: friendId)
-        NSLog("LOG: fetchFriendsByUserIdFromDatabase finished")
+//        NSLog("LOG: fetchFriendsByUserIdFromDatabase finished")
         if let localFriend = localFriendRecords.first {
             // If a FriendRecord exists locally, use it to create and return an Invitation
             return Invitation(id: localFriend.id, username: localFriend.username, profileImageData: localFriend.profileImageData ?? Data())
@@ -654,9 +666,7 @@ extension RepositoryManager {
     }
 
     
-    private func handleSentInvitations() {
-        NSLog("LOG: handleSentInvitations")
-    }
+
     
     private func handleUpdateFriends(oldUserRecord: UserRecord?, newUserRecord: UserRecord) {
         FriendsUpdateTaskQueue.shared.addTask {
