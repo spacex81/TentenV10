@@ -1,0 +1,51 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  dummyQuery: String
+}
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  hasIncomingCallRequest: Boolean
+  profileImagePath: String
+  deviceToken: String
+  friends: [String]
+  roomName: String
+  isBusy: Boolean
+  socialLoginId: String
+  socialLoginType: String
+  imageOffset: Float
+  receivedInvitations: [String]
+  sentInvitations: [String]
+  refusedPushNotification: Boolean
+  status: String
+  lastActive: AWSDateTime
+}
+
+type Mutation {
+  updateUserData(id: ID!, input: UpdateUserInput!): User
+}
+
+input UpdateUserInput {
+  email: String
+  username: String
+  hasIncomingCallRequest: Boolean
+  profileImagePath: String
+  deviceToken: String
+  friends: [String]
+  roomName: String
+  isBusy: Boolean
+  socialLoginId: String
+  socialLoginType: String
+  imageOffset: Float
+  receivedInvitations: [String]
+  sentInvitations: [String]
+  refusedPushNotification: Boolean
+  status: String
+  lastActive: AWSDateTime
+}
