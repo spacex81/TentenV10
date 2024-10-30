@@ -312,7 +312,7 @@ extension HomeViewModel {
             DispatchQueue.main.async {
                 self.friendPin = ""
             }
-            notificationManager.sendLocalNotification(title: "초대장 전송", body: "초대장을 전송했어요😊")
+
         }
     }
 }

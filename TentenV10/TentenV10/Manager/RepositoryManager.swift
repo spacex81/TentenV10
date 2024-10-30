@@ -8,6 +8,9 @@ class RepositoryManager: ObservableObject {
     static let shared = RepositoryManager()
     
     private let liveKitManager = LiveKitManager.shared
+//    private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
+    var notificationManager: NotificationManager?
+    
     weak var collectionViewController: CustomCollectionViewController?
     
     let deleteUserByUIDUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/deleteUserByUID"
@@ -899,7 +902,18 @@ extension RepositoryManager {
         
         do {
             if !friendPin.isEmpty {
-                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
+//                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
+                let friendUserRecord = try await getFriendUserRecordByPinFromFirebase(friendPin: friendPin)
+                notificationManager = NotificationManager.shared(repoManager: self, authManager: AuthManager.shared)
+
+                
+                // Send push notifications
+                notificationManager?.sendLocalNotification(title: "초대장 전송", body: "\(friendUserRecord.username)님에게 초대장을 전송했어요😊")
+                //            notificationManager.sendRemoteNotification(type: "invite")
+                //
+                
+                let friendId = friendUserRecord.id
+
                 // get current user id
                 let currentUserId = userRecord.id
                 // add 'friendId' to current user's 'sentInvitations' in firestore
@@ -928,7 +942,9 @@ extension RepositoryManager {
         
         do {
             if !friendPin.isEmpty {
-                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
+//                let friendId = try await getFriendIdByPinFromFirebase(friendPin: friendPin)
+                let friendUserRecord = try await getFriendUserRecordByPinFromFirebase(friendPin: friendPin)
+                let friendId = friendUserRecord.id
                 
 //                if !newUserRecord.friends.contains(friendId) {
                 if !newUserRecord.friends.contains(friendId) || !friendExistInDatabase(userId: friendId) {
@@ -1620,11 +1636,36 @@ extension RepositoryManager {
 //    }
 
     
-    func getFriendIdByPinFromFirebase(friendPin: String) async throws -> String {
+//    // Let's refactor this app to return 'UserRecord' instead of just id
+//    func getFriendIdByPinFromFirebase(friendPin: String) async throws -> String {
+//        try await withCheckedThrowingContinuation { continuation in
+//            usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
+//                if let error = error {
+//                    continuation.resume(throwing: error)
+//                }
+//                
+//                guard let documents = snapshot?.documents, let document = documents.first else {
+//                    let error = NSError(domain: "getFriendIdByPinError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No such friend with pin: \(friendPin)"])
+//                    continuation.resume(throwing: error)
+//                    return
+//                }
+//                
+//                /** Reference code
+//                 let userDto = try document.data(as: UserDto.self)
+//                 let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
+//                 */
+//                
+//                let friendId = document.documentID
+//                continuation.resume(returning: friendId)
+//            }
+//        }
+//    }
+    func getFriendUserRecordByPinFromFirebase(friendPin: String) async throws -> UserRecord {
         try await withCheckedThrowingContinuation { continuation in
             usersCollection.whereField("pin", isEqualTo: friendPin).getDocuments { snapshot, error in
                 if let error = error {
                     continuation.resume(throwing: error)
+                    return
                 }
                 
                 guard let documents = snapshot?.documents, let document = documents.first else {
@@ -1633,8 +1674,16 @@ extension RepositoryManager {
                     return
                 }
                 
-                let friendId = document.documentID
-                continuation.resume(returning: friendId)
+                // Wrap async code in a Task to allow awaiting
+                Task {
+                    do {
+                        let userDto = try document.data(as: UserDto.self)
+                        let userRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
+                        continuation.resume(returning: userRecord)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
         }
     }
