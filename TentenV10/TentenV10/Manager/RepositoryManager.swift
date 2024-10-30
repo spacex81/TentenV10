@@ -911,7 +911,7 @@ extension RepositoryManager {
                 notificationManager?.sendLocalNotification(title: "초대장 전송", body: "\(friendUserRecord.username)님에게 초대장을 전송했어요😊")
                 if let receiverToken = friendUserRecord.deviceToken {
                     notificationManager?.sendRemoteNotification(type: "invite", receiverToken: receiverToken)
-                }
+                } 
                 
                 let friendId = friendUserRecord.id
 
