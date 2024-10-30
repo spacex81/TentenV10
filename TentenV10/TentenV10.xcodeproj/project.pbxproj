@@ -933,7 +933,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.7;
+				MARKETING_VERSION = 1.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -973,7 +973,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.7;
+				MARKETING_VERSION = 1.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1001,7 +1001,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.7;
+				MARKETING_VERSION = 1.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1030,7 +1030,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.7;
+				MARKETING_VERSION = 1.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
