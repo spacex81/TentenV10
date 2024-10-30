@@ -27,13 +27,45 @@ class NotificationManager {
         self.authManager = authManager
     }
 
-    func sendRemoteNotification(type: String) {
-//        NSLog("LOG: sendRemoteNotification of type: \(type)")
-        if
-            let selectedFriend = repoManager.selectedFriend,
-            let receiverToken = selectedFriend.deviceToken,
-            let senderId = authManager.currentUser?.uid
-        {
+//    // TODO: Refactor this function
+//    // 'receiverToken' should be function input
+//    func sendRemoteNotification(type: String) {
+////        NSLog("LOG: sendRemoteNotification of type: \(type)")
+//        if
+//            let selectedFriend = repoManager.selectedFriend,
+//            let receiverToken = selectedFriend.deviceToken,
+//            let senderId = authManager.currentUser?.uid
+//        {
+//            guard let url = URL(string: handleRegularNotificationUrl) else {
+//                NSLog("Failed to create URL")
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//            
+//            let jsonBody: [String: Any] = [
+//                "receiverToken": receiverToken,
+//                "notificationType": type,
+//                "senderId": senderId
+//            ]
+//            
+//            do {
+//                let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
+//                request.httpBody = jsonData
+//                
+//                Task {
+//                    let (_, _) = try await URLSession.shared.data(for: request)
+//                }
+//            } catch {
+//                NSLog("LOG: Error when serializing the json body when sending poke")
+//            }
+//        }
+//    }
+    func sendRemoteNotification(type: String, receiverToken: String) {
+        // NSLog("LOG: sendRemoteNotification of type: \(type)")
+        if let senderId = authManager.currentUser?.uid {
             guard let url = URL(string: handleRegularNotificationUrl) else {
                 NSLog("Failed to create URL")
                 return
@@ -61,6 +93,7 @@ class NotificationManager {
             }
         }
     }
+
     
 }
 

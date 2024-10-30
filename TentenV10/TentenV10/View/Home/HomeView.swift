@@ -49,7 +49,10 @@ struct HomeView: View {
                         HStack {
                             Button {
                                 impactFeedback.impactOccurred()
-                                notificationManager.sendRemoteNotification(type: "poke")
+//                                notificationManager.sendRemoteNotification(type: "poke")
+                                if let receiverToken = repoManager.selectedFriend?.deviceToken {
+                                    notificationManager.sendRemoteNotification(type: "poke", receiverToken: receiverToken)
+                                }
                             } label: {
                                 Text("👋")
                                    .font(.system(size: 40, weight: .bold, design: .default))

@@ -260,12 +260,14 @@ extension LiveKitManager {
             notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
         }
 
-        if isPublished {
-            notificationManager?.sendRemoteNotification(type: "connect")
-        } else {
-            // MARK: if isPublished is false than wait a little bit before sending notification
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.notificationManager?.sendRemoteNotification(type: "connect")
+        if let receiverToken = repoManager?.selectedFriend?.deviceToken {
+            if isPublished {
+                notificationManager?.sendRemoteNotification(type: "connect", receiverToken: receiverToken)
+            } else {
+                // MARK: if isPublished is false than wait a little bit before sending notification
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.notificationManager?.sendRemoteNotification(type: "connect", receiverToken: receiverToken)
+                }
             }
         }
     }
@@ -303,7 +305,10 @@ extension LiveKitManager {
 
     func room(_ room: Room, participant: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
 //        NSLog("LOG: LiveKitManager-room-didUnpublishTrack")
-        notificationManager?.sendRemoteNotification(type: "disconnect")
+//        notificationManager?.sendRemoteNotification(type: "disconnect")
+        if let receiverToken = repoManager?.selectedFriend?.deviceToken {
+            notificationManager?.sendRemoteNotification(type: "disconnect", receiverToken: receiverToken)
+        }
     }
     
     
