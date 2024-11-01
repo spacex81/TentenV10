@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 type Query {
@@ -48,4 +49,8 @@ input UpdateUserInput {
   refusedPushNotification: Boolean
   status: String
   lastActive: AWSDateTime
+}
+
+type Subscription {
+  onUpdateUserStatus(id: ID!): User
 }
