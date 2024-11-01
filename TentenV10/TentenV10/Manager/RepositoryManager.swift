@@ -187,7 +187,6 @@ class RepositoryManager: ObservableObject {
             }
         }
     }
-
     
     func syncDetailedFriends(friendIds: [String]) {
         // Find friends in 'detailedFriends' that are not in 'friendIds'
@@ -908,7 +907,7 @@ extension RepositoryManager {
 
                 
                 // Send push notifications
-                notificationManager?.sendLocalNotification(title: "초대장 전송", body: "\(friendUserRecord.username)님에게 초대장을 전송했어요😊")
+                notificationManager?.sendLocalNotification(title: "초대장 전송", body: "\(friendUserRecord.username)에게 초대장을 전송했어요😊")
                 if let receiverToken = friendUserRecord.deviceToken {
                     notificationManager?.sendRemoteNotification(type: "invite", receiverToken: receiverToken)
                 } 
