@@ -8,7 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 const TEAM_ID = "GHJU9V8GHS";
 const AUTH_KEY_ID = "96YT8389V6";
 const TOPIC = "tech.komaki.TentenV10";
-const APNS_HOST_NAME = "api.sandbox.push.apple.com";
+// const APNS_HOST_NAME = "api.sandbox.push.apple.com";
+const APNS_HOST_NAME = "api.push.apple.com";
 const TOKEN_KEY_FILE_NAME = "./AuthKey_96YT8389V6.p8";
 
 
