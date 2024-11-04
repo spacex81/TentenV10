@@ -46,7 +46,10 @@ struct AddView: View {
                 }
                 Spacer()
             }
+            
             VStack {
+                Spacer()
+                    .frame(height: 30)
                 VStack {
                     if !contentViewModel.sentInvitations.isEmpty {
                         // Display names for each user in the invitation
