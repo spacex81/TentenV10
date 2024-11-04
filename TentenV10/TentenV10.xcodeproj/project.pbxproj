@@ -11,6 +11,8 @@
 		C8022C942C71F4BD006DE470 /* AnimatedBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */; };
 		C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */; };
 		C8050FD42CAAC72700786DF1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8050FD32CAAC72700786DF1 /* GRDB */; };
+		C8063BA42CD8CE7B00B043EE /* ImagePickerViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8063BA32CD8CE7B00B043EE /* ImagePickerViewRepresentable.swift */; };
+		C8063BA62CD8CE9700B043EE /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8063BA52CD8CE9700B043EE /* ImagePickerViewController.swift */; };
 		C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = C812FEE52C68ECDC00BD9D9B /* test.wav */; };
 		C812FEE82C69A5A000BD9D9B /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */; };
 		C812FF062C69D70E00BD9D9B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C812FF052C69D70E00BD9D9B /* AuthManager.swift */; };
@@ -137,6 +139,8 @@
 		C8022C8F2C70DBA1006DE470 /* AddButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButtonCell.swift; sourceTree = "<group>"; };
 		C8022C932C71F4BD006DE470 /* AnimatedBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedBackgroundView.swift; sourceTree = "<group>"; };
 		C8022C952C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedBackgroundViewRepresentable.swift; sourceTree = "<group>"; };
+		C8063BA32CD8CE7B00B043EE /* ImagePickerViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewRepresentable.swift; sourceTree = "<group>"; };
+		C8063BA52CD8CE9700B043EE /* ImagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		C812FEE52C68ECDC00BD9D9B /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
 		C812FEE72C69A5A000BD9D9B /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		C812FF052C69D70E00BD9D9B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -487,6 +491,8 @@
 			isa = PBXGroup;
 			children = (
 				C81B484B2C87584300E1164B /* ProfileImageView.swift */,
+				C8063BA32CD8CE7B00B043EE /* ImagePickerViewRepresentable.swift */,
+				C8063BA52CD8CE9700B043EE /* ImagePickerViewController.swift */,
 			);
 			path = AddProfileImage;
 			sourceTree = "<group>";
@@ -694,6 +700,7 @@
 				C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */,
 				C8AF0B2A2CA53B82003F3D2E /* PermissionButton.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
+				C8063BA62CD8CE9700B043EE /* ImagePickerViewController.swift in Sources */,
 				C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */,
 				C8144AC02C7B57520011385D /* PinButton.swift in Sources */,
 				C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */,
@@ -710,6 +717,7 @@
 				C819BE3E2CB5506B00642D48 /* InvitationView.swift in Sources */,
 				C8E700832CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift in Sources */,
 				C81B484C2C87584300E1164B /* ProfileImageView.swift in Sources */,
+				C8063BA42CD8CE7B00B043EE /* ImagePickerViewRepresentable.swift in Sources */,
 				C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */,
 				C815BC8D2C60854C004CB09E /* AppDelegate.swift in Sources */,
 				C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */,

@@ -1,31 +1,14 @@
 import UIKit
 
-final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelegate {
+class ImagePickerViewController: UIViewController, UIScrollViewDelegate {
+    let repoManager = RepositoryManager.shared
+    
+    var onNext: (() -> Void)?
     
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-    
-    var onDismiss: (() -> Void)?
-    let repoManager = RepositoryManager.shared
     private var profileImageView: UIImageView? // Image view for profile image
+    private var isImageSelected = false
     
-    private var isImageSelected = false  // State to track if image is selected
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.layer.cornerRadius = 16
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    private let dimmingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
-        view.alpha = 0
-        return view
-    }()
-    
-    // ScrollView to allow zooming and panning
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.minimumZoomScale = 1.0
@@ -35,7 +18,6 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         return scrollView
     }()
     
-    // Custom button with hue-rotating gradient background
     private let changeButton: GradientButton = {
         let button = GradientButton(type: .system)
         button.setTitle("사진 선택하기", for: .normal)
@@ -44,60 +26,47 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         button.layer.cornerRadius = 30
         button.layer.masksToBounds = true
         button.addTarget(nil, action: #selector(changeImageAction), for: .touchUpInside)
-        
+
         // Adding text shadow to changeButton
         button.titleLabel?.layer.shadowColor = UIColor.black.cgColor
         button.titleLabel?.layer.shadowOffset = CGSize(width: 1, height: 1)
         button.titleLabel?.layer.shadowRadius = 3
         button.titleLabel?.layer.shadowOpacity = 0.5
         button.titleLabel?.layer.masksToBounds = false  // Allow shadow to go beyond label bounds
-        
+
         return button
     }()
-
+    
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("취소", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)  // Bold text for cancel button
-        
-        // Adding text shadow to closeButton
-        button.titleLabel?.layer.shadowColor = UIColor.black.cgColor
-        button.titleLabel?.layer.shadowOffset = CGSize(width: 1, height: 1)
-        button.titleLabel?.layer.shadowRadius = 3
-        button.titleLabel?.layer.shadowOpacity = 0.5
-        button.titleLabel?.layer.masksToBounds = false  // Allow shadow to go beyond label bounds
-        
-        button.addTarget(nil, action: #selector(dismissBottomSheet), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        // MARK: 'ImagePickerViewController.self' makes error
+        button.addTarget(self, action: #selector(resetImage), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .black
         setupViews()
-        setupGesture()
-        changeButton.startHueRotation()  // Start hue rotation when view loads
+        changeButton.startHueRotation()
     }
     
     private func setupViews() {
-        view.addSubview(dimmingView)
-        view.addSubview(contentView)
-        
-        dimmingView.frame = view.bounds
-        
-        // Add scrollView to the contentView
-        contentView.addSubview(scrollView)
-        scrollView.delegate = self  // Set the scroll view delegate to self
-        
+        // Set up scroll view and profile image view
+        view.addSubview(scrollView)
+        scrollView.delegate = self
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        // Create profile image view and add it to the scrollView
         let profileImageView = UIImageView()
         profileImageView.contentMode = .scaleAspectFit
         profileImageView.clipsToBounds = true
@@ -106,50 +75,37 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            profileImageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            profileImageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            profileImageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            profileImageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            profileImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),  // Ensure image view matches scroll view width
-            profileImageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)  // Ensure image view matches scroll view height
+            profileImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            profileImageView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            profileImageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            profileImageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
         
-        if let imageData = repoManager.userRecord?.profileImageData {
-            updateProfileImage(imageData: imageData)  // Call this method to initially set the image
-        }
-        
-        let height = view.frame.height * 1.0
-        contentView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
-
-        // Create a vertical stack for buttons
+        // Set up button stack with change and close buttons
         let buttonStack = UIStackView(arrangedSubviews: [changeButton, closeButton])
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 16
         
-        contentView.addSubview(buttonStack)
+        view.addSubview(buttonStack)
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            buttonStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50), // Adjust for lower placement
-            buttonStack.heightAnchor.constraint(equalToConstant: 150), // Increased height for bigger buttons
-            buttonStack.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.85) // Slightly shorter width
+            buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonStack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            buttonStack.heightAnchor.constraint(equalToConstant: 150),
+            buttonStack.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85)
         ])
-        
-        UIView.animate(withDuration: 0.3) {
-            self.contentView.frame.origin.y = self.view.frame.height - height
-            self.dimmingView.alpha = 1
-        }
     }
     
     private func updateProfileImage(imageData: Data) {
-        let profileImage = UIImage(data: imageData)
-        profileImageView?.image = profileImage
-    }
-    
-    private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissBottomSheet))
-        dimmingView.addGestureRecognizer(tapGesture)
+        guard let image = UIImage(data: imageData) else { return }
+        
+        profileImageView?.image = image
+        scrollView.contentSize = image.size
+        
+        // Update the frame and content size to match the new image
+        profileImageView?.frame = CGRect(origin: .zero, size: image.size)
+        scrollView.zoomScale = scrollView.minimumZoomScale
     }
     
     @objc private func changeImageAction() {
@@ -165,18 +121,6 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
             
             // Present the image picker
             self.present(picker, animated: true, completion: nil)
-        }
-    }
-
-    @objc private func dismissBottomSheet() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.contentView.frame.origin.y = self.view.frame.height
-            self.dimmingView.alpha = 0
-        }) { _ in
-            self.contentView.removeFromSuperview()
-            self.dimmingView.removeFromSuperview()
-            self.onDismiss?()
-            self.changeButton.stopHueRotation()  // Stop the hue rotation when dismissed
         }
     }
     
@@ -218,14 +162,9 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         
         NSLog("LOG: Uploading profile image to Firebase...")
         
-        // Simulate upload completion
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            NSLog("LOG: Profile image uploaded successfully to Firebase")
-            
-            self.dismissBottomSheet()
-        }
+        onNext?()
     }
-
+    
     private func captureVisibleImage() -> UIImage? {
         // Make sure there is an image to work with
         guard let image = profileImageView?.image else {
@@ -271,50 +210,40 @@ final class ImageBottomSheetViewController: UIViewController, UIScrollViewDelega
         return croppedImage
     }
 
+
     
-    // UIScrollViewDelegate method to enable zooming
+    @objc private func resetImage() {
+        // Reset the profile image view
+        profileImageView?.image = nil
+        // Reset the zoom scale
+        scrollView.zoomScale = scrollView.minimumZoomScale
+        // Update the button title
+        changeButton.setTitle("사진 선택하기", for: .normal)
+        isImageSelected = false
+    }
+    
+    // MARK: - UIScrollViewDelegate
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return profileImageView
     }
 }
 
-// MARK: image picker delegate methods
-extension ImageBottomSheetViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
+
+extension ImagePickerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            
-            // Update the userRecord profile image with the resized image
-            if var userRecord = repoManager.userRecord {
-                
-                // Resize the image if necessary
-                var finalImage = selectedImage
-                if selectedImage.size.width > maxImageSize.width || selectedImage.size.height > maxImageSize.height {
-                    if let resizedImage = resizeImage(selectedImage, targetSize: maxImageSize) {
-                        finalImage = resizedImage
-                    } else {
-                        NSLog("LOG: Error resizing image")
-                        return
-                    }
-                }
-                
-                // Set profileImageData with resized image
-                userRecord.profileImageData = finalImage.jpegData(compressionQuality: 0.8)
-                
-                if let imageData = finalImage.jpegData(compressionQuality: 0.8) {
-                    // Update the repoManager's userRecord on the main thread
-                    self.updateProfileImage(imageData: imageData)  // Refresh the image in the bottom sheet
-                    self.isImageSelected = true  // Mark that an image has been selected
-                    self.changeButton.setTitle("프로필 사진으로 사용", for: .normal)  // Change button text
-                }
+            if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
+                updateProfileImage(imageData: imageData)
+                isImageSelected = true
+                changeButton.setTitle("프로필 사진으로 사용", for: .normal)
             }
         }
-        // Dismiss only the image picker, not the bottom sheet
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // Dismiss only the image picker, not the bottom sheet
         picker.dismiss(animated: true, completion: nil)
     }
 }
