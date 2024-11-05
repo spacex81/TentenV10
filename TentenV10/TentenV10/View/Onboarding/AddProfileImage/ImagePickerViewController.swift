@@ -234,10 +234,26 @@ class ImagePickerViewController: UIViewController, UIScrollViewDelegate {
 extension ImagePickerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            if let imageData = selectedImage.jpegData(compressionQuality: 0.8) {
-                updateProfileImage(imageData: imageData)
-                isImageSelected = true
-                changeButton.setTitle("프로필 사진으로 사용", for: .normal)
+            if var userRecord = repoManager.userRecord {
+                var finalImage = selectedImage
+                if selectedImage.size.width > maxImageSize.width || selectedImage.size.height > maxImageSize.height {
+                    if let resizedImage = resizeImage(selectedImage, targetSize: maxImageSize) {
+                        finalImage = resizedImage
+                    } else {
+                        NSLog("LOG: Error resizing image")
+                        return
+                    }
+                }
+                
+                // Set profileImageData with resized image
+                userRecord.profileImageData = finalImage.jpegData(compressionQuality: 0.8)
+                
+                if let imageData = finalImage.jpegData(compressionQuality: 0.8) {
+                    // Update the repoManager's userRecord on the main thread
+                    self.updateProfileImage(imageData: imageData)  // Refresh the image in the bottom sheet
+                    self.isImageSelected = true  // Mark that an image has been selected
+                    self.changeButton.setTitle("프로필 사진으로 사용", for: .normal)  // Change button text
+                }
             }
         }
         picker.dismiss(animated: true, completion: nil)

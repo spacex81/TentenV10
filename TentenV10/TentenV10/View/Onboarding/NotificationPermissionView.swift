@@ -62,17 +62,19 @@ struct NotificationPermissionView: View {
                 onNext()
             } else {
                 print("Notification permission denied.")
-//                repoManager.userRecord?.refusedPushNotification = true
                 
-                if var updatedUserRecord = repoManager.userRecord {
-                    updatedUserRecord.refusedPushNotification = true
-                    
-                    DispatchQueue.main.async {
-                        self.repoManager.userRecord = updatedUserRecord
-                    }
-                    
-                    repoManager.createUserInDatabase(user: updatedUserRecord)
-                    repoManager.updateUserField(userId: updatedUserRecord.id, fieldsToUpdate: ["refusedPushNotification": true])
+//                if var updatedUserRecord = repoManager.userRecord {
+//                    updatedUserRecord.refusedPushNotification = true
+//                    
+//                    DispatchQueue.main.async {
+//                        self.repoManager.userRecord = updatedUserRecord
+//                    }
+//                    
+//                    repoManager.createUserInDatabase(user: updatedUserRecord)
+//                    repoManager.updateUserField(userId: updatedUserRecord.id, fieldsToUpdate: ["refusedPushNotification": true])
+//                }
+                DispatchQueue.main.async {
+                    showSettingsView = true // Show settings view if permission is denied
                 }
             }
         }
