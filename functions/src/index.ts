@@ -5,6 +5,7 @@ import * as path from 'path';
 import { handleRegularNotification } from './handleRegularNotification';
 import { handleLivekitToken } from './handleLivekitToken';
 import { generateFirebaseToken } from './generateFirebaseToken';
+import { generateFirebaseTokenForTest } from './generateFirebaseTokenForTest';
 import { deleteUserByUID } from './deleteUserByUID';
 import { notifyAppSyncOnUserUpdate } from './notifyAppSyncOnUserUpdate';
 
@@ -23,5 +24,6 @@ setGlobalOptions({ region: 'asia-northeast3' })
 exports.handleLivekitToken = handleLivekitToken;
 exports.handleRegularNotification = handleRegularNotification;
 exports.generateFirebaseToken = generateFirebaseToken;
+exports.generateFirebaseTokenForTest = generateFirebaseTokenForTest
 exports.deleteUserByUID = deleteUserByUID;
 exports.notifyAppSyncOnUserUpdate = notifyAppSyncOnUserUpdate;

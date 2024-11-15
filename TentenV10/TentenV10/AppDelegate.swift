@@ -4,6 +4,7 @@ import UIKit
 import FirebaseCore
 import FirebaseAuth
 import UserNotifications
+import FBSDKCoreKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
@@ -12,7 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         FirebaseApp.configure()
         
-
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+        
         UNUserNotificationCenter.current().delegate = self
         
         return true
@@ -47,6 +52,10 @@ extension AppDelegate {
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error)")
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return ApplicationDelegate.shared.application(app, open: url, options: options)
     }
     
     // Handle notifications when app is in the foreground

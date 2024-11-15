@@ -20,16 +20,38 @@
 				<string>kakaoaefdd4db2fe061703b2470f7d2c130a8</string>
 			</array>
 		</dict>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <!-- Add Facebook URL Scheme -->
+                <string>fb576160324949357</string>
+            </array>
+        </dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>579700523437-iupmcv6ujvp72d9sekdc3ddg722vcfir.apps.googleusercontent.com</string>
 	<key>GoogleUtilitiesAppDelegateProxyEnabled</key>
 	<false/>
+    
+    <key>FacebookAppID</key>
+    <string>576160324949357</string>
+    
+    <key>FacebookDisplayName</key>
+    <string>wiz</string>
+    
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
+        <!-- Required for Facebook SDK -->
+        <string>fbapi</string>
+        <string>fb-messenger-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
 	</array>
+    
 	<key>UIAppFonts</key>
 	<array>
 		<string>PPPangramSansRounded-Bold.otf</string>
@@ -46,5 +68,12 @@
     
     <key>UIUserInterfaceStyle</key>
     <string>Dark</string>
+    
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <true/>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <true/>
+    <key>FacebookClientToken</key>
+    <string>c97be075e9ea9b6b1c4d2c74a15577f4</string>
 </dict>
 </plist>

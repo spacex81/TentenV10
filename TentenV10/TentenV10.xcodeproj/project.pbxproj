@@ -68,6 +68,10 @@
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
 		C831526A2CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */; };
+		C84B749D2CE495BF00970FFB /* FacebookBasics in Frameworks */ = {isa = PBXBuildFile; productRef = C84B749C2CE495BF00970FFB /* FacebookBasics */; };
+		C84B749F2CE495BF00970FFB /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = C84B749E2CE495BF00970FFB /* FacebookCore */; };
+		C84B74A12CE495BF00970FFB /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = C84B74A02CE495BF00970FFB /* FacebookLogin */; };
+		C84B74A32CE495BF00970FFB /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = C84B74A22CE495BF00970FFB /* FacebookShare */; };
 		C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84EF36C2C89ABB10092D6B5 /* SettingView.swift */; };
 		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
 		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
@@ -249,14 +253,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C84B749D2CE495BF00970FFB /* FacebookBasics in Frameworks */,
 				C8BB1F092C86D49C00F176E6 /* GoogleSignInSwift in Frameworks */,
 				C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */,
 				C815BC802C608519004CB09E /* FirebaseFunctions in Frameworks */,
 				C8E49F692CA113B700E19E38 /* GRDB in Frameworks */,
+				C84B74A12CE495BF00970FFB /* FacebookLogin in Frameworks */,
 				C8BB1F072C86D49C00F176E6 /* GoogleSignIn in Frameworks */,
 				C815BC822C608519004CB09E /* FirebaseStorage in Frameworks */,
 				C815BC8B2C608543004CB09E /* WebRTC in Frameworks */,
 				C815BC882C608539004CB09E /* LiveKit in Frameworks */,
+				C84B74A32CE495BF00970FFB /* FacebookShare in Frameworks */,
+				C84B749F2CE495BF00970FFB /* FacebookCore in Frameworks */,
 				C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */,
 				C815BC7C2C608519004CB09E /* FirebaseAuth in Frameworks */,
 				C815BC7E2C608519004CB09E /* FirebaseFirestore in Frameworks */,
@@ -589,6 +597,10 @@
 				C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */,
 				C8BB1F152C86F09900F176E6 /* KakaoSDKUser */,
 				C8E49F682CA113B700E19E38 /* GRDB */,
+				C84B749C2CE495BF00970FFB /* FacebookBasics */,
+				C84B749E2CE495BF00970FFB /* FacebookCore */,
+				C84B74A02CE495BF00970FFB /* FacebookLogin */,
+				C84B74A22CE495BF00970FFB /* FacebookShare */,
 			);
 			productName = TentenV10;
 			productReference = C815BC692C60849B004CB09E /* TentenV10.app */;
@@ -651,6 +663,7 @@
 				C8BB1F052C86D49C00F176E6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				C8E49F672CA113B700E19E38 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			productRefGroup = C815BC6A2C60849B004CB09E /* Products */;
 			projectDirPath = "";
@@ -919,6 +932,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TentenV10/TentenV10.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TentenV10/Preview Content\"";
@@ -941,9 +955,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.12;
+				MARKETING_VERSION = 1.2.15;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -961,6 +976,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TentenV10/TentenV10.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TentenV10/Preview Content\"";
@@ -983,9 +999,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.12;
+				MARKETING_VERSION = 1.2.15;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1013,7 +1030,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.12;
+				MARKETING_VERSION = 1.2.15;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1044,7 +1061,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.2.12;
+				MARKETING_VERSION = 1.2.15;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.komaki.TentenV10.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1115,6 +1132,14 @@
 				minimumVersion = 127.0.0;
 			};
 		};
+		C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.0;
+			};
+		};
 		C8BB1F052C86D49C00F176E6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -1176,6 +1201,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C815BC892C608543004CB09E /* XCRemoteSwiftPackageReference "WebRTC" */;
 			productName = WebRTC;
+		};
+		C84B749C2CE495BF00970FFB /* FacebookBasics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookBasics;
+		};
+		C84B749E2CE495BF00970FFB /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		C84B74A02CE495BF00970FFB /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		C84B74A22CE495BF00970FFB /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
 		};
 		C8BB1F062C86D49C00F176E6 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
