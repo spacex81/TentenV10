@@ -7,6 +7,7 @@ import { handleLivekitToken } from './handleLivekitToken';
 import { generateFirebaseToken } from './generateFirebaseToken';
 import { generateFirebaseTokenForTest } from './generateFirebaseTokenForTest';
 import { deleteUserByUID } from './deleteUserByUID';
+import { deleteUserByUIDForTest } from './deleteUserByUIDForTest';
 import { notifyAppSyncOnUserUpdate } from './notifyAppSyncOnUserUpdate';
 
 import * as admin from 'firebase-admin';
@@ -26,4 +27,5 @@ exports.handleRegularNotification = handleRegularNotification;
 exports.generateFirebaseToken = generateFirebaseToken;
 exports.generateFirebaseTokenForTest = generateFirebaseTokenForTest
 exports.deleteUserByUID = deleteUserByUID;
+exports.deleteUserByUIDForTest = deleteUserByUIDForTest;
 exports.notifyAppSyncOnUserUpdate = notifyAppSyncOnUserUpdate;
