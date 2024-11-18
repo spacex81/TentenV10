@@ -26,11 +26,25 @@ export const deleteUserByUID = functions
             // Step 2: Remove the user from each friend's 'friends' field
             const batch = admin.firestore().batch(); // Batch write for performance
 
+            // for (const friendId of friends) {
+            //     const friendRef = admin.firestore().collection('users').doc(friendId);
+            //     batch.update(friendRef, {
+            //         friends: admin.firestore.FieldValue.arrayRemove(uid)
+            //     });
+            // }
+
             for (const friendId of friends) {
                 const friendRef = admin.firestore().collection('users').doc(friendId);
-                batch.update(friendRef, {
-                    friends: admin.firestore.FieldValue.arrayRemove(uid)
-                });
+                
+                // Check if the friend's document exists before updating
+                const friendDoc = await friendRef.get();
+                if (friendDoc.exists) {
+                    batch.update(friendRef, {
+                        friends: admin.firestore.FieldValue.arrayRemove(uid)
+                    });
+                } else {
+                    console.log(`Friend with ID: ${friendId} does not exist. Skipping update.`);
+                }
             }
 
             // Commit the batch
