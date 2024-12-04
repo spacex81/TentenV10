@@ -184,7 +184,7 @@ struct HomeView: View {
                 }
                 
             }
-        }
+        } // Top VStack
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             AnimatedBackgroundViewRepresentable(
