@@ -19,6 +19,9 @@
     "👋" : {
 
     },
+    "🔒" : {
+
+    },
     "hold to talk" : {
       "comment" : "Text for hold to talk button",
       "extractionState" : "manual",

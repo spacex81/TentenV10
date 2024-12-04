@@ -5,7 +5,10 @@ struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
-
+    
+    // Overlay View
+    @State private var overlayViewScale: CGFloat = 2.0 // State to track the scale of SomView
+    //
     
     let repoManager = RepositoryManager.shared
     let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
@@ -33,158 +36,178 @@ struct HomeView: View {
     }
     
     var body: some View {
-        VStack {
-            viewModel.logoStickerViewModel
-                .view()
-                .aspectRatio(1024 / 1024, contentMode: .fit)
-                .frame(width: 70)
-                .onTapGesture {
-                    viewModel.logoStickerViewModel.setInput("Click", value: true)
-                    print("HOHO")
-                    // TODO: Want to add haptic feedback
-                    impactFeedback.impactOccurred()
-                }
-            
-            
-            
-            Spacer()
-            VStack {
-                // Main text
-                if let selectedFriend = repoManager.selectedFriend {
-                    if viewModel.isPressing && !viewModel.isPublished {
-                        ShimmeringViewControllerRepresentable(text: "connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
-                            .frame(width: 200, height: 30)
-                            .transition(.opacity)
-                    } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
-                        ShimmeringViewControllerRepresentable(text: "slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
-                        
-                            .frame(width: 200, height: 30)
-                            .transition(.opacity)
-                    } else {
-                        HStack {
-                            Button {
-                                impactFeedback.impactOccurred()
-//                                notificationManager.sendRemoteNotification(type: "poke")
-                                if let receiverToken = repoManager.selectedFriend?.deviceToken {
-                                    notificationManager.sendRemoteNotification(type: "poke", receiverToken: receiverToken)
-                                }
-                            } label: {
-                                Text("👋")
-                                   .font(.system(size: 40, weight: .bold, design: .default))
-                                   .baselineOffset(-10) // Adjust this value to move the emoji down
-                            }
-
-                            // Add distance in the middle
-                            Text(selectedFriend.username)
-                                .font(.system(size: 40, weight: .bold, design: .default))
-                                .padding(.leading, 10) // Adjust the spacing between the emoji and the text
-                                .padding(.top, 10)
-                                .transition(.opacity)
-                                .shadow(color: Color.black.opacity(0.3), radius: 3, x: 2, y: 2)
-                        }
-                   }
-                }
-            }
-            
-            ZStack {
-                // Speech bubble
-                if !viewModel.isPressing && !viewModel.isLocked {
-                    if viewModel.currentState == .isListening {
-                        HoldToReplyBubble()
-                            .frame(height: 200)
-                            .offset(y: -110)
-                    } else if viewModel.selectedFriendIsBusy {
-                        IsBusyBubble()
-                            .frame(height: 200)
-                            .offset(y: -110)
-                    } else {
-                        HoldToTalkBubble()
-                            .frame(height: 200)
-                            .offset(y: -110)
-                    }
-                }
-                
-//                if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
-                if viewModel.isPressing && viewModel.isPublished {
-                    // Rive Lock View
+        GeometryReader { geometry in
                     ZStack {
-                        // Display the shimmer animation (background layer)
-                        viewModel.shimmerViewModel
-                            .view()
-                            .aspectRatio(66 / 88.73, contentMode: .fit) // Maintain aspect ratio
-                            .frame(width: 66) // Adjust the width for shimmer effect
+             VStack {
+                Spacer()
+                VStack {
+                    // Main text
+                    if let selectedFriend = repoManager.selectedFriend {
+                        if viewModel.isPressing && !viewModel.isPublished {
+                            ShimmeringViewControllerRepresentable(text: "connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+                                .frame(width: 200, height: 30)
+                                .transition(.opacity)
+                        } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
+                            ShimmeringViewControllerRepresentable(text: "slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+                            
+                                .frame(width: 200, height: 30)
+                                .transition(.opacity)
+                        } else {
+                            HStack {
+                                Button {
+                                    impactFeedback.impactOccurred()
+    //                                notificationManager.sendRemoteNotification(type: "poke")
+                                    if let receiverToken = repoManager.selectedFriend?.deviceToken {
+                                        notificationManager.sendRemoteNotification(type: "poke", receiverToken: receiverToken)
+                                    }
+                                } label: {
+                                    Text("👋")
+                                       .font(.system(size: 40, weight: .bold, design: .default))
+                                       .baselineOffset(-10) // Adjust this value to move the emoji down
+                                }
 
-                        // Display the lock animation (foreground layer)
-                        viewModel.lockViewModel
-                            .view()
-                            .aspectRatio(26.43 / 31.79, contentMode: .fit) // Maintain aspect ratio
-                            .frame(
-                                width: 26.43 * viewModel.lockIconScale,
-                                height: 31.79 * viewModel.lockIconScale
-                            )
-                            .offset(y: -15) // Move the lock slightly up
+                                // Add distance in the middle
+                                Text(selectedFriend.username)
+                                    .font(.system(size: 40, weight: .bold, design: .default))
+                                    .padding(.leading, 10) // Adjust the spacing between the emoji and the text
+                                    .padding(.top, 10)
+                                    .transition(.opacity)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 3, x: 2, y: 2)
+                            }
+                       }
                     }
-                    .padding(.bottom, 20) // Add some spacing between the animations and the long press button
-                    .offset(y: -100)
-//                    .offset(x: 100, y: -100)
                 }
                 
-                // Scroll View
-                CustomCollectionViewRepresentable(
-                    selectedFriend: $viewModel.selectedFriend,
-                    detailedFriends: $viewModel.detailedFriends,
-                    isSheetPresented: $isSheetPresented,
-                    isPressing: $viewModel.isPressing,
-                    isPublished: $viewModel.isPublished,
-                    isLocked: $viewModel.isLocked
-                )
-                .frame(height: 300)
-                
-                // Need to add bouncy animation when view changes
-                if !viewModel.isLocked && ringAnimationState {
-                    // Circle 1
-                    Circle()
-                        .trim(from: 0, to: 1.0) // Full circle when active
-                        .stroke(.white, style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
-                        .opacity(0.5)
-                        .frame(width: strokeSize * 0.7, height: strokeSize * 0.7)
-                } else if !viewModel.isLocked && !ringAnimationState {
-                    // Circle 2
-//                    Circle()
-//                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
-//                        .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-//                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
-//                        .opacity(1.0)
-//                        .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
-                    MainRingView(strokeSize: strokeSize)
-                } else {
-                    // Cancel Button
-                    Button(action: {
-                        Task {
-                            viewModel.isLocked = false
-                            viewModel.lockIconIsLocked = false
-                            
-                            await viewModel.unpublishAudio()
-                            viewModel.disconnect()
+                ZStack {
+                    // Speech bubble
+                    if !viewModel.isPressing && !viewModel.isLocked {
+                        if viewModel.currentState == .isListening {
+                            HoldToReplyBubble()
+                                .frame(height: 200)
+                                .offset(y: -110)
+                        } else if viewModel.selectedFriendIsBusy {
+                            IsBusyBubble()
+                                .frame(height: 200)
+                                .offset(y: -110)
+                        } else {
+                            HoldToTalkBubble()
+                                .frame(height: 200)
+                                .offset(y: -110)
                         }
-                    }) {
+                    }
+                    
+    //                if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
+                    if viewModel.isPressing && viewModel.isPublished {
+                        // Rive Lock View
                         ZStack {
-                            Circle()
-                                .fill(Color.red)
-                                .frame(width: 60, height: 60)
-                            
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundColor(.white)
-                                .frame(width: 30, height: 30)
+                            // Display the shimmer animation (background layer)
+                            viewModel.shimmerViewModel
+                                .view()
+                                .aspectRatio(66 / 88.73, contentMode: .fit) // Maintain aspect ratio
+                                .frame(width: 66) // Adjust the width for shimmer effect
+
+                            // Display the lock animation (foreground layer)
+                            viewModel.lockViewModel
+                                .view()
+                                .aspectRatio(26.43 / 31.79, contentMode: .fit) // Maintain aspect ratio
+                                .frame(
+                                    width: 26.43 * viewModel.lockIconScale,
+                                    height: 31.79 * viewModel.lockIconScale
+                                )
+                                .offset(y: -15) // Move the lock slightly up
+                        }
+                        .padding(.bottom, 20) // Add some spacing between the animations and the long press button
+                        .offset(y: -100)
+    //                    .offset(x: 100, y: -100)
+                    }
+                    
+                    // Scroll View
+                    CustomCollectionViewRepresentable(
+                        selectedFriend: $viewModel.selectedFriend,
+                        detailedFriends: $viewModel.detailedFriends,
+                        isSheetPresented: $isSheetPresented,
+                        isPressing: $viewModel.isPressing,
+                        isPublished: $viewModel.isPublished,
+                        isLocked: $viewModel.isLocked
+                    )
+                    .frame(height: 300)
+                    
+                    // Need to add bouncy animation when view changes
+                    if !viewModel.isLocked && ringAnimationState {
+                        // Circle 1
+                        Circle()
+                            .trim(from: 0, to: 1.0) // Full circle when active
+                            .stroke(.white, style: StrokeStyle(lineWidth: 12, lineCap: .round))
+                            .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
+                            .opacity(0.5)
+                            .frame(width: strokeSize * 0.7, height: strokeSize * 0.7)
+                    } else if !viewModel.isLocked && !ringAnimationState {
+                        // Circle 2
+    //                    Circle()
+    //                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
+    //                        .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+    //                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
+    //                        .opacity(1.0)
+    //                        .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
+                        MainRingView(strokeSize: strokeSize)
+                    } else {
+                        // Cancel Button
+                        Button(action: {
+                            Task {
+                                viewModel.isLocked = false
+                                viewModel.lockIconIsLocked = false
+                                
+                                await viewModel.unpublishAudio()
+                                viewModel.disconnect()
+                            }
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.red)
+                                    .frame(width: 60, height: 60)
+                                
+                                Image(systemName: "xmark")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(.white)
+                                    .frame(width: 30, height: 30)
+                            }
                         }
                     }
                 }
-                
+            } // Top VStack
+                        
+            // Conditionally show Blur glass
+           if overlayViewScale == 1.0 {
+               Color.clear
+                   .background(.ultraThinMaterial) // Adds blur with transparency
+                   .ignoresSafeArea() // Extends blur to the entire screen
+                   .transition(.opacity) // Smoothly fade in/out
+                   .animation(.easeInOut(duration: 0.25), value: overlayViewScale) // Smooth transition
+           }
+
+            // SomView with scalable size and adjustable opacity
+           OverlayView()
+               .scaleEffect(overlayViewScale) // Apply scale
+               .opacity(2.0 - overlayViewScale) // Adjust opacity based on scale
+               .animation(.easeInOut(duration: 0.25), value: overlayViewScale) // Smooth animation
+                        
+           viewModel.logoStickerViewModel
+            .view()
+            .aspectRatio(1024 / 1024, contentMode: .fit)
+            .frame(width: 70)
+            .position(x: geometry.size.width / 2, // Center horizontally
+                      y: geometry.size.height * 0.1) // 10% from the top
+            .onTapGesture {
+                viewModel.logoStickerViewModel.setInput("Click", value: true)
+                overlayViewScale = (overlayViewScale == 1.0) ? 2.0 : 1.0 // Toggle scale
+                print("HOHO")
+                impactFeedback.impactOccurred()
             }
-        } // Top VStack
+
+        }
+
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             AnimatedBackgroundViewRepresentable(

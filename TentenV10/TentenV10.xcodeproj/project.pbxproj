@@ -66,6 +66,7 @@
 		C82185482CB7F29100934D42 /* FriendsUpdateQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */; };
 		C828E79B2CAA6F920084DBE4 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CA7242C6B014B00B4BFD0 /* DummyData.swift */; };
+		C82E47272D0099BC005DE6DD /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82E47262D0099BC005DE6DD /* OverlayView.swift */; };
 		C82F66DF2C74A09D004E33FA /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F66DE2C74A09D004E33FA /* BaseCell.swift */; };
 		C831526A2CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */; };
 		C84B749D2CE495BF00970FFB /* FacebookBasics in Frameworks */ = {isa = PBXBuildFile; productRef = C84B749C2CE495BF00970FFB /* FacebookBasics */; };
@@ -202,6 +203,7 @@
 		C82185472CB7F29100934D42 /* FriendsUpdateQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsUpdateQueue.swift; sourceTree = "<group>"; };
 		C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C82CA7242C6B014B00B4BFD0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
+		C82E47262D0099BC005DE6DD /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		C82F66DE2C74A09D004E33FA /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		C83152692CB918BA009B76BA /* UpdateCurrentSpeakerQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCurrentSpeakerQueue.swift; sourceTree = "<group>"; };
 		C84EF36C2C89ABB10092D6B5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
 				C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */,
 				C812FF092C69D96200BD9D9B /* HomeView.swift */,
+				C82E47262D0099BC005DE6DD /* OverlayView.swift */,
 				C8D8550A2CBCB0D500A45249 /* MainRingView.swift */,
 				C8144ACE2C7C46710011385D /* HomeViewPreview.swift */,
 				C84EF36C2C89ABB10092D6B5 /* SettingView.swift */,
@@ -748,6 +751,7 @@
 				C8144ACD2C7C44DF0011385D /* SpeechBubbleShapeDownward.swift in Sources */,
 				C8022C962C71F4C7006DE470 /* AnimatedBackgroundViewRepresentable.swift in Sources */,
 				C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */,
+				C82E47272D0099BC005DE6DD /* OverlayView.swift in Sources */,
 				C8AF0B2A2CA53B82003F3D2E /* PermissionButton.swift in Sources */,
 				C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */,
 				C8063BA62CD8CE9700B043EE /* ImagePickerViewController.swift in Sources */,
