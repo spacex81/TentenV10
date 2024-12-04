@@ -5,13 +5,15 @@ struct EmailView: View {
     
     var body: some View {
         VStack {
-            TextField("Email", text: $viewModel.email)
+//            TextField("Email", text: $viewModel.email)
+            TextField("이메일", text: $viewModel.email)
                 .autocapitalization(.none)
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(5.0)
 
-            SecureField("Password", text: $viewModel.password)
+//            SecureField("Password", text: $viewModel.password)
+            SecureField("비밀번호", text: $viewModel.password)
                 .padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(5.0)
@@ -26,7 +28,8 @@ struct EmailView: View {
             Button(action: {
                 viewModel.emailSignIn()
             }) {
-                Text("Sign In")
+//                Text("Sign In")
+                Text("로그인")
                     .foregroundColor(.black)
                     .padding()
                     .frame(maxWidth: .infinity)

@@ -85,6 +85,9 @@
 		C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */; };
 		C8AF47CF2C723D2700C7B6BE /* TapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47CE2C723D2700C7B6BE /* TapCell.swift */; };
 		C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */; };
+		C8B2BB762D00387900708452 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = C8B2BB752D00387900708452 /* RiveRuntime */; };
+		C8B2BB7D2D00396E00708452 /* lock.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7B2D00396E00708452 /* lock.riv */; };
+		C8B2BB7E2D00396E00708452 /* shimmer.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7C2D00396E00708452 /* shimmer.riv */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
@@ -95,6 +98,10 @@
 		C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F112C86F09900F176E6 /* KakaoSDKAuth */; };
 		C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F132C86F09900F176E6 /* KakaoSDKCommon */; };
 		C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = C8BB1F152C86F09900F176E6 /* KakaoSDKUser */; };
+		C8CD0B842CF97089002B1139 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C8CD0B832CF97089002B1139 /* Localizable.xcstrings */; };
+		C8CD0B852CF97089002B1139 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C8CD0B832CF97089002B1139 /* Localizable.xcstrings */; };
+		C8CD0B872CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C8CD0B862CF9A2D8002B1139 /* InfoPlist.xcstrings */; };
+		C8CD0B882CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C8CD0B862CF9A2D8002B1139 /* InfoPlist.xcstrings */; };
 		C8D8550B2CBCB0D500A45249 /* MainRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8550A2CBCB0D500A45249 /* MainRingView.swift */; };
 		C8D8D0F52CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */; };
 		C8D8D0F62CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */; };
@@ -209,12 +216,16 @@
 		C8AF0B2B2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PPPangramSansRounded-Bold.otf"; sourceTree = "<group>"; };
 		C8AF47CE2C723D2700C7B6BE /* TapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapCell.swift; sourceTree = "<group>"; };
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
+		C8B2BB7B2D00396E00708452 /* lock.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lock.riv; sourceTree = "<group>"; };
+		C8B2BB7C2D00396E00708452 /* shimmer.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = shimmer.riv; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
 		C8B5B4262C660122002ACBAA /* FriendRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRecord.swift; sourceTree = "<group>"; };
 		C8BB1F032C86CA7200F176E6 /* SignInButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInButtonView.swift; sourceTree = "<group>"; };
 		C8BB1F0A2C86DA0300F176E6 /* GoogleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInManager.swift; sourceTree = "<group>"; };
+		C8CD0B832CF97089002B1139 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		C8CD0B862CF9A2D8002B1139 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		C8D8550A2CBCB0D500A45249 /* MainRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRingView.swift; sourceTree = "<group>"; };
 		C8D8D0F32CAD4C810010E3B8 /* DeleteBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C8D8D0F42CAD4C810010E3B8 /* DeleteBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
@@ -263,6 +274,7 @@
 				C815BC822C608519004CB09E /* FirebaseStorage in Frameworks */,
 				C815BC8B2C608543004CB09E /* WebRTC in Frameworks */,
 				C815BC882C608539004CB09E /* LiveKit in Frameworks */,
+				C8B2BB762D00387900708452 /* RiveRuntime in Frameworks */,
 				C84B74A32CE495BF00970FFB /* FacebookShare in Frameworks */,
 				C84B749F2CE495BF00970FFB /* FacebookCore in Frameworks */,
 				C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */,
@@ -361,6 +373,8 @@
 		C815BC602C60849B004CB09E = {
 			isa = PBXGroup;
 			children = (
+				C8CD0B862CF9A2D8002B1139 /* InfoPlist.xcstrings */,
+				C8CD0B832CF97089002B1139 /* Localizable.xcstrings */,
 				C815BC6B2C60849B004CB09E /* TentenV10 */,
 				C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */,
 				C8050FD22CAAC72600786DF1 /* Frameworks */,
@@ -380,6 +394,7 @@
 		C815BC6B2C60849B004CB09E /* TentenV10 */ = {
 			isa = PBXGroup;
 			children = (
+				C8B2BB7A2D00395A00708452 /* RiveAsset */,
 				C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */,
 				C815BCBD2C60D4A3004CB09E /* View */,
 				C815BCBC2C60D49E004CB09E /* ViewModel */,
@@ -513,6 +528,15 @@
 			path = AddFriend;
 			sourceTree = "<group>";
 		};
+		C8B2BB7A2D00395A00708452 /* RiveAsset */ = {
+			isa = PBXGroup;
+			children = (
+				C8B2BB7B2D00396E00708452 /* lock.riv */,
+				C8B2BB7C2D00396E00708452 /* shimmer.riv */,
+			);
+			path = RiveAsset;
+			sourceTree = "<group>";
+		};
 		C8B2E1362CAC2130005E53A6 /* FriendCenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -601,6 +625,7 @@
 				C84B749E2CE495BF00970FFB /* FacebookCore */,
 				C84B74A02CE495BF00970FFB /* FacebookLogin */,
 				C84B74A22CE495BF00970FFB /* FacebookShare */,
+				C8B2BB752D00387900708452 /* RiveRuntime */,
 			);
 			productName = TentenV10;
 			productReference = C815BC692C60849B004CB09E /* TentenV10.app */;
@@ -654,6 +679,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = C815BC602C60849B004CB09E;
 			packageReferences = (
@@ -664,6 +690,7 @@
 				C8BB1F102C86F09900F176E6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				C8E49F672CA113B700E19E38 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				C8B2BB742D00387900708452 /* XCRemoteSwiftPackageReference "rive-ios" */,
 			);
 			productRefGroup = C815BC6A2C60849B004CB09E /* Products */;
 			projectDirPath = "";
@@ -681,10 +708,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
+				C8CD0B872CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */,
 				C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */,
+				C8CD0B852CF97089002B1139 /* Localizable.xcstrings in Resources */,
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,
 				C815BC712C60849C004CB09E /* Assets.xcassets in Resources */,
 				C815BC902C6085DA004CB09E /* GoogleService-Info.plist in Resources */,
+				C8B2BB7D2D00396E00708452 /* lock.riv in Resources */,
+				C8B2BB7E2D00396E00708452 /* shimmer.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +723,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8CD0B882CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */,
+				C8CD0B842CF97089002B1139 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -865,6 +898,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -921,6 +955,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1140,6 +1175,14 @@
 				minimumVersion = 14.1.0;
 			};
 		};
+		C8B2BB742D00387900708452 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.4.0;
+			};
+		};
 		C8BB1F052C86D49C00F176E6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -1221,6 +1264,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookShare;
+		};
+		C8B2BB752D00387900708452 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8B2BB742D00387900708452 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
 		};
 		C8BB1F062C86D49C00F176E6 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;

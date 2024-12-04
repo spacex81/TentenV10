@@ -77,47 +77,6 @@ struct MicPermissionView: View {
     }
 }
 
-// MARK: Seems unnecessary to maintain another SettingsView. Will refactor later
-// Settings View for guiding the user to manually enable permissions in the app settings
-//struct SettingsView2: View {
-//    var onSettingsReturn: () -> Void
-//
-//    var body: some View {
-//        VStack {
-//            // MARK: Title
-//            Text("마이크 권한을 설정에서 켜주세요")
-//                .font(.title)
-//                .fontWeight(.bold)
-//                .padding(.bottom, 5)
-//            
-//            // MARK: Subtext
-//            Text("마이크 허용 없이는 친구들과 대화가 어려워요 😢")
-//
-//            Button(action: openSettings) {
-//                Text("설정으로 가기")
-//                    .font(.headline)
-//                    .padding()
-//                    .background(Color.blue)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(10)
-//            }
-//        }
-//        .onAppear {
-//            // When the user comes back from settings, recheck permissions
-//            onSettingsReturn()
-//        }
-//    }
-//
-//    // Function to open the settings app
-//    private func openSettings() {
-//        if let url = URL(string: UIApplication.openSettingsURLString) {
-//            if UIApplication.shared.canOpenURL(url) {
-//                UIApplication.shared.open(url)
-//            }
-//        }
-//    }
-//}
-
 struct SettingsView2: View {
     var onSettingsReturn: () -> Void
 

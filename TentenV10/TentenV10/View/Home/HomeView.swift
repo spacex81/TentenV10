@@ -1,9 +1,16 @@
 import SwiftUI
+import RiveRuntime
 
 struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
+
+    // Rive
+//    let shimmerViewModel = RiveViewModel(fileName: "shimmer", stateMachineName: "State Machine")
+//    let lockViewModel = RiveViewModel(fileName: "lock", stateMachineName: "State Machine")
+//    @State private var scale: CGFloat = 1.0 // State to track the lock icon's scale
+    //
     
     let repoManager = RepositoryManager.shared
     let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
@@ -69,6 +76,22 @@ struct HomeView: View {
                         }
                    }
                 }
+                
+//                ZStack {
+//                    // Display the shimmer animation (background layer)
+//                    shimmerViewModel
+//                        .view()
+//                        .aspectRatio(66 / 88.73, contentMode: .fit) // Maintain aspect ratio
+//                        .frame(width: 66) // Adjust the width for shimmer effect
+//
+//                    // Display the lock animation (foreground layer)
+//                    lockViewModel
+//                        .view()
+//                        .aspectRatio(26.43 / 31.79, contentMode: .fit) // Maintain aspect ratio
+//                        .frame(width: 26.43 * scale, height: 31.79 * scale) // Scale the lock icon
+//                        .offset(y: -15) // Move the lock slightly up
+//                }
+//                .padding(.bottom, 20) // Add some spacing between the animations and the long press button
             }
             
             ZStack {

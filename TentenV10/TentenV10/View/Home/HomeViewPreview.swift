@@ -45,7 +45,8 @@ struct HomeViewPreview: View {
                             .padding(.top, 10)
                             .transition(.opacity)
                         
-                        Text("hold to talk")
+//                        Text("hold to talk")
+                        Text("눌러서 말하기")
                             .font(.headline)
                             .foregroundColor(.black)
                             .padding()

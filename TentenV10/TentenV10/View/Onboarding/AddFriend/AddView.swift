@@ -7,7 +7,6 @@ struct AddView: View {
     
     @State private var showAddFriendView = false
     @State private var showSettingView = false
-    
 
     var onNext: () -> Void
     var onBack: () -> Void // Add closure to handle the back button action

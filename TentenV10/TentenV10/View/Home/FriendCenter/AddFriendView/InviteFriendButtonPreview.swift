@@ -13,7 +13,7 @@ struct InviteFriendButtonPreview: View {
                     viewModel.friendPin = ""
                 }
             } label: {
-                Text("Click")
+//                Text("Click")
             }
             Spacer()
 //            if viewModel.friendPin.count > 0 {

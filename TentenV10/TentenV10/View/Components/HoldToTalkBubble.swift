@@ -35,7 +35,7 @@ struct HoldToTalkBubble: View {
             ZStack {
                 // "눌러서 말하기" text (Default)
                 if !showForegroundText {
-                    Text("눌러서 말하기")
+                    Text(NSLocalizedString("hold to talk", comment: ""))
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(.black)

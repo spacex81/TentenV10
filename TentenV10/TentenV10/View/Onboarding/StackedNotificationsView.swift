@@ -12,7 +12,8 @@ struct StackedNotificationsView: View {
         ZStack {
             // Main content of the app
             VStack {
-                Button("Show Notification") {
+//                Button("Show Notification") {
+                Button("알림 보이기") {
                     addNotification(message: "New Notification at \(Date())")
                 }
                 .padding()

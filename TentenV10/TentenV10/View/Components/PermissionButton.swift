@@ -20,7 +20,8 @@ struct PermissionButton: View {
                 LinearGradient(gradient: Gradient(colors: colors), startPoint: .trailing, endPoint: .leading)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                 
-                Text("Continue")
+//                Text("Continue")
+                Text("계속")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.white)

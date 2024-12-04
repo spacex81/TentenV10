@@ -62,7 +62,8 @@ struct PinText: View {
 
 struct ConfirmationText: View {
     var body: some View {
-        Text("pin copied!")
+//        Text("pin copied!")
+        Text("복사됨")
             .font(.system(size: 18)) // Match the font size here as well
             .frame(width: 140, height: 30)
             .padding(3)
