@@ -131,22 +131,7 @@ class LongPressCell: BaseCell {
         } else {
             imageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
-        
-//        updateCellState()
     }
-    
-//    private func updateCellState() {
-//        guard let friend = friend else { return }
-//
-//        if friend.isBusy {
-//            longPressGestureRecognizer.isEnabled = false
-//        } else {
-//            if !longPressGestureRecognizer.isEnabled {
-//                longPressGestureRecognizer.isEnabled = true
-//            }
-//        }
-//    }
-    
 
     override func applyScaleTransform(_ transform: CGAffineTransform) {
         propertyAnimator = UIViewPropertyAnimator(

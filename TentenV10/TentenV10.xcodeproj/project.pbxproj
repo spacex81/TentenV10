@@ -88,6 +88,7 @@
 		C8B2BB762D00387900708452 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = C8B2BB752D00387900708452 /* RiveRuntime */; };
 		C8B2BB7D2D00396E00708452 /* lock.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7B2D00396E00708452 /* lock.riv */; };
 		C8B2BB7E2D00396E00708452 /* shimmer.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7C2D00396E00708452 /* shimmer.riv */; };
+		C8B2BB902D006DBB00708452 /* logo sticker.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB8F2D006DBB00708452 /* logo sticker.riv */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
@@ -218,6 +219,7 @@
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B2BB7B2D00396E00708452 /* lock.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lock.riv; sourceTree = "<group>"; };
 		C8B2BB7C2D00396E00708452 /* shimmer.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = shimmer.riv; sourceTree = "<group>"; };
+		C8B2BB8F2D006DBB00708452 /* logo sticker.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "logo sticker.riv"; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
@@ -533,6 +535,7 @@
 			children = (
 				C8B2BB7B2D00396E00708452 /* lock.riv */,
 				C8B2BB7C2D00396E00708452 /* shimmer.riv */,
+				C8B2BB8F2D006DBB00708452 /* logo sticker.riv */,
 			);
 			path = RiveAsset;
 			sourceTree = "<group>";
@@ -709,6 +712,7 @@
 			files = (
 				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
 				C8CD0B872CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */,
+				C8B2BB902D006DBB00708452 /* logo sticker.riv in Resources */,
 				C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */,
 				C8CD0B852CF97089002B1139 /* Localizable.xcstrings in Resources */,
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,

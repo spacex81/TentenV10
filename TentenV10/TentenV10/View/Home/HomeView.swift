@@ -34,16 +34,21 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            viewModel.logoViewModel
+                .view()
+                .aspectRatio(1024 / 1024, contentMode: .fit)
+                .frame(width: 70)
+            
             Spacer()
             VStack {
                 // Main text
                 if let selectedFriend = repoManager.selectedFriend {
                     if viewModel.isPressing && !viewModel.isPublished {
-                        ShimmeringViewControllerRepresentable(text: "Connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+                        ShimmeringViewControllerRepresentable(text: "connecting", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
                             .frame(width: 200, height: 30)
                             .transition(.opacity)
                     } else if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
-                        ShimmeringViewControllerRepresentable(text: "Slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
+                        ShimmeringViewControllerRepresentable(text: "slide up to lock", font: UIFont.boldSystemFont(ofSize: 24), fontSize: 24)
                         
                             .frame(width: 200, height: 30)
                             .transition(.opacity)
