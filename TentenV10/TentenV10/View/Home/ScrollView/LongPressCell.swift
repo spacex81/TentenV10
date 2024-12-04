@@ -83,9 +83,7 @@ class LongPressCell: BaseCell {
 //            NSLog("LOG: didLongPressCell-changed")
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
             let lockProgress = Float(verticalDistance / lockDistance)
-            NSLog("LOG: lockProgress: \(lockProgress)")
             
-            // TODO: Need to add 'Unlocking' animation
             if lockProgress >= 1 && viewModel.isPublished {
                 viewModel.isLocked = true
                 viewModel.lockIconIsLocked = true

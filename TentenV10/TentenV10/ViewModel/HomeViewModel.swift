@@ -27,12 +27,8 @@ class HomeViewModel: ObservableObject {
     }
     var lockIconIsLocked: Bool = false {
         didSet {
-//            if lockIconIsLocked {
-//                lockViewModel.setInput("Locked", value: lockIconIsLocked)
-//            } else {
-//                lockViewModel.setInput("Locked", value: lockIconIsLocked)
-//            }
             lockViewModel.setInput("Locked", value: lockIconIsLocked)
+            shimmerViewModel.setInput("Locked", value: lockIconIsLocked)
         }
     }
     //
