@@ -18,7 +18,7 @@ class HomeViewModel: ObservableObject {
     weak var collectionViewController: CustomCollectionViewController?
     
     // Rive
-    let logoViewModel = RiveViewModel(fileName: "logo sticker")
+    let logoStickerViewModel = RiveViewModel(fileName: "logo_sticker", stateMachineName: "State Machine")
     let shimmerViewModel = RiveViewModel(fileName: "shimmer", stateMachineName: "State Machine")
     let lockViewModel = RiveViewModel(fileName: "lock", stateMachineName: "State Machine")
     var lockIconScale: CGFloat = 1.0 {

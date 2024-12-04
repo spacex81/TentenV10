@@ -34,10 +34,16 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            viewModel.logoViewModel
+            viewModel.logoStickerViewModel
                 .view()
                 .aspectRatio(1024 / 1024, contentMode: .fit)
                 .frame(width: 70)
+                .onTapGesture {
+                    viewModel.logoStickerViewModel.setInput("Click", value: true)
+                    print("HOHO")
+                }
+            
+            
             
             Spacer()
             VStack {
