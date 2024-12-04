@@ -83,6 +83,9 @@ class LongPressCell: BaseCell {
 //            NSLog("LOG: didLongPressCell-changed")
             let verticalDistance = longPressGestureBeganPoint.y - locationInContentView.y
             let lockProgress = Float(verticalDistance / lockDistance)
+            NSLog("LOG: lockProgress: \(lockProgress)")
+            
+            // TODO: Need to add 'Unlocking' animation
             if lockProgress >= 1 && viewModel.isPublished {
                 viewModel.isLocked = true
                 viewModel.lockIconIsLocked = true
@@ -92,9 +95,12 @@ class LongPressCell: BaseCell {
                     feedback.impactOccurred()
                     hasGivenFeedback = true // Set the flag to true to prevent further feedback
                 }
-            } else {
+            } else if lockProgress < 1 && lockProgress >= 0 {
                 viewModel.progress = lockProgress
+            } else {
+                viewModel.lockIconIsLocked = false
             }
+            
         case .ended, .cancelled:
 //            NSLog("LOG: didLongPressCell-ended or cancelled")
             onLongPressEnded?() // Trigger the long press ended callback

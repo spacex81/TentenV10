@@ -22,7 +22,7 @@ class HomeViewModel: ObservableObject {
     let lockViewModel = RiveViewModel(fileName: "lock", stateMachineName: "State Machine")
     var lockIconScale: CGFloat = 1.0 {
         didSet {
-            NSLog("LOG: lockIconScale: \(lockIconScale)")
+//            NSLog("LOG: lockIconScale: \(lockIconScale)")
         }
     }
     var lockIconIsLocked: Bool = false {
