@@ -6,11 +6,6 @@ struct HomeView: View {
     @State private var isSheetPresented: Bool = false
     @ObservedObject var viewModel = HomeViewModel.shared
 
-    // Rive
-//    let shimmerViewModel = RiveViewModel(fileName: "shimmer", stateMachineName: "State Machine")
-//    let lockViewModel = RiveViewModel(fileName: "lock", stateMachineName: "State Machine")
-    @State private var scale: CGFloat = 1.0 // State to track the lock icon's scale
-    //
     
     let repoManager = RepositoryManager.shared
     let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
@@ -99,11 +94,11 @@ struct HomeView: View {
 //                if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
                 if viewModel.isPressing && viewModel.isPublished {
                     // Lock View
-                    VStack {
-                        LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
-                    }
-                    .frame(width: 100, height: 200)
-                    .offset(y: -100)
+//                    VStack {
+//                        LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
+//                    }
+//                    .frame(width: 100, height: 200)
+//                    .offset(y: -100)
                     
                     // Rive lock view
                     ZStack {
@@ -124,7 +119,8 @@ struct HomeView: View {
                             .offset(y: -15) // Move the lock slightly up
                     }
                     .padding(.bottom, 20) // Add some spacing between the animations and the long press button
-                    .offset(x: 100, y: -100)
+                    .offset(y: -100)
+//                    .offset(x: 100, y: -100)
                 }
                 
                 // Scroll View

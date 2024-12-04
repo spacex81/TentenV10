@@ -31,8 +31,6 @@ class HomeViewModel: ObservableObject {
             shimmerViewModel.setInput("Locked", value: lockIconIsLocked)
         }
     }
-    //
-
     
     // MARK: Used to manage LiveKit connect/disconnect whis isPressing value changes
     private var connectTask: Task<Void, Never>?
