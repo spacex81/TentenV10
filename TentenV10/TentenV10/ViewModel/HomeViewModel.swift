@@ -3,6 +3,7 @@ import SwiftUI
 import FirebaseAuth
 import Combine
 import AVFoundation
+import RiveRuntime
 
 class HomeViewModel: ObservableObject {
     static let shared = HomeViewModel()
@@ -15,6 +16,26 @@ class HomeViewModel: ObservableObject {
     private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
     
     weak var collectionViewController: CustomCollectionViewController?
+    
+    // Rive
+    let shimmerViewModel = RiveViewModel(fileName: "shimmer", stateMachineName: "State Machine")
+    let lockViewModel = RiveViewModel(fileName: "lock", stateMachineName: "State Machine")
+    var lockIconScale: CGFloat = 1.0 {
+        didSet {
+            NSLog("LOG: lockIconScale: \(lockIconScale)")
+        }
+    }
+    var lockIconIsLocked: Bool = false {
+        didSet {
+//            if lockIconIsLocked {
+//                lockViewModel.setInput("Locked", value: lockIconIsLocked)
+//            } else {
+//                lockViewModel.setInput("Locked", value: lockIconIsLocked)
+//            }
+            lockViewModel.setInput("Locked", value: lockIconIsLocked)
+        }
+    }
+    //
 
     
     // MARK: Used to manage LiveKit connect/disconnect whis isPressing value changes
@@ -107,7 +128,11 @@ class HomeViewModel: ObservableObject {
 //            NSLog("LOG: HomeViewModel-isLocked: \(isLocked)")
         }
     }
-    @Published var progress: Float = 0.0
+    @Published var progress: Float = 0.0 {
+        didSet {
+            lockIconScale = max(1.0, CGFloat(0.9 + 0.4 * progress))
+        }
+    }
     
     @Published var friendPin: String = ""
     
@@ -116,6 +141,8 @@ class HomeViewModel: ObservableObject {
     init() {
         bindRepositoryManager()
         bindLiveKitManager()
+        
+        lockViewModel.setInput("Locked", value: lockIconIsLocked)
     }
     
     private func bindLiveKitManager() {

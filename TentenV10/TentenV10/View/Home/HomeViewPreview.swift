@@ -104,6 +104,8 @@ struct HomeViewPreview: View {
                     Button(action: {
                         Task {
                             viewModel.isLocked = false
+                            viewModel.lockIconIsLocked = false
+                            
                             await viewModel.unpublishAudio()
                             viewModel.disconnect()
                         }

@@ -85,6 +85,8 @@ class LongPressCell: BaseCell {
             let lockProgress = Float(verticalDistance / lockDistance)
             if lockProgress >= 1 && viewModel.isPublished {
                 viewModel.isLocked = true
+                viewModel.lockIconIsLocked = true
+                
                 if !hasGivenFeedback {
 //                    NSLog("LOG: impactOccurred")
                     feedback.impactOccurred()
