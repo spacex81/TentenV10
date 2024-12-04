@@ -41,6 +41,8 @@ struct HomeView: View {
                 .onTapGesture {
                     viewModel.logoStickerViewModel.setInput("Click", value: true)
                     print("HOHO")
+                    // TODO: Want to add haptic feedback
+                    impactFeedback.impactOccurred()
                 }
             
             
