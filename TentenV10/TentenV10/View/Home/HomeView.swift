@@ -93,14 +93,7 @@ struct HomeView: View {
                 
 //                if viewModel.isPressing && viewModel.isPublished && !viewModel.isLocked {
                 if viewModel.isPressing && viewModel.isPublished {
-                    // Lock View
-//                    VStack {
-//                        LockViewRepresentable(isLocked: viewModel.isLocked, progress: viewModel.progress)
-//                    }
-//                    .frame(width: 100, height: 200)
-//                    .offset(y: -100)
-                    
-                    // Rive lock view
+                    // Rive Lock View
                     ZStack {
                         // Display the shimmer animation (background layer)
                         viewModel.shimmerViewModel

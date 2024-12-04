@@ -96,6 +96,7 @@ class LongPressCell: BaseCell {
             } else if lockProgress < 1 && lockProgress >= 0 {
                 viewModel.progress = lockProgress
             } else {
+                viewModel.isLocked = false
                 viewModel.lockIconIsLocked = false
             }
             
