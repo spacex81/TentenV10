@@ -197,11 +197,11 @@ struct HomeView: View {
             .aspectRatio(1024 / 1024, contentMode: .fit)
             .frame(width: 70)
             .position(x: geometry.size.width / 2, // Center horizontally
-                      y: geometry.size.height * 0.1) // 10% from the top
+//                      y: geometry.size.height * 0.1) // 10% from the top
+                      y: geometry.size.height * 0.05) 
             .onTapGesture {
                 viewModel.logoStickerViewModel.setInput("Click", value: true)
                 overlayViewScale = (overlayViewScale == 1.0) ? 2.0 : 1.0 // Toggle scale
-                print("HOHO")
                 impactFeedback.impactOccurred()
             }
 

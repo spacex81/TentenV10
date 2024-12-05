@@ -77,6 +77,9 @@
 		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
 		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
 		C857BCB22D013E3F007B97BE /* logo_sticker.riv in Resources */ = {isa = PBXBuildFile; fileRef = C857BCB12D013E3F007B97BE /* logo_sticker.riv */; };
+		C857BCC62D017A45007B97BE /* ExploreGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCC52D017A45007B97BE /* ExploreGridView.swift */; };
+		C857BCC82D017A4C007B97BE /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCC72D017A4C007B97BE /* TimerView.swift */; };
+		C8603C172D017B5F00A1E675 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8603C162D017B5F00A1E675 /* ImageView.swift */; };
 		C86FCBF82CBAB34D008C85F5 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */; };
 		C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C873752C2CABF58800BB322E /* NotificationManager.swift */; };
 		C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC4E2CA1AF3700AC1932 /* EmailView.swift */; };
@@ -210,6 +213,9 @@
 		C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewRepresentable.swift; sourceTree = "<group>"; };
 		C85489812C7A05EB006878E0 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
 		C857BCB12D013E3F007B97BE /* logo_sticker.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = logo_sticker.riv; sourceTree = "<group>"; };
+		C857BCC52D017A45007B97BE /* ExploreGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreGridView.swift; sourceTree = "<group>"; };
+		C857BCC72D017A4C007B97BE /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		C8603C162D017B5F00A1E675 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		C873752C2CABF58800BB322E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		C889DC4E2CA1AF3700AC1932 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
@@ -306,8 +312,8 @@
 				C854897E2C7A05D3006878E0 /* LockView */,
 				C8DB63ED2C6F2B2100831BA8 /* ScrollView */,
 				C8022C922C71F4AE006DE470 /* AnimatedBackgroundView */,
+				C857BCC42D017A1D007B97BE /* OverlayView */,
 				C812FF092C69D96200BD9D9B /* HomeView.swift */,
-				C82E47262D0099BC005DE6DD /* OverlayView.swift */,
 				C8D8550A2CBCB0D500A45249 /* MainRingView.swift */,
 				C8144ACE2C7C46710011385D /* HomeViewPreview.swift */,
 				C84EF36C2C89ABB10092D6B5 /* SettingView.swift */,
@@ -504,6 +510,17 @@
 				C85489812C7A05EB006878E0 /* LockView.swift */,
 			);
 			path = LockView;
+			sourceTree = "<group>";
+		};
+		C857BCC42D017A1D007B97BE /* OverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				C82E47262D0099BC005DE6DD /* OverlayView.swift */,
+				C857BCC72D017A4C007B97BE /* TimerView.swift */,
+				C857BCC52D017A45007B97BE /* ExploreGridView.swift */,
+				C8603C162D017B5F00A1E675 /* ImageView.swift */,
+			);
+			path = OverlayView;
 			sourceTree = "<group>";
 		};
 		C884C62F2C89626800412B49 /* AddUsername */ = {
@@ -780,6 +797,7 @@
 				C8144ACF2C7C46710011385D /* HomeViewPreview.swift in Sources */,
 				C819BE412CB5507D00642D48 /* InvitationCard.swift in Sources */,
 				C819BE422CB5507D00642D48 /* StackedInvitationCard.swift in Sources */,
+				C857BCC62D017A45007B97BE /* ExploreGridView.swift in Sources */,
 				C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */,
 				C8E1AF062CCF7DDD002C7AA3 /* StrokeText.swift in Sources */,
 				C8144AB32C7B33850011385D /* ShimmeringViewControllerRepresentable.swift in Sources */,
@@ -789,6 +807,7 @@
 				C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */,
 				C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */,
 				C8AF47D12C723D3400C7B6BE /* LongPressCell.swift in Sources */,
+				C8603C172D017B5F00A1E675 /* ImageView.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
 				C8144AC62C7C22BB0011385D /* SpeechBubbleShapeUpward.swift in Sources */,
@@ -811,6 +830,7 @@
 				C81B48502C88247A00E1164B /* Utils.swift in Sources */,
 				C812FF122C69DAF700BD9D9B /* AuthViewModel.swift in Sources */,
 				C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */,
+				C857BCC82D017A4C007B97BE /* TimerView.swift in Sources */,
 				C812FF142C69DB3500BD9D9B /* ImagePicker.swift in Sources */,
 				C81B48562C883B4500E1164B /* AddUsernameButton.swift in Sources */,
 				C8022C902C70DBA1006DE470 /* AddButtonCell.swift in Sources */,
