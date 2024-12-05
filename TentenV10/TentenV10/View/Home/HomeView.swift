@@ -7,7 +7,7 @@ struct HomeView: View {
     @ObservedObject var viewModel = HomeViewModel.shared
     
     // Overlay View
-    @State private var overlayViewScale: CGFloat = 2.0 // State to track the scale of SomView
+//    @State private var overlayViewScale: CGFloat = 2.0 // State to track the scale of SomView
     //
     
     let repoManager = RepositoryManager.shared
@@ -182,19 +182,19 @@ struct HomeView: View {
             } // Top VStack
                         
             // Conditionally show Blur glass
-           if overlayViewScale == 1.0 {
+            if viewModel.overlayViewScale == 1.0 {
                Color.clear
                    .background(.ultraThinMaterial) // Adds blur with transparency
                    .ignoresSafeArea() // Extends blur to the entire screen
                    .transition(.opacity) // Smoothly fade in/out
-                   .animation(.easeInOut(duration: 0.25), value: overlayViewScale) // Smooth transition
+                   .animation(.easeInOut(duration: 0.25), value: viewModel.overlayViewScale) // Smooth transition
            }
 
             // SomView with scalable size and adjustable opacity
            OverlayView()
-               .scaleEffect(overlayViewScale) // Apply scale
-               .opacity(2.0 - overlayViewScale) // Adjust opacity based on scale
-               .animation(.easeInOut(duration: 0.25), value: overlayViewScale) // Smooth animation
+                            .scaleEffect(viewModel.overlayViewScale) // Apply scale
+                            .opacity(2.0 - viewModel.overlayViewScale) // Adjust opacity based on scale
+                            .animation(.easeInOut(duration: 0.25), value: viewModel.overlayViewScale) // Smooth animation
                         
            viewModel.logoStickerViewModel
             .view()
@@ -205,7 +205,7 @@ struct HomeView: View {
                       y: geometry.size.height * 0.05) 
             .onTapGesture {
                 viewModel.logoStickerViewModel.setInput("Click", value: true)
-                overlayViewScale = (overlayViewScale == 1.0) ? 2.0 : 1.0 // Toggle scale
+                viewModel.overlayViewScale = (viewModel.overlayViewScale == 1.0) ? 2.0 : 1.0 // Toggle scale
                 impactFeedback.impactOccurred()
             }
 

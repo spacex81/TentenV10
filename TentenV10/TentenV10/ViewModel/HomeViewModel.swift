@@ -133,6 +133,11 @@ class HomeViewModel: ObservableObject {
     
     @Published var friendPin: String = ""
     
+    // Overlay View
+//    var overlayViewScale: CGFloat = 2.0
+    @Published var overlayViewScale: CGFloat = 2.0 
+    //
+    
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -385,6 +390,9 @@ extension HomeViewModel {
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
             repoManager.updateStatus(to: "background")
+            
+            // Erase OverlayView
+            overlayViewScale = 2.0
             
         @unknown default:
             break

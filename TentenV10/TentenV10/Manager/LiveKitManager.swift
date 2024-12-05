@@ -53,7 +53,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
 
 extension LiveKitManager {
     func connect(roomName: String) async {
-        NSLog("LOG: LiveKitManager-connect")
+        NSLog("LOG: LiveKitManager-connect: start")
         NSLog("LOG: roomName: \(roomName)")
         
         guard let room = self.room else {
@@ -100,7 +100,7 @@ extension LiveKitManager {
                 self.isConnected = true
                 self.isConnected2 = true
             }
-//            NSLog("LOG: LiveKit Connected")
+            NSLog("LOG: LiveKit Connected")
         } catch {
             if Task.isCancelled {
                 NSLog("LOG: Connection canceled due to task cancellation.")
@@ -131,7 +131,7 @@ extension LiveKitManager {
     }
     
     func publishAudio() async {
-//        NSLog("LOG: LiveKitManager-publishAudio: start")
+        NSLog("LOG: LiveKitManager-publishAudio: start")
         
         // Check if the task has been canceled before starting
         do {
@@ -160,7 +160,7 @@ extension LiveKitManager {
                 NSLog("Failed to enable microphone for LiveKit Room: \(error)")
             }
         }
-//        NSLog("LOG: LiveKitManager-publishAudio: finish")
+        NSLog("LOG: LiveKitManager-publishAudio: finish")
     }
     
     func unpublishAudio() async {
@@ -234,7 +234,7 @@ extension LiveKitManager {
 
         // Check if the received message is 'readyToTalk'
         if message == "readyToTalk" {
-//            print("Received 'readyToTalk' message. Setting isPublished to true.")
+            print("Received 'readyToTalk' message. Setting isPublished to true.")
 //            print("LOG: LiveKit remote audio is published")
             
 //            if let repoManager = self.repoManager, notificationManager == nil {
