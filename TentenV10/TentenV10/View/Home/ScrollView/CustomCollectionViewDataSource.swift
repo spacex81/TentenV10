@@ -90,7 +90,7 @@ class CustomCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             }
             
             longPressCell.onLongPressBegan = { [weak self] in
-//                NSLog("LOG: onLongPressBegan")
+                NSLog("LOG: onLongPressBegan")
                 if self?.selectedFriend?.status == "suspended" {
 //                    self?.notificationManager.sendRemoteNotification(type: "wakeup")
                     if let receiverToken = self?.selectedFriend?.deviceToken {

@@ -32,6 +32,8 @@ class HomeViewModel: ObservableObject {
             shimmerViewModel.setInput("Locked", value: lockIconIsLocked)
         }
     }
+    let closButtonViewModel = RiveViewModel(fileName: "close_button", stateMachineName: "State Machine")
+    //
     
     // MARK: Used to manage LiveKit connect/disconnect whis isPressing value changes
     private var connectTask: Task<Void, Never>?

@@ -161,17 +161,21 @@ struct HomeView: View {
                                 viewModel.disconnect()
                             }
                         }) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.red)
-                                    .frame(width: 60, height: 60)
-                                
-                                Image(systemName: "xmark")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundColor(.white)
-                                    .frame(width: 30, height: 30)
-                            }
+//                            ZStack {
+//                                Circle()
+//                                    .fill(Color.red)
+//                                    .frame(width: 60, height: 60)
+//                                
+//                                Image(systemName: "xmark")
+//                                    .resizable()
+//                                    .scaledToFit()
+//                                    .foregroundColor(.white)
+//                                    .frame(width: 30, height: 30)
+//                            }
+                            viewModel.closButtonViewModel
+                                .view()
+                                .aspectRatio(31 / 31, contentMode: .fit)
+                                .frame(width: 60)
                         }
                     }
                 }

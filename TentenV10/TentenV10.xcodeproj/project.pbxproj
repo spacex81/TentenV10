@@ -117,6 +117,7 @@
 		C8E28C292C80449F008A5238 /* RoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E28C282C80449F008A5238 /* RoomDto.swift */; };
 		C8E49F692CA113B700E19E38 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C8E49F682CA113B700E19E38 /* GRDB */; };
 		C8E49F6B2CA12C7300E19E38 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E49F6A2CA12C7300E19E38 /* SplashView.swift */; };
+		C8E509182D019C9B00183DB9 /* close_button.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8E509172D019C9B00183DB9 /* close_button.riv */; };
 		C8E700832CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */; };
 		C8E700852CB96AEA002600D5 /* ImageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E700842CB96AEA002600D5 /* ImageBottomSheetViewController.swift */; };
 		C8E9BF702C709580002AEDE0 /* CustomCollectionViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */; };
@@ -245,6 +246,7 @@
 		C8E1AF092CCF8264002C7AA3 /* InvitationsCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationsCenter.swift; sourceTree = "<group>"; };
 		C8E28C282C80449F008A5238 /* RoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDto.swift; sourceTree = "<group>"; };
 		C8E49F6A2CA12C7300E19E38 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		C8E509172D019C9B00183DB9 /* close_button.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = close_button.riv; sourceTree = "<group>"; };
 		C8E700822CB96AD9002600D5 /* ImageBottomSheetViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		C8E700842CB96AEA002600D5 /* ImageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C8E9BF6F2C709580002AEDE0 /* CustomCollectionViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewRepresentable.swift; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				C8B2BB7B2D00396E00708452 /* lock.riv */,
 				C8B2BB7C2D00396E00708452 /* shimmer.riv */,
 				C857BCB12D013E3F007B97BE /* logo_sticker.riv */,
+				C8E509172D019C9B00183DB9 /* close_button.riv */,
 			);
 			path = RiveAsset;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8E509182D019C9B00183DB9 /* close_button.riv in Resources */,
 				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
 				C8CD0B872CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */,
 				C857BCB22D013E3F007B97BE /* logo_sticker.riv in Resources */,

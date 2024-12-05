@@ -297,12 +297,12 @@ class RepositoryManager: ObservableObject {
     @Published var userDto: UserDto?
     @Published var detailedFriends: [FriendRecord] = [] {
         didSet {
-            NSLog("LOG: repoManager-detailedFriends")
-            print(detailedFriends)
+//            NSLog("LOG: repoManager-detailedFriends")
+//            print(detailedFriends)
             
-            NSLog("LOG: repoManager-detailedFriends from local db")
-            let friendsFromDb = fetchAllFriendsFromDatabase()
-            print(friendsFromDb)
+//            NSLog("LOG: repoManager-detailedFriends from local db")
+//            let friendsFromDb = fetchAllFriendsFromDatabase()
+//            print(friendsFromDb)
             
             if detailedFriends.count > 0 && selectedFriend == nil {
                 selectedFriend = detailedFriends[0]
@@ -523,8 +523,8 @@ extension RepositoryManager {
                          
                          let updatedUserRecord = try await self.convertUserDtoToUserRecord(userDto: userDto)
                          
-                         NSLog("LOG: listenToUser-updatedUserRecord")
-                         print(updatedUserRecord)
+//                         NSLog("LOG: listenToUser-updatedUserRecord")
+//                         print(updatedUserRecord)
                          
                          
                          let sentInvitations = updatedUserRecord.sentInvitations
@@ -566,12 +566,12 @@ extension RepositoryManager {
 //            }
 //        }
         
-        NSLog("LOG: RepositoryManager-handleSentInvitations")
-        if friendIds.isEmpty {
-            print("LOG: friendIds is empty")
-        } else {
-            print(friendIds)
-        }
+//        NSLog("LOG: RepositoryManager-handleSentInvitations")
+//        if friendIds.isEmpty {
+//            print("LOG: friendIds is empty")
+//        } else {
+//            print(friendIds)
+//        }
         
         let contentViewModel = ContentViewModel.shared
 
@@ -748,8 +748,8 @@ extension RepositoryManager {
                     do {
                         let friendDto = try document.data(as: UserDto.self)
                         let newFriendRecord = try await self.convertUserDtoToFriendRecord(userDto: friendDto)
-                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
-                        print(newFriendRecord)
+//                        NSLog("LOG: RepositoryManager-listenToFriend-newFriendRecord")
+//                        print(newFriendRecord)
                         
                         DispatchQueue.main.async {
                             if let index = self.detailedFriends.firstIndex(where: { $0.id == newFriendRecord.id }) {

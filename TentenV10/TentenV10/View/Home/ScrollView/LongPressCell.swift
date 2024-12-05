@@ -60,7 +60,7 @@ class LongPressCell: BaseCell {
         
         switch gesture.state {
         case .began:
-//            NSLog("LOG: didLongPressCell-began")
+            NSLog("LOG: didLongPressCell-began")
             onLongPressBegan?() // Trigger the long press began callback
             viewModel.progress = 0
             longPressGestureBeganPoint = locationInContentView
