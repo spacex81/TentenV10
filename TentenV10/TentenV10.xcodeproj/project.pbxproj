@@ -76,6 +76,7 @@
 		C84EF36D2C89ABB10092D6B5 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84EF36C2C89ABB10092D6B5 /* SettingView.swift */; };
 		C85489802C7A05E3006878E0 /* LockViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */; };
 		C85489822C7A05EB006878E0 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85489812C7A05EB006878E0 /* LockView.swift */; };
+		C857BCB22D013E3F007B97BE /* logo_sticker.riv in Resources */ = {isa = PBXBuildFile; fileRef = C857BCB12D013E3F007B97BE /* logo_sticker.riv */; };
 		C86FCBF82CBAB34D008C85F5 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */; };
 		C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C873752C2CABF58800BB322E /* NotificationManager.swift */; };
 		C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC4E2CA1AF3700AC1932 /* EmailView.swift */; };
@@ -89,7 +90,6 @@
 		C8B2BB762D00387900708452 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = C8B2BB752D00387900708452 /* RiveRuntime */; };
 		C8B2BB7D2D00396E00708452 /* lock.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7B2D00396E00708452 /* lock.riv */; };
 		C8B2BB7E2D00396E00708452 /* shimmer.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BB7C2D00396E00708452 /* shimmer.riv */; };
-		C8B2BBAB2D00833900708452 /* logo_sticker.riv in Resources */ = {isa = PBXBuildFile; fileRef = C8B2BBAA2D00833900708452 /* logo_sticker.riv */; };
 		C8B5B41D2C65B761002ACBAA /* UserRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41C2C65B761002ACBAA /* UserRecord.swift */; };
 		C8B5B41F2C65B765002ACBAA /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B41E2C65B765002ACBAA /* UserDto.swift */; };
 		C8B5B4272C660122002ACBAA /* FriendRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B5B4262C660122002ACBAA /* FriendRecord.swift */; };
@@ -209,6 +209,7 @@
 		C84EF36C2C89ABB10092D6B5 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		C854897F2C7A05E3006878E0 /* LockViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewRepresentable.swift; sourceTree = "<group>"; };
 		C85489812C7A05EB006878E0 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
+		C857BCB12D013E3F007B97BE /* logo_sticker.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = logo_sticker.riv; sourceTree = "<group>"; };
 		C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		C873752C2CABF58800BB322E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		C889DC4E2CA1AF3700AC1932 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
@@ -221,7 +222,6 @@
 		C8AF47D02C723D3400C7B6BE /* LongPressCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressCell.swift; sourceTree = "<group>"; };
 		C8B2BB7B2D00396E00708452 /* lock.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = lock.riv; sourceTree = "<group>"; };
 		C8B2BB7C2D00396E00708452 /* shimmer.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = shimmer.riv; sourceTree = "<group>"; };
-		C8B2BBAA2D00833900708452 /* logo_sticker.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = logo_sticker.riv; sourceTree = "<group>"; };
 		C8B5B3DD2C6214A5002ACBAA /* TentenV10.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TentenV10.entitlements; sourceTree = "<group>"; };
 		C8B5B41C2C65B761002ACBAA /* UserRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecord.swift; sourceTree = "<group>"; };
 		C8B5B41E2C65B765002ACBAA /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
@@ -538,7 +538,7 @@
 			children = (
 				C8B2BB7B2D00396E00708452 /* lock.riv */,
 				C8B2BB7C2D00396E00708452 /* shimmer.riv */,
-				C8B2BBAA2D00833900708452 /* logo_sticker.riv */,
+				C857BCB12D013E3F007B97BE /* logo_sticker.riv */,
 			);
 			path = RiveAsset;
 			sourceTree = "<group>";
@@ -715,7 +715,7 @@
 			files = (
 				C812FEE62C68ECDC00BD9D9B /* test.wav in Resources */,
 				C8CD0B872CF9A2D8002B1139 /* InfoPlist.xcstrings in Resources */,
-				C8B2BBAB2D00833900708452 /* logo_sticker.riv in Resources */,
+				C857BCB22D013E3F007B97BE /* logo_sticker.riv in Resources */,
 				C8AF0B2C2CA5493B003F3D2E /* PPPangramSansRounded-Bold.otf in Resources */,
 				C8CD0B852CF97089002B1139 /* Localizable.xcstrings in Resources */,
 				C815BC742C60849C004CB09E /* Preview Assets.xcassets in Resources */,
