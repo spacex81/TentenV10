@@ -15,8 +15,8 @@ struct ImageView: View {
     var body: some View {
         ZStack {
             GeometryReader(content: { geo in
-                Image(imageN).resizable().scaledToFit()
-//                Image(imageN).resizable().scaledToFill()
+//                Image(imageN).resizable().scaledToFit()
+                Image(imageN).resizable().scaledToFill()
                     .matchedGeometryEffect(id: imageN, in: namespace)
                     .frame(width: geo.size.width, height: geo.size.height)
                     .onTapGesture {
@@ -28,9 +28,11 @@ struct ImageView: View {
         }
         .background(.thinMaterial)
         .ignoresSafeArea()
+        .onAppear {
+            NSLog("LOG: ImageViw-onAppear")
+            NSLog("LOG: namespace: \(namespace)")
+            NSLog("LOG: imageN: \(imageN)")
+        }
     }
 }
 
-//#Preview {
-//    ImageView()
-//}

@@ -13,12 +13,6 @@ struct OverlayView: View {
                 TimerView()
             }
         }
-        .onTapGesture {
-            // Toggle between the two views when tapped
-            withAnimation(.easeInOut) {
-                showExploreGrid.toggle()
-            }
-        }
     }
 }
 
