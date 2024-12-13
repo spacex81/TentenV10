@@ -1,0 +1,3 @@
+[submodule "TentenV10/protocol"]
+	path = TentenV10/protocol
+	url = git@github.com:spacex81/protocol.git
