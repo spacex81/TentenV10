@@ -55,13 +55,13 @@ extension BackgroundTaskManager {
         
         audioSessionManager.playTestAudio()
         
-//        for i in 1...30 {
-        for i in 1...5 {
+        for i in 1...30 {
+//        for i in 1...5 {
             if !isBackgroundAudioTaskRunning {
                 break
             }
             if let player = audioSessionManager.audioPlayer, player.isPlaying {
-                NSLog("LOG: Playing silent audio(\(i))...")
+//                NSLog("LOG: Playing silent audio(\(i))...")
             }
             sleep(1)
         }

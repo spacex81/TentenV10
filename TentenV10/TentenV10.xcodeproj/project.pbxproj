@@ -125,6 +125,9 @@
 		C8E9BF782C7099A7002AEDE0 /* CustomCollectionViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF772C7099A7002AEDE0 /* CustomCollectionViewContainer.swift */; };
 		C8E9BF7A2C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF792C709CBA002AEDE0 /* CustomCollectionViewFlowLayout.swift */; };
 		C8E9BF7C2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E9BF7B2C709CD2002AEDE0 /* CustomCollectionViewDataSource.swift */; };
+		C8ED365A2D0B1D8A009DF042 /* CGRPCZlib in Frameworks */ = {isa = PBXBuildFile; productRef = C8ED36592D0B1D8A009DF042 /* CGRPCZlib */; };
+		C8ED365C2D0B1D8A009DF042 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = C8ED365B2D0B1D8A009DF042 /* GRPC */; };
+		C8ED365E2D0B1D8A009DF042 /* GRPCReflectionService in Frameworks */ = {isa = PBXBuildFile; productRef = C8ED365D2D0B1D8A009DF042 /* GRPCReflectionService */; };
 		C8FC31F22CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FC31F12CB7DA6D009CDAE8 /* ReceivedInvitationsTaskQueue.swift */; };
 /* End PBXBuildFile section */
 
@@ -269,6 +272,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C828E79F2CAA6F920084DBE4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NotificationServiceExtension; sourceTree = "<group>"; };
+		C87CE89D2D0BD1B1007B78E9 /* Proto */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Proto; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +285,8 @@
 				C8BB1F142C86F09900F176E6 /* KakaoSDKCommon in Frameworks */,
 				C815BC802C608519004CB09E /* FirebaseFunctions in Frameworks */,
 				C8E49F692CA113B700E19E38 /* GRDB in Frameworks */,
+				C8ED365E2D0B1D8A009DF042 /* GRPCReflectionService in Frameworks */,
+				C8ED365A2D0B1D8A009DF042 /* CGRPCZlib in Frameworks */,
 				C84B74A12CE495BF00970FFB /* FacebookLogin in Frameworks */,
 				C8BB1F072C86D49C00F176E6 /* GoogleSignIn in Frameworks */,
 				C815BC822C608519004CB09E /* FirebaseStorage in Frameworks */,
@@ -292,6 +298,7 @@
 				C8BB1F162C86F09900F176E6 /* KakaoSDKUser in Frameworks */,
 				C815BC7C2C608519004CB09E /* FirebaseAuth in Frameworks */,
 				C815BC7E2C608519004CB09E /* FirebaseFirestore in Frameworks */,
+				C8ED365C2D0B1D8A009DF042 /* GRPC in Frameworks */,
 				C8BB1F122C86F09900F176E6 /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,6 +393,7 @@
 		C815BC602C60849B004CB09E = {
 			isa = PBXGroup;
 			children = (
+				C87CE89D2D0BD1B1007B78E9 /* Proto */,
 				C8CD0B862CF9A2D8002B1139 /* InfoPlist.xcstrings */,
 				C8CD0B832CF97089002B1139 /* Localizable.xcstrings */,
 				C815BC6B2C60849B004CB09E /* TentenV10 */,
@@ -633,6 +641,9 @@
 			dependencies = (
 				C828E79A2CAA6F920084DBE4 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				C87CE89D2D0BD1B1007B78E9 /* Proto */,
+			);
 			name = TentenV10;
 			packageProductDependencies = (
 				C815BC7B2C608519004CB09E /* FirebaseAuth */,
@@ -652,6 +663,9 @@
 				C84B74A02CE495BF00970FFB /* FacebookLogin */,
 				C84B74A22CE495BF00970FFB /* FacebookShare */,
 				C8B2BB752D00387900708452 /* RiveRuntime */,
+				C8ED36592D0B1D8A009DF042 /* CGRPCZlib */,
+				C8ED365B2D0B1D8A009DF042 /* GRPC */,
+				C8ED365D2D0B1D8A009DF042 /* GRPCReflectionService */,
 			);
 			productName = TentenV10;
 			productReference = C815BC692C60849B004CB09E /* TentenV10.app */;
@@ -671,6 +685,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				C828E7952CAA6F920084DBE4 /* NotificationServiceExtension */,
+				C87CE89D2D0BD1B1007B78E9 /* Proto */,
 			);
 			name = NotificationServiceExtension;
 			packageProductDependencies = (
@@ -717,6 +732,7 @@
 				C8E49F672CA113B700E19E38 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				C8B2BB742D00387900708452 /* XCRemoteSwiftPackageReference "rive-ios" */,
+				C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */,
 			);
 			productRefGroup = C815BC6A2C60849B004CB09E /* Products */;
 			projectDirPath = "";
@@ -1239,6 +1255,14 @@
 				version = 6.29.3;
 			};
 		};
+		C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/grpc/grpc-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.24.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1331,6 +1355,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C8E49F672CA113B700E19E38 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
+		};
+		C8ED36592D0B1D8A009DF042 /* CGRPCZlib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = CGRPCZlib;
+		};
+		C8ED365B2D0B1D8A009DF042 /* GRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPC;
+		};
+		C8ED365D2D0B1D8A009DF042 /* GRPCReflectionService */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPCReflectionService;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

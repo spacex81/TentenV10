@@ -460,7 +460,7 @@ extension AuthViewModel {
 
 extension AuthViewModel {
     func checkPermissions() async {
-        NSLog("LOG: AuthViewModel-checkPermissions")
+//        NSLog("LOG: AuthViewModel-checkPermissions")
 //        Task {
             // Check if notification permission is granted
             isNotificationPermissionGranted = await AuthManager.shared.isNotificationPermissionGranted()
@@ -469,8 +469,8 @@ extension AuthViewModel {
             isMicPermissionGranted = await AuthManager.shared.isMicPermissionGranted()
 
             // Log the permission statuses
-            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
-            print("Microphone Permission Granted: \(isMicPermissionGranted)")
+//            print("Notification Permission Granted: \(isNotificationPermissionGranted)")
+//            print("Microphone Permission Granted: \(isMicPermissionGranted)")
 //        }
     }
 }

@@ -143,12 +143,6 @@ struct HomeView: View {
                             .frame(width: strokeSize * 0.7, height: strokeSize * 0.7)
                     } else if !viewModel.isLocked && !ringAnimationState {
                         // Circle 2
-    //                    Circle()
-    //                        .trim(from: 0.1, to: 1.0)  // 10% gap when inactive
-    //                        .stroke(.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-    //                        .rotationEffect(.degrees(-75)) // Shift the empty part to upper-right
-    //                        .opacity(1.0)
-    //                        .frame(width: strokeSize * 0.9, height: strokeSize * 0.9)
                         MainRingView(strokeSize: strokeSize)
                     } else {
                         // Cancel Button
@@ -161,17 +155,6 @@ struct HomeView: View {
                                 viewModel.disconnect()
                             }
                         }) {
-//                            ZStack {
-//                                Circle()
-//                                    .fill(Color.red)
-//                                    .frame(width: 60, height: 60)
-//                                
-//                                Image(systemName: "xmark")
-//                                    .resizable()
-//                                    .scaledToFit()
-//                                    .foregroundColor(.white)
-//                                    .frame(width: 30, height: 30)
-//                            }
                             viewModel.closButtonViewModel
                                 .view()
                                 .aspectRatio(31 / 31, contentMode: .fit)
@@ -179,8 +162,9 @@ struct HomeView: View {
                         }
                     }
                 }
-            } // Top VStack
+            }
                         
+            /// Overlay View Components
             // Conditionally show Blur glass
             if viewModel.overlayViewScale == 1.0 {
                Color.clear
@@ -192,9 +176,9 @@ struct HomeView: View {
 
             // SomView with scalable size and adjustable opacity
            OverlayView()
-                            .scaleEffect(viewModel.overlayViewScale) // Apply scale
-                            .opacity(2.0 - viewModel.overlayViewScale) // Adjust opacity based on scale
-                            .animation(.easeInOut(duration: 0.25), value: viewModel.overlayViewScale) // Smooth animation
+            .scaleEffect(viewModel.overlayViewScale) // Apply scale
+            .opacity(2.0 - viewModel.overlayViewScale) // Adjust opacity based on scale
+            .animation(.easeInOut(duration: 0.25), value: viewModel.overlayViewScale) // Smooth animation
                         
            viewModel.logoStickerViewModel
             .view()
@@ -205,9 +189,11 @@ struct HomeView: View {
                       y: geometry.size.height * 0.05) 
             .onTapGesture {
                 viewModel.logoStickerViewModel.setInput("Click", value: true)
+                // 
                 viewModel.overlayViewScale = (viewModel.overlayViewScale == 1.0) ? 2.0 : 1.0 // Toggle scale
                 impactFeedback.impactOccurred()
             }
+            ///
 
         }
 
@@ -225,7 +211,7 @@ struct HomeView: View {
             ProfileView()
         }
         .onAppear {
-            NSLog("LOG: HomeView-onAppear")
+//            NSLog("LOG: HomeView-onAppear")
             
             // MARK: There are some cases when 'isBusy' value in firebase stays to true
             // leading no one able to call the user

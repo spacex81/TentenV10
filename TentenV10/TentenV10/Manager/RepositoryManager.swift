@@ -718,8 +718,8 @@ extension RepositoryManager {
 
     private func handleIncomingCallRequest(userDto: UserDto) {
         let roomName = userDto.roomName
-//        NSLog("LOG: handleIncomingCallRequest")
-//        NSLog("LOG: room name: \(roomName)")
+        NSLog("LOG: handleIncomingCallRequest")
+        NSLog("LOG: room name: \(roomName)")
         
         if userDto.hasIncomingCallRequest {
             Task {
