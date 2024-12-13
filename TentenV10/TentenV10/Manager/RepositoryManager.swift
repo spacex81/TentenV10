@@ -132,7 +132,7 @@ class RepositoryManager: ObservableObject {
     
     func updateStatus(to status: String) {
         guard var newUserRecord = userRecord else {
-            NSLog("LOG: No user record found to update status")
+//            NSLog("LOG: No user record found to update status")
             return
         }
 
@@ -244,7 +244,7 @@ class RepositoryManager: ObservableObject {
                 }
             }
         } else {
-            NSLog("LOG: userRecord is nil")
+//            NSLog("LOG: userRecord is nil")
         }
     }
     
@@ -809,10 +809,10 @@ extension RepositoryManager {
             if let document = document, document.exists {
                 Task {
                     do {
-                        NSLog("LOG: listenToRoom-Update room document from room listener")
+//                        NSLog("LOG: listenToRoom-Update room document from room listener")
                         let roomDto = try self.convertRoomDocumentToRoomDto(document: document)
-                        NSLog("LOG: Updated RoomDto")
-                        print(roomDto)
+//                        NSLog("LOG: Updated RoomDto")
+////                        print(roomDto)
                         
                         self.updateCurrentSpeaker(roomDto: roomDto, currentUserId: currentUserId)
                         await self.updateLastInteraction(roomDto: roomDto, currentUserId: currentUserId)

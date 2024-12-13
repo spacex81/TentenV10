@@ -84,6 +84,7 @@
 		C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C873752C2CABF58800BB322E /* NotificationManager.swift */; };
 		C87CE8F32D0BD763007B78E9 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = C87CE8F22D0BD763007B78E9 /* GRPC */; };
 		C87CE8F52D0BD794007B78E9 /* GRPCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */; };
+		C87CE8F72D0BFD0B007B78E9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CE8F62D0BFD0B007B78E9 /* NetworkManager.swift */; };
 		C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC4E2CA1AF3700AC1932 /* EmailView.swift */; };
 		C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */; };
 		C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC562CA2959200AC1932 /* MicPermissionView.swift */; };
@@ -225,6 +226,7 @@
 		C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		C873752C2CABF58800BB322E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRPCManager.swift; sourceTree = "<group>"; };
+		C87CE8F62D0BFD0B007B78E9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		C889DC4E2CA1AF3700AC1932 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
 		C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		C889DC562CA2959200AC1932 /* MicPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicPermissionView.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 				C8BB1F0A2C86DA0300F176E6 /* GoogleSignInManager.swift */,
 				C873752C2CABF58800BB322E /* NotificationManager.swift */,
 				C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */,
+				C87CE8F62D0BFD0B007B78E9 /* NetworkManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -785,6 +788,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C87CE8F72D0BFD0B007B78E9 /* NetworkManager.swift in Sources */,
 				C81B484E2C87596400E1164B /* AddView.swift in Sources */,
 				C8BB1F042C86CA7200F176E6 /* SignInButtonView.swift in Sources */,
 				C8144ACB2C7C2E6D0011385D /* InviteFriendButtonPreview.swift in Sources */,
