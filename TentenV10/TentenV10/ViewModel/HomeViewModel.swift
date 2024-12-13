@@ -380,6 +380,10 @@ extension HomeViewModel {
             // MARK: There are some cases when 'isBusy' value in firebase stays to true
             // leading no one able to call the user
             repoManager.syncIsBusy()
+            
+            // MARK: Connect to gRPC server
+//            connectToGrpcServer()
+
 
         case .inactive:
             NSLog("LOG: App is inactive")
@@ -398,4 +402,6 @@ extension HomeViewModel {
             break
         }
     }
+    
 }
+

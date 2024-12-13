@@ -3,6 +3,8 @@ import GRPC
 import NIO
 
 final class GRPCManager: ObservableObject {
+    static let shared = GRPCManager()
+
     // MARK: - Properties
     private var eventLoopGroup: EventLoopGroup?
     private var channel: GRPCChannel?
@@ -13,8 +15,29 @@ final class GRPCManager: ObservableObject {
     @Published var isConnected: Bool = false
     @Published var friendStatuses: [String: Bool] = [:]
     
+    private let lock = NSLock() // Lock to prevent multiple connections
+    private var isConnecting = false // Track if a connection is currently being established
+    
     // MARK: - Connect to gRPC Server
     func connect(clientID: String, friends: [String]) {
+        NSLog("LOG: GRPCManager-connect: clientID=\(clientID), friends=\(friends)")
+        
+        lock.lock()
+        defer { lock.unlock() }
+        
+        if isConnected {
+            NSLog("LOG: GRPCManager-connect: Already connected")
+            return
+        }
+        
+        if isConnecting {
+            NSLog("LOG: GRPCManager-connect: Connection in progress, skipping new connect request")
+            return
+        }
+        
+        NSLog("LOG: GRPCManager-connect: Starting connection process")
+        isConnecting = true
+        
         DispatchQueue.global().async {
             do {
                 // 1. Create an EventLoopGroup for handling async work
@@ -35,6 +58,7 @@ final class GRPCManager: ObservableObject {
                 DispatchQueue.main.async {
                     self.serverResponse = "✅ Connected to gRPC Server!"
                     self.isConnected = true
+                    self.isConnecting = false
                 }
                 
                 // 🔥 Start Ping-Pong Communication
@@ -46,6 +70,8 @@ final class GRPCManager: ObservableObject {
             } catch {
                 DispatchQueue.main.async {
                     self.serverResponse = "❌ Failed to connect: \(error.localizedDescription)"
+                    self.isConnected = false
+                    self.isConnecting = false
                 }
             }
         }
@@ -111,6 +137,14 @@ final class GRPCManager: ObservableObject {
     // MARK: - Disconnect from gRPC Server
     func disconnect() {
         DispatchQueue.global().async {
+            self.lock.lock()
+            defer { self.lock.unlock() }
+            
+            if !self.isConnected {
+                NSLog("LOG: GRPCManager-disconnect: Already disconnected")
+                return
+            }
+            
             self.pingPongCall?.cancel(promise: nil)
             self.pingPongCall = nil
             

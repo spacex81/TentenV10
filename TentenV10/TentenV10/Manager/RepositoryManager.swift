@@ -10,6 +10,7 @@ class RepositoryManager: ObservableObject {
     private let liveKitManager = LiveKitManager.shared
 //    private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
     var notificationManager: NotificationManager?
+    private let grpcManager = GRPCManager.shared
     
     weak var collectionViewController: CustomCollectionViewController?
     
@@ -86,6 +87,10 @@ class RepositoryManager: ObservableObject {
                     listenToRooms(userRecord: userRecord)
                 }
                 
+                // setup gRPC connection
+                connectToGrpcServer(clientID: userRecord.id, friends: userRecord.friends)
+                
+                
                 syncFriendInfo()
                 syncDetailedFriends(friendIds: userRecord.friends)
                 updateStatusWhenAppLaunch()
@@ -104,6 +109,12 @@ class RepositoryManager: ObservableObject {
             }
         }
     }
+    
+    func connectToGrpcServer(clientID: String, friends: [String]) {
+        NSLog("LOG: RepositoryManager-connectToGrpcServer")
+        grpcManager.connect(clientID: clientID, friends: friends)
+    }
+
     
     func updateStatusWhenAppLaunch() {
         // Check if app is in the foreground

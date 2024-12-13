@@ -33,8 +33,8 @@ class ContentViewModel: ObservableObject {
     }
     @Published var sentInvitations: [Invitation] = [] {
         didSet {
-            NSLog("LOG: sentInvitations")
-            print(sentInvitations)
+//            NSLog("LOG: sentInvitations")
+//            print(sentInvitations)
         }
     }
     @Published var receivedInvitations: [Invitation] = [] {
