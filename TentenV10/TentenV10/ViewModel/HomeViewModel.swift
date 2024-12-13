@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     private let audioSessionManager = AudioSessionManager.shared
     private let backgroundTaskManager = BackgroundTaskManager.shared
     private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
+    private let grpcManager = GRPCManager.shared
     
     weak var collectionViewController: CustomCollectionViewController?
     
@@ -402,6 +403,15 @@ extension HomeViewModel {
             break
         }
     }
-    
+}
+
+extension HomeViewModel {
+    func connectToGrpcServer() {
+        if !grpcManager.isConnected {
+            if let clientID = repoManager.userRecord?.id, let friends = repoManager.userRecord?.friends {
+                grpcManager.connect(clientID: clientID, friends: friends)
+            }
+        }
+    }
 }
 
