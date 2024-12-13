@@ -82,6 +82,8 @@
 		C8603C172D017B5F00A1E675 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8603C162D017B5F00A1E675 /* ImageView.swift */; };
 		C86FCBF82CBAB34D008C85F5 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */; };
 		C873752D2CABF58800BB322E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C873752C2CABF58800BB322E /* NotificationManager.swift */; };
+		C87CE8F32D0BD763007B78E9 /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = C87CE8F22D0BD763007B78E9 /* GRPC */; };
+		C87CE8F52D0BD794007B78E9 /* GRPCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */; };
 		C889DC4F2CA1AF3700AC1932 /* EmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC4E2CA1AF3700AC1932 /* EmailView.swift */; };
 		C889DC532CA2957E00AC1932 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */; };
 		C889DC572CA2959200AC1932 /* MicPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889DC562CA2959200AC1932 /* MicPermissionView.swift */; };
@@ -222,6 +224,7 @@
 		C8603C162D017B5F00A1E675 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		C86FCBF72CBAB34D008C85F5 /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		C873752C2CABF58800BB322E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRPCManager.swift; sourceTree = "<group>"; };
 		C889DC4E2CA1AF3700AC1932 /* EmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailView.swift; sourceTree = "<group>"; };
 		C889DC522CA2957E00AC1932 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		C889DC562CA2959200AC1932 /* MicPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicPermissionView.swift; sourceTree = "<group>"; };
@@ -307,6 +310,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C87CE8F32D0BD763007B78E9 /* GRPC in Frameworks */,
 				C8050FD42CAAC72700786DF1 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,6 +458,7 @@
 				C812FF192C69F3C900BD9D9B /* AudioSessionManager.swift */,
 				C8BB1F0A2C86DA0300F176E6 /* GoogleSignInManager.swift */,
 				C873752C2CABF58800BB322E /* NotificationManager.swift */,
+				C87CE8F42D0BD794007B78E9 /* GRPCManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -690,6 +695,7 @@
 			name = NotificationServiceExtension;
 			packageProductDependencies = (
 				C8050FD32CAAC72700786DF1 /* GRDB */,
+				C87CE8F22D0BD763007B78E9 /* GRPC */,
 			);
 			productName = NotificationServiceExtension;
 			productReference = C828E7942CAA6F920084DBE4 /* NotificationServiceExtension.appex */;
@@ -830,6 +836,7 @@
 				C8603C172D017B5F00A1E675 /* ImageView.swift in Sources */,
 				C812FF182C69F3AF00BD9D9B /* BackgroundTaskManager.swift in Sources */,
 				C8E9BF722C709594002AEDE0 /* CustomCollectionViewController.swift in Sources */,
+				C87CE8F52D0BD794007B78E9 /* GRPCManager.swift in Sources */,
 				C8144AC62C7C22BB0011385D /* SpeechBubbleShapeUpward.swift in Sources */,
 				C82CA7252C6B014B00B4BFD0 /* DummyData.swift in Sources */,
 				C812FF0E2C69D99F00BD9D9B /* AddFriendView.swift in Sources */,
@@ -1320,6 +1327,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C84B749B2CE495BF00970FFB /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookShare;
+		};
+		C87CE8F22D0BD763007B78E9 /* GRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8ED36582D0B1D8A009DF042 /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPC;
 		};
 		C8B2BB752D00387900708452 /* RiveRuntime */ = {
 			isa = XCSwiftPackageProductDependency;
