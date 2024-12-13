@@ -1,3 +1,6 @@
 [submodule "TentenV10/protocol"]
 	path = TentenV10/protocol
 	url = git@github.com:spacex81/protocol.git
+[submodule "TentenV10/Proto/protocol"]
+	path = TentenV10/Proto/protocol
+	url = git@github.com:spacex81/protocol.git
