@@ -9,11 +9,20 @@ final class GRPCManager: ObservableObject {
     private var eventLoopGroup: EventLoopGroup?
     private var channel: GRPCChannel?
     private var pingPongCall: BidirectionalStreamingCall<Service_ClientMessage, Service_Ping>?
-    private var friendListenerCall: BidirectionalStreamingCall<Service_FriendListenerMessage, Service_FriendStatusUpdate>?
-    
+    private var friendListenerCall: BidirectionalStreamingCall<Service_FriendListenerRequest, Service_FriendListenerResponse>?
+
     @Published var serverResponse: String = "Waiting for server response..."
     @Published var isConnected: Bool = false
-    @Published var friendStatuses: [String: Bool] = [:]
+    @Published var friendStatuses: [String: Bool] = [:] {
+        didSet {
+            NSLog("LOG: ====== Friend Statuses Updated ======")
+            for (friendID, isOnline) in friendStatuses {
+                let status = isOnline ? "ONLINE" : "OFFLINE"
+                NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
+            }
+            NSLog("LOG: =====================================")
+        }
+    }
     
     private let lock = NSLock() // Lock to prevent multiple connections
     private var isConnecting = false // Track if a connection is currently being established
@@ -56,7 +65,7 @@ final class GRPCManager: ObservableObject {
                 let client = Service_ServerNIOClient(channel: channel)
                 
                 DispatchQueue.main.async {
-                    self.serverResponse = "✅ Connected to gRPC Server!"
+                    self.serverResponse = "LOG: ✅ Connected to gRPC Server!"
                     self.isConnected = true
                     self.isConnecting = false
                 }
@@ -69,7 +78,7 @@ final class GRPCManager: ObservableObject {
                 
             } catch {
                 DispatchQueue.main.async {
-                    self.serverResponse = "❌ Failed to connect: \(error.localizedDescription)"
+                    self.serverResponse = "LOG:❌ Failed to connect: \(error.localizedDescription)"
                     self.isConnected = false
                     self.isConnecting = false
                 }
@@ -81,8 +90,7 @@ final class GRPCManager: ObservableObject {
     private func startPingPong(client: Service_ServerNIOClient, clientID: String) {
         let call = client.communicate { response in
             DispatchQueue.main.async {
-                self.serverResponse = "📨 Ping from Server: \(response.message)"
-                print("📨 Received Ping: \(response.message)")
+                self.serverResponse = "LOG: 📨 Ping from Server: \(response.message)"
             }
             
             if let call = self.pingPongCall {
@@ -101,35 +109,89 @@ final class GRPCManager: ObservableObject {
         call.sendMessage(clientMessage).whenComplete { result in
             switch result {
             case .success:
-                print("✅ Sent ClientHello message successfully")
+//                print("LOG: ✅ Sent ClientHello message successfully")
+                break
             case .failure(let error):
-                print("❌ Failed to send ClientHello message: \(error.localizedDescription)")
+                print("LOG: ❌ Failed to send ClientHello message: \(error.localizedDescription)")
             }
+        }
+        
+        // ✅ Notify when the pingpong listener is disconnected
+        call.status.whenComplete { result in
+            switch result {
+            case .success:
+                NSLog("LOG: PingPong listener connection ended gracefully")
+            case .failure(let error):
+                NSLog("LOG: PingPong listener disconnected with error: \(error.localizedDescription)")
+            }
+            
+            // You can trigger reconnection logic here if needed
         }
     }
     
     // MARK: - Start the Friend Listener
-    private func startFriendListener(client: Service_ServerNIOClient, friends: [String]) {
+    func startFriendListener(client: Service_ServerNIOClient, friends: [String]) {
         let call = client.friendListener { response in
             DispatchQueue.main.async {
-                self.friendStatuses[response.clientID] = response.isOnline
+                switch response.message {
+                
+                case .friendUpdate(let friendUpdate):
+                    // Handle friend update
+                    self.friendStatuses[friendUpdate.clientID] = friendUpdate.isOnline
+
+                case .keepalivePing(let keepalivePing):
+                    // Handle keepalive ping
+//                    NSLog("LOG: Received KeepAlivePing from server: \(keepalivePing.message)")
+                    
+                    // Send KeepAliveAck to the server
+                    var keepAliveAck = Service_KeepAliveAck()
+                    keepAliveAck.message = "ACK from iOS client"
+                    
+                    var request = Service_FriendListenerRequest()
+                    request.message = .keepaliveAck(keepAliveAck)
+                    
+                    if let call = self.friendListenerCall {
+                        call.sendMessage(request).whenComplete { result in
+                            switch result {
+                            case .success:
+//                                NSLog("LOG: Sent KeepAliveAck successfully")
+                                break
+                            case .failure(let error):
+                                NSLog("LOG: Failed to send KeepAliveAck: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                case .none:
+                    NSLog("LOG: ⚠️ Received an unknown response from server")
+                }
             }
         }
         
         self.friendListenerCall = call
         
+        // Send the FriendList to the server
         var friendList = Service_FriendList()
         friendList.friendIds = friends
         
-        var friendListenerMessage = Service_FriendListenerMessage()
-        friendListenerMessage.friendList = friendList
+        var request = Service_FriendListenerRequest()
+        request.message = .friendList(friendList)
         
-        call.sendMessage(friendListenerMessage).whenComplete { result in
+        call.sendMessage(request).whenComplete { result in
             switch result {
             case .success:
-                print("✅ Sent FriendList message successfully")
+                NSLog("LOG: 📡 Sent FriendList message successfully")
             case .failure(let error):
-                print("❌ Failed to send FriendList message: \(error.localizedDescription)")
+                NSLog("LOG: ❌ Failed to send FriendList message: \(error.localizedDescription)")
+            }
+        }
+        
+        // ✅ Notify when the friend listener is disconnected
+        call.status.whenComplete { result in
+            switch result {
+            case .success:
+                NSLog("LOG: ℹ️ Friend listener connection ended gracefully")
+            case .failure(let error):
+                NSLog("LOG: ❌ Friend listener disconnected with error: \(error.localizedDescription)")
             }
         }
     }
@@ -159,7 +221,7 @@ final class GRPCManager: ObservableObject {
             
             DispatchQueue.main.async {
                 self.isConnected = false
-                self.serverResponse = "🔴 Disconnected from gRPC Server"
+                self.serverResponse = "LOG: 🔴 Disconnected from gRPC Server"
                 self.friendStatuses = [:]
             }
         }
@@ -175,12 +237,14 @@ final class GRPCManager: ObservableObject {
         var clientMessage = Service_ClientMessage()
         clientMessage.pong = pong
         
+        // TODO: I only want to print out message when it failed to send pong message
         call.sendMessage(clientMessage).whenComplete { result in
             switch result {
             case .success:
-                print("✅ Sent Pong message successfully")
+//                NSLog("LOG: ✅ Sent Pong message successfully")
+                break
             case .failure(let error):
-                print("❌ Failed to send Pong message: \(error.localizedDescription)")
+                NSLog("LOG: ❌ Failed to send Pong message: \(error.localizedDescription)")
             }
         }
     }

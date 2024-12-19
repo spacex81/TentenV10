@@ -35,11 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             body: "친구들의 목소리를 들을 수 없어요"
         )
         
-        if let userId = repoManager.userRecord?.id {
-            repoManager.updateUserField(userId: userId, fieldsToUpdate: ["status": "suspended"])
-        }
-
-        sleep(3)
+//        if let userId = repoManager.userRecord?.id {
+//            repoManager.updateUserField(userId: userId, fieldsToUpdate: ["status": "suspended"])
+//        }
+//
+//        sleep(3)
     }
 }
 

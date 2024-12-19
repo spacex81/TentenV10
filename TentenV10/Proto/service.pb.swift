@@ -68,25 +68,45 @@ struct Service_ClientMessage: Sendable {
 }
 
 /// Used for the friend listener connection
-struct Service_FriendListenerMessage: Sendable {
+/// message FriendListenerMessage {
+///     FriendList friend_list = 1;
+/// }
+struct Service_FriendListenerRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var message: Service_FriendListenerRequest.OneOf_Message? = nil
+
+  /// Client sends friend list
   var friendList: Service_FriendList {
-    get {return _friendList ?? Service_FriendList()}
-    set {_friendList = newValue}
+    get {
+      if case .friendList(let v)? = message {return v}
+      return Service_FriendList()
+    }
+    set {message = .friendList(newValue)}
   }
-  /// Returns true if `friendList` has been explicitly set.
-  var hasFriendList: Bool {return self._friendList != nil}
-  /// Clears the value of `friendList`. Subsequent reads from it will return its default value.
-  mutating func clearFriendList() {self._friendList = nil}
+
+  /// Client acknowledges a keepalive ping
+  var keepaliveAck: Service_KeepAliveAck {
+    get {
+      if case .keepaliveAck(let v)? = message {return v}
+      return Service_KeepAliveAck()
+    }
+    set {message = .keepaliveAck(newValue)}
+  }
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+  enum OneOf_Message: Equatable, Sendable {
+    /// Client sends friend list
+    case friendList(Service_FriendList)
+    /// Client acknowledges a keepalive ping
+    case keepaliveAck(Service_KeepAliveAck)
 
-  fileprivate var _friendList: Service_FriendList? = nil
+  }
+
+  init() {}
 }
 
 struct Service_FriendList: Sendable {
@@ -102,7 +122,49 @@ struct Service_FriendList: Sendable {
   init() {}
 }
 
-struct Service_FriendStatusUpdate: Sendable {
+struct Service_FriendListenerResponse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var message: Service_FriendListenerResponse.OneOf_Message? = nil
+
+  /// Used to update friend online status
+  var friendUpdate: Service_FriendUpdate {
+    get {
+      if case .friendUpdate(let v)? = message {return v}
+      return Service_FriendUpdate()
+    }
+    set {message = .friendUpdate(newValue)}
+  }
+
+  /// Server sends keepalive ping
+  var keepalivePing: Service_KeepAlivePing {
+    get {
+      if case .keepalivePing(let v)? = message {return v}
+      return Service_KeepAlivePing()
+    }
+    set {message = .keepalivePing(newValue)}
+  }
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum OneOf_Message: Equatable, Sendable {
+    /// Used to update friend online status
+    case friendUpdate(Service_FriendUpdate)
+    /// Server sends keepalive ping
+    case keepalivePing(Service_KeepAlivePing)
+
+  }
+
+  init() {}
+}
+
+/// message FriendStatusUpdate {
+///     string client_id = 1; // The client whose state changed
+///     bool is_online = 2;
+/// }
+struct Service_FriendUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -110,7 +172,34 @@ struct Service_FriendStatusUpdate: Sendable {
   /// The client whose state changed
   var clientID: String = String()
 
+  /// The online status of the client
   var isOnline: Bool = false
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Service_KeepAlivePing: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Customizable message for debugging (e.g., "Ping from Server")
+  var message: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Service_KeepAliveAck: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Customizable message for debugging (e.g., "ACK from Client")
+  var message: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -321,10 +410,11 @@ extension Service_ClientMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Service_FriendListenerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FriendListenerMessage"
+extension Service_FriendListenerRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".FriendListenerRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "friend_list"),
+    2: .standard(proto: "keepalive_ack"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -333,7 +423,32 @@ extension Service_FriendListenerMessage: SwiftProtobuf.Message, SwiftProtobuf._M
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._friendList) }()
+      case 1: try {
+        var v: Service_FriendList?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .friendList(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .friendList(v)
+        }
+      }()
+      case 2: try {
+        var v: Service_KeepAliveAck?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .keepaliveAck(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .keepaliveAck(v)
+        }
+      }()
       default: break
       }
     }
@@ -344,14 +459,22 @@ extension Service_FriendListenerMessage: SwiftProtobuf.Message, SwiftProtobuf._M
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._friendList {
+    switch self.message {
+    case .friendList?: try {
+      guard case .friendList(let v)? = self.message else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
+    }()
+    case .keepaliveAck?: try {
+      guard case .keepaliveAck(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case nil: break
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Service_FriendListenerMessage, rhs: Service_FriendListenerMessage) -> Bool {
-    if lhs._friendList != rhs._friendList {return false}
+  static func ==(lhs: Service_FriendListenerRequest, rhs: Service_FriendListenerRequest) -> Bool {
+    if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -389,8 +512,78 @@ extension Service_FriendList: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   }
 }
 
-extension Service_FriendStatusUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FriendStatusUpdate"
+extension Service_FriendListenerResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".FriendListenerResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "friend_update"),
+    2: .standard(proto: "keepalive_ping"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: Service_FriendUpdate?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .friendUpdate(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .friendUpdate(v)
+        }
+      }()
+      case 2: try {
+        var v: Service_KeepAlivePing?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .keepalivePing(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .keepalivePing(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.message {
+    case .friendUpdate?: try {
+      guard case .friendUpdate(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .keepalivePing?: try {
+      guard case .keepalivePing(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_FriendListenerResponse, rhs: Service_FriendListenerResponse) -> Bool {
+    if lhs.message != rhs.message {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_FriendUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".FriendUpdate"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
     2: .standard(proto: "is_online"),
@@ -419,9 +612,73 @@ extension Service_FriendStatusUpdate: SwiftProtobuf.Message, SwiftProtobuf._Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Service_FriendStatusUpdate, rhs: Service_FriendStatusUpdate) -> Bool {
+  static func ==(lhs: Service_FriendUpdate, rhs: Service_FriendUpdate) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
     if lhs.isOnline != rhs.isOnline {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_KeepAlivePing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".KeepAlivePing"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "message"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.message.isEmpty {
+      try visitor.visitSingularStringField(value: self.message, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_KeepAlivePing, rhs: Service_KeepAlivePing) -> Bool {
+    if lhs.message != rhs.message {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_KeepAliveAck: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".KeepAliveAck"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "message"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.message) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.message.isEmpty {
+      try visitor.visitSingularStringField(value: self.message, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_KeepAliveAck, rhs: Service_KeepAliveAck) -> Bool {
+    if lhs.message != rhs.message {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

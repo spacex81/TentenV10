@@ -382,9 +382,6 @@ extension HomeViewModel {
             // leading no one able to call the user
             repoManager.syncIsBusy()
             
-            // MARK: Connect to gRPC server
-//            connectToGrpcServer()
-
 
         case .inactive:
             NSLog("LOG: App is inactive")
@@ -405,13 +402,4 @@ extension HomeViewModel {
     }
 }
 
-extension HomeViewModel {
-    func connectToGrpcServer() {
-        if !grpcManager.isConnected {
-            if let clientID = repoManager.userRecord?.id, let friends = repoManager.userRecord?.friends {
-                grpcManager.connect(clientID: clientID, friends: friends)
-            }
-        }
-    }
-}
 

@@ -23,13 +23,19 @@ internal protocol Service_ServerClientProtocol: GRPCClient {
 
   func friendListener(
     callOptions: CallOptions?,
-    handler: @escaping (Service_FriendStatusUpdate) -> Void
-  ) -> BidirectionalStreamingCall<Service_FriendListenerMessage, Service_FriendStatusUpdate>
+    handler: @escaping (Service_FriendListenerResponse) -> Void
+  ) -> BidirectionalStreamingCall<Service_FriendListenerRequest, Service_FriendListenerResponse>
 
   func getAllUserInfo(
     _ request: Service_Empty,
     callOptions: CallOptions?
   ) -> UnaryCall<Service_Empty, Service_UserList>
+
+  func streamAllUserInfo(
+    _ request: Service_Empty,
+    callOptions: CallOptions?,
+    handler: @escaping (Service_UserList) -> Void
+  ) -> ServerStreamingCall<Service_Empty, Service_UserList>
 }
 
 extension Service_ServerClientProtocol {
@@ -59,6 +65,7 @@ extension Service_ServerClientProtocol {
   }
 
   /// Handles friend listener for online status
+  /// rpc FriendListener (stream FriendListenerMessage) returns (stream FriendStatusUpdate);
   ///
   /// Callers should use the `send` method on the returned object to send messages
   /// to the server. The caller should send an `.end` after the final message has been sent.
@@ -69,8 +76,8 @@ extension Service_ServerClientProtocol {
   /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
   internal func friendListener(
     callOptions: CallOptions? = nil,
-    handler: @escaping (Service_FriendStatusUpdate) -> Void
-  ) -> BidirectionalStreamingCall<Service_FriendListenerMessage, Service_FriendStatusUpdate> {
+    handler: @escaping (Service_FriendListenerResponse) -> Void
+  ) -> BidirectionalStreamingCall<Service_FriendListenerRequest, Service_FriendListenerResponse> {
     return self.makeBidirectionalStreamingCall(
       path: Service_ServerClientMetadata.Methods.friendListener.path,
       callOptions: callOptions ?? self.defaultCallOptions,
@@ -94,6 +101,27 @@ extension Service_ServerClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetAllUserInfoInterceptors() ?? []
+    )
+  }
+
+  /// New streaming function to send real-time Redis user info list
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to StreamAllUserInfo.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  internal func streamAllUserInfo(
+    _ request: Service_Empty,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (Service_UserList) -> Void
+  ) -> ServerStreamingCall<Service_Empty, Service_UserList> {
+    return self.makeServerStreamingCall(
+      path: Service_ServerClientMetadata.Methods.streamAllUserInfo.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamAllUserInfoInterceptors() ?? [],
+      handler: handler
     )
   }
 }
@@ -166,12 +194,17 @@ internal protocol Service_ServerAsyncClientProtocol: GRPCClient {
 
   func makeFriendListenerCall(
     callOptions: CallOptions?
-  ) -> GRPCAsyncBidirectionalStreamingCall<Service_FriendListenerMessage, Service_FriendStatusUpdate>
+  ) -> GRPCAsyncBidirectionalStreamingCall<Service_FriendListenerRequest, Service_FriendListenerResponse>
 
   func makeGetAllUserInfoCall(
     _ request: Service_Empty,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Service_Empty, Service_UserList>
+
+  func makeStreamAllUserInfoCall(
+    _ request: Service_Empty,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncServerStreamingCall<Service_Empty, Service_UserList>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -196,7 +229,7 @@ extension Service_ServerAsyncClientProtocol {
 
   internal func makeFriendListenerCall(
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncBidirectionalStreamingCall<Service_FriendListenerMessage, Service_FriendStatusUpdate> {
+  ) -> GRPCAsyncBidirectionalStreamingCall<Service_FriendListenerRequest, Service_FriendListenerResponse> {
     return self.makeAsyncBidirectionalStreamingCall(
       path: Service_ServerClientMetadata.Methods.friendListener.path,
       callOptions: callOptions ?? self.defaultCallOptions,
@@ -213,6 +246,18 @@ extension Service_ServerAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetAllUserInfoInterceptors() ?? []
+    )
+  }
+
+  internal func makeStreamAllUserInfoCall(
+    _ request: Service_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncServerStreamingCall<Service_Empty, Service_UserList> {
+    return self.makeAsyncServerStreamingCall(
+      path: Service_ServerClientMetadata.Methods.streamAllUserInfo.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamAllUserInfoInterceptors() ?? []
     )
   }
 }
@@ -246,7 +291,7 @@ extension Service_ServerAsyncClientProtocol {
   internal func friendListener<RequestStream>(
     _ requests: RequestStream,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncResponseStream<Service_FriendStatusUpdate> where RequestStream: Sequence, RequestStream.Element == Service_FriendListenerMessage {
+  ) -> GRPCAsyncResponseStream<Service_FriendListenerResponse> where RequestStream: Sequence, RequestStream.Element == Service_FriendListenerRequest {
     return self.performAsyncBidirectionalStreamingCall(
       path: Service_ServerClientMetadata.Methods.friendListener.path,
       requests: requests,
@@ -258,7 +303,7 @@ extension Service_ServerAsyncClientProtocol {
   internal func friendListener<RequestStream>(
     _ requests: RequestStream,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncResponseStream<Service_FriendStatusUpdate> where RequestStream: AsyncSequence & Sendable, RequestStream.Element == Service_FriendListenerMessage {
+  ) -> GRPCAsyncResponseStream<Service_FriendListenerResponse> where RequestStream: AsyncSequence & Sendable, RequestStream.Element == Service_FriendListenerRequest {
     return self.performAsyncBidirectionalStreamingCall(
       path: Service_ServerClientMetadata.Methods.friendListener.path,
       requests: requests,
@@ -276,6 +321,18 @@ extension Service_ServerAsyncClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeGetAllUserInfoInterceptors() ?? []
+    )
+  }
+
+  internal func streamAllUserInfo(
+    _ request: Service_Empty,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncResponseStream<Service_UserList> {
+    return self.performAsyncServerStreamingCall(
+      path: Service_ServerClientMetadata.Methods.streamAllUserInfo.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeStreamAllUserInfoInterceptors() ?? []
     )
   }
 }
@@ -303,10 +360,13 @@ internal protocol Service_ServerClientInterceptorFactoryProtocol: Sendable {
   func makeCommunicateInterceptors() -> [ClientInterceptor<Service_ClientMessage, Service_Ping>]
 
   /// - Returns: Interceptors to use when invoking 'friendListener'.
-  func makeFriendListenerInterceptors() -> [ClientInterceptor<Service_FriendListenerMessage, Service_FriendStatusUpdate>]
+  func makeFriendListenerInterceptors() -> [ClientInterceptor<Service_FriendListenerRequest, Service_FriendListenerResponse>]
 
   /// - Returns: Interceptors to use when invoking 'getAllUserInfo'.
   func makeGetAllUserInfoInterceptors() -> [ClientInterceptor<Service_Empty, Service_UserList>]
+
+  /// - Returns: Interceptors to use when invoking 'streamAllUserInfo'.
+  func makeStreamAllUserInfoInterceptors() -> [ClientInterceptor<Service_Empty, Service_UserList>]
 }
 
 internal enum Service_ServerClientMetadata {
@@ -317,6 +377,7 @@ internal enum Service_ServerClientMetadata {
       Service_ServerClientMetadata.Methods.communicate,
       Service_ServerClientMetadata.Methods.friendListener,
       Service_ServerClientMetadata.Methods.getAllUserInfo,
+      Service_ServerClientMetadata.Methods.streamAllUserInfo,
     ]
   )
 
@@ -338,6 +399,12 @@ internal enum Service_ServerClientMetadata {
       path: "/service.Server/GetAllUserInfo",
       type: GRPCCallType.unary
     )
+
+    internal static let streamAllUserInfo = GRPCMethodDescriptor(
+      name: "StreamAllUserInfo",
+      path: "/service.Server/StreamAllUserInfo",
+      type: GRPCCallType.serverStreaming
+    )
   }
 }
 
@@ -349,10 +416,14 @@ internal protocol Service_ServerProvider: CallHandlerProvider {
   func communicate(context: StreamingResponseCallContext<Service_Ping>) -> EventLoopFuture<(StreamEvent<Service_ClientMessage>) -> Void>
 
   /// Handles friend listener for online status
-  func friendListener(context: StreamingResponseCallContext<Service_FriendStatusUpdate>) -> EventLoopFuture<(StreamEvent<Service_FriendListenerMessage>) -> Void>
+  /// rpc FriendListener (stream FriendListenerMessage) returns (stream FriendStatusUpdate);
+  func friendListener(context: StreamingResponseCallContext<Service_FriendListenerResponse>) -> EventLoopFuture<(StreamEvent<Service_FriendListenerRequest>) -> Void>
 
   /// New function to fetch all users from Redis
   func getAllUserInfo(request: Service_Empty, context: StatusOnlyCallContext) -> EventLoopFuture<Service_UserList>
+
+  /// New streaming function to send real-time Redis user info list
+  func streamAllUserInfo(request: Service_Empty, context: StreamingResponseCallContext<Service_UserList>) -> EventLoopFuture<GRPCStatus>
 }
 
 extension Service_ServerProvider {
@@ -379,8 +450,8 @@ extension Service_ServerProvider {
     case "FriendListener":
       return BidirectionalStreamingServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Service_FriendListenerMessage>(),
-        responseSerializer: ProtobufSerializer<Service_FriendStatusUpdate>(),
+        requestDeserializer: ProtobufDeserializer<Service_FriendListenerRequest>(),
+        responseSerializer: ProtobufSerializer<Service_FriendListenerResponse>(),
         interceptors: self.interceptors?.makeFriendListenerInterceptors() ?? [],
         observerFactory: self.friendListener(context:)
       )
@@ -392,6 +463,15 @@ extension Service_ServerProvider {
         responseSerializer: ProtobufSerializer<Service_UserList>(),
         interceptors: self.interceptors?.makeGetAllUserInfoInterceptors() ?? [],
         userFunction: self.getAllUserInfo(request:context:)
+      )
+
+    case "StreamAllUserInfo":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Service_Empty>(),
+        responseSerializer: ProtobufSerializer<Service_UserList>(),
+        interceptors: self.interceptors?.makeStreamAllUserInfoInterceptors() ?? [],
+        userFunction: self.streamAllUserInfo(request:context:)
       )
 
     default:
@@ -414,9 +494,10 @@ internal protocol Service_ServerAsyncProvider: CallHandlerProvider, Sendable {
   ) async throws
 
   /// Handles friend listener for online status
+  /// rpc FriendListener (stream FriendListenerMessage) returns (stream FriendStatusUpdate);
   func friendListener(
-    requestStream: GRPCAsyncRequestStream<Service_FriendListenerMessage>,
-    responseStream: GRPCAsyncResponseStreamWriter<Service_FriendStatusUpdate>,
+    requestStream: GRPCAsyncRequestStream<Service_FriendListenerRequest>,
+    responseStream: GRPCAsyncResponseStreamWriter<Service_FriendListenerResponse>,
     context: GRPCAsyncServerCallContext
   ) async throws
 
@@ -425,6 +506,13 @@ internal protocol Service_ServerAsyncProvider: CallHandlerProvider, Sendable {
     request: Service_Empty,
     context: GRPCAsyncServerCallContext
   ) async throws -> Service_UserList
+
+  /// New streaming function to send real-time Redis user info list
+  func streamAllUserInfo(
+    request: Service_Empty,
+    responseStream: GRPCAsyncResponseStreamWriter<Service_UserList>,
+    context: GRPCAsyncServerCallContext
+  ) async throws
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -458,8 +546,8 @@ extension Service_ServerAsyncProvider {
     case "FriendListener":
       return GRPCAsyncServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Service_FriendListenerMessage>(),
-        responseSerializer: ProtobufSerializer<Service_FriendStatusUpdate>(),
+        requestDeserializer: ProtobufDeserializer<Service_FriendListenerRequest>(),
+        responseSerializer: ProtobufSerializer<Service_FriendListenerResponse>(),
         interceptors: self.interceptors?.makeFriendListenerInterceptors() ?? [],
         wrapping: { try await self.friendListener(requestStream: $0, responseStream: $1, context: $2) }
       )
@@ -471,6 +559,15 @@ extension Service_ServerAsyncProvider {
         responseSerializer: ProtobufSerializer<Service_UserList>(),
         interceptors: self.interceptors?.makeGetAllUserInfoInterceptors() ?? [],
         wrapping: { try await self.getAllUserInfo(request: $0, context: $1) }
+      )
+
+    case "StreamAllUserInfo":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Service_Empty>(),
+        responseSerializer: ProtobufSerializer<Service_UserList>(),
+        interceptors: self.interceptors?.makeStreamAllUserInfoInterceptors() ?? [],
+        wrapping: { try await self.streamAllUserInfo(request: $0, responseStream: $1, context: $2) }
       )
 
     default:
@@ -487,11 +584,15 @@ internal protocol Service_ServerServerInterceptorFactoryProtocol: Sendable {
 
   /// - Returns: Interceptors to use when handling 'friendListener'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeFriendListenerInterceptors() -> [ServerInterceptor<Service_FriendListenerMessage, Service_FriendStatusUpdate>]
+  func makeFriendListenerInterceptors() -> [ServerInterceptor<Service_FriendListenerRequest, Service_FriendListenerResponse>]
 
   /// - Returns: Interceptors to use when handling 'getAllUserInfo'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetAllUserInfoInterceptors() -> [ServerInterceptor<Service_Empty, Service_UserList>]
+
+  /// - Returns: Interceptors to use when handling 'streamAllUserInfo'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeStreamAllUserInfoInterceptors() -> [ServerInterceptor<Service_Empty, Service_UserList>]
 }
 
 internal enum Service_ServerServerMetadata {
@@ -502,6 +603,7 @@ internal enum Service_ServerServerMetadata {
       Service_ServerServerMetadata.Methods.communicate,
       Service_ServerServerMetadata.Methods.friendListener,
       Service_ServerServerMetadata.Methods.getAllUserInfo,
+      Service_ServerServerMetadata.Methods.streamAllUserInfo,
     ]
   )
 
@@ -522,6 +624,12 @@ internal enum Service_ServerServerMetadata {
       name: "GetAllUserInfo",
       path: "/service.Server/GetAllUserInfo",
       type: GRPCCallType.unary
+    )
+
+    internal static let streamAllUserInfo = GRPCMethodDescriptor(
+      name: "StreamAllUserInfo",
+      path: "/service.Server/StreamAllUserInfo",
+      type: GRPCCallType.serverStreaming
     )
   }
 }
