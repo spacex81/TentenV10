@@ -5,7 +5,11 @@ import NIO
 
 final class GRPCManager: ObservableObject {
     static let shared = GRPCManager()
-
+    
+    private lazy var repoManager: RepositoryManager = {
+        return RepositoryManager.shared
+    }()
+    
     // MARK: - Properties
     private var eventLoopGroup: EventLoopGroup?
     private var channel: GRPCChannel?
@@ -28,7 +32,7 @@ final class GRPCManager: ObservableObject {
     private var isConnecting = false // Track if a connection is currently being established
     
     //
-    private var appState: String = "foreground" {
+    var appState: String = "foreground" {
         didSet {
             NSLog("LOG: appState: \(appState)")
         }
@@ -41,10 +45,16 @@ final class GRPCManager: ObservableObject {
 
     @objc private func handleAppDidEnterBackground() {
         self.appState = "background"
+        if isConnected {
+            disconnect()
+        }
     }
 
     @objc private func handleAppWillEnterForeground() {
         self.appState = "foreground"
+        if !isConnected, let userRecord = repoManager.userRecord {
+            connect(clientID: userRecord.id, friends: userRecord.friends)
+        }
     }
     //
     
@@ -115,7 +125,9 @@ final class GRPCManager: ObservableObject {
             }
             
             if let call = self.pingPongCall {
-                self.sendPong(call: call)
+                if self.appState == "foreground" {
+                    self.sendPong(call: call)
+                }
             }
         }
         
@@ -263,6 +275,7 @@ final class GRPCManager: ObservableObject {
                 NSLog("LOG: ❌ Failed to send Pong message: \(error.localizedDescription)")
             }
         }
+//        NSLog("LOG: GRPCManager-sendPong: Sent Pong message")
     }
 }
 

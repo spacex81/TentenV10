@@ -114,7 +114,7 @@ class RepositoryManager: ObservableObject {
     }
     
     func connectToGrpcServer(clientID: String, friends: [String]) {
-        NSLog("LOG: RepositoryManager-connectToGrpcServer")
+//        NSLog("LOG: RepositoryManager-connectToGrpcServer")
         grpcManager.connect(clientID: clientID, friends: friends)
     }
 

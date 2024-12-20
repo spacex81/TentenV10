@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationWillTerminate(_ application: UIApplication) {
         NSLog("LOG: AppDelegate-applicationWillTerminate")
         let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
-        let repoManager = RepositoryManager.shared
+//        let repoManager = RepositoryManager.shared
         
         notificationManager.sendLocalNotification(
             title: "앱을 종료합니다.",
