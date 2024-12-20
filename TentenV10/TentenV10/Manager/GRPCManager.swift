@@ -14,11 +14,10 @@ final class GRPCManager: ObservableObject {
 
     @Published var serverResponse: String = "Waiting for server response..."
     @Published var isConnected: Bool = false
-    @Published var friendStatuses: [String: Bool] = [:] {
+    @Published var friendStatuses: [String: String] = [:] { // Change to String to support "foreground", "background", "offline"
         didSet {
             NSLog("LOG: ====== Friend Statuses Updated ======")
-            for (friendID, isOnline) in friendStatuses {
-                let status = isOnline ? "ONLINE" : "OFFLINE"
+            for (friendID, status) in friendStatuses {
                 NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
             }
             NSLog("LOG: =====================================")
@@ -159,8 +158,10 @@ final class GRPCManager: ObservableObject {
                 
                 case .friendUpdate(let friendUpdate):
                     // Handle friend update
-                    self.friendStatuses[friendUpdate.clientID] = friendUpdate.isOnline
-
+//                    self.friendStatuses[friendUpdate.clientID] = friendUpdate.isOnline
+                    let statusString = self.convertStatusToString(status: friendUpdate.status)
+                    self.friendStatuses[friendUpdate.clientID] = statusString
+                    
                 case .keepalivePing(let keepalivePing):
                     // Handle keepalive ping
 //                    NSLog("LOG: Received KeepAlivePing from server: \(keepalivePing.message)")
@@ -251,23 +252,33 @@ final class GRPCManager: ObservableObject {
     
     // MARK: - Send Pong Message
     private func sendPong(call: BidirectionalStreamingCall<Service_ClientMessage, Service_Ping>) {
-        let currentTimeMillis = Int64(Date().timeIntervalSince1970 * 1000)
-        
         var pong = Service_Pong()
-        pong.status = (currentTimeMillis % 2 == 0) ? .even : .odd
+        pong.status = self.appState == "foreground" ? .foreground : .background
         
         var clientMessage = Service_ClientMessage()
         clientMessage.pong = pong
         
-        // TODO: I only want to print out message when it failed to send pong message
         call.sendMessage(clientMessage).whenComplete { result in
-            switch result {
-            case .success:
-//                NSLog("LOG: ✅ Sent Pong message successfully")
-                break
-            case .failure(let error):
+            if case .failure(let error) = result {
                 NSLog("LOG: ❌ Failed to send Pong message: \(error.localizedDescription)")
             }
+        }
+    }
+}
+
+extension GRPCManager {
+    private func convertStatusToString(status: Service_FriendUpdate.Status) -> String {
+        switch status {
+        case .offline:
+            return "offline"
+        case .foreground:
+            return "foreground"
+        case .background:
+            return "background"
+        case .UNRECOGNIZED(let value):
+            return "unrecognized(\(value))"
+        default:
+            return "unknown"
         }
     }
 }

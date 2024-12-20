@@ -67,10 +67,6 @@ struct Service_ClientMessage: Sendable {
   init() {}
 }
 
-/// Used for the friend listener connection
-/// message FriendListenerMessage {
-///     FriendList friend_list = 1;
-/// }
 struct Service_FriendListenerRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -160,9 +156,9 @@ struct Service_FriendListenerResponse: Sendable {
   init() {}
 }
 
-/// message FriendStatusUpdate {
+/// message FriendUpdate {
 ///     string client_id = 1; // The client whose state changed
-///     bool is_online = 2;
+///     bool is_online = 2;    // The online status of the client
 /// }
 struct Service_FriendUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -172,10 +168,48 @@ struct Service_FriendUpdate: Sendable {
   /// The client whose state changed
   var clientID: String = String()
 
-  /// The online status of the client
-  var isOnline: Bool = false
+  /// The current status (foreground, background, offline)
+  var status: Service_FriendUpdate.Status = .offline
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum Status: SwiftProtobuf.Enum, Swift.CaseIterable {
+    typealias RawValue = Int
+    case offline // = 0
+    case foreground // = 1
+    case background // = 2
+    case UNRECOGNIZED(Int)
+
+    init() {
+      self = .offline
+    }
+
+    init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .offline
+      case 1: self = .foreground
+      case 2: self = .background
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    var rawValue: Int {
+      switch self {
+      case .offline: return 0
+      case .foreground: return 1
+      case .background: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    static let allCases: [Service_FriendUpdate.Status] = [
+      .offline,
+      .foreground,
+      .background,
+    ]
+
+  }
 
   init() {}
 }
@@ -218,49 +252,57 @@ struct Service_ClientHello: Sendable {
   init() {}
 }
 
+/// message Pong {
+///     enum Status {
+///         STATUS_UNKNOWN = 0; 
+///         STATUS_EVEN = 1; 
+///         STATUS_ODD = 2; 
+///     }
+///     Status status = 1;
+/// }
 struct Service_Pong: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var status: Service_Pong.Status = .unknown
+  var status: Service_Pong.Status = .offline
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum Status: SwiftProtobuf.Enum, Swift.CaseIterable {
     typealias RawValue = Int
-    case unknown // = 0
-    case even // = 1
-    case odd // = 2
+    case offline // = 0
+    case foreground // = 1
+    case background // = 2
     case UNRECOGNIZED(Int)
 
     init() {
-      self = .unknown
+      self = .offline
     }
 
     init?(rawValue: Int) {
       switch rawValue {
-      case 0: self = .unknown
-      case 1: self = .even
-      case 2: self = .odd
+      case 0: self = .offline
+      case 1: self = .foreground
+      case 2: self = .background
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
 
     var rawValue: Int {
       switch self {
-      case .unknown: return 0
-      case .even: return 1
-      case .odd: return 2
+      case .offline: return 0
+      case .foreground: return 1
+      case .background: return 2
       case .UNRECOGNIZED(let i): return i
       }
     }
 
     // The compiler won't synthesize support with the UNRECOGNIZED case.
     static let allCases: [Service_Pong.Status] = [
-      .unknown,
-      .even,
-      .odd,
+      .offline,
+      .foreground,
+      .background,
     ]
 
   }
@@ -586,7 +628,7 @@ extension Service_FriendUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   static let protoMessageName: String = _protobuf_package + ".FriendUpdate"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "client_id"),
-    2: .standard(proto: "is_online"),
+    2: .same(proto: "status"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -596,7 +638,7 @@ extension Service_FriendUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.clientID) }()
-      case 2: try { try decoder.decodeSingularBoolField(value: &self.isOnline) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.status) }()
       default: break
       }
     }
@@ -606,18 +648,26 @@ extension Service_FriendUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if !self.clientID.isEmpty {
       try visitor.visitSingularStringField(value: self.clientID, fieldNumber: 1)
     }
-    if self.isOnline != false {
-      try visitor.visitSingularBoolField(value: self.isOnline, fieldNumber: 2)
+    if self.status != .offline {
+      try visitor.visitSingularEnumField(value: self.status, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Service_FriendUpdate, rhs: Service_FriendUpdate) -> Bool {
     if lhs.clientID != rhs.clientID {return false}
-    if lhs.isOnline != rhs.isOnline {return false}
+    if lhs.status != rhs.status {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
+}
+
+extension Service_FriendUpdate.Status: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "OFFLINE"),
+    1: .same(proto: "FOREGROUND"),
+    2: .same(proto: "BACKGROUND"),
+  ]
 }
 
 extension Service_KeepAlivePing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -735,7 +785,7 @@ extension Service_Pong: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.status != .unknown {
+    if self.status != .offline {
       try visitor.visitSingularEnumField(value: self.status, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -750,9 +800,9 @@ extension Service_Pong: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
 
 extension Service_Pong.Status: SwiftProtobuf._ProtoNameProviding {
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "STATUS_UNKNOWN"),
-    1: .same(proto: "STATUS_EVEN"),
-    2: .same(proto: "STATUS_ODD"),
+    0: .same(proto: "OFFLINE"),
+    1: .same(proto: "FOREGROUND"),
+    2: .same(proto: "BACKGROUND"),
   ]
 }
 
