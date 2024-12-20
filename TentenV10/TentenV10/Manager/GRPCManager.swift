@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import GRPC
 import NIO
 
@@ -26,6 +27,27 @@ final class GRPCManager: ObservableObject {
     
     private let lock = NSLock() // Lock to prevent multiple connections
     private var isConnecting = false // Track if a connection is currently being established
+    
+    //
+    private var appState: String = "foreground" {
+        didSet {
+            NSLog("LOG: appState: \(appState)")
+        }
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+
+    @objc private func handleAppDidEnterBackground() {
+        self.appState = "background"
+    }
+
+    @objc private func handleAppWillEnterForeground() {
+        self.appState = "foreground"
+    }
+    //
     
     // MARK: - Connect to gRPC Server
     func connect(clientID: String, friends: [String]) {

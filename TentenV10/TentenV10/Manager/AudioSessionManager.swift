@@ -58,7 +58,7 @@ extension AudioSessionManager {
     }
     
     @objc private func handleAudioRouteChange(_ notification: Notification) {
-        NSLog("LOG: AudioSessionManager-handleAudioRouteChange")
+//        NSLog("LOG: AudioSessionManager-handleAudioRouteChange")
         
         guard let userInfo = notification.userInfo,
               let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
