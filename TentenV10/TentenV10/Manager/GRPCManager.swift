@@ -19,15 +19,21 @@ final class GRPCManager: ObservableObject {
     @Published var serverResponse: String = "Waiting for server response..."
     @Published var isConnected: Bool = false
     @Published var friendStatuses: [String: String] = [:]
-//    { // Change to String to support "foreground", "background", "offline"
-//        didSet {
-//            NSLog("LOG: ====== Friend Statuses Updated ======")
-//            for (friendID, status) in friendStatuses {
-//                NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
-//            }
-//            NSLog("LOG: =====================================")
-//        }
-//    }
+    {
+        didSet {
+            printFriendStatuses()
+        }
+    }
+    
+    func printFriendStatuses() {
+        NSLog("LOG: ====== Friend Statuses Updated ======")
+        for (friendID, status) in friendStatuses {
+            if status == "foreground" {
+                NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
+            }
+        }
+        NSLog("LOG: =====================================")
+    }
     
     private let lock = NSLock() // Lock to prevent multiple connections
     private var isConnecting = false // Track if a connection is currently being established

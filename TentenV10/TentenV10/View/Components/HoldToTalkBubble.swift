@@ -78,6 +78,7 @@ struct HoldToTalkBubble: View {
             }
             .onAppear {
 //                print("HoldToTalkBubble appeared")
+                updateTextTransitionOnAppear()
             }
 //            .onChange(of: viewModel.selectedFriend?.status) { _, newValue in
 //                updateTextTransition() // Update the text transition when status changes
@@ -96,8 +97,20 @@ struct HoldToTalkBubble: View {
         }
     }
     
+    private func updateTextTransitionOnAppear() {
+        if let id = viewModel.selectedFriend?.id {
+            let appStatus = viewModel.friendStatuses[id]
+            NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
+            if appStatus == "foreground" {
+                showForegroundText = true
+            } else {
+                showForegroundText = false
+            }
+        }
+    }
+    
     private func updateTextTransition() {
-        print("LOG: Updating text transition")
+//        print("LOG: Updating text transition")
         withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
             if let id = viewModel.selectedFriend?.id {
                 let appStatus = viewModel.friendStatuses[id]
