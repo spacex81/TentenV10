@@ -79,9 +79,14 @@ struct HoldToTalkBubble: View {
             .onAppear {
 //                print("HoldToTalkBubble appeared")
             }
-            .onChange(of: viewModel.selectedFriend?.status) { _, newValue in
-//                print("Friend status changed to: \(newValue ?? "nil")")
+//            .onChange(of: viewModel.selectedFriend?.status) { _, newValue in
+//                updateTextTransition() // Update the text transition when status changes
+//            }
+            .onChange(of: viewModel.friendStatuses) { _, newValue in
                 updateTextTransition() // Update the text transition when status changes
+            }
+            .onChange(of: viewModel.selectedFriend) { _, _ in
+                updateTextTransition()
             }
             .onDisappear {
 //                print("HoldToTalkBubble disappeared")
@@ -91,28 +96,9 @@ struct HoldToTalkBubble: View {
         }
     }
     
-//    private func updateTextTransition() {
-//        print("LOG: Updating text transition")
-//        withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
-//            if viewModel.selectedFriend?.status == "foreground" {
-////                print("Switching to 👀 여기 있어요")
-//                showForegroundText = true
-//            } else {
-////                print("Switching to 눌러서 말하기")
-//                showForegroundText = false
-//            }
-//        }
-//    }
     private func updateTextTransition() {
         print("LOG: Updating text transition")
         withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
-//            if viewModel.selectedFriend?.status == "foreground" {
-////                print("Switching to 👀 여기 있어요")
-//                showForegroundText = true
-//            } else {
-////                print("Switching to 눌러서 말하기")
-//                showForegroundText = false
-//            }
             if let id = viewModel.selectedFriend?.id {
                 let appStatus = viewModel.friendStatuses[id]
                 NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
@@ -124,7 +110,6 @@ struct HoldToTalkBubble: View {
             }
         }
     }
-
 }
 
 
