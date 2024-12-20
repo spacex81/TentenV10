@@ -276,7 +276,7 @@ final class GRPCManager: ObservableObject {
                 NSLog("LOG: ❌ Failed to send Pong message: \(error.localizedDescription)")
             }
         }
-//        NSLog("LOG: GRPCManager-sendPong: Sent Pong message")
+        NSLog("LOG: GRPCManager-sendPong: Sent Pong message")
     }
 }
 

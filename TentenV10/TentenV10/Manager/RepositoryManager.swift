@@ -88,7 +88,7 @@ class RepositoryManager: ObservableObject {
                 }
                 
                 // setup gRPC connection
-                if !grpcManager.isConnected {
+                if !grpcManager.isConnected && grpcManager.appState == "foreground" {
                     connectToGrpcServer(clientID: userRecord.id, friends: userRecord.friends)
 //                    connectToGrpcServer(clientID: "e6c1a465-2c03-4487-abf5-6f747d18fa7e", friends: ["713bede9-e9a9-4c96-8038-04e3108ac403", "045bfce2-4859-4ae7-ba1d-82e34d8bb87f"])
                 }
