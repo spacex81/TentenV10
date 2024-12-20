@@ -91,18 +91,40 @@ struct HoldToTalkBubble: View {
         }
     }
     
+//    private func updateTextTransition() {
+//        print("LOG: Updating text transition")
+//        withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
+//            if viewModel.selectedFriend?.status == "foreground" {
+////                print("Switching to 👀 여기 있어요")
+//                showForegroundText = true
+//            } else {
+////                print("Switching to 눌러서 말하기")
+//                showForegroundText = false
+//            }
+//        }
+//    }
     private func updateTextTransition() {
         print("LOG: Updating text transition")
         withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
-            if viewModel.selectedFriend?.status == "foreground" {
-//                print("Switching to 👀 여기 있어요")
-                showForegroundText = true
-            } else {
-//                print("Switching to 눌러서 말하기")
-                showForegroundText = false
+//            if viewModel.selectedFriend?.status == "foreground" {
+////                print("Switching to 👀 여기 있어요")
+//                showForegroundText = true
+//            } else {
+////                print("Switching to 눌러서 말하기")
+//                showForegroundText = false
+//            }
+            if let id = viewModel.selectedFriend?.id {
+                let appStatus = viewModel.friendStatuses[id]
+                NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
+                if appStatus == "foreground" {
+                    showForegroundText = true
+                } else {
+                    showForegroundText = false
+                }
             }
         }
     }
+
 }
 
 

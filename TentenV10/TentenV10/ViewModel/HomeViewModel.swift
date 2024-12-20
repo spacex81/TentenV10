@@ -139,11 +139,33 @@ class HomeViewModel: ObservableObject {
     @Published var overlayViewScale: CGFloat = 2.0 
     //
     
+    // GRPCManager
+    @Published var friendStatuses: [String: String] = [:] {
+        didSet {
+            for (friendID, status) in friendStatuses {
+                if selectedFriend?.id == friendID {
+                    
+                }
+            }
+            printFriendStatuses()
+        }
+    }
+    
+    func printFriendStatuses() {
+        NSLog("LOG: HomeViewModel-printFriendStatuses")
+        NSLog("LOG: ====== Friend Statuses Updated ======")
+        for (friendID, status) in friendStatuses {
+            NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
+        }
+    }
+    //
+    
     private var cancellables = Set<AnyCancellable>()
     
     init() {
         bindRepositoryManager()
         bindLiveKitManager()
+        bindGRPCManager()
         
         lockViewModel.setInput("Locked", value: lockIconIsLocked)
     }
@@ -205,6 +227,15 @@ class HomeViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink {  currentState in
                 self.currentState = currentState
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func bindGRPCManager() {
+        GRPCManager.shared.$friendStatuses
+            .receive(on: DispatchQueue.main)
+            .sink { friendStatuses in
+                self.friendStatuses = friendStatuses
             }
             .store(in: &cancellables)
     }
