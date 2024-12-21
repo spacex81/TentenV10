@@ -48,10 +48,10 @@ struct TentenV10App: App {
                 }
                 .onAppear {
                     // Call handleScenePhaseChange manually on first launch
-                    viewModel.handleScenePhaseChange(to: .active)
+//                    viewModel.handleScenePhaseChange(to: .active)
                 }
                 .onChange(of: scenePhase) { _, newScenePhase in
-                    viewModel.handleScenePhaseChange(to: newScenePhase)
+//                    viewModel.handleScenePhaseChange(to: newScenePhase)
                 }
         }
     }

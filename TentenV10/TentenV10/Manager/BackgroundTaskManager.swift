@@ -62,7 +62,7 @@ extension BackgroundTaskManager {
                 break
             }
             if let player = audioSessionManager.audioPlayer, player.isPlaying {
-//                NSLog("LOG: Playing silent audio(\(i))...")
+                NSLog("LOG: Playing silent audio(\(i))...")
             }
             if !liveKitManager.isConnected && grpcManager.isConnected {
                 grpcManager.disconnect()

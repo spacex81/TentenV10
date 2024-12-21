@@ -419,7 +419,7 @@ extension HomeViewModel {
             break
 
         case .background:
-//            NSLog("LOG: App is in the background")
+            NSLog("LOG: App is in the background")
             repoManager.userRecord?.status = "background"
             audioSessionManager.setupAudioPlayer()
             backgroundTaskManager.startAudioTask()
