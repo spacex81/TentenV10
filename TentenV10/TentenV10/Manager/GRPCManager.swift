@@ -262,11 +262,6 @@ final class GRPCManager: ObservableObject {
         var request = Service_FriendListenerRequest()
         request.message = .removeFriend(removeFriend)
         
-//        call.sendMessage(request).whenComplete { result in
-//            if case .failure(let error) = result {
-//                NSLog("LOG: ❌ Failed to send RemoveFriend message: \(error.localizedDescription)")
-//            }
-//        }
         call.sendMessage(request).whenComplete { result in
             if case .failure(let error) = result {
                 NSLog("LOG: ❌ Failed to send RemoveFriend message: \(error.localizedDescription)")
@@ -324,7 +319,7 @@ final class GRPCManager: ObservableObject {
                 NSLog("LOG: ❌ Failed to send Pong message: \(error.localizedDescription)")
             }
         }
-        NSLog("LOG: GRPCManager-sendPong: Sent Pong message")
+//        NSLog("LOG: GRPCManager-sendPong: Sent Pong message")
     }
 }
 

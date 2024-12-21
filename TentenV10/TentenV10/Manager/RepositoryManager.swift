@@ -8,7 +8,6 @@ class RepositoryManager: ObservableObject {
     static let shared = RepositoryManager()
     
     private let liveKitManager = LiveKitManager.shared
-//    private let notificationManager = NotificationManager.shared(repoManager: RepositoryManager.shared, authManager: AuthManager.shared)
     var notificationManager: NotificationManager?
     private let grpcManager = GRPCManager.shared
     
@@ -17,7 +16,6 @@ class RepositoryManager: ObservableObject {
     let deleteUserByUIDUrl = "https://asia-northeast3-tentenv9.cloudfunctions.net/deleteUserByUID"
     
     // Local Database
-//    private var dbQueue: DatabaseQueue!
     private var dbPool: DatabasePool!
     
     
@@ -248,8 +246,6 @@ class RepositoryManager: ObservableObject {
 //        NSLog("LOG: RepositoryManager-syncIsBusy")
         
         if var userRecord = userRecord {
-//            NSLog("LOG: isBusy: \(userRecord.isBusy)")
-//            NSLog("LOG: currentState: \(currentState)")
             
             Task {
                 do {

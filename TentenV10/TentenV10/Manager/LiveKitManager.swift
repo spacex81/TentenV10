@@ -6,6 +6,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     static let shared = LiveKitManager()
     
     weak var repoManager: RepositoryManager?
+    weak var grpcManager: GRPCManager?
     var notificationManager: NotificationManager?
     weak var collectionViewController: CustomCollectionViewController?
     
@@ -235,14 +236,6 @@ extension LiveKitManager {
         // Check if the received message is 'readyToTalk'
         if message == "readyToTalk" {
             print("Received 'readyToTalk' message. Setting isPublished to true.")
-//            print("LOG: LiveKit remote audio is published")
-            
-//            if let repoManager = self.repoManager, notificationManager == nil {
-//                notificationManager = NotificationManager.shared(repoManager: repoManager, authManager: AuthManager.shared)
-//            }
-//    
-//            notificationManager?.sendRemoteNotification(type: "connect")
-            
             DispatchQueue.main.async {
                 self.isPublished = true
                 self.repoManager?.currentState = .isSpeaking
@@ -288,81 +281,71 @@ extension LiveKitManager {
     }
     
     // Remote participant left the room
-//    func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
-//        NSLog("LOG: remote participant left the room")
-//        // when this callback runs when isPressing is true
-//        // this should not run
-//        if !isPressing {
-//            Task {
-//                isLocked = false
-////                NSLog("LOG: isLocked is \(isLocked ? "locked" : "unlocked")")
-//                await unpublishAudio()
-//                await disconnect()
-//                
-//                if let currentUserId = repoManager?.userRecord?.id,
-//                   let currentUserDeviceToken = repoManager?.userRecord?.deviceToken,
-//                   let roomName = repoManager?.userRecord?.roomName
-//                {
-//                    let components = roomName.split(separator: "_").map(String.init)
-//                    if components.count == 2 {
-//                        let friendDeviceToken = components[0] == currentUserDeviceToken ? components[1] : components[0]
-//                        NSLog("LOG: friendDeviceToken: \(friendDeviceToken)")
-//                        NSLog("LOG: currentUserId: \(currentUserId)")
-//                        
-//                        // TODO: Set current user's isBusy value to false
-//                        // TODO: Set friend's isBusy value to false
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     func room(_ room: Room, participantDidDisconnect participant: RemoteParticipant) {
         NSLog("LOG: remote participant left the room")
-        // when this callback runs when isPressing is true
-        // this should not run
         if !isPressing {
             Task {
-                isLocked = false
-                await unpublishAudio()
-                await disconnect()
-                
-                if let currentUserId = repoManager?.userRecord?.id,
-                   let currentUserDeviceToken = repoManager?.userRecord?.deviceToken,
-                   let roomName = repoManager?.userRecord?.roomName
-                {
-                    let components = roomName.split(separator: "_").map(String.init)
-                    if components.count == 2 {
-                        let friendDeviceToken = components[0] == currentUserDeviceToken ? components[1] : components[0]
-                        NSLog("LOG: friendDeviceToken: \(friendDeviceToken)")
-                        NSLog("LOG: currentUserId: \(currentUserId)")
-                        
-                        do {
-                            // Fetch friend's UserDto using device token
-                            if let friendUser = try await repoManager?.fetchUserFromFirebase(field: "deviceToken", value: friendDeviceToken) {
-                                guard let friendId = friendUser.id else {
-                                    NSLog("LOG: LiveKitManager-participantDidDisconnect: Could not find friendId")
-                                    return
-                                }
-                                
-                                // Update current user's isBusy to false
-                                repoManager?.updateUserField(userId: currentUserId, fieldsToUpdate: ["isBusy": false])
-                                NSLog("LOG: Set current user's isBusy to false")
-
-                                // Update friend's isBusy to false
-                                repoManager?.updateUserField(userId: friendId, fieldsToUpdate: ["isBusy": false])
-                                NSLog("LOG: Set friend's isBusy to false")
-                            } else {
-                                NSLog("LOG: Could not find user with deviceToken \(friendDeviceToken)")
-                            }
-                        } catch {
-                            NSLog("LOG: Error fetching friend user data: \(error.localizedDescription)")
-                        }
-                    }
-                }
+                await handleParticipantDidDisconnect()
             }
         }
     }
+
+    // handleParticipantDidDisconnect start
+    private func handleParticipantDidDisconnect() async {
+        isLocked = false
+        await unpublishAudio()
+        await disconnect()
+        
+        guard let currentUserId = repoManager?.userRecord?.id,
+              let currentUserDeviceToken = repoManager?.userRecord?.deviceToken,
+              let roomName = repoManager?.userRecord?.roomName else {
+            NSLog("LOG: Missing required user data")
+            return
+        }
+        
+        let friendDeviceToken = extractFriendDeviceToken(from: roomName, currentUserDeviceToken: currentUserDeviceToken)
+        if friendDeviceToken == nil {
+            NSLog("LOG: Unable to extract friend device token")
+            return
+        }
+        
+        NSLog("LOG: friendDeviceToken: \(friendDeviceToken!)")
+        NSLog("LOG: currentUserId: \(currentUserId)")
+        
+        do {
+            if let friendUser = try await fetchFriendUser(deviceToken: friendDeviceToken!) {
+                await updateUserBusyStatus(currentUserId: currentUserId, friendId: friendUser.id)
+            } else {
+                NSLog("LOG: Could not find user with deviceToken \(friendDeviceToken!)")
+            }
+        } catch {
+            NSLog("LOG: Error fetching friend user data: \(error.localizedDescription)")
+        }
+    }
+
+    private func extractFriendDeviceToken(from roomName: String, currentUserDeviceToken: String) -> String? {
+        let components = roomName.split(separator: "_").map(String.init)
+        guard components.count == 2 else { return nil }
+        return components[0] == currentUserDeviceToken ? components[1] : components[0]
+    }
+
+    private func fetchFriendUser(deviceToken: String) async throws -> UserDto? {
+        return try await repoManager?.fetchUserFromFirebase(field: "deviceToken", value: deviceToken)
+    }
+
+    private func updateUserBusyStatus(currentUserId: String, friendId: String?) async {
+        guard let friendId = friendId else {
+            NSLog("LOG: LiveKitManager-updateUserBusyStatus: friendId is nil")
+            return
+        }
+        
+        repoManager?.updateUserField(userId: currentUserId, fieldsToUpdate: ["isBusy": false])
+        NSLog("LOG: Set current user's isBusy to false")
+
+        repoManager?.updateUserField(userId: friendId, fieldsToUpdate: ["isBusy": false])
+        NSLog("LOG: Set friend's isBusy to false")
+    }
+    // handleParticipantDidDisconnect end
 
 
     func room(_ room: Room, participant: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
