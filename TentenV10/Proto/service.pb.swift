@@ -67,6 +67,12 @@ struct Service_ClientMessage: Sendable {
   init() {}
 }
 
+/// message FriendListenerRequest {
+///     oneof message {
+///         FriendList friend_list = 1;         // Client sends friend list
+///         KeepAliveAck keepalive_ack = 2;     // Client acknowledges a keepalive ping
+///     }
+/// }
 struct Service_FriendListenerRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -74,16 +80,42 @@ struct Service_FriendListenerRequest: Sendable {
 
   var message: Service_FriendListenerRequest.OneOf_Message? = nil
 
-  /// Client sends friend list
-  var friendList: Service_FriendList {
+  /// Add multiple friends
+  var addFriendList: Service_AddFriendList {
     get {
-      if case .friendList(let v)? = message {return v}
-      return Service_FriendList()
+      if case .addFriendList(let v)? = message {return v}
+      return Service_AddFriendList()
     }
-    set {message = .friendList(newValue)}
+    set {message = .addFriendList(newValue)}
   }
 
-  /// Client acknowledges a keepalive ping
+  /// Add a single friend
+  var addFriend: Service_AddFriend {
+    get {
+      if case .addFriend(let v)? = message {return v}
+      return Service_AddFriend()
+    }
+    set {message = .addFriend(newValue)}
+  }
+
+  /// Remove multiple friends
+  var removeFriendList: Service_RemoveFriendList {
+    get {
+      if case .removeFriendList(let v)? = message {return v}
+      return Service_RemoveFriendList()
+    }
+    set {message = .removeFriendList(newValue)}
+  }
+
+  /// Remove a single friend
+  var removeFriend: Service_RemoveFriend {
+    get {
+      if case .removeFriend(let v)? = message {return v}
+      return Service_RemoveFriend()
+    }
+    set {message = .removeFriend(newValue)}
+  }
+
   var keepaliveAck: Service_KeepAliveAck {
     get {
       if case .keepaliveAck(let v)? = message {return v}
@@ -95,9 +127,14 @@ struct Service_FriendListenerRequest: Sendable {
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum OneOf_Message: Equatable, Sendable {
-    /// Client sends friend list
-    case friendList(Service_FriendList)
-    /// Client acknowledges a keepalive ping
+    /// Add multiple friends
+    case addFriendList(Service_AddFriendList)
+    /// Add a single friend
+    case addFriend(Service_AddFriend)
+    /// Remove multiple friends
+    case removeFriendList(Service_RemoveFriendList)
+    /// Remove a single friend
+    case removeFriend(Service_RemoveFriend)
     case keepaliveAck(Service_KeepAliveAck)
 
   }
@@ -105,13 +142,51 @@ struct Service_FriendListenerRequest: Sendable {
   init() {}
 }
 
-struct Service_FriendList: Sendable {
+/// message FriendList {
+///     repeated string friend_ids = 1; // List of friend IDs to track
+/// }
+struct Service_AddFriendList: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// List of friend IDs to track
   var friendIds: [String] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Service_AddFriend: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var friendID: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Service_RemoveFriendList: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var friendIds: [String] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Service_RemoveFriend: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var friendID: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -156,10 +231,6 @@ struct Service_FriendListenerResponse: Sendable {
   init() {}
 }
 
-/// message FriendUpdate {
-///     string client_id = 1; // The client whose state changed
-///     bool is_online = 2;    // The online status of the client
-/// }
 struct Service_FriendUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -252,14 +323,6 @@ struct Service_ClientHello: Sendable {
   init() {}
 }
 
-/// message Pong {
-///     enum Status {
-///         STATUS_UNKNOWN = 0; 
-///         STATUS_EVEN = 1; 
-///         STATUS_ODD = 2; 
-///     }
-///     Status status = 1;
-/// }
 struct Service_Pong: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -455,8 +518,11 @@ extension Service_ClientMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 extension Service_FriendListenerRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".FriendListenerRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "friend_list"),
-    2: .standard(proto: "keepalive_ack"),
+    1: .standard(proto: "add_friend_list"),
+    2: .standard(proto: "add_friend"),
+    3: .standard(proto: "remove_friend_list"),
+    4: .standard(proto: "remove_friend"),
+    5: .standard(proto: "keepalive_ack"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -466,19 +532,58 @@ extension Service_FriendListenerRequest: SwiftProtobuf.Message, SwiftProtobuf._M
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try {
-        var v: Service_FriendList?
+        var v: Service_AddFriendList?
         var hadOneofValue = false
         if let current = self.message {
           hadOneofValue = true
-          if case .friendList(let m) = current {v = m}
+          if case .addFriendList(let m) = current {v = m}
         }
         try decoder.decodeSingularMessageField(value: &v)
         if let v = v {
           if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.message = .friendList(v)
+          self.message = .addFriendList(v)
         }
       }()
       case 2: try {
+        var v: Service_AddFriend?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .addFriend(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .addFriend(v)
+        }
+      }()
+      case 3: try {
+        var v: Service_RemoveFriendList?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .removeFriendList(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .removeFriendList(v)
+        }
+      }()
+      case 4: try {
+        var v: Service_RemoveFriend?
+        var hadOneofValue = false
+        if let current = self.message {
+          hadOneofValue = true
+          if case .removeFriend(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.message = .removeFriend(v)
+        }
+      }()
+      case 5: try {
         var v: Service_KeepAliveAck?
         var hadOneofValue = false
         if let current = self.message {
@@ -502,13 +607,25 @@ extension Service_FriendListenerRequest: SwiftProtobuf.Message, SwiftProtobuf._M
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
     switch self.message {
-    case .friendList?: try {
-      guard case .friendList(let v)? = self.message else { preconditionFailure() }
+    case .addFriendList?: try {
+      guard case .addFriendList(let v)? = self.message else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .addFriend?: try {
+      guard case .addFriend(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case .removeFriendList?: try {
+      guard case .removeFriendList(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    }()
+    case .removeFriend?: try {
+      guard case .removeFriend(let v)? = self.message else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     }()
     case .keepaliveAck?: try {
       guard case .keepaliveAck(let v)? = self.message else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     }()
     case nil: break
     }
@@ -522,8 +639,8 @@ extension Service_FriendListenerRequest: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Service_FriendList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".FriendList"
+extension Service_AddFriendList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".AddFriendList"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "friend_ids"),
   ]
@@ -547,8 +664,104 @@ extension Service_FriendList: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Service_FriendList, rhs: Service_FriendList) -> Bool {
+  static func ==(lhs: Service_AddFriendList, rhs: Service_AddFriendList) -> Bool {
     if lhs.friendIds != rhs.friendIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_AddFriend: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".AddFriend"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "friend_id"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.friendID) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.friendID.isEmpty {
+      try visitor.visitSingularStringField(value: self.friendID, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_AddFriend, rhs: Service_AddFriend) -> Bool {
+    if lhs.friendID != rhs.friendID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_RemoveFriendList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".RemoveFriendList"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "friend_ids"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.friendIds) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.friendIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.friendIds, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_RemoveFriendList, rhs: Service_RemoveFriendList) -> Bool {
+    if lhs.friendIds != rhs.friendIds {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Service_RemoveFriend: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".RemoveFriend"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "friend_id"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.friendID) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.friendID.isEmpty {
+      try visitor.visitSingularStringField(value: self.friendID, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Service_RemoveFriend, rhs: Service_RemoveFriend) -> Bool {
+    if lhs.friendID != rhs.friendID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

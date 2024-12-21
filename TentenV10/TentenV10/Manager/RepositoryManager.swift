@@ -88,11 +88,18 @@ class RepositoryManager: ObservableObject {
                 }
                 
                 // setup gRPC connection
-                if !grpcManager.isConnected && grpcManager.appState == "foreground" {
-                    connectToGrpcServer(clientID: userRecord.id, friends: userRecord.friends)
-//                    connectToGrpcServer(clientID: "e6c1a465-2c03-4487-abf5-6f747d18fa7e", friends: ["713bede9-e9a9-4c96-8038-04e3108ac403", "045bfce2-4859-4ae7-ba1d-82e34d8bb87f"])
-                }
+//                if !grpcManager.isConnected && grpcManager.appState == "foreground" {
+//                    connectToGrpcServer(clientID: userRecord.id, friends: userRecord.friends)
+//                }
                 
+                // Setup gRPC connection and synchronize friend lists
+                if grpcManager.appState == "foreground" {
+                    if !grpcManager.isConnected {
+                        connectToGrpcServer(clientID: userRecord.id, friends: userRecord.friends)
+                    } else {
+                        syncFriendsWithGrpcManager(userRecord.friends)
+                    }
+                }
                 
                 syncFriendInfo()
                 syncDetailedFriends(friendIds: userRecord.friends)
@@ -159,6 +166,22 @@ class RepositoryManager: ObservableObject {
         ])
         
 //        NSLog("LOG: User status updated to \(status)")
+    }
+    
+    private func syncFriendsWithGrpcManager(_ latestFriends: [String]) {
+        let currentFriends = Set(grpcManager.friendStatuses.keys) // Get the current friends being tracked
+        let newFriends = Set(latestFriends).subtracting(currentFriends) // Friends to add
+        let removedFriends = currentFriends.subtracting(latestFriends) // Friends to remove
+
+        // Add new friends
+        for friendID in newFriends {
+            grpcManager.addFriend(friendID: friendID)
+        }
+
+        // Remove old friends
+        for friendID in removedFriends {
+            grpcManager.removeFriend(friendID: friendID)
+        }
     }
     
     func syncFriendInfo() {

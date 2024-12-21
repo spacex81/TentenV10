@@ -28,9 +28,9 @@ final class GRPCManager: ObservableObject {
     func printFriendStatuses() {
         NSLog("LOG: ====== Friend Statuses Updated ======")
         for (friendID, status) in friendStatuses {
-            if status == "foreground" {
+//            if status == "foreground" {
                 NSLog("LOG: Friend ID: \(friendID) | Status: \(status)")
-            }
+//            }
         }
         NSLog("LOG: =====================================")
     }
@@ -67,7 +67,7 @@ final class GRPCManager: ObservableObject {
     
     // MARK: - Connect to gRPC Server
     func connect(clientID: String, friends: [String]) {
-        NSLog("LOG: GRPCManager-connect: clientID=\(clientID), friends=\(friends)")
+        NSLog("LOG: GRPCManager-connect: clientID=\(clientID)")
         
         lock.lock()
         defer { lock.unlock() }
@@ -113,7 +113,6 @@ final class GRPCManager: ObservableObject {
                 
                 // 🔥 Start Friend Listener
                 self.startFriendListener(client: client, friends: friends)
-                
             } catch {
                 DispatchQueue.main.async {
                     self.serverResponse = "LOG:❌ Failed to connect: \(error.localizedDescription)"
@@ -212,11 +211,11 @@ final class GRPCManager: ObservableObject {
         self.friendListenerCall = call
         
         // Send the FriendList to the server
-        var friendList = Service_FriendList()
+        var friendList = Service_AddFriendList()
         friendList.friendIds = friends
         
         var request = Service_FriendListenerRequest()
-        request.message = .friendList(friendList)
+        request.message = .addFriendList(friendList)
         
         call.sendMessage(request).whenComplete { result in
             switch result {
@@ -234,6 +233,49 @@ final class GRPCManager: ObservableObject {
                 NSLog("LOG: ℹ️ Friend listener connection ended gracefully")
             case .failure(let error):
                 NSLog("LOG: ❌ Friend listener disconnected with error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func addFriend(friendID: String) {
+        guard let call = friendListenerCall else { return }
+        
+        var addFriend = Service_AddFriend()
+        addFriend.friendID = friendID
+        
+        var request = Service_FriendListenerRequest()
+        request.message = .addFriend(addFriend)
+        
+        call.sendMessage(request).whenComplete { result in
+            if case .failure(let error) = result {
+                NSLog("LOG: ❌ Failed to send AddFriend message: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func removeFriend(friendID: String) {
+        guard let call = friendListenerCall else { return }
+        
+        var removeFriend = Service_RemoveFriend()
+        removeFriend.friendID = friendID
+        
+        var request = Service_FriendListenerRequest()
+        request.message = .removeFriend(removeFriend)
+        
+//        call.sendMessage(request).whenComplete { result in
+//            if case .failure(let error) = result {
+//                NSLog("LOG: ❌ Failed to send RemoveFriend message: \(error.localizedDescription)")
+//            }
+//        }
+        call.sendMessage(request).whenComplete { result in
+            if case .failure(let error) = result {
+                NSLog("LOG: ❌ Failed to send RemoveFriend message: \(error.localizedDescription)")
+            } else {
+                // Safely remove the friend ID from friendStatuses
+                DispatchQueue.main.async {
+                    self.friendStatuses.removeValue(forKey: friendID)
+                    NSLog("LOG: ✅ Successfully removed friendID \(friendID) from friendStatuses")
+                }
             }
         }
     }

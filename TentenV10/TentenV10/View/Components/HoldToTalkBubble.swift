@@ -77,14 +77,10 @@ struct HoldToTalkBubble: View {
                 }
             }
             .onAppear {
-//                print("HoldToTalkBubble appeared")
                 updateTextTransitionOnAppear()
             }
-//            .onChange(of: viewModel.selectedFriend?.status) { _, newValue in
-//                updateTextTransition() // Update the text transition when status changes
-//            }
             .onChange(of: viewModel.friendStatuses) { _, newValue in
-                updateTextTransition() // Update the text transition when status changes
+                updateTextTransition()
             }
             .onChange(of: viewModel.selectedFriend) { _, _ in
                 updateTextTransition()
