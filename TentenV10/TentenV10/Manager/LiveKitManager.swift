@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import UserNotifications
 import LiveKit
 
@@ -6,7 +7,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
     static let shared = LiveKitManager()
     
     weak var repoManager: RepositoryManager?
-    weak var grpcManager: GRPCManager?
+
     var notificationManager: NotificationManager?
     weak var collectionViewController: CustomCollectionViewController?
     
@@ -38,7 +39,7 @@ class LiveKitManager: ObservableObject, RoomDelegate {
             NSLog("LOG: LiveKitManager-isPressing : \(isPressing ? "true" : "false")")
         }
     }
-
+    
     var room: Room?
 
     let livekitUrl = "wss://tentwenty-bp8gb2jg.livekit.cloud"
@@ -49,8 +50,10 @@ class LiveKitManager: ObservableObject, RoomDelegate {
         let roomOptions = RoomOptions(adaptiveStream: true, dynacast: true)
         room = Room(delegate: self, roomOptions: roomOptions)
 
+//        setupBindings()
     }
 }
+
 
 extension LiveKitManager {
     func connect(roomName: String) async {
@@ -291,7 +294,7 @@ extension LiveKitManager {
     }
 
     // handleParticipantDidDisconnect start
-    private func handleParticipantDidDisconnect() async {
+    func handleParticipantDidDisconnect() async {
         isLocked = false
         await unpublishAudio()
         await disconnect()

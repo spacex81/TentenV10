@@ -7,6 +7,7 @@ class BackgroundTaskManager: ObservableObject {
     
     private let audioSessionManager = AudioSessionManager.shared
     private let liveKitManager = LiveKitManager.shared
+    private let grpcManager = GRPCManager.shared
 
     var liveKitTaskId: UIBackgroundTaskIdentifier = .invalid
     var audioTaskId: UIBackgroundTaskIdentifier = .invalid
@@ -62,6 +63,9 @@ extension BackgroundTaskManager {
             }
             if let player = audioSessionManager.audioPlayer, player.isPlaying {
 //                NSLog("LOG: Playing silent audio(\(i))...")
+            }
+            if !liveKitManager.isConnected && grpcManager.isConnected {
+                grpcManager.disconnect()
             }
             sleep(1)
         }

@@ -96,7 +96,7 @@ struct HoldToTalkBubble: View {
     private func updateTextTransitionOnAppear() {
         if let id = viewModel.selectedFriend?.id {
             let appStatus = viewModel.friendStatuses[id]
-            NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
+//            NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
             if appStatus == "foreground" {
                 showForegroundText = true
             } else {
@@ -110,7 +110,7 @@ struct HoldToTalkBubble: View {
         withAnimation(.interpolatingSpring(stiffness: 200, damping: 15)) {  // Bouncy animation for scale transition
             if let id = viewModel.selectedFriend?.id {
                 let appStatus = viewModel.friendStatuses[id]
-                NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
+//                NSLog("LOG: updateTextTransition-appStatus: \(String(describing: appStatus))")
                 if appStatus == "foreground" {
                     showForegroundText = true
                 } else {

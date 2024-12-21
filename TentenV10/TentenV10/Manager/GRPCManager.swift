@@ -9,6 +9,9 @@ final class GRPCManager: ObservableObject {
     private lazy var repoManager: RepositoryManager = {
         return RepositoryManager.shared
     }()
+    private lazy var liveKitManager: LiveKitManager = {
+        return LiveKitManager.shared
+    }()
     
     // MARK: - Properties
     private var eventLoopGroup: EventLoopGroup?
@@ -21,7 +24,19 @@ final class GRPCManager: ObservableObject {
     @Published var friendStatuses: [String: String] = [:]
     {
         didSet {
-            printFriendStatuses()
+//            printFriendStatuses()
+            if let selectedFriendId = repoManager.selectedFriend?.id {
+                let selectedFriendOnlineState = friendStatuses[selectedFriendId] ?? ""
+                NSLog("LOG: Selected Friend ID: \(selectedFriendId) | Selected Friend Online State: \(selectedFriendOnlineState)")
+                
+                if selectedFriendOnlineState == "offline" && liveKitManager.isConnected {
+                    if !liveKitManager.isPressing {
+                        Task {
+                            await liveKitManager.handleParticipantDidDisconnect()
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -52,7 +67,7 @@ final class GRPCManager: ObservableObject {
 
     @objc private func handleAppDidEnterBackground() {
         self.appState = "background"
-        if isConnected {
+        if isConnected && !liveKitManager.isConnected {
             disconnect()
         }
     }
